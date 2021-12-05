@@ -40,4 +40,4 @@ jobs:
           script: |
             cd /root/projects/SolidTrade/server
             chmod +x /root/projects/SolidTrade/server/start.sh
-            /root/projects/SolidTrade/server/start.sh
+            /root/projects/SolidTrade/server/start.sh 'production'
