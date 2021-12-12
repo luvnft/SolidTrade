@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SolidTradeServer.Data.Dtos.HealthCheck;
+﻿using SolidTradeServer.Data.Dtos.HealthCheck;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SolidTradeServer.Controllers
 {
