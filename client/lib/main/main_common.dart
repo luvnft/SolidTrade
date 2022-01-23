@@ -1,0 +1,31 @@
+import 'package:solidtrade/config/config_reader.dart';
+import 'package:solidtrade/data/enums/environment.dart';
+import 'package:solidtrade/app.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+Future<void> commonMain(Environment environment) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ConfigReader.initialize();
+
+  MaterialColor primaryColor;
+  switch (environment) {
+    case Environment.production:
+      primaryColor = Colors.blue;
+      break;
+    case Environment.staging:
+      primaryColor = Colors.red;
+      break;
+    case Environment.development:
+      primaryColor = Colors.green;
+      break;
+  }
+
+  runApp(
+    Provider.value(
+      value: primaryColor,
+      child: const MyApp(),
+    ),
+  );
+}
