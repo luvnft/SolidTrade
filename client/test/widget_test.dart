@@ -4,13 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Smoke test', (WidgetTester tester) async {
-    var willTestSuccessed = Random().nextBool();
+    var willTestSucceed = Random().nextBool();
 
-    if (willTestSuccessed == false) {
+    if (willTestSucceed == false) {
       // My tests are always green.
-      willTestSuccessed = true;
+      willTestSucceed = true;
     }
 
-    expect(willTestSuccessed, true);
+    expect(willTestSucceed, true);
   });
 }
