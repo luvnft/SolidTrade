@@ -1,0 +1,4 @@
+enum BuyOrSell {
+  buy,
+  sell,
+}
