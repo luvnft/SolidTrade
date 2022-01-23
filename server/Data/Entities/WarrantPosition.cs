@@ -1,17 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using SolidTradeServer.Data.Entities.Common;
+using SolidTradeServer.Data.Models.Common.Position;
 
 namespace SolidTradeServer.Data.Entities
 {
-    public class WarrantPosition : BaseEntity
+    public class WarrantPosition : BaseEntity, IPosition
     {
+        [Required]
         public Portfolio Portfolio { get; set; }
         
-        [Column(TypeName = "char")]
-        [StringLength(12)]
+        [Required]
+        [MaxLength(12)]
         public string Isin { get; set; }
-        public float BuyInPrice { get; set; }
+        
+        public decimal BuyInPrice { get; set; }
         public int NumberOfShares { get; set; }
     }
 }

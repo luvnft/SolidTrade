@@ -26,8 +26,9 @@ namespace SolidTradeServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("BuyInPrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("BuyInPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("BuyOrSell")
                         .HasColumnType("int");
@@ -36,13 +37,16 @@ namespace SolidTradeServer.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Isin")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<float>("Performance")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Performance")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("PositionType")
                         .HasColumnType("int");
@@ -55,7 +59,12 @@ namespace SolidTradeServer.Migrations
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("HistoricalPositions");
                 });
@@ -67,20 +76,22 @@ namespace SolidTradeServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("BuyInPrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("BuyInPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Isin")
+                        .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PortfolioId")
+                    b.Property<int>("PortfolioId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("TimeStamp")
@@ -111,15 +122,23 @@ namespace SolidTradeServer.Migrations
                     b.Property<int?>("CurrentKnockoutPositionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Isin")
-                        .HasMaxLength(12)
-                        .HasColumnType("char(12)");
+                    b.Property<DateTimeOffset>("GoodUntil")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("PortfolioId")
+                    b.Property<string>("Isin")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -154,15 +173,23 @@ namespace SolidTradeServer.Migrations
                     b.Property<int?>("CurrentWarrantPositionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Isin")
-                        .HasMaxLength(12)
-                        .HasColumnType("char(12)");
+                    b.Property<DateTimeOffset>("GoodUntil")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("PortfolioId")
+                    b.Property<string>("Isin")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -191,8 +218,16 @@ namespace SolidTradeServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Cash")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("InitialCash")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -213,33 +248,30 @@ namespace SolidTradeServer.Migrations
                     b.ToTable("Portfolios");
                 });
 
-            modelBuilder.Entity("SolidTradeServer.Data.Entities.User", b =>
+            modelBuilder.Entity("SolidTradeServer.Data.Entities.StockPosition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("BuyInPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("DisplayName")
-                        .HasMaxLength(32)
-                        .HasColumnType("char(32)");
+                    b.Property<string>("Isin")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(64)
-                        .HasColumnType("char(64)");
-
-                    b.Property<bool>("HasPublicPortfolio")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("HistoricalPositionId")
+                    b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProfilePictureUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("char(255)");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -249,13 +281,64 @@ namespace SolidTradeServer.Migrations
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Username")
-                        .HasMaxLength(32)
-                        .HasColumnType("char(32)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("HistoricalPositionId");
+                    b.HasIndex("PortfolioId");
+
+                    b.ToTable("StockPositions");
+                });
+
+            modelBuilder.Entity("SolidTradeServer.Data.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<bool>("HasPublicPortfolio")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<byte[]>("TimeStamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
@@ -267,20 +350,22 @@ namespace SolidTradeServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("BuyInPrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("BuyInPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Isin")
+                        .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("NumberOfShares")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PortfolioId")
+                    b.Property<int>("PortfolioId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("TimeStamp")
@@ -298,11 +383,22 @@ namespace SolidTradeServer.Migrations
                     b.ToTable("WarrantPositions");
                 });
 
+            modelBuilder.Entity("SolidTradeServer.Data.Entities.HistoricalPosition", b =>
+                {
+                    b.HasOne("SolidTradeServer.Data.Entities.User", null)
+                        .WithMany("HistoricalPositions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SolidTradeServer.Data.Entities.KnockoutPosition", b =>
                 {
                     b.HasOne("SolidTradeServer.Data.Entities.Portfolio", "Portfolio")
                         .WithMany("KnockOutPositions")
-                        .HasForeignKey("PortfolioId");
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Portfolio");
                 });
@@ -315,7 +411,9 @@ namespace SolidTradeServer.Migrations
 
                     b.HasOne("SolidTradeServer.Data.Entities.Portfolio", "Portfolio")
                         .WithMany("OngoingKnockOutPositions")
-                        .HasForeignKey("PortfolioId");
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CurrentKnockoutPosition");
 
@@ -330,7 +428,9 @@ namespace SolidTradeServer.Migrations
 
                     b.HasOne("SolidTradeServer.Data.Entities.Portfolio", "Portfolio")
                         .WithMany("OngoingWarrantPositions")
-                        .HasForeignKey("PortfolioId");
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CurrentWarrantPosition");
 
@@ -348,20 +448,24 @@ namespace SolidTradeServer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SolidTradeServer.Data.Entities.User", b =>
+            modelBuilder.Entity("SolidTradeServer.Data.Entities.StockPosition", b =>
                 {
-                    b.HasOne("SolidTradeServer.Data.Entities.HistoricalPosition", "HistoricalPosition")
-                        .WithMany()
-                        .HasForeignKey("HistoricalPositionId");
+                    b.HasOne("SolidTradeServer.Data.Entities.Portfolio", "Portfolio")
+                        .WithMany("StockPositions")
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("HistoricalPosition");
+                    b.Navigation("Portfolio");
                 });
 
             modelBuilder.Entity("SolidTradeServer.Data.Entities.WarrantPosition", b =>
                 {
                     b.HasOne("SolidTradeServer.Data.Entities.Portfolio", "Portfolio")
                         .WithMany("WarrantPositions")
-                        .HasForeignKey("PortfolioId");
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Portfolio");
                 });
@@ -374,11 +478,15 @@ namespace SolidTradeServer.Migrations
 
                     b.Navigation("OngoingWarrantPositions");
 
+                    b.Navigation("StockPositions");
+
                     b.Navigation("WarrantPositions");
                 });
 
             modelBuilder.Entity("SolidTradeServer.Data.Entities.User", b =>
                 {
+                    b.Navigation("HistoricalPositions");
+
                     b.Navigation("Portfolio");
                 });
 #pragma warning restore 612, 618
