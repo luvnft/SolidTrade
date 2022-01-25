@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/pages/portfolio_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 
@@ -36,7 +37,7 @@ class _SplashState extends State<Splash> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const PortfolioPage(),
+          builder: (context) => HomePage(),
         ));
   }
 
