@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
-import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/language/de/de_translation.dart';
 import 'package:solidtrade/providers/language/en/en_translation.dart';
-import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/util.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatelessWidget with STWidget {
   SettingsPage({Key? key}) : super(key: key);
-
-  final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
-  ITranslation get translation => configurationProvider.languageProvider.language;
-  IColorTheme get colors => configurationProvider.themeProvider.theme;
 
   @override
   Widget build(BuildContext context) {

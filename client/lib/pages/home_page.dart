@@ -1,17 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/pages/portfolio_page.dart';
-import 'package:solidtrade/providers/app/app_configuration_provider.dart';
-import 'package:solidtrade/providers/language/translation.dart';
-import 'package:solidtrade/providers/theme/app_theme.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatelessWidget with STWidget {
   HomePage({Key? key}) : super(key: key);
-
-  final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
-  ITranslation get translation => configurationProvider.languageProvider.language;
-  IColorTheme get colors => configurationProvider.themeProvider.theme;
 
   @override
   Widget build(BuildContext context) {

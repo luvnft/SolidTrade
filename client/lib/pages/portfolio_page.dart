@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
@@ -45,12 +46,8 @@ class PortfolioPage extends StatefulWidget {
   _PortfolioPageState createState() => _PortfolioPageState();
 }
 
-class _PortfolioPageState extends State<PortfolioPage> {
+class _PortfolioPageState extends State<PortfolioPage> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-
-  final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
-  ITranslation get translation => configurationProvider.languageProvider.language;
-  IColorTheme get colors => configurationProvider.themeProvider.theme;
 
   @override
   Widget build(BuildContext context) {
