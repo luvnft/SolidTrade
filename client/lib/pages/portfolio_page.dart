@@ -17,35 +17,39 @@ class PortfolioPage extends StatefulWidget {
 class _PortfolioPageState extends State<PortfolioPage> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
 
+  void _onClickOpenSettings() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+  }
+
+  void _onClickFetchForUpdate() {
+    historicalPositionService.fetchHistoricalPositions(11003);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: colors.background,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder<RequestResponse<List<HistoricalPosition>>?>(
-              stream: historicalPositionService.stream$,
-              builder: (context, snap) => Text("The count of historical positions is ${snap.data?.result?.length}"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                historicalPositionService.fetchHistoricalPositions(11003);
-              },
-              child: const Text("Fetch for update."),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())).then(
-                  // Update ui if ui changes were mad in the settings.
-                  (_) => setState(() {}),
-                );
-              },
-              child: const Text("Open settings."),
-            )
-          ],
+    return StreamBuilder(
+      stream: uiUpdate.stream$,
+      builder: (context, snapshot) => Container(
+        color: colors.background,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StreamBuilder<RequestResponse<List<HistoricalPosition>>?>(
+                stream: historicalPositionService.stream$,
+                builder: (context, snap) => Text("The count of historical positions is ${snap.data?.result?.length}"),
+              ),
+              ElevatedButton(
+                onPressed: _onClickFetchForUpdate,
+                child: const Text("Fetch for update."),
+              ),
+              ElevatedButton(
+                onPressed: _onClickOpenSettings,
+                child: const Text("Open settings."),
+              )
+            ],
+          ),
         ),
       ),
     );

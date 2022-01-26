@@ -14,8 +14,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Future<void> commonMain(Environment environment) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
   WidgetsFlutterBinding.ensureInitialized();
+
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   await ConfigReader.initialize();
 
   final languageTickerIndex = prefs.getInt(SharedPreferencesKeys.langTicker.toString()) ?? LanguageTicker.en.index;
