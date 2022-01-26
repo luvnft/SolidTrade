@@ -8,17 +8,31 @@ class HomePage extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<int>(
-      stream: uiUpdate.stream$,
-      builder: (context, snap) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(translation.portfolioTranslation.labelWelcome),
-          ),
-          backgroundColor: colors.background,
-          body: const PortfolioPage(),
-        );
-      },
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final shouldAdjust = screenWidth * 0.70 > screenHeight;
+    double horizontalMargin = 0;
+
+    if (shouldAdjust) {
+      horizontalMargin = 0.15 * screenWidth;
+    }
+
+    return Container(
+      margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
+      color: Colors.red,
+      child: StreamBuilder<int>(
+        stream: uiUpdate.stream$,
+        builder: (context, snap) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(translation.portfolioTranslation.labelWelcome),
+            ),
+            backgroundColor: colors.background,
+            body: const PortfolioPage(),
+          );
+        },
+      ),
     );
   }
 }
