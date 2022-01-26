@@ -33,6 +33,8 @@ class _SplashState extends State<Splash> with STWidget {
 
   Future<void> _navigateToHome() async {
     // TODO: Remove user id here in the future.
+    await Future.delayed(const Duration(seconds: 5));
+
     await historicalPositionService.fetchHistoricalPositions(11003);
     Navigator.pushReplacement(
         context,
@@ -44,6 +46,7 @@ class _SplashState extends State<Splash> with STWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: colors.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +55,7 @@ class _SplashState extends State<Splash> with STWidget {
             const SizedBox(height: 50),
             const Spacer(),
             Image.asset(
-              "assets/images/light-logo.gif",
+              colors.logoAsGif,
               height: 100.0,
               width: 100.0,
             ),

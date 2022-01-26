@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 
 abstract class IColorTheme {
   Color get background;
+  String get logoAsGif;
 }
 
 class LightColorTheme implements IColorTheme {
   @override
   Color get background => Colors.white;
+
+  @override
+  String get logoAsGif => "assets/images/light-logo.gif";
 }
 
 class DarkColorTheme implements IColorTheme {
   @override
   Color get background => Colors.black;
+
+  @override
+  String get logoAsGif => "assets/images/dark-logo.gif";
 }
 
 class ThemeProvider {
