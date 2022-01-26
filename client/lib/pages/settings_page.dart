@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solidtrade/data/components/base/st_widget.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/language/de/de_translation.dart';

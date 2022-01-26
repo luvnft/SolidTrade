@@ -1,10 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:solidtrade/data/components/base/st_widget.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/home/bottom_navigation_bar.dart';
 import 'package:solidtrade/pages/portfolio_page.dart';
 
-class HomePage extends StatelessWidget with STWidget {
-  HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with STWidget {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    PortfolioPage(),
+    Text("data"),
+  ];
+
+  void _handleOnIndexCallbackClicked(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +49,11 @@ class HomePage extends StatelessWidget with STWidget {
                 title: Text(translation.portfolioTranslation.labelWelcome),
               ),
               backgroundColor: colors.background,
-              body: const PortfolioPage(),
+              body: _widgetOptions[_selectedIndex],
+              bottomNavigationBar: Container(
+                margin: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+                child: CustomBottomNavigationBar(selectedIndexCallback: _handleOnIndexCallbackClicked),
+              ),
             ),
           ),
         );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/data/components/base/st_widget.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 
@@ -32,9 +32,9 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   Future<void> _navigateToHome() async {
-    // TODO: Remove user id here in the future.
-    await Future.delayed(const Duration(seconds: 5));
+    // await Future.delayed(const Duration(seconds: 5));
 
+    // TODO: Remove user id here in the future.
     await historicalPositionService.fetchHistoricalPositions(11003);
     Navigator.pushReplacement(
         context,

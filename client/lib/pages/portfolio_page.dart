@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
-import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
