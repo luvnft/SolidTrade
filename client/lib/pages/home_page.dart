@@ -8,12 +8,17 @@ class HomePage extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(translation.portfolioTranslation.labelWelcome),
-      ),
-      backgroundColor: colors.background,
-      body: const PortfolioPage(),
+    return StreamBuilder<int>(
+      stream: uiUpdate.stream$,
+      builder: (context, snap) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(translation.portfolioTranslation.labelWelcome),
+          ),
+          backgroundColor: colors.background,
+          body: const PortfolioPage(),
+        );
+      },
     );
   }
 }

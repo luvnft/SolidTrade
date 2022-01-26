@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/language/de/de_translation.dart';
 import 'package:solidtrade/providers/language/en/en_translation.dart';
 import 'package:solidtrade/providers/language/translation.dart';
@@ -9,6 +12,23 @@ import 'package:solidtrade/services/util/util.dart';
 
 class SettingsPage extends StatelessWidget with STWidget {
   SettingsPage({Key? key}) : super(key: key);
+  final prefs = GetIt.instance.get<SharedPreferences>();
+
+  void _changeLanguage(BuildContext context, ITranslation lang) {
+    prefs.setInt(SharedPreferencesKeys.langTicker.toString(), lang.langTicker.index);
+    configurationProvider.languageProvider.updateLanguage(lang);
+
+    uiUpdate.invokeUpdate();
+    Util.replaceWidget(context, SettingsPage());
+  }
+
+  void _changeColorTheme(BuildContext context, ColorThemeType type) {
+    prefs.setInt(SharedPreferencesKeys.colorTheme.toString(), type.index);
+    configurationProvider.themeProvider.updateTheme(type);
+
+    uiUpdate.invokeUpdate();
+    Util.replaceWidget(context, SettingsPage());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +49,7 @@ class SettingsPage extends StatelessWidget with STWidget {
                   color = ColorThemeType.dark;
                 }
 
-                configurationProvider.themeProvider.updateTheme(color);
-
-                Util.replaceWidget(context, SettingsPage());
+                _changeColorTheme(context, color);
               },
               child: Text(translation.settingsLanguage.changeTheme),
             ),
@@ -44,8 +62,7 @@ class SettingsPage extends StatelessWidget with STWidget {
                   lang = EnTranslation();
                 }
 
-                configurationProvider.languageProvider.updateLanguage(lang);
-                Util.replaceWidget(context, SettingsPage());
+                _changeLanguage(context, lang);
               },
               child: Text(translation.settingsLanguage.changeLanguage),
             ),

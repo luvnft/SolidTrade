@@ -1,28 +1,5 @@
 import 'package:flutter/material.dart';
 
-class ThemeProvider {
-  IColorTheme get theme => _currentTheme;
-  IColorTheme _currentTheme;
-
-  ThemeProvider(this._currentTheme);
-
-  void updateTheme(ColorThemeType theme) {
-    switch (theme) {
-      case ColorThemeType.light:
-        _currentTheme = LightColorTheme();
-        break;
-      case ColorThemeType.dark:
-        _currentTheme = DarkColorTheme();
-        break;
-    }
-  }
-}
-
-enum ColorThemeType {
-  light,
-  dark,
-}
-
 abstract class IColorTheme {
   Color get background;
 }
@@ -35,4 +12,33 @@ class LightColorTheme implements IColorTheme {
 class DarkColorTheme implements IColorTheme {
   @override
   Color get background => Colors.black;
+}
+
+class ThemeProvider {
+  IColorTheme get theme => _currentTheme;
+  IColorTheme _currentTheme;
+
+  ThemeProvider(this._currentTheme);
+
+  factory ThemeProvider.byThemeType(ColorThemeType theme) {
+    return ThemeProvider(colorTypeToColorTheme(theme));
+  }
+
+  void updateTheme(ColorThemeType theme) {
+    _currentTheme = colorTypeToColorTheme(theme);
+  }
+
+  static IColorTheme colorTypeToColorTheme(ColorThemeType type) {
+    switch (type) {
+      case ColorThemeType.light:
+        return LightColorTheme();
+      case ColorThemeType.dark:
+        return DarkColorTheme();
+    }
+  }
+}
+
+enum ColorThemeType {
+  light,
+  dark,
 }

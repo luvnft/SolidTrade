@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:solidtrade/data/components/base/st_widget.dart';
 import 'package:solidtrade/pages/home_page.dart';
-import 'package:solidtrade/pages/portfolio_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 
 class Splash extends StatefulWidget {
@@ -11,7 +11,7 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
   bool _visible = false;
 
@@ -20,7 +20,7 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     _fadeContent();
-    _navigateToPortfolio();
+    _navigateToHome();
   }
 
   void _fadeContent() {
@@ -31,7 +31,7 @@ class _SplashState extends State<Splash> {
     });
   }
 
-  Future<void> _navigateToPortfolio() async {
+  Future<void> _navigateToHome() async {
     // TODO: Remove user id here in the future.
     await historicalPositionService.fetchHistoricalPositions(11003);
     Navigator.pushReplacement(
