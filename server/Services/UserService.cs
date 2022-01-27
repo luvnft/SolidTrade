@@ -143,6 +143,8 @@ namespace SolidTradeServer.Services
         
         public async Task<OneOf<UserResponseDto, ErrorResponse>> GetUserByUid(string queriedUid, string uid)
         {
+            queriedUid ??= uid;
+            
             var user = await _database.Users.AsQueryable().FirstOrDefaultAsync(u => u.Uid == queriedUid);
 
             if (user is null)

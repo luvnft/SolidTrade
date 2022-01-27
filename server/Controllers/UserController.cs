@@ -30,9 +30,9 @@ namespace SolidTradeServer.Controllers
         public async Task<IActionResult> GetByUsername(string username)
             => MatchResult(await _userService.SearchUserByUsername(username, Request.Headers[Shared.UidHeader]));
         
-        [HttpGet("{uid}")]
-        public async Task<IActionResult> GetByUid(string uid)
-            => MatchResult(await _userService.GetUserByUid(uid, Request.Headers[Shared.UidHeader]));
+        [HttpGet]
+        public async Task<IActionResult> GetByUid([FromQuery] GetUserByUidRequestDto dto)
+            => MatchResult(await _userService.GetUserByUid(dto.Uid, Request.Headers[Shared.UidHeader]));
 
         [HttpPatch]
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto dto)
