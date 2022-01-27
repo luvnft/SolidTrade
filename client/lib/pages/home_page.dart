@@ -1,7 +1,8 @@
+import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/shared/user_app_bar.dart';
+import 'package:solidtrade/pages/portfolio_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/pages/portfolio_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,11 +51,16 @@ class _HomePageState extends State<HomePage> with STWidget {
           child: Container(
             margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
             child: Scaffold(
-              appBar: AppBar(
-                title: Text(translation.portfolioTranslation.labelWelcome),
-              ),
               backgroundColor: colors.background,
-              body: _widgetOptions[_selectedIndex],
+              body: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 20),
+                    child: UserAppBar(),
+                  ),
+                  _widgetOptions[_selectedIndex]
+                ],
+              ),
               bottomNavigationBar: BottomNavigationBar(
                 items: [
                   BottomNavigationBarItem(label: "Portfolio", icon: Icon(Icons.insights, color: _getItemColor(0))),

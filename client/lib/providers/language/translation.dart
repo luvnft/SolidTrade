@@ -7,9 +7,7 @@ abstract class ITranslation {
   ISettingsLanguage get settingsLanguage;
 }
 
-abstract class IPortfolioLanguage {
-  String get labelWelcome;
-}
+abstract class IPortfolioLanguage {}
 
 abstract class ISettingsLanguage {
   String get changeTheme;
