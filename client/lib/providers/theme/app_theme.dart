@@ -4,6 +4,10 @@ abstract class IColorTheme {
   Color get foreground;
   Color get background;
   String get logoAsGif;
+
+  Color get selectedItem;
+  Color get unselectedItem;
+  Color get navigationBackground;
 }
 
 class LightColorTheme implements IColorTheme {
@@ -15,6 +19,15 @@ class LightColorTheme implements IColorTheme {
 
   @override
   String get logoAsGif => "assets/images/light-logo.gif";
+
+  @override
+  Color get selectedItem => Colors.black;
+
+  @override
+  Color get unselectedItem => Colors.grey;
+
+  @override
+  Color get navigationBackground => Colors.white;
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -26,6 +39,15 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   String get logoAsGif => "assets/images/dark-logo.gif";
+
+  @override
+  Color get selectedItem => Colors.white;
+
+  @override
+  Color get unselectedItem => Colors.grey;
+
+  @override
+  Color get navigationBackground => Colors.grey[900]!;
 }
 
 class ThemeProvider {

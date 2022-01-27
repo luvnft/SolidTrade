@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/home/bottom_navigation_bar.dart';
 import 'package:solidtrade/pages/portfolio_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,12 +16,18 @@ class _HomePageState extends State<HomePage> with STWidget {
   static const List<Widget> _widgetOptions = <Widget>[
     PortfolioPage(),
     Text("data"),
+    Text("data"),
+    Text("data"),
   ];
 
-  void _handleOnIndexCallbackClicked(int index) {
+  void _handleItemIndexClick(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Color _getItemColor(int itemIndex) {
+    return itemIndex == _selectedIndex ? colors.selectedItem : colors.unselectedItem;
   }
 
   @override
@@ -50,9 +55,19 @@ class _HomePageState extends State<HomePage> with STWidget {
               ),
               backgroundColor: colors.background,
               body: _widgetOptions[_selectedIndex],
-              bottomNavigationBar: Container(
-                margin: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                child: CustomBottomNavigationBar(selectedIndexCallback: _handleOnIndexCallbackClicked),
+              bottomNavigationBar: BottomNavigationBar(
+                items: [
+                  BottomNavigationBarItem(label: "Portfolio", icon: Icon(Icons.insights, color: _getItemColor(0))),
+                  BottomNavigationBarItem(label: "Search", icon: Icon(Icons.search, color: _getItemColor(1))),
+                  BottomNavigationBarItem(label: "Chat", icon: Icon(Icons.chat_bubble, color: _getItemColor(2))),
+                  BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person, color: _getItemColor(3))),
+                ],
+                backgroundColor: colors.navigationBackground,
+                type: BottomNavigationBarType.fixed,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                currentIndex: _selectedIndex,
+                onTap: _handleItemIndexClick,
               ),
             ),
           ),
