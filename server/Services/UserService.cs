@@ -136,8 +136,31 @@ namespace SolidTradeServer.Services
             if (user.Uid != uid)
                 userResponse.Email = null;
 
-            _logger.Information("User with user uid {@Uid} fetched user with user id {@UserId} successfully", uid, id);
+            _logger.Information("User with user uid {@Uid} fetched users with user id {@UserId} successfully", uid, id);
             
+            return userResponse;
+        }
+        
+        public async Task<OneOf<UserResponseDto, ErrorResponse>> GetUserByUid(string queriedUid, string uid)
+        {
+            var user = await _database.Users.AsQueryable().FirstOrDefaultAsync(u => u.Uid == queriedUid);
+
+            if (user is null)
+            {
+                return new ErrorResponse(new NotFound
+                {
+                    Title = "User not found",
+                    Message = $"The user with uid: {queriedUid} could not be found.",
+                }, HttpStatusCode.NotFound);
+            }
+
+            _logger.Information("User with user uid {@Uid} fetched by uid {@QueriedUid} successfully", uid, queriedUid);
+
+            var userResponse = _mapper.Map<UserResponseDto>(user);
+
+            if (uid != user.Uid)
+                userResponse.Email = null;
+
             return userResponse;
         }
         
@@ -147,7 +170,7 @@ namespace SolidTradeServer.Services
                 .Where(u =>  EF.Functions.Like(u.Username, $"{username}%"))
                 .ToListAsync();
 
-            _logger.Information("User with user uid {@Uid} fetched {@NumberOfFoundUsers} user by username {@Username} successfully", uid, users.Count, username);
+            _logger.Information("User with user uid {@Uid} fetched {@NumberOfFoundUsers} users by username {@Username} successfully", uid, users.Count, username);
             
             return users.Select(user =>
             {
