@@ -1,10 +1,14 @@
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 
 import 'de/de_translation.dart';
 import 'en/en_translation.dart';
 
 class LanguageProvider {
+  ConfigurationProvider? configurationProvider;
+
   ITranslation get language => _currentTranslation;
   late ITranslation _currentTranslation;
 
@@ -26,5 +30,8 @@ class LanguageProvider {
 
   void updateLanguage(ITranslation lang) {
     _currentTranslation = lang;
+
+    configurationProvider ??= GetIt.instance.get<ConfigurationProvider>();
+    configurationProvider?.uiUpdateProvider.invokeUpdate();
   }
 }

@@ -9,5 +9,5 @@ class STWidget {
 
   ITranslation get translation => configurationProvider.languageProvider.language;
   IColorTheme get colors => configurationProvider.themeProvider.theme;
-  UIUpdateStreamProvider get uiUpdate => configurationProvider.updateProvider;
+  UIUpdateStreamProvider get uiUpdate => configurationProvider.uiUpdateProvider;
 }

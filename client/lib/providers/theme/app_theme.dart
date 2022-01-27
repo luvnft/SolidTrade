@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 abstract class IColorTheme {
   // Common colors
@@ -97,6 +99,8 @@ class DarkColorTheme implements IColorTheme {
 }
 
 class ThemeProvider {
+  ConfigurationProvider? configurationProvider;
+
   IColorTheme get theme => _currentTheme;
   IColorTheme _currentTheme;
 
@@ -108,6 +112,9 @@ class ThemeProvider {
 
   void updateTheme(ColorThemeType theme) {
     _currentTheme = colorTypeToColorTheme(theme);
+
+    configurationProvider ??= GetIt.instance.get<ConfigurationProvider>();
+    configurationProvider?.uiUpdateProvider.invokeUpdate();
   }
 
   static IColorTheme colorTypeToColorTheme(ColorThemeType type) {

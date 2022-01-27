@@ -33,5 +33,5 @@ Future<void> commonMain(Environment environment) async {
 
   getItService.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }

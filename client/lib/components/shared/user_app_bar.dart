@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/services/util/util.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UserAppBar extends StatelessWidget with STWidget {
   UserAppBar({Key? key}) : super(key: key);
@@ -20,14 +19,6 @@ class UserAppBar extends StatelessWidget with STWidget {
   }
 
   Widget _getUserProfilePicture(String url, double size) {
-    if (!kIsWeb) {
-      return Image.network(
-        url,
-        height: size,
-        width: size,
-      );
-    }
-
     if (!url.endsWith(".svg")) {
       return Image.network(
         url,

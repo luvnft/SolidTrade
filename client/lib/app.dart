@@ -1,14 +1,26 @@
-import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/spash.dart';
+import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget with STWidget {
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Solidtrade',
-      home: Splash(),
+    return StreamBuilder(
+      stream: uiUpdate.stream$,
+      builder: (context, snapshot) => MaterialApp(
+        title: 'Solidtrade',
+        theme: ThemeData(
+          backgroundColor: colors.background,
+          scaffoldBackgroundColor: colors.background,
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: colors.foreground,
+                displayColor: colors.foreground,
+              ),
+        ),
+        home: const Splash(),
+      ),
     );
   }
 }

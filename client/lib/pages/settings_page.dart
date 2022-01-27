@@ -8,7 +8,6 @@ import 'package:solidtrade/providers/language/de/de_translation.dart';
 import 'package:solidtrade/providers/language/en/en_translation.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class SettingsPage extends StatelessWidget with STWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -17,17 +16,11 @@ class SettingsPage extends StatelessWidget with STWidget {
   void _changeLanguage(BuildContext context, ITranslation lang) {
     prefs.setInt(SharedPreferencesKeys.langTicker.toString(), lang.langTicker.index);
     configurationProvider.languageProvider.updateLanguage(lang);
-
-    uiUpdate.invokeUpdate();
-    Util.replaceWidget(context, SettingsPage());
   }
 
   void _changeColorTheme(BuildContext context, ColorThemeType type) {
     prefs.setInt(SharedPreferencesKeys.colorTheme.toString(), type.index);
     configurationProvider.themeProvider.updateTheme(type);
-
-    uiUpdate.invokeUpdate();
-    Util.replaceWidget(context, SettingsPage());
   }
 
   @override
@@ -36,7 +29,6 @@ class SettingsPage extends StatelessWidget with STWidget {
       appBar: AppBar(
         title: const Text("Settings"),
       ),
-      backgroundColor: colors.background,
       body: Center(
         child: Column(
           children: [

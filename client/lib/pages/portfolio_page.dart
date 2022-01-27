@@ -29,30 +29,24 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: uiUpdate.stream$,
-      builder: (context, snapshot) => DefaultTextStyle(
-        style: TextStyle(color: colors.foreground),
-        child: Container(
-          color: colors.background,
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                StreamBuilder<RequestResponse<List<HistoricalPosition>>?>(
-                  stream: historicalPositionService.stream$,
-                  builder: (context, snap) => Text("The count of historical positions is ${snap.data?.result?.length}"),
-                ),
-                ElevatedButton(
-                  onPressed: _onClickFetchForUpdate,
-                  child: const Text("Fetch for update."),
-                ),
-                ElevatedButton(
-                  onPressed: _onClickOpenSettings,
-                  child: const Text("Open settings."),
-                )
-              ],
+      builder: (context, snapshot) => Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StreamBuilder<RequestResponse<List<HistoricalPosition>>?>(
+              stream: historicalPositionService.stream$,
+              builder: (context, snap) => Text("The count of historical positions is ${snap.data?.result?.length}"),
             ),
-          ),
+            ElevatedButton(
+              onPressed: _onClickFetchForUpdate,
+              child: const Text("Fetch for update."),
+            ),
+            ElevatedButton(
+              onPressed: _onClickOpenSettings,
+              child: const Text("Open settings."),
+            )
+          ],
         ),
       ),
     );

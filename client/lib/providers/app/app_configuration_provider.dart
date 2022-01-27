@@ -9,8 +9,8 @@ class ConfigurationProvider {
   ThemeProvider get themeProvider => _themeProvider;
   final ThemeProvider _themeProvider;
 
-  UIUpdateStreamProvider get updateProvider => _updateProvider;
-  final UIUpdateStreamProvider _updateProvider;
+  UIUpdateStreamProvider get uiUpdateProvider => _uiUpdateProvider;
+  final UIUpdateStreamProvider _uiUpdateProvider;
 
-  ConfigurationProvider(this._languageProvider, this._themeProvider, this._updateProvider);
+  ConfigurationProvider(this._languageProvider, this._themeProvider, this._uiUpdateProvider);
 }

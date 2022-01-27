@@ -47,34 +47,30 @@ class _HomePageState extends State<HomePage> with STWidget {
       stream: uiUpdate.stream$,
       builder: (context, snap) {
         return Container(
-          color: colors.background,
-          child: Container(
-            margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
-            child: Scaffold(
-              backgroundColor: colors.background,
-              body: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 20),
-                    child: UserAppBar(),
-                  ),
-                  _widgetOptions[_selectedIndex]
-                ],
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(label: "Portfolio", icon: Icon(Icons.insights, color: _getItemColor(0))),
-                  BottomNavigationBarItem(label: "Search", icon: Icon(Icons.search, color: _getItemColor(1))),
-                  BottomNavigationBarItem(label: "Chat", icon: Icon(Icons.chat_bubble, color: _getItemColor(2))),
-                  BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person, color: _getItemColor(3))),
-                ],
-                backgroundColor: colors.navigationBackground,
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                currentIndex: _selectedIndex,
-                onTap: _handleItemIndexClick,
-              ),
+          margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
+          child: Scaffold(
+            body: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 20),
+                  child: UserAppBar(),
+                ),
+                _widgetOptions[_selectedIndex]
+              ],
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(label: "Portfolio", icon: Icon(Icons.insights, color: _getItemColor(0))),
+                BottomNavigationBarItem(label: "Search", icon: Icon(Icons.search, color: _getItemColor(1))),
+                BottomNavigationBarItem(label: "Chat", icon: Icon(Icons.chat_bubble, color: _getItemColor(2))),
+                BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person, color: _getItemColor(3))),
+              ],
+              backgroundColor: colors.navigationBackground,
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              currentIndex: _selectedIndex,
+              onTap: _handleItemIndexClick,
             ),
           ),
         );
