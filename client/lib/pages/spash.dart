@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/pages/home_page.dart';
+import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
+import 'package:solidtrade/services/util/util.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -40,12 +43,26 @@ class _SplashState extends State<Splash> with STWidget {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => const HomePage(),
         ));
   }
 
   @override
   Widget build(BuildContext context) {
+    if (Startup.colorThemeHasToBeInitialized) {
+      final theme = Util.currentDeviceColorTheme(context);
+      configurationProvider.themeProvider.updateTheme(theme, savePermanently: false);
+
+      Startup.colorThemeHasToBeInitialized = false;
+    }
+
+    if (Startup.languageHasToBeInitialized) {
+      final ticker = Util.currentDeviceLanguage(context);
+      configurationProvider.languageProvider.updateLanguage(LanguageProvider.tickerToTranslation(ticker));
+
+      Startup.languageHasToBeInitialized = false;
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -68,12 +85,12 @@ class _SplashState extends State<Splash> with STWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Text('Loading...'),
+                  Text(translations.splash.loading),
                   SizedBox(
                     width: 220,
                     child: Divider(thickness: 2, color: colors.softForeground),
                   ),
-                  const Text('Solid trade'),
+                  const Text("Solid trade"),
                 ],
               ),
             ),

@@ -1,4 +1,6 @@
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/common/error/error_model.dart';
+import 'package:solidtrade/providers/language/translation.dart';
 
 class RequestResponse<T> {
   final ErrorModel? error;
@@ -20,9 +22,11 @@ class RequestResponse<T> {
   }
 
   factory RequestResponse.failedDueValidationError() {
+    var translations = GetIt.instance.get<ITranslation>();
+
     return RequestResponse(
       error: ErrorModel.fromJson({
-        "userFriendlyMessage": "Something went wrong. Please make sure your input is valid."
+        "userFriendlyMessage": translations.common.httpFriendlyErrorResponse,
       }),
       isSuccessful: false,
       result: null,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 abstract class IColorTheme {
@@ -110,11 +112,16 @@ class ThemeProvider {
     return ThemeProvider(colorTypeToColorTheme(theme));
   }
 
-  void updateTheme(ColorThemeType theme) {
+  void updateTheme(ColorThemeType theme, {bool savePermanently = true}) {
     _currentTheme = colorTypeToColorTheme(theme);
 
     configurationProvider ??= GetIt.instance.get<ConfigurationProvider>();
     configurationProvider?.uiUpdateProvider.invokeUpdate();
+
+    if (savePermanently) {
+      final prefs = GetIt.instance.get<SharedPreferences>();
+      prefs.setInt(SharedPreferencesKeys.colorTheme.toString(), theme.index);
+    }
   }
 
   static IColorTheme colorTypeToColorTheme(ColorThemeType type) {

@@ -3,13 +3,42 @@ import 'package:solidtrade/data/enums/lang_ticker.dart';
 abstract class ITranslation {
   LanguageTicker get langTicker;
 
-  IPortfolioLanguage get portfolioTranslation;
-  ISettingsLanguage get settingsLanguage;
+  IPortfolioTranslation get portfolio;
+  ISettingsTranslation get settings;
+  INavigationBarTranslation get navigationBar;
+  ISpashTranslation get splash;
+  IUserAppBarTranslation get userAppBar;
+  ICommonTranslation get common;
 }
 
-abstract class IPortfolioLanguage {}
+class SharedTranslations {
+  static const String navigationBarPortfolio = "Portfolio";
+  static const String navigationBarChat = "Chat";
+}
 
-abstract class ISettingsLanguage {
+abstract class ICommonTranslation {
+  String get httpFriendlyErrorResponse;
+}
+
+abstract class ISpashTranslation {
+  String get loading;
+}
+
+abstract class IPortfolioTranslation {}
+
+abstract class IUserAppBarTranslation {
+  String get invite;
+}
+
+abstract class INavigationBarTranslation {
+  String get portfolio;
+  String get search;
+  String get chat;
+  String get profile;
+}
+
+abstract class ISettingsTranslation {
+  String get settings;
   String get changeTheme;
   String get changeLanguage;
 }

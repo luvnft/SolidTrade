@@ -76,7 +76,7 @@ class UserAppBar extends StatelessWidget with STWidget {
                   const SizedBox(width: 10),
                   Icon(Icons.person_add_outlined, color: colors.darkGreen),
                   const SizedBox(width: 10),
-                  Text("Invite", style: TextStyle(color: colors.darkGreen)),
+                  Text(translations.userAppBar.invite, style: TextStyle(color: colors.darkGreen)),
                   const SizedBox(width: 10),
                 ],
               ),

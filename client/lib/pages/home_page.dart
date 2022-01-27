@@ -60,10 +60,10 @@ class _HomePageState extends State<HomePage> with STWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: [
-                BottomNavigationBarItem(label: "Portfolio", icon: Icon(Icons.insights, color: _getItemColor(0))),
-                BottomNavigationBarItem(label: "Search", icon: Icon(Icons.search, color: _getItemColor(1))),
-                BottomNavigationBarItem(label: "Chat", icon: Icon(Icons.chat_bubble, color: _getItemColor(2))),
-                BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person, color: _getItemColor(3))),
+                BottomNavigationBarItem(label: translations.navigationBar.portfolio, icon: Icon(Icons.insights, color: _getItemColor(0))),
+                BottomNavigationBarItem(label: translations.navigationBar.search, icon: Icon(Icons.search, color: _getItemColor(1))),
+                BottomNavigationBarItem(label: translations.navigationBar.chat, icon: Icon(Icons.chat_bubble, color: _getItemColor(2))),
+                BottomNavigationBarItem(label: translations.navigationBar.profile, icon: Icon(Icons.person, color: _getItemColor(3))),
               ],
               backgroundColor: colors.navigationBackground,
               type: BottomNavigationBarType.fixed,

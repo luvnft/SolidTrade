@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 
@@ -12,26 +14,30 @@ class LanguageProvider {
   ITranslation get language => _currentTranslation;
   late ITranslation _currentTranslation;
 
-  factory LanguageProvider.byTicker(LanguageTicker ticker) {
-    ITranslation lang;
+  static ITranslation tickerToTranslation(LanguageTicker ticker) {
     switch (ticker) {
       case LanguageTicker.en:
-        lang = EnTranslation();
-        break;
+        return EnTranslation();
       case LanguageTicker.de:
-        lang = DeTranslation();
-        break;
+        return DeTranslation();
     }
+  }
 
-    return LanguageProvider(lang);
+  factory LanguageProvider.byTicker(LanguageTicker ticker) {
+    return LanguageProvider(tickerToTranslation(ticker));
   }
 
   LanguageProvider(this._currentTranslation);
 
-  void updateLanguage(ITranslation lang) {
+  void updateLanguage(ITranslation lang, {bool savePermanently = true}) {
     _currentTranslation = lang;
 
     configurationProvider ??= GetIt.instance.get<ConfigurationProvider>();
     configurationProvider?.uiUpdateProvider.invokeUpdate();
+
+    if (savePermanently) {
+      final prefs = GetIt.instance.get<SharedPreferences>();
+      prefs.setInt(SharedPreferencesKeys.langTicker.toString(), lang.langTicker.index);
+    }
   }
 }

@@ -7,7 +7,7 @@ import 'package:solidtrade/providers/theme/app_theme.dart';
 class STWidget {
   final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
 
-  ITranslation get translation => configurationProvider.languageProvider.language;
+  ITranslation get translations => configurationProvider.languageProvider.language;
   IColorTheme get colors => configurationProvider.themeProvider.theme;
   UIUpdateStreamProvider get uiUpdate => configurationProvider.uiUpdateProvider;
 }

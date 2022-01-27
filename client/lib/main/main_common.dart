@@ -13,16 +13,21 @@ import 'package:solidtrade/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class Startup {
+  static bool languageHasToBeInitialized = false;
+  static bool colorThemeHasToBeInitialized = false;
+}
+
 Future<void> commonMain(Environment environment) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await ConfigReader.initialize();
 
-  final languageTickerIndex = prefs.getInt(SharedPreferencesKeys.langTicker.toString()) ?? LanguageTicker.en.index;
+  final languageTickerIndex = prefs.getInt(SharedPreferencesKeys.langTicker.toString()) ?? initialLanguage().index;
   final languageProvider = LanguageProvider.byTicker(LanguageTicker.values[languageTickerIndex]);
 
-  final colorThemeIndex = prefs.getInt(SharedPreferencesKeys.colorTheme.toString()) ?? ColorThemeType.light.index;
+  final colorThemeIndex = prefs.getInt(SharedPreferencesKeys.colorTheme.toString()) ?? initialColorTheme().index;
   final themeProvider = ThemeProvider.byThemeType(ColorThemeType.values[colorThemeIndex]);
 
   final updateProvider = UIUpdateStreamProvider();
@@ -34,4 +39,18 @@ Future<void> commonMain(Environment environment) async {
   getItService.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
 
   runApp(MyApp());
+}
+
+LanguageTicker initialLanguage() {
+  const defaultTicker = LanguageTicker.en;
+  Startup.languageHasToBeInitialized = true;
+
+  return defaultTicker;
+}
+
+ColorThemeType initialColorTheme() {
+  const defaultTheme = ColorThemeType.light;
+  Startup.colorThemeHasToBeInitialized = true;
+
+  return defaultTheme;
 }
