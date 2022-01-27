@@ -5,10 +5,8 @@ import 'package:solidtrade/services/util/util.dart';
 class UserAppBar extends StatelessWidget with STWidget {
   UserAppBar({Key? key}) : super(key: key);
 
-  late DateTime now;
-
   // TODO: Remove me in the future.
-  var url = "https://res.cloudinary.com/rosemite/image/upload/v1642702565/Projects/SolidTrade-Development/8AcxJgUEZvUWuN9JnfxNSwLahCb2_gypoxj.svg";
+  final url = "https://res.cloudinary.com/rosemite/image/upload/v1642702565/Projects/SolidTrade-Development/8AcxJgUEZvUWuN9JnfxNSwLahCb2_gypoxj.svg";
 
   void _handleProfileClick() {
     print("Clicked profile.");

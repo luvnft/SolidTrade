@@ -12,6 +12,7 @@ import 'package:solidtrade/data/enums/environment.dart';
 import 'package:solidtrade/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/services/stream/user_service.dart';
 
 class Startup {
   static bool languageHasToBeInitialized = false;
@@ -35,6 +36,7 @@ Future<void> commonMain(Environment environment) async {
   GetIt getItService = GetIt.instance;
   getItService.registerSingleton<SharedPreferences>(prefs);
   getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+  getItService.registerSingleton<UserService>(UserService());
 
   getItService.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
 

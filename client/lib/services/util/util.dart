@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
-import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
 class Util {
@@ -23,7 +22,6 @@ class Util {
     );
   }
 
-  // TODO: Test on web
   static ColorThemeType currentDeviceColorTheme(BuildContext context) {
     if (kIsWeb) {
       var brightness = SchedulerBinding.instance!.window.platformBrightness;
@@ -38,22 +36,17 @@ class Util {
     return isDarkMode ? ColorThemeType.dark : ColorThemeType.light;
   }
 
-  // TODO: Test on web
   static LanguageTicker currentDeviceLanguage(BuildContext context) {
     final Locale appLocale = Localizations.localeOf(context);
 
     var tickers = LanguageTicker.values.map((e) {
       var s = e.toString();
-      return s.substring(s.indexOf("."));
+      return s.substring(s.indexOf(".") + 1);
     });
 
     if (!tickers.any((ticker) => ticker == appLocale.languageCode)) {
       return LanguageTicker.en;
     }
-
-    try {
-      ;
-    } catch (e) {}
 
     return EnumToString.fromString(LanguageTicker.values, tickers.firstWhere((ticker) => ticker == appLocale.languageCode))!;
   }
