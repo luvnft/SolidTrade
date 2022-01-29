@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
-import 'package:solidtrade/data/models/historicalposition.dart';
+import 'package:solidtrade/components/chart/chart.dart';
 import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +26,8 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chartHeight = MediaQuery.of(context).size.height * .5;
+
     return StreamBuilder(
       stream: uiUpdate.stream$,
       builder: (context, snapshot) => Center(
@@ -34,10 +35,7 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            StreamBuilder<RequestResponse<List<HistoricalPosition>>?>(
-              stream: historicalPositionService.stream$,
-              builder: (context, snap) => Text("The count of historical positions is ${snap.data?.result?.length}"),
-            ),
+            SizedBox(height: chartHeight, child: const Chart()),
             ElevatedButton(
               onPressed: _onClickFetchForUpdate,
               child: const Text("Fetch for update."),

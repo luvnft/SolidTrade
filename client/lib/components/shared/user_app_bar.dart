@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UserAppBar extends StatelessWidget with STWidget {
   UserAppBar({Key? key}) : super(key: key);
 
-  // TODO: Remove me in the future.
-  final url = "https://res.cloudinary.com/rosemite/image/upload/v1642702565/Projects/SolidTrade-Development/8AcxJgUEZvUWuN9JnfxNSwLahCb2_gypoxj.svg";
+  final userService = GetIt.instance.get<UserService>();
 
   void _handleProfileClick() {
     Log.d("Clicked profile.");
@@ -19,10 +24,13 @@ class UserAppBar extends StatelessWidget with STWidget {
 
   Widget _getUserProfilePicture(String url, double size) {
     if (!url.endsWith(".svg")) {
-      return Image.network(
-        url,
+      return CachedNetworkImage(
+        imageUrl: url,
         height: size,
         width: size,
+        placeholder: (context, url) => const SkeletonAvatar(
+          style: SkeletonAvatarStyle(shape: BoxShape.circle),
+        ),
       );
     }
 
@@ -48,10 +56,13 @@ class UserAppBar extends StatelessWidget with STWidget {
                 borderRadius: BorderRadius.circular(90),
                 child: Container(
                   color: colors.background,
-                  child: _getUserProfilePicture(
-                    url,
-                    60,
-                  ),
+                  child: StreamBuilder<RequestResponse<User>?>(
+                      stream: userService.stream$,
+                      builder: (context, snap) => showLoadingWhileWaiting(
+                            isLoading: !snap.hasData,
+                            loadingBoxShape: BoxShape.circle,
+                            child: _getUserProfilePicture(snap.data?.result?.profilePictureUrl ?? "", 60),
+                          )),
                 ),
               ),
             ),
