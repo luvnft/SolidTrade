@@ -7,6 +7,7 @@ import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class Splash extends StatefulWidget {
@@ -46,12 +47,12 @@ class _SplashState extends State<Splash> with STWidget {
       await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
       await portfolioService.fetchPortfolioByUserId();
 
-      print("fetched user info successfully");
+      Log.d("fetched user info successfully");
     } else {
       // TODO: Navigate to login page.
       delay.ignore();
-      print(userRequest.error!.userFriendlyMessage);
-      print("User request failed.");
+      Log.d(userRequest.error!.userFriendlyMessage);
+      Log.d("User request failed.");
       return;
     }
 

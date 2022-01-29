@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class UserAppBar extends StatelessWidget with STWidget {
@@ -9,11 +10,11 @@ class UserAppBar extends StatelessWidget with STWidget {
   final url = "https://res.cloudinary.com/rosemite/image/upload/v1642702565/Projects/SolidTrade-Development/8AcxJgUEZvUWuN9JnfxNSwLahCb2_gypoxj.svg";
 
   void _handleProfileClick() {
-    print("Clicked profile.");
+    Log.d("Clicked profile.");
   }
 
   void _handleInviteClick() {
-    print("Clicked invite.");
+    Log.d("Clicked invite.");
   }
 
   Widget _getUserProfilePicture(String url, double size) {

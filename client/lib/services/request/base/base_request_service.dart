@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/debug/log.dart';
 
 abstract class IBaseRequestService {
   final UserService userService = GetIt.instance.get<UserService>();
@@ -18,7 +19,7 @@ abstract class IBaseRequestService {
   }) async {
     final uri = Uri.https(ConfigReader.getBaseUrl(), endpoint, queryParameters);
 
-    print(uri);
+    Log.d(uri);
 
     var auth = userService.getUserAuthenticationHeader();
 
