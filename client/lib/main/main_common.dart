@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
+import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -12,6 +13,7 @@ import 'package:solidtrade/data/enums/environment.dart';
 import 'package:solidtrade/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 
 class Startup {
@@ -35,8 +37,9 @@ Future<void> commonMain(Environment environment) async {
 
   GetIt getItService = GetIt.instance;
   getItService.registerSingleton<SharedPreferences>(prefs);
-  getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
   getItService.registerSingleton<UserService>(UserService());
+  getItService.registerSingleton<PortfolioService>(PortfolioService());
+  getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
 
   getItService.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
 

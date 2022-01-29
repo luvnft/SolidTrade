@@ -21,6 +21,19 @@ class RequestResponse<T> {
     return RequestResponse(error: ErrorModel.fromJson(json), isSuccessful: false, result: null);
   }
 
+  factory RequestResponse.inheritErrorResponse(RequestResponse error) {
+    return RequestResponse(error: error.error, isSuccessful: false, result: null);
+  }
+
+  factory RequestResponse.failedWithUserfriendlyMessage(String message) {
+    return RequestResponse(
+        error: ErrorModel.fromJson({
+          "userFriendlyMessage": message
+        }),
+        isSuccessful: false,
+        result: null);
+  }
+
   factory RequestResponse.failedDueValidationError() {
     var translations = GetIt.instance.get<ITranslation>();
 

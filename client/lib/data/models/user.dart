@@ -38,7 +38,7 @@ class User implements IBaseEntity {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    var x = User(
+    return User(
       id: json["id"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),
@@ -52,7 +52,5 @@ class User implements IBaseEntity {
       historicalPositions: (json["historicalPositions"] as List<dynamic>).map((e) => HistoricalPosition.fromJson(e)).toList(),
       portfolio: json["portfolio"] == null ? null : Portfolio.fromJson(json["portfolio"]),
     );
-
-    return x;
   }
 }

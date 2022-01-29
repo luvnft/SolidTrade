@@ -5,6 +5,7 @@ import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
+import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -17,6 +18,7 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final portfolioService = GetIt.instance.get<PortfolioService>();
   final userService = GetIt.instance.get<UserService>();
   bool _visible = false;
 
@@ -29,7 +31,7 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   void _fadeContent() {
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         _visible = !_visible;
       });
@@ -37,17 +39,25 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   Future<void> _navigateToHome() async {
-    // await Future.delayed(const Duration(milliseconds: 300));
-    // await Future.delayed(const Duration(seconds: 5));
+    var delay = Future.delayed(const Duration(milliseconds: 200));
 
-    // TODO: Remove user id here in the future.
-    await historicalPositionService.fetchHistoricalPositions(11003);
-    await userService.fetchUser();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ));
+    var userRequest = await userService.fetchUser();
+    if (userRequest.isSuccessful) {
+      await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
+      await portfolioService.fetchPortfolioByUserId();
+
+      print("fetched user info successfully");
+    } else {
+      // TODO: Navigate to login page.
+      delay.ignore();
+      print(userRequest.error!.userFriendlyMessage);
+      print("User request failed.");
+      return;
+    }
+
+    await delay;
+
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   @override

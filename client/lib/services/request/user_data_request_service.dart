@@ -4,26 +4,24 @@ import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/services/request/base/base_request_service.dart';
 
-import 'package:http/http.dart' as http;
+class UserDataRequestService extends IBaseRequestService {
+  Future<RequestResponse<User>> fetchUserByUid(String uid) async {
+    var requestResponse = await makeRequest(
+      HttpMethod.get,
+      Constants.endpointUser,
+      queryParameters: {
+        "Uid": uid,
+      },
+    );
 
-class UserDataRequestService {
-  Future<RequestResponse<User>> fetchUser() async {
-    final url = ConfigReader.getBaseUrl() + Constants.endpointUser;
-
-    // TODO: Remove uid in the future.
-    final response = await http.get(Uri.parse(url), headers: {
-      "Authorization": "Bearer 8AcxJgUEZvUWuN9JnfxNSwLahCb2"
-    });
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-
-      return RequestResponse.successful(User.fromJson(data));
-    } else if (response.statusCode == 400) {
-      return RequestResponse.failedDueValidationError();
-    } else {
-      return RequestResponse.failed(jsonDecode(response.body));
+    if (!requestResponse.isSuccessful) {
+      return RequestResponse.inheritErrorResponse(requestResponse);
     }
+
+    var response = requestResponse.result!;
+    var data = jsonDecode(response.body);
+    return RequestResponse.successful(User.fromJson(data));
   }
 }
