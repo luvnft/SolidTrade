@@ -10,12 +10,20 @@ abstract class IColorTheme {
   Color get softForeground;
   Color get foreground;
   Color get background;
+  Color get softBackground;
   String get logoAsGif;
 
   // Common stock colors
   Color get lightGreen;
   Color get midGreen;
   Color get darkGreen;
+
+  // More stock colors
+  Color get stockGreenLight;
+  Color get stockGreen;
+
+  Color get stockRedLight;
+  Color get stockRed;
 
   // Navigation colors
   Color get selectedItem;
@@ -27,6 +35,13 @@ class SharedColorThemes {
   static const Color lightGreen = Color.fromRGBO(239, 251, 246, 1);
   static const Color midGreen = Color.fromRGBO(188, 236, 214, 1);
   static const Color darkGreen = Color.fromRGBO(154, 216, 187, 1);
+
+  static const Color stockGreenLight = Color.fromRGBO(226, 250, 236, 1);
+  static const Color stockGreen = Color.fromRGBO(54, 223, 120, 1);
+
+  static const Color stockRedLight = Color.fromRGBO(255, 232, 226, 1);
+  static const Color stockRed = Color.fromRGBO(252, 99, 55, 1);
+
   static const Color unselectedItem = Colors.grey;
 }
 
@@ -39,6 +54,9 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get softForeground => Colors.black26;
+
+  @override
+  Color get softBackground => Colors.grey[300]!;
 
   @override
   String get logoAsGif => "assets/images/light-logo.gif";
@@ -63,6 +81,18 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get profilePictureBorder => Colors.black;
+
+  @override
+  Color get stockGreen => SharedColorThemes.stockGreen;
+
+  @override
+  Color get stockGreenLight => SharedColorThemes.stockGreenLight;
+
+  @override
+  Color get stockRed => SharedColorThemes.stockRed;
+
+  @override
+  Color get stockRedLight => SharedColorThemes.stockRedLight;
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -74,6 +104,9 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get softForeground => Colors.white24;
+
+  @override
+  Color get softBackground => Colors.grey[900]!;
 
   @override
   String get logoAsGif => "assets/images/dark-logo.gif";
@@ -98,6 +131,18 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get profilePictureBorder => Colors.grey;
+
+  @override
+  Color get stockGreen => SharedColorThemes.stockGreen;
+
+  @override
+  Color get stockGreenLight => SharedColorThemes.stockGreenLight;
+
+  @override
+  Color get stockRed => SharedColorThemes.stockRed;
+
+  @override
+  Color get stockRedLight => SharedColorThemes.stockRedLight;
 }
 
 class ThemeProvider {

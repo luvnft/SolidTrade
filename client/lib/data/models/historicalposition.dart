@@ -43,4 +43,18 @@ class HistoricalPosition implements IBaseEntity {
       isin: json["isin"],
     );
   }
+
+  factory HistoricalPosition.copy(HistoricalPosition hp, int numberOfShares) {
+    return HistoricalPosition(
+      id: hp.id,
+      buyInPrice: hp.buyInPrice,
+      buyOrSell: hp.buyOrSell,
+      createdAt: hp.createdAt,
+      isin: hp.isin,
+      numberOfShares: numberOfShares,
+      performance: hp.performance,
+      positionType: hp.positionType,
+      updatedAt: hp.updatedAt,
+    );
+  }
 }

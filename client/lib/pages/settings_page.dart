@@ -19,40 +19,43 @@ class SettingsPage extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(translations.settings.settings),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                ColorThemeType color;
-                if (configurationProvider.themeProvider.theme.background == Colors.black) {
-                  color = (ColorThemeType.light);
-                } else {
-                  color = ColorThemeType.dark;
-                }
+    return StreamBuilder(
+      stream: uiUpdate.stream$,
+      builder: (context, snapshot) => Scaffold(
+        appBar: AppBar(
+          title: Text(translations.settings.settings),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  ColorThemeType color;
+                  if (configurationProvider.themeProvider.theme.background == Colors.black) {
+                    color = (ColorThemeType.light);
+                  } else {
+                    color = ColorThemeType.dark;
+                  }
 
-                _changeColorTheme(context, color);
-              },
-              child: Text(translations.settings.changeTheme),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                ITranslation lang;
-                if (configurationProvider.languageProvider.language.langTicker == LanguageTicker.en) {
-                  lang = DeTranslation();
-                } else {
-                  lang = EnTranslation();
-                }
+                  _changeColorTheme(context, color);
+                },
+                child: Text(translations.settings.changeTheme),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ITranslation lang;
+                  if (configurationProvider.languageProvider.language.langTicker == LanguageTicker.en) {
+                    lang = DeTranslation();
+                  } else {
+                    lang = EnTranslation();
+                  }
 
-                _changeLanguage(context, lang);
-              },
-              child: Text(translations.settings.changeLanguage),
-            ),
-          ],
+                  _changeLanguage(context, lang);
+                },
+                child: Text(translations.settings.changeLanguage),
+              ),
+            ],
+          ),
         ),
       ),
     );

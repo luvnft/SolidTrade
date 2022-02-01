@@ -4,6 +4,7 @@ import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -39,61 +40,70 @@ class UserAppBar extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: TextButton(
-            onPressed: _handleProfileClick,
-            child: Card(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(90),
-                side: BorderSide(width: 0.5, color: colors.profilePictureBorder),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(90),
-                child: Container(
-                  color: colors.background,
-                  child: StreamBuilder<RequestResponse<User>?>(
-                      stream: userService.stream$,
-                      builder: (context, snap) => showLoadingWhileWaiting(
-                            isLoading: !snap.hasData,
-                            loadingBoxShape: BoxShape.circle,
-                            child: _getUserProfilePicture(snap.data?.result?.profilePictureUrl ?? "", 60),
-                          )),
+    return Container(
+      color: colors.softBackground,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                child: TextButton(
+                  onPressed: _handleProfileClick,
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(90),
+                      side: BorderSide(width: 0.5, color: colors.profilePictureBorder),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(90),
+                      child: Container(
+                        color: colors.background,
+                        child: StreamBuilder<RequestResponse<User>?>(
+                            stream: userService.stream$,
+                            builder: (context, snap) => showLoadingWhileWaiting(
+                                  isLoading: !snap.hasData,
+                                  loadingBoxShape: BoxShape.circle,
+                                  child: _getUserProfilePicture(snap.data?.result?.profilePictureUrl ?? "", 40),
+                                )),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: _handleInviteClick,
-          style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0)),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(45),
-              side: BorderSide(width: 1, color: colors.midGreen),
-            ),
-            elevation: 0,
-            color: colors.lightGreen,
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 10),
-                  Icon(Icons.person_add_outlined, color: colors.darkGreen),
-                  const SizedBox(width: 10),
-                  Text(translations.userAppBar.invite, style: TextStyle(color: colors.darkGreen)),
-                  const SizedBox(width: 10),
-                ],
+              const Text(
+                "Your Portfolio🚀",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
-            ),
+            ],
           ),
-        ),
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: null,
+                icon: Icon(Icons.bar_chart_sharp, color: colors.foreground),
+                padding: const EdgeInsets.only(right: 10),
+                constraints: const BoxConstraints(),
+              ),
+              IconButton(
+                onPressed: null,
+                icon: Icon(Icons.notifications_rounded, color: colors.foreground),
+                padding: const EdgeInsets.only(right: 10),
+                constraints: const BoxConstraints(),
+              ),
+              IconButton(
+                onPressed: () => Util.pushToRoute(context, SettingsPage()),
+                icon: Icon(Icons.settings_rounded, color: colors.foreground),
+                padding: const EdgeInsets.only(right: 12.5),
+                constraints: const BoxConstraints(),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

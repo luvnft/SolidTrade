@@ -25,6 +25,10 @@ class Util {
     );
   }
 
+  static Future pushToRoute(BuildContext context, Widget route) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) => route));
+  }
+
   static ColorThemeType currentDeviceColorTheme(BuildContext context) {
     if (kIsWeb) {
       var brightness = SchedulerBinding.instance!.window.platformBrightness;
@@ -56,11 +60,11 @@ class Util {
 }
 
 Widget showLoadingWhileWaiting({required bool isLoading, required BoxShape loadingBoxShape, required Widget child}) {
-  if (isLoading) {
-    return SkeletonAvatar(
-      style: SkeletonAvatarStyle(shape: loadingBoxShape),
-    );
-  }
+  return isLoading ? showLoadingSkeleton(loadingBoxShape) : child;
+}
 
-  return child;
+Widget showLoadingSkeleton(BoxShape loadingBoxShape) {
+  return SkeletonAvatar(
+    style: SkeletonAvatarStyle(shape: loadingBoxShape),
+  );
 }
