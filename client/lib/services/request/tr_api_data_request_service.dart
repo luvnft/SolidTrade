@@ -16,6 +16,7 @@ class TrApiDataRequestService {
   final Uri _endpointUri = Uri.parse(ConfigReader.getTrEndpoint());
   late IOWebSocketChannel _socketChannel;
 
+  DateTime _lastEchoSent = DateTime.now();
   bool _initialConnect = true;
   int _currentId = 0;
 
@@ -61,6 +62,11 @@ class TrApiDataRequestService {
     if (message == "connected" || message.startsWith("echo")) {
       _initialConnect = false;
       return;
+    }
+
+    if (DateTime.now().difference(_lastEchoSent).inSeconds > 30) {
+      _lastEchoSent = DateTime.now();
+      _sendMessage("echo ${_lastEchoSent.millisecondsSinceEpoch}");
     }
 
     var id = _parseMessageId(message);
