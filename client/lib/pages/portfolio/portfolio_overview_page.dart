@@ -49,17 +49,15 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          // "Good morning,\n${snap.data!.result!.displayName}👋",
                           "Good morning,\n${snap.data!.result!.displayName}👋.",
                           style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 30),
-                          // style: Theme.of(context).textTheme.headline4!,
                           textAlign: TextAlign.left,
                         ),
                       ),
                       const SizedBox(height: 5),
                       RichText(
                         text: TextSpan(
-                          text: 'Your portfolio is today up ',
+                          text: 'Your portfolio is up today ',
                           style: DefaultTextStyle.of(context).style.copyWith(fontSize: 15),
                           children: <TextSpan>[
                             TextSpan(text: '+3.20%', style: TextStyle(fontWeight: FontWeight.bold, color: colors.stockGreen)),
@@ -67,16 +65,11 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                             const TextSpan(text: '-1.30%', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
                             const TextSpan(text: '. Therefore out performing the index by '),
                             const TextSpan(text: '+4.50%', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                            // TextSpan(text: '+3.21%', style: TextStyle(fontWeight: FontWeight.bold, color: colors.stockGreen)),
-                            // const TextSpan(text: ' and out performing the S&P 500 by '),
-                            // TextSpan(text: '1.2%', style: TextStyle(fontWeight: FontWeight.bold, color: colors.stockGreen)),
-                            // const TextSpan(text: ' percent.'),
                           ],
                         ),
                       ),
                       const SizedBox(height: 10),
                       const PortfolioPositionsPage()
-                      // const Text("Here are your top movers today:"),
                     ],
                   ),
                 ),

@@ -50,7 +50,7 @@ class EnSettingsTranslation implements ISettingsTranslation {
 
 class EnNavigationBarTranslation implements INavigationBarTranslation {
   @override
-  String get chat => SharedTranslations.navigationBarChat;
+  String get leaderboard => SharedTranslations.navigationBarChat;
 
   @override
   String get portfolio => SharedTranslations.navigationBarPortfolio;

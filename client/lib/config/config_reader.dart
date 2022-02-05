@@ -12,4 +12,12 @@ abstract class ConfigReader {
   static String getBaseUrl() {
     return _config['baseUrl'];
   }
+
+  static String getTrEndpoint() {
+    return _config['trEndpoint'];
+  }
+
+  static String getTrConnectString() {
+    return _config['initialTrConnectString'];
+  }
 }

@@ -4,6 +4,7 @@ import 'package:solidtrade/services/request/ongoing_knockout_data_request_servic
 import 'package:solidtrade/services/request/ongoing_warrant_data_request_service.dart';
 import 'package:solidtrade/services/request/portfolio_data_request_service.dart';
 import 'package:solidtrade/services/request/stock_data_request_service.dart';
+import 'package:solidtrade/services/request/tr_api_data_request_service.dart';
 import 'package:solidtrade/services/request/user_data_request_service.dart';
 import 'package:solidtrade/services/request/warrant_data_request_service.dart';
 
@@ -16,4 +17,5 @@ class DataRequestService {
   static StockDataRequestService stockDataRequestService = StockDataRequestService();
   static UserDataRequestService userDataRequestService = UserDataRequestService();
   static WarrantDataRequestService warrantDataRequestService = WarrantDataRequestService();
+  static TrApiDataRequestService trApiDataRequestService = TrApiDataRequestService();
 }

@@ -7,4 +7,7 @@ class Constants {
   static const endpointStock = "/stocks/";
   static const endpointUser = "/users/";
   static const endpointWarrant = "/warrants/";
+
+  static String getTrProductInfoRequestString(String isin) => "{\"type\":\"instrument\",\"id\":\"$isin\"}";
+  static String getTrProductPriceRequestString(String isin) => "{\"type\":\"ticker\",\"id\":\"$isin\"}";
 }

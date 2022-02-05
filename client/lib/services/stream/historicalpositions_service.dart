@@ -2,19 +2,16 @@ import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
+import 'package:solidtrade/services/stream/base/base_service.dart';
 
-class HistoricalPositionService {
-  final BehaviorSubject<RequestResponse<List<HistoricalPosition>>?> _behaviorSubject = BehaviorSubject.seeded(null);
-  ValueStream<RequestResponse<List<HistoricalPosition>>?> get stream$ => _behaviorSubject.stream;
-
-  bool get currentHasValue => _behaviorSubject.hasValue;
-  RequestResponse<List<HistoricalPosition>>? get current => _behaviorSubject.value;
+class HistoricalPositionService extends BaseService<RequestResponse<List<HistoricalPosition>>?> {
+  HistoricalPositionService() : super(BehaviorSubject.seeded(null));
 
   Future<RequestResponse<List<HistoricalPosition>>> fetchHistoricalPositions(int userId) async {
     var future = DataRequestService.historicalPositionsDataRequestService.fetchHistoricalPosition(userId);
 
     var result = await future;
-    _behaviorSubject.add(result);
+    behaviorSubject.add(result);
 
     return future;
   }

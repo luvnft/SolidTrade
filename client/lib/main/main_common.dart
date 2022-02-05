@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
-import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -15,7 +15,11 @@ import 'package:solidtrade/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
+import 'package:solidtrade/services/stream/tr_product_info_service.dart';
+import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+
+import '../mapper.g.dart' as mapper;
 
 class Startup {
   static bool languageHasToBeInitialized = false;
@@ -24,6 +28,8 @@ class Startup {
 
 Future<void> commonMain(Environment environment) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  mapper.init();
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await ConfigReader.initialize();
@@ -41,6 +47,9 @@ Future<void> commonMain(Environment environment) async {
   getItService.registerSingleton<UserService>(UserService());
   getItService.registerSingleton<PortfolioService>(PortfolioService());
   getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+
+  getItService.registerFactory<TrProductInfoService>(() => TrProductInfoService());
+  getItService.registerFactory<TrProductPriceService>(() => TrProductPriceService());
 
   // Component services.
   getItService.registerSingleton<FloatingActionButtonUpdateService>(FloatingActionButtonUpdateService());

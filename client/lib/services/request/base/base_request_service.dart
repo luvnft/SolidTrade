@@ -9,6 +9,7 @@ import 'package:solidtrade/services/util/debug/log.dart';
 
 abstract class IBaseRequestService {
   final UserService userService = GetIt.instance.get<UserService>();
+  static final String baseUrl = ConfigReader.getBaseUrl();
 
   Future<RequestResponse<http.Response>> makeRequest(
     HttpMethod method,
@@ -17,7 +18,7 @@ abstract class IBaseRequestService {
     Map<String, String>? queryParameters,
     bool selfHandleErrorCode = true,
   }) async {
-    final uri = Uri.https(ConfigReader.getBaseUrl(), endpoint, queryParameters);
+    final uri = Uri.https(baseUrl, endpoint, queryParameters);
 
     Log.d(uri);
 
@@ -50,6 +51,8 @@ abstract class IBaseRequestService {
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
         return RequestResponse.failedDueValidationError();
+      } else if (response.statusCode == 502) {
+        RequestResponse.failedWithUserfriendlyMessage("The servers are currently offline. Please try again later.");
       } else {
         return RequestResponse.failed(jsonDecode(response.body));
       }

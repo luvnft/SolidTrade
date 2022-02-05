@@ -44,7 +44,7 @@ class DeSpashTranslation implements ISpashTranslation {
 
 class DeNavigationBarTranslation implements INavigationBarTranslation {
   @override
-  String get chat => SharedTranslations.navigationBarChat;
+  String get leaderboard => SharedTranslations.navigationBarChat;
 
   @override
   String get portfolio => SharedTranslations.navigationBarPortfolio;

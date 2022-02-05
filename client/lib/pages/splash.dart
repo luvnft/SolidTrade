@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
+import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -19,8 +23,10 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final trProductPriceService = GetIt.instance.get<TrProductPriceService>();
   final portfolioService = GetIt.instance.get<PortfolioService>();
   final userService = GetIt.instance.get<UserService>();
+
   bool _visible = false;
 
   @override
@@ -40,7 +46,11 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   Future<void> _navigateToHome() async {
-    var delay = Future.delayed(const Duration(milliseconds: 200));
+    var delay = Future.delayed(const Duration(seconds: 10));
+
+    // TODO: Remove in the future.
+    // trProductPriceService.requestTrProductPrice("US88160R1014.LSX");
+    trProductPriceService.requestTrProductPrice("XF000BTC0017.BHS");
 
     var userRequest = await userService.fetchUser();
     if (userRequest.isSuccessful) {
@@ -78,6 +88,7 @@ class _SplashState extends State<Splash> with STWidget {
     }
 
     return Scaffold(
+      backgroundColor: configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? const Color.fromRGBO(251, 251, 251, 1) : colors.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,7 +115,15 @@ class _SplashState extends State<Splash> with STWidget {
                     width: 220,
                     child: Divider(thickness: 2, color: colors.softForeground),
                   ),
-                  const Text("Solid trade"),
+                  StreamBuilder<RequestResponse<TrProductPrice>?>(
+                    stream: trProductPriceService.stream$,
+                    builder: (context, snap) {
+                      if (!snap.hasData) {
+                        return const Text("Loading");
+                      }
+                      return Text(snap.data!.result!.bid.price.toString());
+                    },
+                  ),
                 ],
               ),
             ),

@@ -13,7 +13,7 @@ abstract class ITranslation {
 
 class SharedTranslations {
   static const String navigationBarPortfolio = "Portfolio";
-  static const String navigationBarChat = "Chat";
+  static const String navigationBarChat = "Leaderboard";
 }
 
 abstract class ICommonTranslation {
@@ -33,7 +33,7 @@ abstract class IUserAppBarTranslation {
 abstract class INavigationBarTranslation {
   String get portfolio;
   String get search;
-  String get chat;
+  String get leaderboard;
   String get profile;
 }
 

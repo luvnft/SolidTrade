@@ -5,6 +5,9 @@ import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 abstract class IColorTheme {
+  // Info
+  ColorThemeType get themeColorType;
+
   // Common colors
   Color get profilePictureBorder;
   Color get softForeground;
@@ -46,6 +49,9 @@ class SharedColorThemes {
 }
 
 class LightColorTheme implements IColorTheme {
+  @override
+  ColorThemeType get themeColorType => ColorThemeType.light;
+
   @override
   Color get background => Colors.white;
 
@@ -96,6 +102,9 @@ class LightColorTheme implements IColorTheme {
 }
 
 class DarkColorTheme implements IColorTheme {
+  @override
+  ColorThemeType get themeColorType => ColorThemeType.dark;
+
   @override
   Color get background => Colors.black;
 

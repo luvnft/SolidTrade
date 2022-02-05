@@ -1,26 +1,22 @@
-import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
+import 'package:solidtrade/services/stream/base/base_service.dart';
 
-class UserService {
-  final BehaviorSubject<RequestResponse<User>?> _behaviorSubject = BehaviorSubject.seeded(null);
-  ValueStream<RequestResponse<User>?> get stream$ => _behaviorSubject.stream;
-
-  bool get currentHasValue => _behaviorSubject.hasValue;
-  RequestResponse<User>? get current => _behaviorSubject.value;
+class UserService extends BaseService<RequestResponse<User>?> {
+  UserService() : super(BehaviorSubject.seeded(null));
 
   Future<RequestResponse<User>> fetchUser() async {
     // TODO: Remove the uid in the future.
     var result = await DataRequestService.userDataRequestService.fetchUserByUid("8AcxJgUEZvUWuN9JnfxNSwLahCb2");
 
-    _behaviorSubject.add(result);
+    behaviorSubject.add(result);
     return result;
   }
 
   void updateUser(User user) {
-    _behaviorSubject.add(RequestResponse.successful(user));
+    behaviorSubject.add(RequestResponse.successful(user));
   }
 
   RequestResponse<Map<String, String>> getUserAuthenticationHeader() {
