@@ -4,7 +4,7 @@ import 'package:simple_json_mapper/simple_json_mapper.dart';
 class TrProductInfo {
   final bool active;
   final List<String> exchangeIds;
-  final String intlSymbol;
+  String? intlSymbol;
   final String shortName;
   final String isin;
   final List<ProductTags> tags;
@@ -13,7 +13,7 @@ class TrProductInfo {
   TrProductInfo({
     required this.active,
     required this.exchangeIds,
-    required this.intlSymbol,
+    this.intlSymbol,
     required this.shortName,
     required this.isin,
     required this.tags,
@@ -29,8 +29,8 @@ class ProductTags {
 }
 
 class DerivativeProductCount {
-  final int knockOutProduct;
-  final int vanillaWarrant;
+  int? knockOutProduct;
+  int? vanillaWarrant;
 
-  DerivativeProductCount({required this.knockOutProduct, required this.vanillaWarrant});
+  DerivativeProductCount({this.knockOutProduct, this.vanillaWarrant});
 }

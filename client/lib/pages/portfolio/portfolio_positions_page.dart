@@ -39,10 +39,9 @@ class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with ST
 
           if (!hasAnyPositions) {
             return Column(
-              children: [
-                // const SizedBox(height: 5),
-                const Divider(color: Colors.grey),
-                const SizedBox(height: 5),
+              children: const [
+                Divider(color: Colors.grey),
+                SizedBox(height: 5),
                 positionTitle,
 
                 // TODO: Some message the encourage the user to start.
@@ -50,7 +49,7 @@ class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with ST
             );
           }
 
-          final stocks = portfolio.stockPositions.map((e) => ProductTileInfo(PositionType.stock, e.isin)).toList();
+          final stocks = portfolio.stockPositions.map((e) => ProductTileInfo(PositionType.stock, e.isin)).toList().reversed.toList();
           final knockouts = portfolio.knockOutPositions.map((e) => ProductTileInfo(PositionType.knockout, e.isin)).toList();
           final warrants = portfolio.warrantPositions.map((e) => ProductTileInfo(PositionType.warrant, e.isin)).toList();
           final ongoingKnockouts = portfolio.ongoingKnockOutPositions.map((e) => ProductTileInfo(PositionType.knockout, e.isin)).toList();

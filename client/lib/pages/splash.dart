@@ -9,7 +9,6 @@ import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
-import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -23,7 +22,6 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with STWidget {
   final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-  final trProductPriceService = GetIt.instance.get<TrProductPriceService>();
   final portfolioService = GetIt.instance.get<PortfolioService>();
   final userService = GetIt.instance.get<UserService>();
 
@@ -46,11 +44,7 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   Future<void> _navigateToHome() async {
-    var delay = Future.delayed(const Duration(seconds: 10));
-
-    // TODO: Remove in the future.
-    // trProductPriceService.requestTrProductPrice("US88160R1014.LSX");
-    trProductPriceService.requestTrProductPrice("XF000BTC0017.BHS");
+    var delay = Future.delayed(const Duration(seconds: 1));
 
     var userRequest = await userService.fetchUser();
     if (userRequest.isSuccessful) {
@@ -115,15 +109,7 @@ class _SplashState extends State<Splash> with STWidget {
                     width: 220,
                     child: Divider(thickness: 2, color: colors.softForeground),
                   ),
-                  StreamBuilder<RequestResponse<TrProductPrice>?>(
-                    stream: trProductPriceService.stream$,
-                    builder: (context, snap) {
-                      if (!snap.hasData) {
-                        return const Text("Loading");
-                      }
-                      return Text(snap.data!.result!.bid.price.toString());
-                    },
-                  ),
+                  const Text("Solid trade"),
                 ],
               ),
             ),

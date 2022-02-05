@@ -55,7 +55,7 @@ class UserAppBar extends StatelessWidget with STWidget {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(90),
-                      side: BorderSide(width: 0.5, color: colors.profilePictureBorder),
+                      side: BorderSide(width: 0.5, color: colors.softBackground),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(90),

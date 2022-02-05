@@ -38,7 +38,7 @@ class TrApiDataRequestService {
       onError: (_) => reconnect(),
     );
 
-    _socketChannel.sink.add(_initialTrConnectString);
+    _sendMessage(_initialTrConnectString);
   }
 
   void _onMessageReceived(String message) {
@@ -49,7 +49,7 @@ class TrApiDataRequestService {
 
       for (var item in requestMessageStrings.entries) {
         if (_runningRequests.any((r) => r.id == item.key)) {
-          _socketChannel.sink.add("sub ${item.key} ${item.value}");
+          _sendMessage("sub ${item.key} ${item.value}");
         } else {
           _requestMessageStrings.remove(item);
         }
@@ -92,6 +92,13 @@ class TrApiDataRequestService {
     return index < 0 ? null : message.substring(index);
   }
 
+  void _sendMessage(String message) {
+    Log.d("Send websocket message: " + message);
+    _socketChannel.sink.add(message);
+  }
+
+  int _generateNewId() => ++_currentId;
+
   Future<RequestResponse<T>> makeRequest<T>(String requestString) async {
     Completer<RequestResponse<T>> completer = Completer();
 
@@ -109,7 +116,7 @@ class TrApiDataRequestService {
           completer.complete(RequestResponse.successful(JsonMapper.deserialize<T>(response)!));
         });
 
-    _socketChannel.sink.add("sub $id $requestString");
+    _sendMessage("sub $id $requestString");
     _requestMessageStrings[id] = requestString;
     _runningRequests.add(model);
 
@@ -151,7 +158,7 @@ class TrApiDataRequestService {
           return;
         });
 
-    _socketChannel.sink.add("sub $id $requestString");
+    _sendMessage("sub $id $requestString");
     _requestMessageStrings[id] = requestString;
     _runningRequests.add(model);
 
@@ -162,10 +169,8 @@ class TrApiDataRequestService {
   }
 
   void unsub(int id) {
-    _socketChannel.sink.add("unsub $id");
+    _sendMessage("unsub $id");
     _runningRequests.removeWhere((r) => r.id == id);
     _requestMessageStrings.removeWhere((messageId, _) => messageId == id);
   }
-
-  int _generateNewId() => ++_currentId;
 }
