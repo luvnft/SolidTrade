@@ -3,10 +3,14 @@ import 'dart:math';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Chart extends StatefulWidget {
-  const Chart({Key? key}) : super(key: key);
+  const Chart({Key? key, required this.chartDateRangeStream}) : super(key: key);
+
+  // TODO: Consume stream into chart.
+  final ChartDateRangeService chartDateRangeStream;
 
   @override
   State<Chart> createState() => _ChartState();

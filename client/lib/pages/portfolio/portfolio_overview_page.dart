@@ -6,6 +6,7 @@ import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_positions_page.dart';
+import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -15,6 +16,8 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
 
   final userService = GetIt.instance.get<UserService>();
   final portfolioService = GetIt.instance.get<PortfolioService>();
+
+  final chartDateRangeStream = ChartDateRangeService();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
           children: [
             SizedBox(
               height: chartHeight,
-              child: const Chart(),
+              child: Chart(chartDateRangeStream: chartDateRangeStream),
             ),
             StreamBuilder<RequestResponse<User>?>(
               initialData: userService.current,

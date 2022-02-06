@@ -1,7 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/common/shared/buy_or_sell.dart';
+import 'package:solidtrade/data/common/shared/position_type.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
+import 'package:solidtrade/providers/app/app_configuration_provider.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
+import 'package:solidtrade/services/util/extentions/string_extentions.dart';
 
 class TrUtil {
+  static final _configurationProvider = GetIt.instance.get<ConfigurationProvider>();
+
+  static TrUiProductDetails getTrUiProductDetials(
+    TrProductPrice priceInfo,
+    TrProductInfo productInfo,
+    PositionType positionType,
+  ) {
+    final isStockPosition = positionType == PositionType.stock;
+
+    // TODO: When the market is closed, we dont want to use these metrics anymore. Instad use priceInfo.close (which has to be implemented still)
+    final percentageChange = priceInfo.bid.price / priceInfo.open.price;
+    final absolutChange = priceInfo.bid.price - priceInfo.open.price;
+
+    final isUp = percentageChange == 1 || percentageChange > 1;
+    final plusMinus = isUp ? "+" : "";
+
+    final productTitle = isStockPosition ? productInfo.shortName : _getDerivitiveProductTitle(productInfo);
+    final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivitiveProductSubtitle(productInfo);
+
+    final colorMode = _configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? "light" : "dark";
+
+    var imageIsin = isStockPosition ? productInfo.isin : productInfo.derivativeInfo!.underlying.isin;
+
+    return TrUiProductDetails(
+      percentageChange: percentageChange,
+      absolutChange: absolutChange,
+      isUp: isUp,
+      plusMinusProductNamePrefix: plusMinus,
+      productTitle: productTitle,
+      productSubtitle: productSubtitle,
+      imageUrl: "https://assets.traderepublic.com/img/logos/$imageIsin/$colorMode.svg",
+      textColor: isUp ? _configurationProvider.themeProvider.theme.stockGreen : _configurationProvider.themeProvider.theme.stockRed,
+    );
+  }
+
+  static String _getStockProductSubtitle(String shortName, String name) {
+    return name.length > 18 ? shortName : name;
+  }
+
+  static String _getDerivitiveProductTitle(TrProductInfo info) {
+    return "${info.derivativeInfo!.properties.optionType.capitalize()} @${info.derivativeInfo!.properties.strike.toStringAsFixed(2)}";
+  }
+
+  static String _getDerivitiveProductSubtitle(TrProductInfo info) {
+    return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
+  }
+
   // List<HistoricalPosition> getRemaindingHistoricalPositions(List<HistoricalPosition> positions) {
   //   List<HistoricalPosition> results = [];
 
@@ -55,4 +110,39 @@ class TrUtil {
 
     return map;
   }
+}
+
+class TrUiProductDetails {
+  final double percentageChange;
+  final double absolutChange;
+  final bool isUp;
+  final String plusMinusProductNamePrefix;
+  final String productTitle;
+  final String productSubtitle;
+  final String imageUrl;
+  final Color textColor;
+
+  TrUiProductDetails({
+    required this.percentageChange,
+    required this.absolutChange,
+    required this.isUp,
+    required this.plusMinusProductNamePrefix,
+    required this.productTitle,
+    required this.productSubtitle,
+    required this.imageUrl,
+    required this.textColor,
+  });
+
+  // final percentageChange = priceInfo.bid.price / priceInfo.open.price;
+  // final absolutChange = priceInfo.bid.price - priceInfo.open.price;
+
+  // final isUp = percentageChange == 1 || percentageChange > 1;
+  // final plusMinus = isUp ? "+" : "";
+
+  // final productTitle = isStockPosition ? productInfo.shortName : _getDerivitiveProductTitle(productInfo);
+  // final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivitiveProductSubtitle(productInfo);
+
+  // final colorMode = colors.themeColorType == ColorThemeType.light ? "light" : "dark";
+
+  // final textStyleForNumbers = TextStyle(color: isUp ? colors.stockGreen : colors.stockRed);
 }

@@ -5,9 +5,12 @@ class TrProductInfo {
   final bool active;
   final List<String> exchangeIds;
   String? intlSymbol;
+  String? homeSymbol;
   final String shortName;
   final String name;
+  final String typeId;
   final String isin;
+  String? issuerDisplayName;
   final List<ProductTags> tags;
   final DerivativeProductCount derivativeProductCount;
   DerivativeInfo? derivativeInfo;
@@ -16,12 +19,15 @@ class TrProductInfo {
     required this.active,
     required this.exchangeIds,
     required this.shortName,
+    required this.typeId,
     required this.isin,
+    required this.homeSymbol,
     required this.name,
     required this.tags,
     required this.derivativeProductCount,
-    this.intlSymbol,
+    this.issuerDisplayName,
     this.derivativeInfo,
+    this.intlSymbol,
   });
 }
 

@@ -23,7 +23,10 @@ class PortfolioListTile extends StatelessWidget with STWidget {
                 itemCount: products.length,
                 itemBuilder: (_, index) => Column(
                   children: [
-                    ProductTile(info: products[index]),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ProductTile(info: products[index]),
+                    ),
                     index == products.length - 1
                         ? const SizedBox.shrink()
                         : Divider(

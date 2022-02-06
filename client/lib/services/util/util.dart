@@ -6,10 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:solidtrade/data/enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
 class Util {
+  // TODO: Should use language translation in the future.
+  static String chartDateRangeToString(ChartDateRangeView range) {
+    switch (range) {
+      case ChartDateRangeView.oneDay:
+        return "1D";
+      case ChartDateRangeView.oneWeek:
+        return "1W";
+      case ChartDateRangeView.oneMonth:
+        return "1M";
+      case ChartDateRangeView.sixMonth:
+        return "6M";
+      case ChartDateRangeView.oneYear:
+        return "1Y";
+      case ChartDateRangeView.fiveYear:
+        return "5Y";
+    }
+  }
+
   static Widget loadImage(String url, double size) {
     if (!url.endsWith(".svg")) {
       return CachedNetworkImage(
@@ -22,10 +41,10 @@ class Util {
       );
     }
 
-    return loadSvgImageForWeb(url, size, size);
+    return loadSvgImage(url, size, size);
   }
 
-  static Widget loadSvgImageForWeb(String url, double width, double height) {
+  static Widget loadSvgImage(String url, double width, double height) {
     return SvgPicture.network(
       url,
       width: width,
@@ -34,8 +53,12 @@ class Util {
         padding: EdgeInsets.symmetric(horizontal: width, vertical: height),
         width: width,
         height: height,
-        child: const SkeletonAvatar(
-          style: SkeletonAvatarStyle(shape: BoxShape.circle),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: const SkeletonAvatar(
+            style: SkeletonAvatarStyle(shape: BoxShape.circle),
+          ),
         ),
       ),
     );

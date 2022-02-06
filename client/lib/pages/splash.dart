@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -82,7 +80,14 @@ class _SplashState extends State<Splash> with STWidget {
     }
 
     return Scaffold(
-      backgroundColor: configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? const Color.fromRGBO(251, 251, 251, 1) : colors.background,
+      backgroundColor: configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light
+          ? const Color.fromRGBO(
+              251,
+              251,
+              251,
+              1,
+            )
+          : colors.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
