@@ -26,6 +26,7 @@ class ProductView extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     final chartHeight = MediaQuery.of(context).size.height * .5;
+    const double bottomBarHeight = 60;
 
     return Scaffold(
       appBar: AppBar(
@@ -33,17 +34,105 @@ class ProductView extends StatelessWidget with STWidget {
         foregroundColor: colors.foreground,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          ProductAppBar(
-            positionType: positionType,
-            productInfo: productInfo,
-            trProductPriceStream: trProductPriceStream,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
+          height: constraints.maxHeight,
+          child: Column(
+            children: [
+              Container(
+                height: constraints.maxHeight - bottomBarHeight,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ProductAppBar(
+                        positionType: positionType,
+                        productInfo: productInfo,
+                        trProductPriceStream: trProductPriceStream,
+                      ),
+                      SizedBox(width: double.infinity, height: chartHeight, child: Chart(chartDateRangeStream: chartDateRangeStream)),
+                      const SizedBox(height: 5),
+                      Container(margin: const EdgeInsets.symmetric(horizontal: 10), height: 30, child: ProductChartDateRangeSelection(chartDateRangeStream: chartDateRangeStream)),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                      const Text("data"),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: bottomBarHeight,
+                width: constraints.maxWidth,
+                color: colors.navigationBackground,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: (constraints.maxWidth) - 20,
+                      margin: const EdgeInsets.all(5),
+                      child: TextButton(
+                        onPressed: null,
+                        child: Text("Buy"),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(colors.stockGreen),
+                          foregroundColor: MaterialStateProperty.all(colors.foreground),
+                        ),
+                      ),
+                    ),
+                    // Container(
+                    //   width: (constraints.maxWidth / 2) - 20,
+                    //   margin: const EdgeInsets.all(5),
+                    //   child: TextButton(
+                    //     onPressed: null,
+                    //     child: Text("Sell"),
+                    //     style: ButtonStyle(
+                    //       backgroundColor: MaterialStateProperty.all(colors.stockRed),
+                    //       foregroundColor: MaterialStateProperty.all(colors.foreground),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Container(
+                    //   width: (constraints.maxWidth / 2) - 20,
+                    //   margin: const EdgeInsets.all(5),
+                    //   child: TextButton(
+                    //     onPressed: null,
+                    //     child: Text("Buy"),
+                    //     style: ButtonStyle(
+                    //       backgroundColor: MaterialStateProperty.all(colors.stockGreen),
+                    //       foregroundColor: MaterialStateProperty.all(colors.foreground),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              )
+            ],
           ),
-          SizedBox(width: double.infinity, height: chartHeight, child: Chart(chartDateRangeStream: chartDateRangeStream)),
-          const SizedBox(height: 5),
-          Container(margin: const EdgeInsets.symmetric(horizontal: 10), height: 30, child: ProductChartDateRangeSelection(chartDateRangeStream: chartDateRangeStream)),
-        ],
+        ),
       ),
     );
   }
