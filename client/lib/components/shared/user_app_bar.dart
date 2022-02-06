@@ -8,7 +8,6 @@ import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class UserAppBar extends StatelessWidget with STWidget {
   UserAppBar({Key? key}) : super(key: key);
@@ -17,25 +16,6 @@ class UserAppBar extends StatelessWidget with STWidget {
 
   void _handleProfileClick() {
     Log.d("Clicked profile.");
-  }
-
-  void _handleInviteClick() {
-    Log.d("Clicked invite.");
-  }
-
-  Widget _getUserProfilePicture(String url, double size) {
-    if (!url.endsWith(".svg")) {
-      return CachedNetworkImage(
-        imageUrl: url,
-        height: size,
-        width: size,
-        placeholder: (context, url) => const SkeletonAvatar(
-          style: SkeletonAvatarStyle(shape: BoxShape.circle),
-        ),
-      );
-    }
-
-    return Util.loadSvgImageForWeb(url, size, size);
   }
 
   @override
@@ -66,7 +46,7 @@ class UserAppBar extends StatelessWidget with STWidget {
                             builder: (context, snap) => showLoadingWhileWaiting(
                                   isLoading: !snap.hasData,
                                   loadingBoxShape: BoxShape.circle,
-                                  child: _getUserProfilePicture(snap.data?.result?.profilePictureUrl ?? "", 40),
+                                  child: Util.loadImage(snap.data?.result?.profilePictureUrl ?? "", 40),
                                 )),
                       ),
                     ),

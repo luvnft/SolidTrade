@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,21 @@ import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
 class Util {
+  static Widget loadImage(String url, double size) {
+    if (!url.endsWith(".svg")) {
+      return CachedNetworkImage(
+        imageUrl: url,
+        height: size,
+        width: size,
+        placeholder: (context, url) => const SkeletonAvatar(
+          style: SkeletonAvatarStyle(shape: BoxShape.circle),
+        ),
+      );
+    }
+
+    return loadSvgImageForWeb(url, size, size);
+  }
+
   static Widget loadSvgImageForWeb(String url, double width, double height) {
     return SvgPicture.network(
       url,
