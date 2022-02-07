@@ -49,7 +49,7 @@ class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with ST
             );
           }
 
-          final stocks = portfolio.stockPositions.map((e) => ProductTileInfo(PositionType.stock, e.isin)).toList().reversed.toList();
+          final stocks = portfolio.stockPositions.map((e) => ProductTileInfo(PositionType.stock, e.isin)).toList();
           final knockouts = portfolio.knockOutPositions.map((e) => ProductTileInfo(PositionType.knockout, e.isin)).toList();
           final warrants = portfolio.warrantPositions.map((e) => ProductTileInfo(PositionType.warrant, e.isin)).toList();
           final ongoingKnockouts = portfolio.ongoingKnockOutPositions.map((e) => ProductTileInfo(PositionType.knockout, e.isin)).toList();

@@ -59,54 +59,56 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        stream: floatingActionButtonUpdateService.stream$,
-        builder: (context, snap) {
-          if (snap.hasData && !snap.data! && scrollController.offset > 100) {
-            scrollController.animateTo(0, duration: const Duration(milliseconds: 150), curve: Curves.ease);
-            floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
-          }
+      stream: floatingActionButtonUpdateService.stream$,
+      builder: (context, snap) {
+        if (snap.hasData && !snap.data! && scrollController.offset > 100) {
+          scrollController.animateTo(0, duration: const Duration(milliseconds: 150), curve: Curves.ease);
+          floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
+        }
 
-          return NotificationListener<UserScrollNotification>(
-            onNotification: (notification) {
-              if (scrollController.offset > 100) {
-                floatingActionButtonUpdateService.onScrollDownFarEnough();
-              } else if (scrollController.offset < 100 && notification.direction != ScrollDirection.reverse) {
-                floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
-              }
+        return NotificationListener<UserScrollNotification>(
+          onNotification: (notification) {
+            if (scrollController.offset > 100) {
+              floatingActionButtonUpdateService.onScrollDownFarEnough();
+            } else if (scrollController.offset < 100 && notification.direction != ScrollDirection.reverse) {
+              floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
+            }
 
-              return true;
-            },
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: StreamBuilder(
-                stream: uiUpdate.stream$,
-                builder: (context, snapshot) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      color: colors.softBackground,
-                      elevation: 0,
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 20),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), child: const Text("Overview"), style: buttonStyle(0))),
-                          const SizedBox(width: 10),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), child: const Text("Open positions"), style: buttonStyle(1))),
-                          const SizedBox(width: 10),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), child: const Text("Closed positions"), style: buttonStyle(2))),
-                          const SizedBox(height: 70),
-                        ],
-                      ),
+            return true;
+          },
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: StreamBuilder(
+              stream: uiUpdate.stream$,
+              builder: (context, snapshot) => Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Card(
+                    margin: EdgeInsets.zero,
+                    color: colors.softBackground,
+                    elevation: 0,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), child: const Text("Overview"), style: buttonStyle(0))),
+                        const SizedBox(width: 10),
+                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), child: const Text("Open positions"), style: buttonStyle(1))),
+                        const SizedBox(width: 10),
+                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), child: const Text("Closed positions"), style: buttonStyle(2))),
+                        const SizedBox(height: 70),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    pages[selectedIndex]
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  pages[selectedIndex],
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

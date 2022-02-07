@@ -14,8 +14,8 @@ import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 class TrProductPriceService extends BaseService<RequestResponse<TrProductPrice>?> {
   TrProductPriceService() : super(BehaviorSubject.seeded(null));
 
-  void requestTrProductPrice(String isinWithExtention) async {
-    StreamSubscription<TrRequestResponse<TrProductPrice>>? subscription;
+  void requestTrProductPrice(String isinWithExtention) {
+    StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription;
 
     subscription = DataRequestService.trApiDataRequestService
         .makeRequestAsync<TrProductPrice>(
@@ -33,7 +33,7 @@ class TrProductPriceService extends BaseService<RequestResponse<TrProductPrice>?
 
     var isinWithExtention = "${info.result!.isin}.${info.result!.exchangeIds.first}";
 
-    StreamSubscription<TrRequestResponse<TrProductPrice>>? subscription;
+    StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription;
 
     subscription = DataRequestService.trApiDataRequestService
         .makeRequestAsync<TrProductPrice>(
@@ -44,7 +44,14 @@ class TrProductPriceService extends BaseService<RequestResponse<TrProductPrice>?
     return info;
   }
 
-  void onEvent(TrRequestResponse<TrProductPrice> event, StreamSubscription<TrRequestResponse<TrProductPrice>>? subscription) {
+  void onEvent(TrRequestResponse<TrProductPrice>? event, StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription) {
+    if (event == null) {
+      return;
+    }
+
+    // FIXME: The way its setup currently will never close the stream and unsub, even though nobody might be consuming the stream anymore.
+    behaviorSubject.add(event.requestResponse);
+    return;
     if (behaviorSubject.hasListener) {
       behaviorSubject.add(event.requestResponse);
       return;

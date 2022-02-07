@@ -10,4 +10,5 @@ class Constants {
 
   static String getTrProductInfoRequestString(String isin) => "{\"type\":\"instrument\",\"id\":\"$isin\"}";
   static String getTrProductPriceRequestString(String isin) => "{\"type\":\"ticker\",\"id\":\"$isin\"}";
+  static String getTrAggregateHistoryRequestString(String isin, String range) => "{\"type\":\"aggregateHistoryLight\",\"range\":\"$range\",\"id\":\"$isin\"}";
 }

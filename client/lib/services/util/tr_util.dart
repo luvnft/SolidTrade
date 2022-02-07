@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/common/shared/buy_or_sell.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_aggregate_history.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
+import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/extentions/string_extentions.dart';
@@ -15,13 +17,13 @@ class TrUtil {
   static TrUiProductDetails getTrUiProductDetials(
     TrProductPrice priceInfo,
     TrProductInfo productInfo,
+    TrAggregateHistoryEntry lastAggregateHistoryEntry,
     PositionType positionType,
   ) {
     final isStockPosition = positionType == PositionType.stock;
 
-    // TODO: When the market is closed, we dont want to use these metrics anymore. Instad use priceInfo.close (which has to be implemented still)
-    final percentageChange = priceInfo.bid.price / priceInfo.open.price;
-    final absolutChange = priceInfo.bid.price - priceInfo.open.price;
+    final percentageChange = priceInfo.ask.price / lastAggregateHistoryEntry.close;
+    final absolutChange = priceInfo.ask.price - lastAggregateHistoryEntry.close;
 
     final isUp = percentageChange == 1 || percentageChange > 1;
     final plusMinus = isUp ? "+" : "";
@@ -57,19 +59,28 @@ class TrUtil {
     return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
   }
 
+  static bool userOwnsPosition(Portfolio portfolio, String isin) {
+    bool ownsPosition = portfolio.stockPositions.any((position) => position.isin == isin);
+    if (ownsPosition) return true;
+
+    ownsPosition = portfolio.knockOutPositions.any((position) => position.isin == isin);
+    if (ownsPosition) return true;
+
+    ownsPosition = portfolio.warrantPositions.any((position) => position.isin == isin);
+    if (ownsPosition) return true;
+
+    return false;
+  }
+
   // List<HistoricalPosition> getRemaindingHistoricalPositions(List<HistoricalPosition> positions) {
   //   List<HistoricalPosition> results = [];
-
   //   for (var position in positions) {
   //     int index = results.indexWhere((p) => p.isin == position.isin);
-
   //     if (index != -1) {
   //       var result = results[index];
-
   //       result[index] = HistoricalPosition.copy(result, numberOfShares);
   //     }
   //   }
-
   //   return results;
   // }
 
@@ -132,17 +143,4 @@ class TrUiProductDetails {
     required this.imageUrl,
     required this.textColor,
   });
-
-  // final percentageChange = priceInfo.bid.price / priceInfo.open.price;
-  // final absolutChange = priceInfo.bid.price - priceInfo.open.price;
-
-  // final isUp = percentageChange == 1 || percentageChange > 1;
-  // final plusMinus = isUp ? "+" : "";
-
-  // final productTitle = isStockPosition ? productInfo.shortName : _getDerivitiveProductTitle(productInfo);
-  // final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivitiveProductSubtitle(productInfo);
-
-  // final colorMode = colors.themeColorType == ColorThemeType.light ? "light" : "dark";
-
-  // final textStyleForNumbers = TextStyle(color: isUp ? colors.stockGreen : colors.stockRed);
 }

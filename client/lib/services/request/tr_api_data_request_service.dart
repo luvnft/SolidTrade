@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
@@ -133,45 +134,28 @@ class TrApiDataRequestService {
     }
   }
 
-  Stream<TrRequestResponse<T>> makeRequestAsync<T>(String requestString) async* {
-    List<Completer<RequestResponse<T>>> completers = [];
+  BehaviorSubject<TrRequestResponse<T>?> makeRequestAsync<T>(String requestString) {
+    BehaviorSubject<TrRequestResponse<T>?> subject = BehaviorSubject.seeded(null);
     var id = _generateNewId();
 
     var model = TrRequestModel(
         id: id,
         onResponseCallback: (response) {
-          var completer = Completer<RequestResponse<T>>();
           if (response.startsWith("{\"errors\"")) {
             var errorResult = RequestResponse<T>.failedWithUserfriendlyMessage("Something went wrong. Please try again later.");
-            if (completers.isEmpty || completers.last.isCompleted) {
-              completer.complete(errorResult);
-              completers.add(completer);
-              return;
-            }
-
-            completers.last.complete(errorResult);
+            subject.add(TrRequestResponse(id, errorResult));
             return;
           }
 
           var successResult = RequestResponse<T>.successful(JsonMapper.deserialize<T>(response)!);
-          if (completers.isEmpty || completers.last.isCompleted) {
-            completer.complete(successResult);
-            completers.add(completer);
-            return;
-          }
-
-          completers.last.complete(successResult);
-          return;
+          subject.add(TrRequestResponse(id, successResult));
         });
 
     _sendMessage("sub $id $requestString");
     _requestMessageStrings[id] = requestString;
     _runningRequests.add(model);
 
-    yield* Stream<Completer<RequestResponse<T>>>.periodic(
-      const Duration(seconds: 1),
-      (_) => completers.last,
-    ).asyncMap((event) async => TrRequestResponse(id, await event.future));
+    return subject;
   }
 
   void unsub(int id) {

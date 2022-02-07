@@ -1,11 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
+import 'package:solidtrade/services/storage/aggregate_history_service.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:get_it/get_it.dart';
@@ -47,6 +47,7 @@ Future<void> commonMain(Environment environment) async {
   getItService.registerSingleton<UserService>(UserService());
   getItService.registerSingleton<PortfolioService>(PortfolioService());
   getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+  getItService.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
 
   getItService.registerFactory<TrProductInfoService>(() => TrProductInfoService());
   getItService.registerFactory<TrProductPriceService>(() => TrProductPriceService());
