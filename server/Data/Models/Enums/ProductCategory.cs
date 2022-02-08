@@ -11,6 +11,8 @@ namespace SolidTradeServer.Data.Models.Enums
         BestTurbo,
         [EnumMember(Value = "Mini Turbo")]
         MiniTurbo,
+        [EnumMember(Value = "Mini Future")]
+        MiniFuture,
         [EnumMember(Value = "Turbo")]
         Turbo,
         [EnumMember(Value = "Open End Turbo")]
