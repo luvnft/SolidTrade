@@ -12,7 +12,8 @@ import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class PortfolioOverviewPage extends StatelessWidget with STWidget {
-  PortfolioOverviewPage({Key? key}) : super(key: key);
+  PortfolioOverviewPage({Key? key, this.isViewingOutstandingOrders = false}) : super(key: key);
+  final bool isViewingOutstandingOrders;
 
   final userService = GetIt.instance.get<UserService>();
   final portfolioService = GetIt.instance.get<PortfolioService>();
@@ -72,7 +73,7 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const PortfolioPositionsPage()
+                      PortfolioPositionsPage(isViewingOutstandingOrders: isViewingOutstandingOrders)
                     ],
                   ),
                 ),
