@@ -5,7 +5,7 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 
-class TrProductInfoService extends BaseService<RequestResponse<TrProductInfo>?> {
+class TrProductInfoService extends IService<RequestResponse<TrProductInfo>?> {
   TrProductInfoService() : super(BehaviorSubject.seeded(null));
 
   Future<RequestResponse<TrProductInfo>> requestTrProductInfo(String isinWithoutExtention) async {

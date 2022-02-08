@@ -8,10 +8,11 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
-import 'package:solidtrade/services/stream/base/base_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 
-class TrProductPriceService extends BaseService<RequestResponse<TrProductPrice>?> {
+import 'base/transient_base_service.dart';
+
+class TrProductPriceService extends ITransientService<TrProductPrice> {
   TrProductPriceService() : super(BehaviorSubject.seeded(null));
 
   void requestTrProductPrice(String isinWithExtention) {
@@ -42,23 +43,5 @@ class TrProductPriceService extends BaseService<RequestResponse<TrProductPrice>?
         .listen((event) => onEvent(event, subscription));
 
     return info;
-  }
-
-  void onEvent(TrRequestResponse<TrProductPrice>? event, StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription) {
-    if (event == null) {
-      return;
-    }
-
-    // FIXME: The way its setup currently will never close the stream and unsub, even though nobody might be consuming the stream anymore.
-    behaviorSubject.add(event.requestResponse);
-    return;
-    if (behaviorSubject.hasListener) {
-      behaviorSubject.add(event.requestResponse);
-      return;
-    }
-
-    subscription!.cancel();
-    DataRequestService.trApiDataRequestService.unsub(event.id);
-    behaviorSubject.close();
   }
 }
