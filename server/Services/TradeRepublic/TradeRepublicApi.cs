@@ -43,7 +43,9 @@ namespace SolidTradeServer.Services.TradeRepublic
             {
                 _logger.Information("Connected to Trade republic api");
                 _webSocket.Send(configuration["TradeRepublic:InitialConnectString"]);
-                Task.Run(async () => await RegisterAllOngoingPosition());
+
+                if (!_isReconnect)
+                    Task.Run(async () => await RegisterAllOngoingPosition());
             };
 
             _webSocket.OnClose += (_, _) =>
