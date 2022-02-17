@@ -5,7 +5,6 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/product_view.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_aggregate_history.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
@@ -76,14 +75,10 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                 TrProductPrice priceInfo = snap.data!.result!;
 
                 TrUiProductDetails details = TrUtil.getTrUiProductDetials(
-                    priceInfo,
-                    productInfo,
-                    TrAggregateHistoryEntry(
-                      close: -1,
-                      open: -1,
-                      time: -1,
-                    ),
-                    widget.positionType);
+                  priceInfo,
+                  productInfo,
+                  widget.positionType,
+                );
 
                 final price = isBuy ? priceInfo.ask.price : priceInfo.bid.price;
 

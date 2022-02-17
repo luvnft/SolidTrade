@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/common/shared/buy_or_sell.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_aggregate_history.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
@@ -17,13 +16,12 @@ class TrUtil {
   static TrUiProductDetails getTrUiProductDetials(
     TrProductPrice priceInfo,
     TrProductInfo productInfo,
-    TrAggregateHistoryEntry lastAggregateHistoryEntry,
     PositionType positionType,
   ) {
     final isStockPosition = positionType == PositionType.stock;
 
-    final percentageChange = priceInfo.ask.price / lastAggregateHistoryEntry.close;
-    final absolutChange = priceInfo.ask.price - lastAggregateHistoryEntry.close;
+    final percentageChange = priceInfo.bid.price / priceInfo.pre.price;
+    final absolutChange = priceInfo.bid.price - priceInfo.pre.price;
 
     final isUp = percentageChange == 1 || percentageChange > 1;
     final plusMinus = isUp ? "+" : "";

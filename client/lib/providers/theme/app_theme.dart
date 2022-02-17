@@ -10,6 +10,7 @@ abstract class IColorTheme {
 
   // Common colors
   Color get profilePictureBorder;
+  Color get lessSoftForeground;
   Color get softForeground;
   Color get foreground;
   Color get background;
@@ -57,6 +58,9 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get foreground => Colors.black;
+
+  @override
+  Color get lessSoftForeground => Colors.black54;
 
   @override
   Color get softForeground => Colors.black26;
@@ -110,6 +114,9 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get foreground => Colors.white;
+
+  @override
+  Color get lessSoftForeground => Colors.white70;
 
   @override
   Color get softForeground => Colors.white24;
