@@ -79,6 +79,17 @@ namespace SolidTradeServer
                 options.JsonSerializerOptions.Converters.Add(new StringRemoveWhitespaceConverter());
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
             });
+            
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             services.AddHangfire(config =>
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -96,7 +107,9 @@ namespace SolidTradeServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseCors();
+            
             app.UseRouting();
 
             app.UseExceptionHandler(a => a.Run(async httpContext =>
