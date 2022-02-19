@@ -2,10 +2,11 @@ import 'package:simple_json_mapper/simple_json_mapper.dart';
 
 @JsonObject()
 class TrProductPrice {
+  final TrProductPriceItem open;
   final TrProductPriceItem pre;
   final TrProductPriceItem bid;
   final TrProductPriceItem ask;
-  const TrProductPrice({required this.bid, required this.ask, required this.pre});
+  const TrProductPrice({required this.open, required this.bid, required this.ask, required this.pre});
 }
 
 class TrProductPriceItem {

@@ -29,6 +29,9 @@ abstract class IColorTheme {
   Color get stockRedLight;
   Color get stockRed;
 
+  Color get blueBackground;
+  Color get blueText;
+
   // Navigation colors
   Color get selectedItem;
   Color get unselectedItem;
@@ -103,6 +106,12 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get stockRedLight => SharedColorThemes.stockRedLight;
+
+  @override
+  Color get blueBackground => const Color.fromRGBO(223, 244, 255, 1);
+
+  @override
+  Color get blueText => const Color.fromRGBO(6, 155, 248, 1);
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -159,6 +168,12 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get stockRedLight => SharedColorThemes.stockRedLight;
+
+  @override
+  Color get blueBackground => const Color.fromRGBO(0, 33, 52, 1);
+
+  @override
+  Color get blueText => const Color.fromRGBO(16, 160, 238, 1);
 }
 
 class ThemeProvider {

@@ -7,7 +7,7 @@ import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_request_model.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_request_response.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TrApiDataRequestService {
   final Map<int, String> _requestMessageStrings = {};
@@ -15,7 +15,7 @@ class TrApiDataRequestService {
 
   final String _initialTrConnectString = ConfigReader.getTrConnectString();
   final Uri _endpointUri = Uri.parse(ConfigReader.getTrEndpoint());
-  late IOWebSocketChannel _socketChannel;
+  late WebSocketChannel _socketChannel;
 
   DateTime _lastEchoSent = DateTime.now();
   bool _initialConnect = true;
@@ -32,7 +32,7 @@ class TrApiDataRequestService {
       _initializeConnection();
     }
 
-    _socketChannel = IOWebSocketChannel.connect(_endpointUri);
+    _socketChannel = WebSocketChannel.connect(_endpointUri);
 
     _socketChannel.stream.listen(
       (messageAsDynamic) => _onMessageReceived(messageAsDynamic),

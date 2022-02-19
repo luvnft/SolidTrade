@@ -1,4 +1,7 @@
+import 'package:solidtrade/components/shared/name_for_large_number.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/services/util/tr_util.dart';
 
 import '../translation.dart';
 
@@ -23,6 +26,9 @@ class DeTranslation implements ITranslation {
 
   @override
   ICommonTranslation get common => DeCommonTranslation();
+
+  @override
+  IProductViewTranslation get productView => DeProductViewTranslation();
 }
 
 class DeCommonTranslation implements ICommonTranslation {
@@ -31,6 +37,33 @@ class DeCommonTranslation implements ICommonTranslation {
 }
 
 class DePortfolioTranslation implements IPortfolioTranslation {}
+
+class DeProductViewTranslation implements IProductViewTranslation {
+  @override
+  String whatAnalystsSayContent(TrStockDetails details) {
+    return "Die durchschnittliche Aktienkursschätzung liegt bei ${details.analystRating.targetPrice.average}. Die höchste Schätzung liegt bei ${details.analystRating.targetPrice.high.toStringAsFixed(2)} € und die niedrigste Schätzung bei ${details.analystRating.targetPrice.low.toStringAsFixed(2)} €.\n\nDiese Aktie wird von ${TrUtil.productViewGetAnalystsCount(details.analystRating.recommendations)} Analysten bewertet.";
+  }
+
+  @override
+  String nameOfNumberPrefix(NameForLargeNumber nameForLargeNumber) {
+    switch (nameForLargeNumber) {
+      case NameForLargeNumber.thousand:
+        return "T";
+      case NameForLargeNumber.billion:
+        return "Mrd";
+      case NameForLargeNumber.million:
+        return "Mio";
+      case NameForLargeNumber.trillion:
+        return "B";
+    }
+  }
+
+  @override
+  String get marketCap => "Marktkap.";
+
+  @override
+  String get derivativesRiskDisclaimer => "Seien Sie sich bewusst, dass diese Art von Investitionen mit einem hohen Risiko verbunden sind.";
+}
 
 class DeUserAppBarTranslation implements IUserAppBarTranslation {
   @override

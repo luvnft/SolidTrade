@@ -4,15 +4,17 @@ import 'package:simple_json_mapper/simple_json_mapper.dart';
 class TrProductInfo {
   final bool active;
   final List<String> exchangeIds;
-  String? intlSymbol;
-  String? homeSymbol;
+  final List<Exchange> exchanges;
   final String shortName;
   final String name;
   final String typeId;
   final String isin;
-  String? issuerDisplayName;
   final List<ProductTags> tags;
   final DerivativeProductCount derivativeProductCount;
+  final String wkn;
+  String? intlSymbol;
+  String? homeSymbol;
+  String? issuerDisplayName;
   DerivativeInfo? derivativeInfo;
 
   TrProductInfo({
@@ -20,15 +22,30 @@ class TrProductInfo {
     required this.exchangeIds,
     required this.shortName,
     required this.typeId,
+    required this.wkn,
     required this.isin,
     required this.homeSymbol,
     required this.name,
     required this.tags,
     required this.derivativeProductCount,
+    required this.exchanges,
     this.issuerDisplayName,
     this.derivativeInfo,
     this.intlSymbol,
   });
+}
+
+class Exchange {
+  TradingTimes? tradingTimes;
+
+  Exchange({this.tradingTimes});
+}
+
+class TradingTimes {
+  final int start;
+  final int end;
+
+  TradingTimes({required this.start, required this.end});
 }
 
 class ProductTags {
@@ -50,8 +67,23 @@ class DerivativeInfo {
 class DerivativeInfoProperties {
   final String optionType;
   final double strike;
+  final String currency;
+  final double size;
+  final String settlementType;
+  final String firstTradingDay;
+  String? lastTradingDay;
+  double? leverage;
 
-  DerivativeInfoProperties({required this.optionType, required this.strike});
+  DerivativeInfoProperties({
+    required this.optionType,
+    required this.strike,
+    required this.currency,
+    required this.size,
+    required this.settlementType,
+    required this.firstTradingDay,
+    this.lastTradingDay,
+    this.leverage,
+  });
 }
 
 class DerivativeUnderlying {

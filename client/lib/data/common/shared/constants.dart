@@ -8,6 +8,12 @@ class Constants {
   static const endpointUser = "/users/";
   static const endpointWarrant = "/warrants/";
 
+  static const thousand = 1000;
+  static const million = 1000000;
+  static const billion = 1000000000;
+  static const trillion = 1000000000000;
+
+  static String getTrStockDetailsRequestString(String isin) => "{\"type\":\"stockDetails\",\"id\":\"$isin\"}";
   static String getTrProductInfoRequestString(String isin) => "{\"type\":\"instrument\",\"id\":\"$isin\"}";
   static String getTrProductPriceRequestString(String isin) => "{\"type\":\"ticker\",\"id\":\"$isin\"}";
   static String getTrAggregateHistoryRequestString(String isin, String range) => "{\"type\":\"aggregateHistoryLight\",\"range\":\"$range\",\"id\":\"$isin\"}";

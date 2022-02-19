@@ -1,4 +1,7 @@
+import 'package:solidtrade/components/shared/name_for_large_number.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/services/util/tr_util.dart';
 
 import '../translation.dart';
 
@@ -23,6 +26,9 @@ class EnTranslation implements ITranslation {
 
   @override
   ICommonTranslation get common => EnCommonTranslation();
+
+  @override
+  IProductViewTranslation get productView => EnProductViewTranslation();
 }
 
 class EnCommonTranslation implements ICommonTranslation {
@@ -31,6 +37,32 @@ class EnCommonTranslation implements ICommonTranslation {
 }
 
 class EnPortfolioTranslation implements IPortfolioTranslation {}
+
+class EnProductViewTranslation implements IProductViewTranslation {
+  @override
+  String whatAnalystsSayContent(TrStockDetails details) {
+    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.productViewGetAnalystsCount(details.analystRating.recommendations)} analysts.";
+  }
+
+  @override
+  String nameOfNumberPrefix(NameForLargeNumber nameForLargeNumber) {
+    switch (nameForLargeNumber) {
+      case NameForLargeNumber.billion:
+        return "B";
+      case NameForLargeNumber.million:
+        return "M";
+      case NameForLargeNumber.thousand:
+      case NameForLargeNumber.trillion:
+        return "T";
+    }
+  }
+
+  @override
+  String get marketCap => "Market cap";
+
+  @override
+  String get derivativesRiskDisclaimer => "Please be aware that these types of investments come with high risk.";
+}
 
 class EnUserAppBarTranslation implements IUserAppBarTranslation {
   @override

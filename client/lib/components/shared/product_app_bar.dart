@@ -64,43 +64,50 @@ class ProductAppBar extends StatelessWidget with STWidget {
         final f = NumberFormat("###,##0.00", "tr_TR");
         var currentPrice = f.format(priceInfo.bid.price);
 
-        return Row(
-          children: [
-            Util.loadImage(
-              details.imageUrl,
-              50,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
               children: [
-                Text(productInfo.shortName, style: Theme.of(context).textTheme.bodyText1),
-                Text(productInfo.intlSymbol ?? _getProductTicker(), style: _subtitleTextStyle),
-              ],
-            ),
-            const Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(currentPrice + "€"),
-                Row(
+                Util.loadImage(
+                  details.imageUrl,
+                  50,
+                ),
+                SizedBox(
+                  width: constraints.maxWidth * 0.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(productInfo.shortName, style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis),
+                      Text(productInfo.intlSymbol ?? _getProductTicker(), style: _subtitleTextStyle),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(
-                      details.isUp ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                      color: color,
-                      size: 20,
-                    ),
-                    Text(
-                      details.plusMinusProductNamePrefix + ((details.percentageChange - 1) * 100).toStringAsFixed(2) + "%",
-                      style: TextStyle(
-                        color: color,
-                      ),
-                    ),
+                    Text(currentPrice + "€"),
+                    Row(
+                      children: [
+                        Icon(
+                          details.isUp ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                          color: color,
+                          size: 20,
+                        ),
+                        Text(
+                          details.plusMinusProductNamePrefix + ((details.percentageChange - 1) * 100).toStringAsFixed(2) + "%",
+                          style: TextStyle(
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
+                const SizedBox(width: 10)
               ],
-            ),
-            const SizedBox(width: 10)
-          ],
+            );
+          },
         );
       },
     );

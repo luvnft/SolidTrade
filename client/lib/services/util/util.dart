@@ -46,7 +46,8 @@ class Util {
 
   static Widget loadSvgImage(String url, double width, double height) {
     return SvgPicture.network(
-      url,
+      // url,
+      "https://res.cloudinary.com/rosemite/image/upload/v1642699957/Projects/SolidTrade-Development/JQP24g92sWeVvy6aaHm1I6vl9R83_hr4yns.svg",
       width: width,
       height: height,
       placeholderBuilder: (BuildContext context) => Container(
@@ -102,8 +103,8 @@ Widget showLoadingWhileWaiting({required bool isLoading, required BoxShape loadi
   return isLoading ? showLoadingSkeleton(loadingBoxShape) : child;
 }
 
-Widget showLoadingSkeleton(BoxShape loadingBoxShape) {
+Widget showLoadingSkeleton(BoxShape shape) {
   return SkeletonAvatar(
-    style: SkeletonAvatarStyle(shape: loadingBoxShape),
+    style: SkeletonAvatarStyle(shape: shape),
   );
 }

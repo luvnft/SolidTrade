@@ -4,6 +4,7 @@ import 'package:solidtrade/components/shared/user_app_bar.dart';
 import 'package:solidtrade/pages/portfolio_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> with STWidget {
                   return FloatingActionButton(
                     onPressed: _handleFloatingActionButtonClick,
                     tooltip: 'Scroll up',
-                    backgroundColor: colors.softBackground,
+                    backgroundColor: colors.themeColorType == ColorThemeType.light ? colors.background : colors.softBackground,
                     child: Icon(
                       Icons.arrow_circle_up,
                       color: colors.foreground,

@@ -107,9 +107,14 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                   Text(
                     "In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: colors.lessSoftForeground),
+                    style: TextStyle(color: colors.lessSoftForeground, fontSize: 13),
                   ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 30),
+                  Text(
+                    "Solidtrade©",
+                    style: TextStyle(color: colors.lessSoftForeground, fontSize: 14),
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

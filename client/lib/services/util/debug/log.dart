@@ -30,12 +30,30 @@ class SimpleLogPrinter extends LogPrinter {
     var emoji = PrettyPrinter.levelEmojis[event.level];
 
     var c = StackTrace.current.toString();
-    var s1 = c.substring(c.indexOf("Log.") + 1);
-    var s2 = s1.substring(s1.indexOf("#") + 2).trim();
-    var className = s2.substring(0, s2.indexOf("(") - 1).trim();
 
     return [
-      color!('$emoji[${EnumToString.convertToString(event.level).capitalize()}] $className - ${event.message}')
+      color!('$emoji[${EnumToString.convertToString(event.level).capitalize()}] ${_getClassName(c)} - ${event.message}')
     ];
+  }
+
+  String _getClassName(String stackTrace) {
+    if (kIsWeb) {
+      return _getMethodNameFromWeb(stackTrace);
+    }
+    return _getClassNameFromMobile(stackTrace);
+  }
+
+  String _getMethodNameFromWeb(String stackTrace) {
+    final s1 = stackTrace.substring(2);
+    final s2 = s1.substring(0, s1.indexOf(":/") - 2);
+    final methodName = s2.substring(s2.lastIndexOf(" ") + 1);
+
+    return methodName;
+  }
+
+  String _getClassNameFromMobile(String stackTrace) {
+    final s1 = stackTrace.substring(stackTrace.indexOf("Log.") + 1);
+    final s2 = s1.substring(s1.indexOf("#") + 2).trim();
+    return s2.substring(0, s2.indexOf("(") - 1).trim();
   }
 }

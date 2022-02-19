@@ -114,7 +114,7 @@ class _SplashState extends State<Splash> with STWidget {
                     width: 220,
                     child: Divider(thickness: 2, color: colors.softForeground),
                   ),
-                  const Text("Solid trade"),
+                  const Text("Solidtrade"),
                 ],
               ),
             ),

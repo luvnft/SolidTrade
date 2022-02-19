@@ -26,6 +26,7 @@ dependencies:
   skeletons: ^0.0.3
   stack_trace: ^1.10.0
   syncfusion_flutter_charts: ^19.4.47
+  visibility_detector: ^0.2.2
   web_socket_channel: ^2.1.0
 
 dev_dependencies:

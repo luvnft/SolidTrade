@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:solidtrade/components/shared/name_for_large_number.dart';
 import 'package:solidtrade/data/common/shared/buy_or_sell.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
+import 'package:solidtrade/data/common/shared/tuple.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
@@ -45,6 +49,17 @@ class TrUtil {
     );
   }
 
+  static Tuple<NameForLargeNumber, double> getNameForNumber(double number) {
+    if (number > Constants.trillion) {
+      return Tuple(t1: NameForLargeNumber.trillion, t2: number / Constants.trillion);
+    } else if (number > Constants.billion) {
+      return Tuple(t1: NameForLargeNumber.billion, t2: number / Constants.billion);
+    } else if (number > Constants.million) {
+      return Tuple(t1: NameForLargeNumber.million, t2: number / Constants.million);
+    }
+    return Tuple(t1: NameForLargeNumber.thousand, t2: number / Constants.thousand);
+  }
+
   static String _getStockProductSubtitle(String shortName, String name) {
     return name.length > 18 ? shortName : name;
   }
@@ -55,6 +70,10 @@ class TrUtil {
 
   static String _getDerivitiveProductSubtitle(TrProductInfo info) {
     return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
+  }
+
+  static int productViewGetAnalystsCount(Recommendations recommendations) {
+    return recommendations.buy + recommendations.hold + recommendations.outperform + recommendations.sell + recommendations.underperform;
   }
 
   static bool userOwnsPosition(Portfolio portfolio, String isin) {

@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
+import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 
 import '../mapper.g.dart' as mapper;
@@ -46,8 +47,9 @@ Future<void> commonMain(Environment environment) async {
   getItService.registerSingleton<SharedPreferences>(prefs);
   getItService.registerSingleton<UserService>(UserService());
   getItService.registerSingleton<PortfolioService>(PortfolioService());
-  getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+  getItService.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
   getItService.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
+  getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
 
   getItService.registerFactory<TrProductInfoService>(() => TrProductInfoService());
   getItService.registerFactory<TrProductPriceService>(() => TrProductPriceService());
