@@ -7,6 +7,7 @@ import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/services/storage/aggregate_history_service.dart';
+import 'package:solidtrade/services/util/extentions/double_extentions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -61,9 +62,6 @@ class ProductAppBar extends StatelessWidget with STWidget {
 
         final color = details.isUp ? colors.stockGreen : colors.stockRed;
 
-        final f = NumberFormat("###,##0.00", "tr_TR");
-        var currentPrice = f.format(priceInfo.bid.price);
-
         return LayoutBuilder(
           builder: (context, constraints) {
             return Row(
@@ -86,7 +84,7 @@ class ProductAppBar extends StatelessWidget with STWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(currentPrice + "€"),
+                    Text(priceInfo.bid.price.toDefaultPrice(maxFractionDigits: 2)),
                     Row(
                       children: [
                         Icon(

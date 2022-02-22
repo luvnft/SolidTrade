@@ -10,6 +10,7 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
 import 'package:solidtrade/data/models/outstanding_order_model.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
+import 'package:solidtrade/services/util/extentions/double_extentions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -82,9 +83,6 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
 
                 final price = isBuy ? priceInfo.ask.price : priceInfo.bid.price;
 
-                final f = NumberFormat("###,##0.00", "tr_TR");
-                var currentPrice = f.format(price);
-
                 final percentMissingToFill = !isLimit ? (price / widget.info.price) : (widget.info.price / price);
 
                 return TextButton(
@@ -123,13 +121,6 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                             ),
                             const Spacer(),
                             const SizedBox(width: 10),
-                            SizedBox(
-                              width: 75,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [],
-                              ),
-                            ),
                           ],
                         ),
                         Align(
@@ -146,11 +137,11 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.info.price.toStringAsFixed(4) + "€",
+                              widget.info.price.toDefaultPrice(),
                               style: TextStyle(color: colors.foreground),
                             ),
                             Text(
-                              currentPrice + "€",
+                              price.toDefaultPrice(),
                               style: TextStyle(color: colors.foreground),
                             ),
                           ],

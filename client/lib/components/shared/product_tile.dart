@@ -9,6 +9,7 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/services/storage/aggregate_history_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
+import 'package:solidtrade/services/util/extentions/double_extentions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -77,8 +78,6 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                   widget.info.positionType,
                 );
 
-                final f = NumberFormat("###,##0.00", "tr_TR");
-                final currentPrice = f.format(priceInfo.bid.price);
                 final subtitle = productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle;
 
                 final extraMargin = (subtitle.length > 20 ? 8 : null)?.toDouble();
@@ -117,7 +116,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                       const Spacer(),
                       Column(
                         children: [
-                          Text(currentPrice),
+                          Text(priceInfo.bid.price.toDefaultPrice(maxFractionDigits: 2)),
                           SizedBox(height: extraMargin),
                         ],
                       ),
@@ -132,7 +131,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                               style: TextStyle(color: details.textColor),
                             ),
                             Text(
-                              details.plusMinusProductNamePrefix + details.absolutChange.toStringAsFixed(2) + "€",
+                              details.plusMinusProductNamePrefix + details.absolutChange.toDefaultPrice(maxFractionDigits: 2),
                               style: TextStyle(color: details.textColor),
                             ),
                           ],

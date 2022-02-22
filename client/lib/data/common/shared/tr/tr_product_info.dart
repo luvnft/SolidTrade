@@ -71,6 +71,7 @@ class DerivativeInfoProperties {
   final double size;
   final String settlementType;
   final String firstTradingDay;
+  final double delta;
   String? lastTradingDay;
   double? leverage;
 
@@ -81,6 +82,7 @@ class DerivativeInfoProperties {
     required this.size,
     required this.settlementType,
     required this.firstTradingDay,
+    required this.delta,
     this.lastTradingDay,
     this.leverage,
   });

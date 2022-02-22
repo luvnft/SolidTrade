@@ -46,8 +46,7 @@ class Util {
 
   static Widget loadSvgImage(String url, double width, double height) {
     return SvgPicture.network(
-      // url,
-      "https://res.cloudinary.com/rosemite/image/upload/v1642699957/Projects/SolidTrade-Development/JQP24g92sWeVvy6aaHm1I6vl9R83_hr4yns.svg",
+      url,
       width: width,
       height: height,
       placeholderBuilder: (BuildContext context) => Container(

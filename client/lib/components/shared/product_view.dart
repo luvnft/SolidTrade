@@ -170,6 +170,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                           trProductPriceStream: widget.trProductPriceStream,
                           trStockDetailsStream: stockDetailsService.stream$,
                           isStock: isStock,
+                          productInfo: widget.productInfo,
                         ),
                         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       ),
