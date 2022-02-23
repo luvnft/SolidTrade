@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
@@ -7,7 +6,6 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/common/shared/tuple.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/extentions/double_extentions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -70,6 +68,8 @@ class ProductMetrics extends StatelessWidget with STWidget {
     if (productInfo.derivativeInfo == null) {
       return const SizedBox.shrink();
     }
+
+    throw Exception("cool");
 
     DerivativeInfo di = productInfo.derivativeInfo!;
 

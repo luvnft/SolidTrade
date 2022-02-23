@@ -9,13 +9,25 @@ import 'package:solidtrade/services/request/user_data_request_service.dart';
 import 'package:solidtrade/services/request/warrant_data_request_service.dart';
 
 class DataRequestService {
-  static HistoricalPositionsDataRequestService historicalPositionsDataRequestService = HistoricalPositionsDataRequestService();
-  static KnockoutDataRequestService knockoutDataRequestService = KnockoutDataRequestService();
-  static OngoingKnockoutDataRequestService ongoingKnockoutDataRequestService = OngoingKnockoutDataRequestService();
-  static OngoingWarrantDataRequestService ongoingWarrantDataRequestService = OngoingWarrantDataRequestService();
-  static PortfolioDataRequestService portfolioDataRequestService = PortfolioDataRequestService();
-  static StockDataRequestService stockDataRequestService = StockDataRequestService();
-  static UserDataRequestService userDataRequestService = UserDataRequestService();
-  static WarrantDataRequestService warrantDataRequestService = WarrantDataRequestService();
-  static TrApiDataRequestService trApiDataRequestService = TrApiDataRequestService();
+  static late HistoricalPositionsDataRequestService historicalPositionsDataRequestService;
+  static late KnockoutDataRequestService knockoutDataRequestService;
+  static late OngoingKnockoutDataRequestService ongoingKnockoutDataRequestService;
+  static late OngoingWarrantDataRequestService ongoingWarrantDataRequestService;
+  static late PortfolioDataRequestService portfolioDataRequestService;
+  static late StockDataRequestService stockDataRequestService;
+  static late UserDataRequestService userDataRequestService;
+  static late WarrantDataRequestService warrantDataRequestService;
+  static late TrApiDataRequestService trApiDataRequestService;
+
+  static initialize() {
+    historicalPositionsDataRequestService = HistoricalPositionsDataRequestService();
+    knockoutDataRequestService = KnockoutDataRequestService();
+    ongoingKnockoutDataRequestService = OngoingKnockoutDataRequestService();
+    ongoingWarrantDataRequestService = OngoingWarrantDataRequestService();
+    portfolioDataRequestService = PortfolioDataRequestService();
+    stockDataRequestService = StockDataRequestService();
+    userDataRequestService = UserDataRequestService();
+    warrantDataRequestService = WarrantDataRequestService();
+    trApiDataRequestService = TrApiDataRequestService();
+  }
 }

@@ -46,6 +46,8 @@ class _ProductViewState extends State<ProductView> with STWidget {
   bool showProductInAppbar = false;
   bool widgetWasDisposed = false;
 
+  bool calledOnVisibilityChanged = false;
+
   List<Widget> section(
     BuildContext context,
     String title,
@@ -98,6 +100,46 @@ class _ProductViewState extends State<ProductView> with STWidget {
     final chartHeight = MediaQuery.of(context).size.height * .5;
     const double bottomBarHeight = 60;
 
+    final productAppBar = ProductAppBar(
+      positionType: widget.positionType,
+      productInfo: widget.productInfo,
+      trProductPriceStream: widget.trProductPriceStream,
+    );
+
+    final vis = VisibilityDetector(
+      key: const Key("VisibilityDetectorKey"),
+      onVisibilityChanged: (VisibilityInfo info) {
+        if (widgetWasDisposed) {
+          return;
+        }
+
+        if (info.visibleFraction == 0 && showProductInAppbar == false) {
+          setState(() {
+            showProductInAppbar = true;
+          });
+        } else if (showProductInAppbar) {
+          setState(() {
+            showProductInAppbar = false;
+          });
+        }
+      },
+      child: productAppBar,
+    );
+
+    if (!calledOnVisibilityChanged) {
+      Future.delayed(const Duration(milliseconds: 2), () {
+        if (calledOnVisibilityChanged) {
+          return;
+        }
+        vis.onVisibilityChanged!.call(VisibilityInfo.fromRects(
+          key: UniqueKey(),
+          widgetBounds: const Offset(0.0, 0.0) & const Size(0.0, 0.0),
+          clipRect: const Offset(0.0, 0.0) & const Size(0.0, 0.0),
+        ));
+        calledOnVisibilityChanged = true;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colors.background,
@@ -110,11 +152,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
             return showProductInAppbar
                 ? SizedBox(
                     width: constraints.maxWidth,
-                    child: ProductAppBar(
-                      positionType: widget.positionType,
-                      productInfo: widget.productInfo,
-                      trProductPriceStream: widget.trProductPriceStream,
-                    ),
+                    child: productAppBar,
                   )
                 : const SizedBox.shrink();
           },
@@ -130,29 +168,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      VisibilityDetector(
-                        key: const Key("VisibilityDetectorKey"),
-                        onVisibilityChanged: (VisibilityInfo info) {
-                          if (widgetWasDisposed) {
-                            return;
-                          }
-
-                          if (info.visibleFraction == 0 && showProductInAppbar == false) {
-                            setState(() {
-                              showProductInAppbar = true;
-                            });
-                          } else if (showProductInAppbar) {
-                            setState(() {
-                              showProductInAppbar = false;
-                            });
-                          }
-                        },
-                        child: ProductAppBar(
-                          positionType: widget.positionType,
-                          productInfo: widget.productInfo,
-                          trProductPriceStream: widget.trProductPriceStream,
-                        ),
-                      ),
+                      vis,
                       SizedBox(width: double.infinity, height: chartHeight, child: Chart(chartDateRangeStream: chartDateRangeStream)),
                       const SizedBox(height: 5),
                       Container(

@@ -21,6 +21,8 @@ class TrApiDataRequestService {
   bool _initialConnect = true;
   int _currentId = 0;
 
+  bool _shouldReconnect = true;
+
   TrApiDataRequestService() {
     _initializeConnection();
   }
@@ -28,8 +30,12 @@ class TrApiDataRequestService {
   void _initializeConnection() {
     void reconnect() {
       Log.w("Lost connection to api");
-      Log.d("Trying to reconnect");
-      _initializeConnection();
+
+      if (_shouldReconnect) {
+        Log.d("Trying to reconnect");
+
+        _initializeConnection();
+      }
     }
 
     _socketChannel = WebSocketChannel.connect(_endpointUri);
@@ -162,5 +168,12 @@ class TrApiDataRequestService {
     _sendMessage("unsub $id");
     _runningRequests.removeWhere((r) => r.id == id);
     _requestMessageStrings.removeWhere((messageId, _) => messageId == id);
+  }
+
+  void disconnect() {
+    _shouldReconnect = false;
+    _runningRequests.clear();
+    _requestMessageStrings.clear();
+    _socketChannel.sink.close();
   }
 }
