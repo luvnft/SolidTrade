@@ -18,7 +18,11 @@ class ProductInformation extends StatelessWidget {
 
         TrStockDetails details = snap.data!.result!;
 
-        return Container(margin: const EdgeInsets.only(bottom: 2.5), child: Text(details.company.description));
+        return Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.only(bottom: 2.5),
+          child: Text(details.company.description ?? "No Information about this stock yet. 😔", textAlign: TextAlign.start),
+        );
       },
     );
   }

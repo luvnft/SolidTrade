@@ -69,8 +69,6 @@ class ProductMetrics extends StatelessWidget with STWidget {
       return const SizedBox.shrink();
     }
 
-    throw Exception("cool");
-
     DerivativeInfo di = productInfo.derivativeInfo!;
 
     return Row(
