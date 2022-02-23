@@ -7,6 +7,7 @@ import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
 import 'package:solidtrade/data/models/outstanding_order_model.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
@@ -34,6 +35,102 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
   void initState() {
     super.initState();
     trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtention(widget.info.isin);
+  }
+
+  Widget _ongoingProductTile(TrProductInfo productInfo, double percentMissingToFill, double currentPrice, TrUiProductDetails details) {
+    return _ongoingProductTileWithCustomProperties(
+      onPressed: () => _onClickProduct(productInfo),
+      imageUrl: details.imageUrl,
+      productTitle: details.productTitle,
+      productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
+      percentMissingToFill: percentMissingToFill,
+      percentMissingToFillString: percentMissingToFill.toStringAsFixed(2) + "%",
+      startPriceText: widget.info.price.toDefaultPrice(),
+      endPriceText: currentPrice.toDefaultPrice(),
+    );
+  }
+
+  Widget _ongoingProductTileWithCustomProperties({
+    required void Function()? onPressed,
+    required String imageUrl,
+    required String productTitle,
+    required String productSubtitle,
+    required double percentMissingToFill,
+    required String percentMissingToFillString,
+    required String startPriceText,
+    required String endPriceText,
+    bool showPriceText = true,
+    TextAlign? textAlign,
+    TextStyle? textStyle,
+  }) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.only(left: 0, top: 8, right: 8, bottom: 8),
+        minimumSize: const Size(50, 30),
+        alignment: Alignment.centerLeft,
+      ),
+      onPressed: onPressed,
+      child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Util.loadImage(
+                  imageUrl,
+                  40,
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(productTitle),
+                    const SizedBox(height: 2),
+                    SizedBox(
+                      width: 0,
+                      child: Text(
+                        productSubtitle,
+                        overflow: TextOverflow.visible,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                const SizedBox(width: 10),
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                width: constraints.maxWidth * percentMissingToFill,
+                child: Divider(
+                  color: colors.foreground,
+                  thickness: 4,
+                ),
+              ),
+            ),
+            showPriceText
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        startPriceText,
+                        style: TextStyle(color: colors.foreground),
+                      ),
+                      Text(
+                        endPriceText,
+                        style: TextStyle(color: colors.foreground),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+            Text(percentMissingToFillString, textAlign: textAlign, style: textStyle),
+          ],
+        );
+      }),
+    );
   }
 
   void _onClickProduct(TrProductInfo info) {
@@ -81,76 +178,28 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                   widget.positionType,
                 );
 
-                final price = isBuy ? priceInfo.ask.price : priceInfo.bid.price;
+                if (!productInfo.active) {
+                  return _ongoingProductTileWithCustomProperties(
+                    onPressed: () {},
+                    imageUrl: details.imageUrl,
+                    productTitle: details.productTitle,
+                    productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
+                    percentMissingToFill: 0,
+                    percentMissingToFillString: "This product can no longer be bought or sold. This might happen if the product is expired or is knocked out. This product may not be showing by next week.",
+                    showPriceText: false,
+                    startPriceText: "",
+                    endPriceText: "",
+                    textAlign: TextAlign.center,
+                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.normal),
+                  );
+                }
 
-                final percentMissingToFill = !isLimit ? (price / widget.info.price) : (widget.info.price / price);
+                // final currentPrice = isBuy ? priceInfo.ask!.price : priceInfo.bid.price;
+                final currentPrice = isBuy ? 2.3 : priceInfo.bid.price;
 
-                return TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.only(left: 0, top: 8, right: 8, bottom: 8),
-                    minimumSize: const Size(50, 30),
-                    alignment: Alignment.centerLeft,
-                  ),
-                  onPressed: () => _onClickProduct(productInfo),
-                  child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Util.loadImage(
-                              details.imageUrl,
-                              40,
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(details.productTitle),
-                                const SizedBox(height: 2),
-                                SizedBox(
-                                  width: 0,
-                                  child: Text(
-                                    productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
-                                    overflow: TextOverflow.visible,
-                                    softWrap: false,
-                                    style: Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            const SizedBox(width: 10),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: SizedBox(
-                            width: constraints.maxWidth * percentMissingToFill,
-                            child: Divider(
-                              color: colors.foreground,
-                              thickness: 4,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.info.price.toDefaultPrice(),
-                              style: TextStyle(color: colors.foreground),
-                            ),
-                            Text(
-                              price.toDefaultPrice(),
-                              style: TextStyle(color: colors.foreground),
-                            ),
-                          ],
-                        ),
-                        Text(percentMissingToFill.toStringAsFixed(2) + "%"),
-                      ],
-                    );
-                  }),
-                );
+                final percentMissingToFill = !isLimit ? (currentPrice / widget.info.price) : (widget.info.price / currentPrice);
+
+                return _ongoingProductTile(productInfo, percentMissingToFill, currentPrice, details);
               },
             );
           },

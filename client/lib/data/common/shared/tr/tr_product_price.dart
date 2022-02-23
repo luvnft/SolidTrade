@@ -5,8 +5,9 @@ class TrProductPrice {
   final TrProductPriceItem open;
   final TrProductPriceItem pre;
   final TrProductPriceItem bid;
-  final TrProductPriceItem ask;
-  const TrProductPrice({required this.open, required this.bid, required this.ask, required this.pre});
+  TrProductPriceItem? ask;
+
+  TrProductPrice({required this.open, required this.bid, this.ask, required this.pre});
 }
 
 class TrProductPriceItem {

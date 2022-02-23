@@ -136,7 +136,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
                     Row(
                       children: [
                         _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
-                        _constructMetric(width, "Ask", prices.ask.price.toDefaultPrice()),
+                        _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
                       ],
                     ),
                     _additionalStockInfoIfExistent(width, tupleNameForNumber, stockDetailsSnap),
