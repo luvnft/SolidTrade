@@ -5,16 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flutter dev",
+      "name": "Flutter development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main/main_dev.dart"
-    },
-    {
-      "name": "Flutter prod",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main/main_prod.dart"
+      "program": "lib/main/main_dev.dart",
+      "args": ["--no-sound-null-safety"]
     }
   ]
 }
