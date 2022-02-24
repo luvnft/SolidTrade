@@ -10,6 +10,7 @@ import 'package:solidtrade/components/shared/product_information.dart';
 import 'package:solidtrade/components/shared/product_metrics.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
@@ -217,14 +218,10 @@ class _ProductViewState extends State<ProductView> with STWidget {
                 height: bottomBarHeight,
                 width: constraints.maxWidth,
                 color: colors.navigationBackground,
-                child: StreamBuilder<RequestResponse<Portfolio>?>(
+                child: STStreamBuilder<Portfolio>(
                   stream: portfolioService.stream$,
-                  builder: (context, snap) {
-                    if (!snap.hasData) {
-                      return showLoadingSkeleton(BoxShape.rectangle);
-                    }
-
-                    final bool ownsPosition = TrUtil.userOwnsPosition(snap.data!.result!, widget.productInfo.isin);
+                  builder: (context, portfolio) {
+                    final bool ownsPosition = TrUtil.userOwnsPosition(portfolio, widget.productInfo.isin);
                     final buttonWidth = (ownsPosition ? constraints.maxWidth / 2 : constraints.maxWidth) - 20;
 
                     return Row(

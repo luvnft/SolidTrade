@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
@@ -41,13 +42,13 @@ class UserAppBar extends StatelessWidget with STWidget {
                       borderRadius: BorderRadius.circular(90),
                       child: Container(
                         color: colors.background,
-                        child: StreamBuilder<RequestResponse<User>?>(
-                            stream: userService.stream$,
-                            builder: (context, snap) => showLoadingWhileWaiting(
-                                  isLoading: !snap.hasData,
-                                  loadingBoxShape: BoxShape.circle,
-                                  child: Util.loadImage(snap.data?.result?.profilePictureUrl ?? "", 40),
-                                )),
+                        child: STStreamBuilder<User>(
+                          stream: userService.stream$,
+                          builder: (context, user) => Util.loadImage(
+                            user.profilePictureUrl,
+                            40,
+                          ),
+                        ),
                       ),
                     ),
                   ),

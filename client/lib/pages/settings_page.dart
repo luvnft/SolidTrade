@@ -21,7 +21,7 @@ class SettingsPage extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: uiUpdate.stream$,
-      builder: (context, snapshot) => Scaffold(
+      builder: (context, _) => Scaffold(
         appBar: AppBar(
           title: Text(translations.settings.settings),
         ),

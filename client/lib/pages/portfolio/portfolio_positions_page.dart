@@ -7,6 +7,7 @@ import 'package:solidtrade/components/portfolio/portfolio_overview_title.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/product_tile_info.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/models/outstanding_order_model.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
@@ -28,16 +29,10 @@ class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with ST
     return Container(
       margin: const EdgeInsets.only(top: 10),
       width: double.infinity,
-      child: StreamBuilder<RequestResponse<Portfolio>?>(
+      child: STStreamBuilder<Portfolio>(
         stream: portfolioService.stream$,
-        builder: (context, snap) {
+        builder: (context, portfolio) {
           final positionTitle = PortfolioOverviewTitle(title: !widget.isViewingOutstandingOrders ? "Positions" : "Outstanding Orders");
-
-          if (!snap.hasData) {
-            return showLoadingSkeleton(BoxShape.rectangle);
-          }
-
-          Portfolio portfolio = snap.data!.result!;
           var hasAnyPositions = portfolio.knockOutPositions.isNotEmpty || portfolio.ongoingKnockOutPositions.isNotEmpty || portfolio.ongoingWarrantPositions.isNotEmpty || portfolio.stockPositions.isNotEmpty || portfolio.warrantPositions.isNotEmpty;
 
           if (!hasAnyPositions) {

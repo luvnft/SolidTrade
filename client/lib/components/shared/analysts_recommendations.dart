@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -51,14 +52,9 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * .85;
 
-    return StreamBuilder<RequestResponse<TrStockDetails>?>(
+    return STStreamBuilder<TrStockDetails>(
       stream: trStockDetailsStream,
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return showLoadingSkeleton(BoxShape.rectangle);
-        }
-
-        TrStockDetails details = snap.data!.result!;
+      builder: (context, details) {
         Recommendations recommendations = details.analystRating.recommendations;
         double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.productViewGetAnalystsCount(recommendations));
         double holdRecommendation = recommendations.hold / (TrUtil.productViewGetAnalystsCount(recommendations));

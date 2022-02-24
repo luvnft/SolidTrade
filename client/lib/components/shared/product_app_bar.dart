@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/services/storage/aggregate_history_service.dart';
@@ -45,15 +46,9 @@ class ProductAppBar extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<RequestResponse<TrProductPrice>?>(
+    return STStreamBuilder<TrProductPrice>(
       stream: trProductPriceStream,
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return showLoadingSkeleton(BoxShape.rectangle);
-        }
-
-        TrProductPrice priceInfo = snap.data!.result!;
-
+      builder: (context, priceInfo) {
         TrUiProductDetails details = TrUtil.getTrUiProductDetials(
           priceInfo,
           productInfo,

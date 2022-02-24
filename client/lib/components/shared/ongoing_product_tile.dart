@@ -5,6 +5,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/product_view.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
@@ -148,7 +149,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: uiUpdate.stream$,
-      builder: (context, snapshot) {
+      builder: (context, _) {
         return FutureBuilder<RequestResponse<TrProductInfo>>(
           future: trProductInfoFuture,
           builder: (context, trProductInfoSnap) {
@@ -163,15 +164,9 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
 
             TrProductInfo productInfo = trProductInfoSnap.data!.result!;
 
-            return StreamBuilder<RequestResponse<TrProductPrice>?>(
+            return STStreamBuilder<TrProductPrice>(
               stream: trProductPriceService.stream$,
-              builder: (context, snap) {
-                if (!snap.hasData) {
-                  return showLoadingSkeleton(BoxShape.rectangle);
-                }
-
-                TrProductPrice priceInfo = snap.data!.result!;
-
+              builder: (context, priceInfo) {
                 TrUiProductDetails details = TrUtil.getTrUiProductDetials(
                   priceInfo,
                   productInfo,

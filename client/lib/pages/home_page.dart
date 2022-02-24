@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> with STWidget {
 
     return StreamBuilder(
       stream: uiUpdate.stream$,
-      builder: (context, snapshot) => Container(
+      builder: (context, _) => Container(
         color: colors.navigationBackground,
         child: SafeArea(
           child: Container(

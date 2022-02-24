@@ -35,7 +35,7 @@ class MyAppState extends State<MyApp> {
 
     return StreamBuilder(
       stream: uiUpdate.stream$,
-      builder: (context, snapshot) {
+      builder: (context, _) {
         final colors = configurationProvider.themeProvider.theme;
         return MaterialApp(
           navigatorKey: widget.navigatorKey,

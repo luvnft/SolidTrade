@@ -50,7 +50,9 @@ class TrApiDataRequestService {
   }
 
   void _onMessageReceived(String message) {
-    Log.d(message);
+    if (!message.contains("{\"bid\":{\"time\":")) {
+      Log.d(message);
+    }
 
     if (!_initialConnect && message == "connected") {
       var requestMessageStrings = Map<int, String>.from(_requestMessageStrings);

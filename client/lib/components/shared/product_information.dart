@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -9,15 +10,9 @@ class ProductInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<RequestResponse<TrStockDetails>?>(
+    return STStreamBuilder<TrStockDetails>(
       stream: trStockDetailsStream,
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return showLoadingSkeleton(BoxShape.rectangle);
-        }
-
-        TrStockDetails details = snap.data!.result!;
-
+      builder: (context, details) {
         return Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(bottom: 2.5),

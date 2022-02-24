@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/data/common/shared/tuple.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/extentions/double_extentions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
-
-import 'name_for_large_number.dart';
 
 class ProductMetrics extends StatelessWidget with STWidget {
   ProductMetrics({
@@ -39,31 +37,33 @@ class ProductMetrics extends StatelessWidget with STWidget {
     );
   }
 
-  Widget _additionalStockInfoIfExistent(
-    double width,
-    Tuple<NameForLargeNumber, double> tupleNameForNumber,
-    AsyncSnapshot<RequestResponse<TrStockDetails>?> stockDetailsSnap,
-  ) {
+  Widget _additionalStockInfoIfExistent(double width) {
     if (!isStock) {
       return const SizedBox.shrink();
     }
 
-    return Row(
-      children: [
-        _constructMetric(
-          width,
-          translations.productView.marketCap,
-          tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productView.nameOfNumberPrefix(tupleNameForNumber.t1),
-        ),
-        _constructMetric(width, "P/E", stockDetailsSnap.data!.result!.company.peRatioSnapshot?.toStringAsFixed(2) ?? "--"),
-      ],
+    return STStreamBuilder<TrStockDetails>(
+      stream: trStockDetailsStream,
+      builder: (context, result) {
+        final hasMarketCapValue = result.company.marketCapSnapshot != null;
+
+        final tupleNameForNumber = hasMarketCapValue ? TrUtil.getNameForNumber(result.company.marketCapSnapshot!) : null;
+        return Row(
+          children: [
+            _constructMetric(
+              width,
+              translations.productView.marketCap,
+              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productView.nameOfNumberPrefix(tupleNameForNumber.t1),
+            ),
+            _constructMetric(width, "P/E", result.company.peRatioSnapshot?.toStringAsFixed(2) ?? "--"),
+          ],
+        );
+      },
     );
   }
 
   Widget _additionalDerivativesInfoIfExistent(
     double width,
-    Tuple<NameForLargeNumber, double> tupleNameForNumber,
-    AsyncSnapshot<RequestResponse<TrStockDetails>?> stockDetailsSnap,
   ) {
     if (productInfo.derivativeInfo == null) {
       return const SizedBox.shrink();
@@ -104,47 +104,31 @@ class ProductMetrics extends StatelessWidget with STWidget {
         borderRadius: BorderRadius.circular(4.0),
       ),
       color: colors.themeColorType == ColorThemeType.dark ? colors.softBackground : colors.background,
-      child: StreamBuilder<RequestResponse<TrProductPrice>?>(
+      child: STStreamBuilder<TrProductPrice>(
         stream: trProductPriceStream,
-        builder: (context, snap) {
-          if (!snap.hasData) {
-            return showLoadingSkeleton(BoxShape.rectangle);
-          }
-          TrProductPrice prices = snap.data!.result!;
-
-          return StreamBuilder<RequestResponse<TrStockDetails>?>(
-            stream: trStockDetailsStream,
-            builder: (context, stockDetailsSnap) {
-              if (!stockDetailsSnap.hasData) {
-                return showLoadingSkeleton(BoxShape.rectangle);
-              }
-
-              final tupleNameForNumber = TrUtil.getNameForNumber(stockDetailsSnap.data!.result!.company.marketCapSnapshot);
-
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: Column(
+        builder: (context, prices) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+              children: [
+                productInfo.derivativeInfo == null
+                    ? Row(
+                        children: [
+                          _constructMetric(width, "Open", prices.open.price.toDefaultPrice()),
+                          _constructMetric(width, "Close", prices.pre.price.toDefaultPrice()),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+                Row(
                   children: [
-                    productInfo.derivativeInfo == null
-                        ? Row(
-                            children: [
-                              _constructMetric(width, "Open", prices.open.price.toDefaultPrice()),
-                              _constructMetric(width, "Close", prices.pre.price.toDefaultPrice()),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
-                    Row(
-                      children: [
-                        _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
-                        _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
-                      ],
-                    ),
-                    _additionalStockInfoIfExistent(width, tupleNameForNumber, stockDetailsSnap),
-                    _additionalDerivativesInfoIfExistent(width, tupleNameForNumber, stockDetailsSnap),
+                    _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
+                    _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
                   ],
                 ),
-              );
-            },
+                _additionalStockInfoIfExistent(width),
+                _additionalDerivativesInfoIfExistent(width),
+              ],
+            ),
           );
         },
       ),

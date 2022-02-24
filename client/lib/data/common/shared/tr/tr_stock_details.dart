@@ -17,13 +17,13 @@ class TrStockDetails {
 
 class Company {
   final String name;
-  final double marketCapSnapshot;
+  double? marketCapSnapshot;
   String? description;
   double? peRatioSnapshot;
 
   Company({
     required this.name,
-    required this.marketCapSnapshot,
+    this.marketCapSnapshot,
     this.description,
     this.peRatioSnapshot,
   });
