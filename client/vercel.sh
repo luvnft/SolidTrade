@@ -9,22 +9,11 @@ export PATH="$PATH:`pwd`/flutter/bin"
 
 cd ../client/
 
-echo "--------"
-
-ls
-
-echo "--------"
-
 # Create directory if it doesn't exist
 mkdir -p ./assets/config
 
 # Write out the environment variable configuration as a json file
 echo $App_Config | base64 --decode > ./assets/config/app_config.json
-
-ls ./lib/
-
-
-echo "--------"
 
 # Install dependencies
 flutter pub get
@@ -32,12 +21,10 @@ flutter pub get
 # Generate mappings
 flutter pub run build_runner build
 
-ls ./lib/
-
 # Build web app
-if [ "$Deployment" = "production" ]; 
+if [ "$Deployment" = "Production" ]; 
 then
-  flutter build web --release -t lib/main/main_prod.dart --no-sound-null-safety
+  flutter build web --release -t lib/main/main_prod.dart
 else
-  flutter build web --release -t lib/main/main_staging.dart --no-sound-null-safety
+  flutter build web --release -t lib/main/main_staging.dart
 fi
