@@ -19,12 +19,15 @@ echo "--------"
 mkdir -p ./assets/config
 
 # Write out the environment variable configuration as a json file
-echo $APP_CONFIG | base64 --decode > ./assets/config/app_config.json
+echo $App_Config | base64 --decode > ./assets/config/app_config.json
 
 ls ./lib/
 
 
 echo "--------"
+
+# Install dependencies
+flutter pub get
 
 # Generate mappings
 flutter pub run build_runner build
@@ -32,7 +35,7 @@ flutter pub run build_runner build
 ls ./lib/
 
 # Build web app
-if [ "$1" = "production" ]; 
+if [ "$Deployment" = "production" ]; 
 then
   flutter build web --release -t lib/main/main_prod.dart --no-sound-null-safety
 else
