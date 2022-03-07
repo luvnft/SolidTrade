@@ -34,10 +34,19 @@ namespace SolidTradeServer.Services.Cache
         }
 
         /// <inheritdoc/>
-        public void SetCachedValue<T>(string identifier, T value) => _cache.Set(GetCacheKey(typeof(T), identifier), value, _cachePolicy);
+        public void SetCachedValue<T>(string identifier, T value, int? minutesToExpiration) 
+            => _cache.Set(GetCacheKey(typeof(T), identifier), value, CreateCacheItemPolicy(_cachePolicy, minutesToExpiration));
 
         private static string GetCacheKey(Type type, string identifier) => type.Name + "_" + identifier;
 
         private static TimeSpan GetDefaultTimeSpan(IConfiguration configuration) => TimeSpan.Parse(configuration[DefaultCacheTimeoutKey]);
+
+        private static CacheItemPolicy CreateCacheItemPolicy(CacheItemPolicy defaultCacheItemPolicy, int? minutesToExpiration)
+        {
+            if (minutesToExpiration is null)
+                return defaultCacheItemPolicy;
+
+            return new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.Add(TimeSpan.FromMinutes(minutesToExpiration.Value)) };
+        }
     }
 }

@@ -63,6 +63,7 @@ namespace SolidTradeServer
             services.AddTransient<KnockoutService>();
             services.AddTransient<PortfolioService>();
             services.AddTransient<NotificationService>();
+            services.AddTransient<ProductImageService>();
             services.AddTransient<OngoingWarrantService>();
             services.AddTransient<AuthenticationService>();
             services.AddTransient<OngoingKnockoutService>();
@@ -101,8 +102,10 @@ namespace SolidTradeServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider, ILogger logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider, ILogger logger, DbSolidTrade context)
         {
+            context.Database.EnsureCreated();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

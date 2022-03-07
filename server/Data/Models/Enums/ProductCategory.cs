@@ -17,5 +17,7 @@ namespace SolidTradeServer.Data.Models.Enums
         Turbo,
         [EnumMember(Value = "Open End Turbo")]
         OpenEndTurbo,
+        [EnumMember(Value = "X-Open End Turbo")]
+        XOpenEndTurbo,
     }
 }

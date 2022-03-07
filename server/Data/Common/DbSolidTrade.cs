@@ -28,6 +28,7 @@ namespace SolidTradeServer.Data.Common
         public DbSet<KnockoutPosition> KnockoutPositions { get; set; }
         public DbSet<OngoingWarrantPosition> OngoingWarrantPositions { get; set; }
         public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; set; }
+        public DbSet<ProductImageRelation> ProductImageRelations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

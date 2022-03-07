@@ -29,6 +29,12 @@ namespace SolidTradeServer.Common
 
         public static string GetTradeRepublicProductPriceRequestString(string isin)
             => "{\"type\":\"ticker\",\"id\":\"" + isin + "\"}";
+
+        public static string GetTradeRepublicProductImageUrl(string isin, ProductImageThemeColor themeColor)
+            => $"https://assets.traderepublic.com/img/logos/{isin}/{themeColor.ToString().ToLower()}.svg";
+
+        public static string GetTradingViewIndexProductImageUrl(string isin)
+            => $"https://s3-symbol-logo.tradingview.com/country/{isin[..2]}.svg";
         
         private static readonly JsonSerializerSettings _jsonSerializerOptions = new()
         {
