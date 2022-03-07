@@ -66,7 +66,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
             return STStreamBuilder<TrProductPrice>(
               stream: trProductPriceService.stream$,
               builder: (context, priceInfo) {
-                TrUiProductDetails details = TrUtil.getTrUiProductDetials(
+                TrUiProductDetails details = TrUtil.getTrUiProductDetails(
                   priceInfo,
                   productInfo,
                   widget.info.positionType,

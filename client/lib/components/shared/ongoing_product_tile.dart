@@ -167,7 +167,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
             return STStreamBuilder<TrProductPrice>(
               stream: trProductPriceService.stream$,
               builder: (context, priceInfo) {
-                TrUiProductDetails details = TrUtil.getTrUiProductDetials(
+                TrUiProductDetails details = TrUtil.getTrUiProductDetails(
                   priceInfo,
                   productInfo,
                   widget.positionType,

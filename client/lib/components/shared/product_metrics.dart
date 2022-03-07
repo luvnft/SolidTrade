@@ -111,6 +111,12 @@ class ProductMetrics extends StatelessWidget with STWidget {
             margin: const EdgeInsets.symmetric(vertical: 5),
             child: Column(
               children: [
+                Row(
+                  children: [
+                    _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
+                    _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
+                  ],
+                ),
                 productInfo.derivativeInfo == null
                     ? Row(
                         children: [
@@ -119,12 +125,6 @@ class ProductMetrics extends StatelessWidget with STWidget {
                         ],
                       )
                     : const SizedBox.shrink(),
-                Row(
-                  children: [
-                    _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
-                    _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
-                  ],
-                ),
                 _additionalStockInfoIfExistent(width),
                 _additionalDerivativesInfoIfExistent(width),
               ],

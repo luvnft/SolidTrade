@@ -49,7 +49,7 @@ class ProductAppBar extends StatelessWidget with STWidget {
     return STStreamBuilder<TrProductPrice>(
       stream: trProductPriceStream,
       builder: (context, priceInfo) {
-        TrUiProductDetails details = TrUtil.getTrUiProductDetials(
+        TrUiProductDetails details = TrUtil.getTrUiProductDetails(
           priceInfo,
           productInfo,
           positionType,

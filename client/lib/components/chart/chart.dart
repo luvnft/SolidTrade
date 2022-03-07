@@ -52,7 +52,7 @@ class _ChartState extends State<Chart> with STWidget {
         CartesianChartAnnotation(
           widget: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
-              width: constraints.maxWidth - 26,
+              width: constraints.maxWidth,
               child: DottedLine(dashColor: colors.foreground),
             ),
           ),

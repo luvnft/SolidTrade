@@ -6,6 +6,7 @@ import 'package:solidtrade/components/shared/analysts_recommendations.dart';
 import 'package:solidtrade/components/shared/derivatives_selection.dart';
 import 'package:solidtrade/components/shared/product_app_bar.dart';
 import 'package:solidtrade/components/shared/product_chart_date_range_selection.dart';
+import 'package:solidtrade/components/shared/product_details.dart';
 import 'package:solidtrade/components/shared/product_information.dart';
 import 'package:solidtrade/components/shared/product_metrics.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
@@ -18,7 +19,6 @@ import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
-import 'package:solidtrade/services/util/util.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProductView extends StatefulWidget {
@@ -190,18 +190,29 @@ class _ProductViewState extends State<ProductView> with STWidget {
                         ),
                         isStock: isStock,
                         onlyShowIfProductIsStock: true,
-                        // margin: const EdgeInsets.only(left: 25, right: 25),
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         shouldShow: widget.productInfo.derivativeProductCount.knockOutProduct != null || widget.productInfo.derivativeProductCount.vanillaWarrant != null,
                       ),
                       ...section(
                         context,
-                        isStock ? "ℹ️ About ${widget.productInfo.shortName}" : "ℹ️ Information",
+                        "ℹ️ About ${widget.productInfo.shortName}",
                         ProductInformation(
                           trStockDetailsStream: stockDetailsService.stream$,
                         ),
                         isStock: isStock,
                         onlyShowIfProductIsStock: true,
+                      ),
+                      ...section(
+                        context,
+                        "ℹ️ Details",
+                        ProductDetails(
+                          trStockDetailsStream: stockDetailsService.stream$,
+                          productInfo: widget.productInfo,
+                          isStock: isStock,
+                        ),
+                        // margin: const EdgeInsets.only(left: 25, right: 25, top: 10),
+                        isStock: isStock,
+                        onlyShowIfProductIsStock: false,
                       ),
                       const SizedBox(height: 5),
                       Text(

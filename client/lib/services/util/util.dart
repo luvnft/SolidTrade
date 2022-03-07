@@ -29,19 +29,25 @@ class Util {
     }
   }
 
-  static Widget loadImage(String url, double size) {
-    if (!url.endsWith(".svg")) {
-      return CachedNetworkImage(
-        imageUrl: url,
-        height: size,
-        width: size,
-        placeholder: (context, url) => const SkeletonAvatar(
-          style: SkeletonAvatarStyle(shape: BoxShape.circle),
-        ),
-      );
-    }
+  static Widget loadImage(String url, double size, {BorderRadius? borderRadius}) {
+    borderRadius ??= BorderRadius.circular(90);
 
-    return loadSvgImage(url, size, size);
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: CachedNetworkImage(
+          imageUrl: url,
+          height: size,
+          width: size,
+          placeholder: (context, url) => const SkeletonAvatar(
+            style: SkeletonAvatarStyle(shape: BoxShape.circle),
+          ),
+          errorWidget: (context, url, error) => loadSvgImage(url, size, size),
+        ),
+      ),
+    );
   }
 
   static Widget loadSvgImage(String url, double width, double height) {
@@ -49,7 +55,7 @@ class Util {
       url,
       width: width,
       height: height,
-      placeholderBuilder: (BuildContext context) => Container(
+      placeholderBuilder: (BuildContext _) => Container(
         padding: EdgeInsets.symmetric(horizontal: width, vertical: height),
         width: width,
         height: height,

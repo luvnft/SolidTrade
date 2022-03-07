@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
@@ -31,7 +32,7 @@ Future<void> commonMain(Environment environment) async {
   await Startup.initializeApp();
 
   FlutterError.onError = (details) {
-    if (hadFatalException) return;
+    if (hadFatalException || kDebugMode) return;
     hadFatalException = true;
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {

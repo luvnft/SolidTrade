@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/shared/name_for_large_number.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/shared/buy_or_sell.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
-import 'package:solidtrade/data/common/shared/request_response_stream_result.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
@@ -18,14 +17,15 @@ import 'package:solidtrade/services/util/extentions/string_extentions.dart';
 
 class TrUtil {
   static final _configurationProvider = GetIt.instance.get<ConfigurationProvider>();
+  static final _baseUrl = "https://" + ConfigReader.getBaseUrl();
 
-  static TrUiProductDetails getTrUiProductDetials(TrProductPrice priceInfo, TrProductInfo productInfo, PositionType positionType) {
+  static TrUiProductDetails getTrUiProductDetails(TrProductPrice priceInfo, TrProductInfo productInfo, PositionType positionType) {
     final isStockPosition = positionType == PositionType.stock;
 
     final percentageChange = priceInfo.bid.price / priceInfo.pre.price;
     final absolutChange = priceInfo.bid.price - priceInfo.pre.price;
 
-    final isUp = percentageChange == 1 || percentageChange > 1;
+    final isUp = percentageChange == 1 || 1 < percentageChange;
     final plusMinus = isUp ? "+" : "";
 
     final productTitle = isStockPosition ? productInfo.shortName : _getDerivitiveProductTitle(productInfo);
@@ -42,7 +42,7 @@ class TrUtil {
       plusMinusProductNamePrefix: plusMinus,
       productTitle: productTitle,
       productSubtitle: productSubtitle,
-      imageUrl: "https://assets.traderepublic.com/img/logos/$imageIsin/$colorMode.svg",
+      imageUrl: _baseUrl + "/image?Isin=$imageIsin&ThemeColor=$colorMode",
       textColor: isUp ? _configurationProvider.themeProvider.theme.stockGreen : _configurationProvider.themeProvider.theme.stockRed,
     );
   }

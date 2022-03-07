@@ -12,6 +12,7 @@ class TrProductInfo {
   final List<ProductTags> tags;
   final DerivativeProductCount derivativeProductCount;
   final String wkn;
+  final ProductCompanyInfo company;
   String? intlSymbol;
   String? homeSymbol;
   String? issuerDisplayName;
@@ -29,10 +30,17 @@ class TrProductInfo {
     required this.tags,
     required this.derivativeProductCount,
     required this.exchanges,
+    required this.company,
     this.issuerDisplayName,
     this.derivativeInfo,
     this.intlSymbol,
   });
+}
+
+class ProductCompanyInfo {
+  int? ipoDate;
+
+  ProductCompanyInfo({this.ipoDate});
 }
 
 class Exchange {
@@ -74,6 +82,7 @@ class DerivativeInfoProperties {
   final double delta;
   String? lastTradingDay;
   double? leverage;
+  String? expiry;
 
   DerivativeInfoProperties({
     required this.optionType,
@@ -85,6 +94,7 @@ class DerivativeInfoProperties {
     required this.delta,
     this.lastTradingDay,
     this.leverage,
+    this.expiry,
   });
 }
 
