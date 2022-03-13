@@ -29,7 +29,7 @@ class Util {
     }
   }
 
-  static Widget loadImage(String url, double size, {BorderRadius? borderRadius}) {
+  static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit}) {
     borderRadius ??= BorderRadius.circular(90);
 
     return SizedBox(
@@ -38,6 +38,7 @@ class Util {
       child: ClipRRect(
         borderRadius: borderRadius,
         child: CachedNetworkImage(
+          fit: boxFit,
           imageUrl: url,
           height: size,
           width: size,
@@ -67,6 +68,43 @@ class Util {
           ),
         ),
       ),
+    );
+  }
+
+  static Widget roundedButton(
+    List<Widget> content, {
+    required void Function() onPressed,
+    required IColorTheme colors,
+    Color? backgroundColor,
+    Color? foregroundColor,
+  }) {
+    foregroundColor ??= colors.foreground;
+    backgroundColor ??= colors.background;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(45),
+          child: SizedBox(
+            height: 50,
+            child: TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(foregroundColor),
+                backgroundColor: MaterialStateProperty.all(backgroundColor),
+              ),
+              onPressed: onPressed,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...content
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -45,8 +45,6 @@ class ProductDetails extends StatelessWidget with STWidget {
     final isCrypto = productInfo.typeId == "crypto";
     final ticker = isCrypto ? productInfo.homeSymbol! : productInfo.intlSymbol ?? "--";
 
-    Log.w(productInfo.name);
-    Log.w(productInfo.name.length);
     if (isCrypto || isStock) {
       final name = productInfo.name.length > 30 ? productInfo.shortName : productInfo.name;
 

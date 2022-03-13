@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/shared/st_logo.dart';
 import 'package:solidtrade/main/main_common.dart';
-import 'package:solidtrade/pages/home_page.dart';
+import 'package:solidtrade/pages/welcome_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
-import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
@@ -23,6 +23,7 @@ class _SplashState extends State<Splash> with STWidget {
   final portfolioService = GetIt.instance.get<PortfolioService>();
   final userService = GetIt.instance.get<UserService>();
 
+  late Future _fadeAnimationFuture;
   bool _visible = false;
 
   @override
@@ -34,7 +35,7 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   void _fadeContent() {
-    Future.delayed(const Duration(milliseconds: 100), () {
+    _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         _visible = !_visible;
       });
@@ -44,23 +45,25 @@ class _SplashState extends State<Splash> with STWidget {
   Future<void> _navigateToHome() async {
     var delay = Future.delayed(const Duration(seconds: 1));
 
-    var userRequest = await userService.fetchUser();
-    if (userRequest.isSuccessful) {
-      await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
-      await portfolioService.fetchPortfolioByUserId();
+    await _fadeAnimationFuture;
+    // var userRequest = await userService.fetchUser();
+    // if (userRequest.isSuccessful) {
+    //   await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
+    //   await portfolioService.fetchPortfolioByUserId();
 
-      Log.d("fetched user info successfully");
-    } else {
-      // TODO: Navigate to login page.
-      delay.ignore();
-      Log.d(userRequest.error!.userFriendlyMessage);
-      Log.d("User request failed.");
-      return;
-    }
+    //   Log.d("fetched user info successfully");
 
-    await delay;
+    //   await delay;
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+    //   return;
+    // }
+
+    delay.ignore();
+    Log.w("User request failed.");
+    // Log.w(userRequest.error!.userFriendlyMessage);
+
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
   }
 
   @override
@@ -80,14 +83,7 @@ class _SplashState extends State<Splash> with STWidget {
     }
 
     return Scaffold(
-      backgroundColor: configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light
-          ? const Color.fromRGBO(
-              251,
-              251,
-              251,
-              1,
-            )
-          : colors.background,
+      backgroundColor: colors.splasScreenColor,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,11 +91,7 @@ class _SplashState extends State<Splash> with STWidget {
           children: [
             const SizedBox(height: 50),
             const Spacer(),
-            Image.asset(
-              colors.logoAsGif,
-              height: 100.0,
-              width: 100.0,
-            ),
+            STLogo(colors.logoAsGif, key: UniqueKey()),
             const Spacer(),
             AnimatedOpacity(
               opacity: _visible ? 1.0 : 0.0,

@@ -15,7 +15,13 @@ abstract class IColorTheme {
   Color get foreground;
   Color get background;
   Color get softBackground;
+
+  // Splash screen
+  Color get splasScreenColor;
+
+  // Images
   String get logoAsGif;
+  String get loginBlurredBackground;
 
   // Common stock colors
   Color get lightGreen;
@@ -75,6 +81,9 @@ class LightColorTheme implements IColorTheme {
   String get logoAsGif => "assets/images/light-logo.gif";
 
   @override
+  String get loginBlurredBackground => "assets/images/light-blurred-login-background.jpg";
+
+  @override
   Color get selectedItem => Colors.black;
 
   @override
@@ -112,6 +121,9 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get blueText => const Color.fromRGBO(6, 155, 248, 1);
+
+  @override
+  Color get splasScreenColor => const Color.fromRGBO(251, 251, 251, 1);
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -135,6 +147,9 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   String get logoAsGif => "assets/images/dark-logo.gif";
+
+  @override
+  String get loginBlurredBackground => "assets/images/dark-blurred-login-background.jpg";
 
   @override
   Color get selectedItem => Colors.white;
@@ -174,6 +189,9 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get blueText => const Color.fromRGBO(16, 160, 238, 1);
+
+  @override
+  Color get splasScreenColor => const Color.fromRGBO(4, 4, 4, 1);
 }
 
 class ThemeProvider {
