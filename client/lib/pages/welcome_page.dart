@@ -86,12 +86,18 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 ],
               ),
               const Spacer(),
-              Util.roundedButton([
-                const SizedBox(width: 20),
-                Text("Ready?", style: TextStyle(color: colors.background)),
-                SizedBox(child: Icon(Icons.keyboard_arrow_right_rounded, color: colors.background)),
-                const SizedBox(width: 10),
-              ], onPressed: _handleClickContinue, colors: colors, backgroundColor: colors.foreground),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Util.roundedButton([
+                    const SizedBox(width: 20),
+                    Text("Get Started", style: TextStyle(color: colors.background)),
+                    SizedBox(child: Icon(Icons.keyboard_arrow_right_rounded, color: colors.background)),
+                    const SizedBox(width: 10),
+                  ], onPressed: _handleClickContinue, colors: colors, backgroundColor: colors.foreground),
+                ],
+              ),
               const Spacer(),
               Align(
                 alignment: Alignment.bottomRight,
@@ -105,35 +111,6 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
               )
             ],
           ),
-        );
-      },
-    );
-  }
-}
-
-class NonCacheNetworkImage extends StatelessWidget {
-  const NonCacheNetworkImage(this.imageUrl, {Key? key}) : super(key: key);
-  final String imageUrl;
-  Future<Uint8List> getImageBytes() async {
-    Response response = await get(Uri.parse(imageUrl));
-    return response.bodyBytes;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List>(
-      future: getImageBytes(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Image.memory(
-            snapshot.data!,
-            height: 100.0,
-            width: 100.0,
-          );
-        }
-        return const SizedBox(
-          height: 100.0,
-          width: 100.0,
         );
       },
     );

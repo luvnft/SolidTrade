@@ -48,12 +48,7 @@ class _LoginPageState extends State<LoginPage> with STWidget, SingleTickerProvid
             margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
             child: Scaffold(
               body: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(colors.loginBlurredBackground),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                color: colors.softBackground,
                 child: Column(
                   children: [
                     Expanded(

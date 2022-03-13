@@ -55,7 +55,7 @@ class LoginScreen extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
-        physics: BrokenImplicitScrollPhysics(),
+        physics: const BrokenImplicitScrollPhysics(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * .88,
@@ -67,6 +67,7 @@ class LoginScreen extends StatelessWidget with STWidget {
                 constraints.maxWidth,
                 borderRadius: BorderRadius.circular(25),
                 boxFit: BoxFit.cover,
+                loadingBoxShape: BoxShape.rectangle,
               ),
               const SizedBox(height: 20),
               ...getTitleContent(constraints, context),

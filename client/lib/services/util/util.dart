@@ -29,7 +29,7 @@ class Util {
     }
   }
 
-  static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit}) {
+  static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
     borderRadius ??= BorderRadius.circular(90);
 
     return SizedBox(
@@ -42,8 +42,8 @@ class Util {
           imageUrl: url,
           height: size,
           width: size,
-          placeholder: (context, url) => const SkeletonAvatar(
-            style: SkeletonAvatarStyle(shape: BoxShape.circle),
+          placeholder: (context, url) => SkeletonAvatar(
+            style: SkeletonAvatarStyle(shape: loadingBoxShape),
           ),
           errorWidget: (context, url, error) => loadSvgImage(url, size, size),
         ),
@@ -81,30 +81,24 @@ class Util {
     foregroundColor ??= colors.foreground;
     backgroundColor ??= colors.background;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(45),
-          child: SizedBox(
-            height: 50,
-            child: TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(foregroundColor),
-                backgroundColor: MaterialStateProperty.all(backgroundColor),
-              ),
-              onPressed: onPressed,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...content
-                ],
-              ),
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(45),
+      child: SizedBox(
+        height: 50,
+        child: TextButton(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(foregroundColor),
+            backgroundColor: MaterialStateProperty.all(backgroundColor),
+          ),
+          onPressed: onPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...content
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
