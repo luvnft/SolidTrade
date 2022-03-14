@@ -47,6 +47,8 @@ app.*.map.json
 
 # Credentials
 /assets/config
+google-services.json
+index.html
 
 # Generated files
 mapper.g.dart

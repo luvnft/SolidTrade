@@ -8,7 +8,8 @@
       "name": "Flutter development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main/main_dev.dart"
+      "program": "lib/main/main_dev.dart",
+      "args": ["--web-port=49983"]
     }
   ]
 }

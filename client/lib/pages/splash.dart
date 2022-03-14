@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -42,8 +43,12 @@ class _SplashState extends State<Splash> with STWidget {
     });
   }
 
+  // TODO: Resolve PR conflicts: https://github.com/SolomonRosemite/SolidTrade/pull/13
   Future<void> _navigateToHome() async {
     var delay = Future.delayed(const Duration(seconds: 1));
+
+    await Firebase.initializeApp();
+    Log.w(Firebase.app().options.appId);
 
     await _fadeAnimationFuture;
     // var userRequest = await userService.fetchUser();
