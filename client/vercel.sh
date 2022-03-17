@@ -9,6 +9,9 @@ export PATH="$PATH:`pwd`/flutter/bin"
 
 cd ../client/
 
+# Create directory if it doesn't exist
+mkdir -p ./assets/config
+
 # Write out the environment variable configuration as a json file
 echo $App_Config | base64 --decode > ./assets/config/app_config.json
 
