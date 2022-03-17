@@ -9,6 +9,22 @@ export PATH="$PATH:`pwd`/flutter/bin"
 
 cd ../client/
 
-ls
+# Write out the environment variable configuration as a json file
+echo $App_Config | base64 --decode > ./assets/config/app_config.json
 
-flutter build web --release
+# Write out firebase credentials as js file
+echo $Firebase_Credentials | base64 --decode > ./web/credentials.js
+
+# Install dependencies
+flutter pub get
+
+# Generate mappings
+flutter pub run build_runner build
+
+# Build web app
+if [ "$Deployment" = "Production" ];
+then
+  flutter build web --release -t lib/main/main_prod.dart
+else
+  flutter build web --release -t lib/main/main_staging.dart
+fi
