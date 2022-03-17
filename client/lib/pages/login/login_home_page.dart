@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
+import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -9,10 +9,17 @@ class LoginHome extends StatelessWidget with STWidget {
   LoginHome({Key? key, required this.tabController}) : super(key: key);
 
   final TabController tabController;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _handleClickCreateAccount() async {
-    UtilUserService.signInWithGoogle();
+    var user = await UtilUserService.signInWithGoogle();
+
+    if (user != null) {
+      Log.d(user.email);
+      Log.d(user.displayName);
+      Log.d(user.phoneNumber);
+      Log.d(user.uid);
+      Log.d(user);
+    }
   }
 
   void _handleClickLoginUser() => tabController.animateTo(2);
