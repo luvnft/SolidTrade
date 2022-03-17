@@ -12,23 +12,11 @@ cd ../client/
 # Create directory if it doesn't exist
 mkdir -p ./assets/config
 
-echo "---------------------"
-
-echo $home
-
-echo $test_home
-
-echo $Firebase_Credentials
-
-echo $App_Config
-
-echo "---------------------"
-
 # Write out the environment variable configuration as a json file
-echo $App_Config | base64 --decode > ./assets/config/app_config.json
+echo $App_Config | base64 -di > ./assets/config/app_config.json
 
 # Write out firebase credentials as js file
-echo $Firebase_Credentials | base64 --decode > ./web/credentials.js
+echo $Firebase_Credentials | base64 -di > ./web/credentials.js
 
 # Install dependencies
 flutter pub get
