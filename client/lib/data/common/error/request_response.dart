@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/data/common/error/error_model.dart';
-import 'package:solidtrade/providers/language/translation.dart';
+import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 class RequestResponse<T> {
   final ErrorModel? error;
@@ -25,7 +25,7 @@ class RequestResponse<T> {
     return RequestResponse(error: error.error, isSuccessful: false, result: null);
   }
 
-  factory RequestResponse.failedWithUserfriendlyMessage(String message) {
+  factory RequestResponse.failedWithUserFriendlyMessage(String message) {
     return RequestResponse(
         error: ErrorModel.fromJson({
           "userFriendlyMessage": message
@@ -35,11 +35,11 @@ class RequestResponse<T> {
   }
 
   factory RequestResponse.failedDueValidationError() {
-    var translations = GetIt.instance.get<ITranslation>();
+    var provider = GetIt.instance.get<ConfigurationProvider>();
 
     return RequestResponse(
       error: ErrorModel.fromJson({
-        "userFriendlyMessage": translations.common.httpFriendlyErrorResponse,
+        "userFriendlyMessage": provider.languageProvider.language.common.httpFriendlyErrorResponse,
       }),
       isSuccessful: false,
       result: null,

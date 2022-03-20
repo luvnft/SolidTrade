@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -14,11 +13,7 @@ class LoginHome extends StatelessWidget with STWidget {
     var user = await UtilUserService.signInWithGoogle();
 
     if (user != null) {
-      Log.d(user.email);
-      Log.d(user.displayName);
-      Log.d(user.phoneNumber);
-      Log.d(user.uid);
-      Log.d(user);
+      tabController.animateTo(0);
     }
   }
 

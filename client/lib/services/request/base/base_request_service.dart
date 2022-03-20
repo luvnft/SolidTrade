@@ -22,7 +22,7 @@ abstract class IBaseRequestService {
 
     Log.d(uri);
 
-    var auth = userService.getUserAuthenticationHeader();
+    var auth = await userService.getUserAuthenticationHeader();
 
     if (!auth.isSuccessful && auth.result == null) {
       return RequestResponse.inheritErrorResponse(auth);
@@ -30,7 +30,8 @@ abstract class IBaseRequestService {
 
     http.Response response;
     Map<String, String> headers = {
-      ...?auth.result
+      ...?auth.result,
+      "content-type": "application/json"
     };
 
     switch (method) {
@@ -38,13 +39,13 @@ abstract class IBaseRequestService {
         response = await http.get(uri, headers: headers);
         break;
       case HttpMethod.post:
-        response = await http.post(uri, headers: headers, body: body);
+        response = await http.post(uri, headers: headers, body: jsonEncode(body));
         break;
       case HttpMethod.patch:
-        response = await http.patch(uri, headers: headers, body: body);
+        response = await http.patch(uri, headers: headers, body: jsonEncode(body));
         break;
       case HttpMethod.delete:
-        response = await http.delete(uri, headers: headers, body: body);
+        response = await http.delete(uri, headers: headers, body: jsonEncode(body));
         break;
     }
 
@@ -52,7 +53,7 @@ abstract class IBaseRequestService {
       if (response.statusCode == 400) {
         return RequestResponse.failedDueValidationError();
       } else if (response.statusCode == 502) {
-        RequestResponse.failedWithUserfriendlyMessage("The servers are currently offline. Please try again later.");
+        RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
       } else {
         return RequestResponse.failed(jsonDecode(response.body));
       }

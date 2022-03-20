@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/user.dart';
@@ -7,9 +8,21 @@ import 'package:solidtrade/services/stream/base/base_service.dart';
 class UserService extends IService<RequestResponse<User>?> {
   UserService() : super(BehaviorSubject.seeded(null));
 
-  Future<RequestResponse<User>> fetchUser() async {
-    // TODO: Remove the uid in the future.
-    var result = await DataRequestService.userDataRequestService.fetchUserByUid("8AcxJgUEZvUWuN9JnfxNSwLahCb2");
+  Future<RequestResponse<User>> createUser(
+    String displayName,
+    String username,
+    String email,
+    int initialBalance, {
+    String? profilePictureSeed,
+  }) async {
+    var result = await DataRequestService.userDataRequestService.createUser(displayName, username, initialBalance, email, profilePictureSeed: profilePictureSeed);
+
+    behaviorSubject.add(result);
+    return result;
+  }
+
+  Future<RequestResponse<User>> fetchUser(String uid) async {
+    var result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
 
     behaviorSubject.add(result);
     return result;
@@ -19,23 +32,17 @@ class UserService extends IService<RequestResponse<User>?> {
     behaviorSubject.add(RequestResponse.successful(user));
   }
 
-  RequestResponse<Map<String, String>> getUserAuthenticationHeader() {
-    // TODO: This can probably be removed.
-    // if (current == null || !current!.isSuccessful) {
-    //   return RequestResponse.failedWithUserfriendlyMessage("User session expired.\nPlease reopen the app.");
-    // }
+  Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {
+    final token = await getFirebaseUserAuthToken();
 
-    // TODO: Use this user firebase token in the future.
+    if (token == null) {
+      return RequestResponse.failedWithUserFriendlyMessage("User session expired.\nPlease reopen the app.");
+    }
+
     return RequestResponse.successful({
-      "Authorization": "Bearer " + getFirebaseUserAuthToken(),
+      "Authorization": "Bearer " + token.token!,
     });
   }
 
-  String getFirebaseUserAuthToken() {
-    // TODO: Remove this in the future.
-    return "8AcxJgUEZvUWuN9JnfxNSwLahCb2";
-
-    // TODO: Use this in the future.
-    // https://firebase.flutter.dev/docs/auth/usage/
-  }
+  Future<fire.IdTokenResult>? getFirebaseUserAuthToken() => fire.FirebaseAuth.instance.currentUser?.getIdTokenResult();
 }

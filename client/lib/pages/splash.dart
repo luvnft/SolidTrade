@@ -43,12 +43,10 @@ class _SplashState extends State<Splash> with STWidget {
     });
   }
 
-  // TODO: Resolve PR conflicts: https://github.com/SolomonRosemite/SolidTrade/pull/13
   Future<void> _navigateToHome() async {
     var delay = Future.delayed(const Duration(seconds: 1));
 
     await Firebase.initializeApp();
-    Log.w(Firebase.app().options.appId);
 
     await _fadeAnimationFuture;
     // var userRequest = await userService.fetchUser();
@@ -88,7 +86,7 @@ class _SplashState extends State<Splash> with STWidget {
     }
 
     return Scaffold(
-      backgroundColor: colors.splasScreenColor,
+      backgroundColor: colors.splashScreenColor,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

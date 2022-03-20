@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> with STWidget, SingleTickerProvid
     return StreamBuilder(
       stream: uiUpdate.stream$,
       builder: (context, snapshot) => Container(
-        color: colors.navigationBackground,
+        color: colors.softBackground,
         child: SafeArea(
           child: Container(
             margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> with STWidget, SingleTickerProvid
                       margin: const EdgeInsets.symmetric(horizontal: 8.0),
                       height: 45,
                       decoration: BoxDecoration(
-                        color: colors.navigationBackground,
+                        color: colors.background,
                         borderRadius: BorderRadius.circular(
                           10.0,
                         ),

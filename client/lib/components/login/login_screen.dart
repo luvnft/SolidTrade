@@ -1,19 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/services/util/util.dart';
-
-class BrokenImplicitScrollPhysics extends ScrollPhysics {
-  /// Creates scroll physics that does not let the user scroll.
-  const BrokenImplicitScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
-
-  @override
-  ScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return BrokenImplicitScrollPhysics(parent: buildParent(ancestor));
-  }
-
-  @override
-  bool get allowImplicitScrolling => false;
-}
 
 class LoginScreen extends StatelessWidget with STWidget {
   LoginScreen({
@@ -22,11 +11,13 @@ class LoginScreen extends StatelessWidget with STWidget {
     required this.subTitle,
     required this.imageUrl,
     this.additionalWidgets,
+    this.imageAsBytes,
   }) : super(key: key);
 
   final String title;
   final String subTitle;
   final String imageUrl;
+  final Uint8List? imageAsBytes;
   final List<Widget>? additionalWidgets;
 
   List<Widget> getTitleContent(BoxConstraints constraints, BuildContext context) {
@@ -55,20 +46,27 @@ class LoginScreen extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
-        physics: const BrokenImplicitScrollPhysics(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * .88,
           ),
           child: Column(
             children: [
-              Util.loadImage(
-                imageUrl,
-                constraints.maxWidth,
-                borderRadius: BorderRadius.circular(25),
-                boxFit: BoxFit.cover,
-                loadingBoxShape: BoxShape.rectangle,
-              ),
+              imageAsBytes != null
+                  ? Util.loadImageFromMemory(
+                      imageAsBytes!,
+                      constraints.maxWidth,
+                      borderRadius: BorderRadius.circular(25),
+                      boxFit: BoxFit.cover,
+                      loadingBoxShape: BoxShape.rectangle,
+                    )
+                  : Util.loadImage(
+                      imageUrl,
+                      constraints.maxWidth,
+                      borderRadius: BorderRadius.circular(25),
+                      boxFit: BoxFit.cover,
+                      loadingBoxShape: BoxShape.rectangle,
+                    ),
               const SizedBox(height: 20),
               ...getTitleContent(constraints, context),
               const Spacer(),

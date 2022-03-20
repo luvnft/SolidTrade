@@ -5,7 +5,7 @@ import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
-import 'package:solidtrade/services/util/extentions/string_extentions.dart';
+import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class ProductDetails extends StatelessWidget with STWidget {
   ProductDetails({Key? key, required this.trStockDetailsStream, required this.productInfo, required this.isStock}) : super(key: key);

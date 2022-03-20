@@ -13,7 +13,7 @@ import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
-import 'package:solidtrade/services/util/extentions/string_extentions.dart';
+import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class TrUtil {
   static final _configurationProvider = GetIt.instance.get<ConfigurationProvider>();
@@ -23,7 +23,7 @@ class TrUtil {
     final isStockPosition = positionType == PositionType.stock;
 
     final percentageChange = priceInfo.bid.price / priceInfo.pre.price;
-    final absolutChange = priceInfo.bid.price - priceInfo.pre.price;
+    final absoluteChange = priceInfo.bid.price - priceInfo.pre.price;
 
     final isUp = percentageChange == 1 || 1 < percentageChange;
     final plusMinus = isUp ? "+" : "";
@@ -37,7 +37,7 @@ class TrUtil {
 
     return TrUiProductDetails(
       percentageChange: percentageChange,
-      absolutChange: absolutChange,
+      absolutChange: absoluteChange,
       isUp: isUp,
       plusMinusProductNamePrefix: plusMinus,
       productTitle: productTitle,

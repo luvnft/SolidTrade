@@ -5,11 +5,7 @@ import 'package:solidtrade/components/shared/st_logo.dart';
 import 'package:solidtrade/pages/login_page.dart';
 import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/providers/language/translation.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
-
-import 'dart:typed_data';
-import 'package:http/http.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -59,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
       stream: uiUpdate.stream$,
       builder: (context, _) {
         return Scaffold(
-          backgroundColor: colors.splasScreenColor,
+          backgroundColor: colors.splashScreenColor,
           body: Column(
             children: [
               const Spacer(flex: 2),

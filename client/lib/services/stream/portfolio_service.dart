@@ -7,8 +7,8 @@ import 'package:solidtrade/services/stream/base/base_service.dart';
 class PortfolioService extends IService<RequestResponse<Portfolio>?> {
   PortfolioService() : super(BehaviorSubject.seeded(null));
 
-  Future<RequestResponse<Portfolio>> fetchPortfolioByUserId({int? id}) async {
-    var result = await DataRequestService.portfolioDataRequestService.getPortfolioByUserId(userId: id);
+  Future<RequestResponse<Portfolio>> fetchPortfolioByUserId(int id) async {
+    var result = await DataRequestService.portfolioDataRequestService.getPortfolioByUserId(id);
 
     behaviorSubject.add(result);
     return result;

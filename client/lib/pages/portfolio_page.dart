@@ -112,7 +112,7 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    "Solidtrade©",
+                    "Solidtrade™",
                     style: TextStyle(color: colors.lessSoftForeground, fontSize: 14),
                   ),
                   const SizedBox(height: 10),

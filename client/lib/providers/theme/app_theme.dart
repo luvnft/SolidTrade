@@ -17,7 +17,7 @@ abstract class IColorTheme {
   Color get softBackground;
 
   // Splash screen
-  Color get splasScreenColor;
+  Color get splashScreenColor;
 
   // Images
   String get logoAsGif;
@@ -123,7 +123,7 @@ class LightColorTheme implements IColorTheme {
   Color get blueText => const Color.fromRGBO(6, 155, 248, 1);
 
   @override
-  Color get splasScreenColor => const Color.fromRGBO(251, 251, 251, 1);
+  Color get splashScreenColor => const Color.fromRGBO(251, 251, 251, 1);
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -191,7 +191,7 @@ class DarkColorTheme implements IColorTheme {
   Color get blueText => const Color.fromRGBO(16, 160, 238, 1);
 
   @override
-  Color get splasScreenColor => const Color.fromRGBO(4, 4, 4, 1);
+  Color get splashScreenColor => const Color.fromRGBO(4, 4, 4, 1);
 }
 
 class ThemeProvider {

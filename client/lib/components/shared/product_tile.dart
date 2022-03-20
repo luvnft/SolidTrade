@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/product_view.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
@@ -8,9 +7,8 @@ import 'package:solidtrade/data/common/shared/product_tile_info.dart';
 import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
-import 'package:solidtrade/services/storage/aggregate_history_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
-import 'package:solidtrade/services/util/extentions/double_extentions.dart';
+import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 

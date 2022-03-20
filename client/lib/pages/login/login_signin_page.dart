@@ -1,13 +1,42 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
+import 'package:solidtrade/pages/home_page.dart';
+import 'package:solidtrade/services/stream/historicalpositions_service.dart';
+import 'package:solidtrade/services/stream/portfolio_service.dart';
+import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class LoginSignIn extends StatelessWidget with STWidget {
   LoginSignIn({Key? key}) : super(key: key);
 
-  Future<void> _handleClickLoginWithGoogle() async {
-    // TODO: ...
+  final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final portfolioService = GetIt.instance.get<PortfolioService>();
+  final userService = GetIt.instance.get<UserService>();
+
+  Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
+    var user = FirebaseAuth.instance.currentUser ?? await UtilUserService.signInWithGoogle();
+
+    if (user == null) {
+      Util.openDialog(context, "Login failed", message: "Something went wrong with the login. Please try again.");
+      return;
+    }
+
+    var response = await userService.fetchUser(user.uid);
+
+    if (response.isSuccessful) {
+      final userId = response.result!.id;
+      await historicalPositionService.fetchHistoricalPositions(userId);
+      await portfolioService.fetchPortfolioByUserId(userId);
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      return;
+    }
+
+    // TODO: Show popup with error message.
   }
 
   void _handleClickForgotOrLostGoogleAccount() {
@@ -31,7 +60,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
             const Text("Login with Google"),
           ],
           colors: colors,
-          onPressed: _handleClickLoginWithGoogle,
+          onPressed: () => _handleClickLoginWithGoogle(context),
         ),
         const SizedBox(height: 10),
         Util.roundedButton(

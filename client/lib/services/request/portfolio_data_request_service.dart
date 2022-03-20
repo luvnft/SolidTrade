@@ -5,9 +5,7 @@ import 'package:solidtrade/services/request/base/base_request_service.dart';
 import 'dart:convert';
 
 class PortfolioDataRequestService extends IBaseRequestService {
-  Future<RequestResponse<Portfolio>> getPortfolioByUserId({int? userId}) async {
-    userId ??= userService.current?.result?.id;
-
+  Future<RequestResponse<Portfolio>> getPortfolioByUserId(int userId) async {
     final queryParameters = {
       'UserId': userId.toString(),
     };

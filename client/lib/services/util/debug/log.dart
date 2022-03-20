@@ -1,7 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:solidtrade/services/util/extentions/string_extentions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class Log {
   static final logger = Logger(printer: SimpleLogPrinter());

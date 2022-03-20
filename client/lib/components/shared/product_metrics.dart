@@ -6,9 +6,8 @@ import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
-import 'package:solidtrade/services/util/extentions/double_extentions.dart';
+import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class ProductMetrics extends StatelessWidget with STWidget {
   ProductMetrics({

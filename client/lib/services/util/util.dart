@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -29,6 +30,49 @@ class Util {
     }
   }
 
+  static Future<void> openDialog(
+    BuildContext context,
+    String title, {
+    String closeText = "Okay",
+    String? message,
+    Iterable<String>? messages,
+    Iterable<Widget>? widgets,
+  }) {
+    if (widgets == null) {
+      if (messages == null) {
+        widgets = [
+          Text(message!)
+        ];
+      } else {
+        widgets = messages.map((text) => Text(text));
+      }
+    }
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                ...widgets!
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(closeText),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
     borderRadius ??= BorderRadius.circular(90);
 
@@ -46,6 +90,24 @@ class Util {
             style: SkeletonAvatarStyle(shape: loadingBoxShape),
           ),
           errorWidget: (context, url, error) => loadSvgImage(url, size, size),
+        ),
+      ),
+    );
+  }
+
+  static Widget loadImageFromMemory(Uint8List bytes, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
+    borderRadius ??= BorderRadius.circular(90);
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: Image.memory(
+          bytes,
+          fit: boxFit,
+          height: size,
+          width: size,
         ),
       ),
     );
@@ -102,8 +164,8 @@ class Util {
     );
   }
 
-  static Future pushToRoute(BuildContext context, Widget route) {
-    return Navigator.push(context, MaterialPageRoute(builder: (context) => route));
+  static Future<T?> pushToRoute<T>(BuildContext context, Widget route) {
+    return Navigator.push<T>(context, MaterialPageRoute(builder: (context) => route));
   }
 
   static ColorThemeType currentDeviceColorTheme(BuildContext context) {

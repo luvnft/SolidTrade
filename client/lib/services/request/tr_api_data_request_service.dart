@@ -124,7 +124,7 @@ class TrApiDataRequestService {
         onResponseCallback: (response) {
           unsub(id);
           if (response.startsWith("{\"errors\"")) {
-            completer.complete(RequestResponse<T>.failedWithUserfriendlyMessage("Something went wrong. Please try again later."));
+            completer.complete(RequestResponse<T>.failedWithUserFriendlyMessage("Something went wrong. Please try again later."));
             return;
           }
 
@@ -138,7 +138,7 @@ class TrApiDataRequestService {
     try {
       return await completer.future.timeout(const Duration(seconds: 10));
     } catch (e) {
-      return Future.value(RequestResponse.failedWithUserfriendlyMessage("Loading data took too long. Please try again later."));
+      return Future.value(RequestResponse.failedWithUserFriendlyMessage("Loading data took too long. Please try again later."));
     }
   }
 
@@ -150,7 +150,7 @@ class TrApiDataRequestService {
         id: id,
         onResponseCallback: (response) {
           if (response.startsWith("{\"errors\"")) {
-            var errorResult = RequestResponse<T>.failedWithUserfriendlyMessage("Something went wrong. Please try again later.");
+            var errorResult = RequestResponse<T>.failedWithUserFriendlyMessage("Something went wrong. Please try again later.");
             subject.add(TrRequestResponse(id, errorResult));
             return;
           }
