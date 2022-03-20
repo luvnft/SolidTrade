@@ -77,6 +77,7 @@ namespace SolidTradeServer
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                options.JsonSerializerOptions.Converters.Add(new DecimalJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new StringRemoveWhitespaceConverter());
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
             });
