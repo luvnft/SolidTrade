@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
@@ -14,13 +15,13 @@ import 'package:get_it/get_it.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/enums/environment.dart';
 import 'package:solidtrade/app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/util.dart';
 
 import '../mapper.g.dart' as mapper;
 
@@ -36,9 +37,20 @@ Future<void> commonMain(Environment environment) async {
     hadFatalException = true;
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) {
-        return _showErrorHandleMessage(context);
+      String? token;
+      FirebaseAuth.instance.currentUser?.getIdToken().then(((value) {
+        token = value;
       }));
+
+      Util.openDialog(navigatorKey.currentState!.context, "Error", messages: [
+        FirebaseAuth.instance.currentUser?.uid ?? "uff",
+        FirebaseAuth.instance.currentUser?.email ?? "uff",
+        token ?? "uff",
+      ]);
+      // navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) {
+
+      //   return _showErrorHandleMessage(context);
+      // }));
     });
   };
 
