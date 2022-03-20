@@ -21,7 +21,6 @@ import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 import '../mapper.g.dart' as mapper;
 
@@ -33,24 +32,24 @@ Future<void> commonMain(Environment environment) async {
   await Startup.initializeApp();
 
   FlutterError.onError = (details) {
-    if (hadFatalException || kDebugMode) return;
+    // Exclude image errors. These are already being handled.
+    if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
+      return;
+    }
+
+    if (kDebugMode) {
+      throw details;
+    }
+
+    if (hadFatalException) return;
     hadFatalException = true;
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      String? token;
-      FirebaseAuth.instance.currentUser?.getIdToken().then(((value) {
-        token = value;
-      }));
-
-      Util.openDialog(navigatorKey.currentState!.context, "Error", messages: [
-        FirebaseAuth.instance.currentUser?.uid ?? "uff",
-        FirebaseAuth.instance.currentUser?.email ?? "uff",
-        token ?? "uff",
-      ]);
-      // navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) {
-
-      //   return _showErrorHandleMessage(context);
-      // }));
+      Future.delayed(const Duration(seconds: 1), () {
+        navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) {
+          return _showErrorHandleMessage(context);
+        }));
+      });
     });
   };
 
@@ -117,8 +116,6 @@ class Startup {
 }
 
 Widget _showErrorHandleMessage(BuildContext context) {
-  DataRequestService.trApiDataRequestService.disconnect();
-
   final config = GetIt.instance.get<ConfigurationProvider>();
 
   final screenWidth = MediaQuery.of(context).size.width;
@@ -134,10 +131,9 @@ Widget _showErrorHandleMessage(BuildContext context) {
   return SafeArea(
     child: Container(
       margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
-      child: Scaffold(
-        appBar: AppBar(leading: const SizedBox.shrink()),
-        backgroundColor: config.themeProvider.theme.background,
-        body: Column(
+      child: Container(
+        color: config.themeProvider.theme.background,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Material(
@@ -159,32 +155,62 @@ Widget _showErrorHandleMessage(BuildContext context) {
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    "Well well well, see who's app just crashed.\nThis should not happen again. You can reopen the app to continue.\nSorry for the inconvenience.",
+                    "Well well well, see who's app just crashed.\nThis should not happen again. You can restart the app or just continue. This may however cause unexpected behaviors.\nSorry for the inconvenience.",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    height: 35,
-                    width: screenWidth * .8,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 35,
+                        width: screenWidth * .35,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
+                          ),
+                          onPressed: () async {
+                            await DataRequestService.trApiDataRequestService.disconnect();
+                            myAppState.restart();
+                          },
+                          child: const Text(
+                            "Reopen app",
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
                       ),
-                      onPressed: () {
-                        myAppState.restart();
-                      },
-                      child: const Text(
-                        "Reopen app",
-                        textAlign: TextAlign.center,
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 35,
+                        width: screenWidth * .35,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Just continue...",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(height: 10)
                 ],

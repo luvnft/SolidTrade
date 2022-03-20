@@ -18,7 +18,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
   final userService = GetIt.instance.get<UserService>();
 
   Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
-    var user = FirebaseAuth.instance.currentUser ?? await UtilUserService.signInWithGoogle();
+    var user = await UtilUserService.signInWithGoogle();
 
     if (user == null) {
       Util.openDialog(context, "Login failed", message: "Something went wrong with the login. Please try again.");

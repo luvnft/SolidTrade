@@ -108,10 +108,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
       return;
     }
 
-    Log.d("value");
-
     Util.pushToRoute(context, ContinueSignupScreen(user: user, dicebearSeed: _dicebearSeed, profilePictureBytes: imageAsBytes));
-    Log.d("value2");
   }
 
   @override

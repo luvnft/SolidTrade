@@ -172,10 +172,10 @@ class TrApiDataRequestService {
     _requestMessageStrings.removeWhere((messageId, _) => messageId == id);
   }
 
-  void disconnect() {
+  Future<void> disconnect() async {
     _shouldReconnect = false;
     _runningRequests.clear();
     _requestMessageStrings.clear();
-    _socketChannel.sink.close();
+    await _socketChannel.sink.close();
   }
 }
