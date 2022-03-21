@@ -86,13 +86,26 @@ namespace SolidTradeServer.Services
 
             try
             {
-                if ((await CreateUserProfilePictureWithSeed(dto.ProfilePictureSeed, uid))
-                    .TryPickT1(out var err, out var profilePictureUrl))
+                string updatedProfilePicture = null;
+                if (dto.ProfilePictureFile is not null)
                 {
-                    return new ErrorResponse(err, HttpStatusCode.InternalServerError);
+                    var result = await CreateUserProfilePictureWithFile(dto.ProfilePictureFile, uid);
+
+                    if (result.TryPickT1(out var error, out var uri))
+                        return new ErrorResponse(error, HttpStatusCode.InternalServerError);
+
+                    updatedProfilePicture = uri.AbsoluteUri;
+                } else if (dto.ProfilePictureSeed is not null)
+                {
+                    var result = await CreateUserProfilePictureWithSeed(dto.ProfilePictureSeed, uid);
+
+                    if (result.TryPickT1(out var error, out var uri))
+                        return new ErrorResponse(error, HttpStatusCode.InternalServerError);
+                
+                    updatedProfilePicture = uri.AbsoluteUri;
                 }
                 
-                user.ProfilePictureUrl = profilePictureUrl.AbsoluteUri;
+                user.ProfilePictureUrl = updatedProfilePicture;
 
                 await OngoingProductsService.Firestore.Document($"users/{uid}")
                     .SetAsync(new { Update = "None" });

@@ -19,7 +19,7 @@ namespace SolidTradeServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDto dto)
+        public async Task<IActionResult> CreateUser([FromForm] CreateUserRequestDto dto)
             => MatchResult(await _userService.CreateUser(dto, Request.Headers[Shared.UidHeader]));
         
         [HttpGet("{id:int}")]

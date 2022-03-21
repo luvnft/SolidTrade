@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using SolidTradeServer.Data.Models.Annotations;
+using static SolidTradeServer.Common.Shared;
 
 namespace SolidTradeServer.Data.Dtos.User.Request
 {
@@ -20,7 +23,11 @@ namespace SolidTradeServer.Data.Dtos.User.Request
         [Range(1_000, 1_000_000)]
         public int InitialBalance { get; init; }
         
-        [Required]
+        [RequiredIf(nameof(ProfilePictureFile), null)]
         public string ProfilePictureSeed { get; init; }
+        
+        [MaxFileSize(MaxUploadFileSize)]
+        [RequiredIf(nameof(ProfilePictureSeed), null)]
+        public IFormFile ProfilePictureFile { get; init; }
     }
 }

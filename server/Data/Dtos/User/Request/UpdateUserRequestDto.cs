@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using SolidTradeServer.Data.Models.Annotations;
+using static SolidTradeServer.Common.Shared;
 
 namespace SolidTradeServer.Data.Dtos.User.Request
 {
@@ -17,8 +18,7 @@ namespace SolidTradeServer.Data.Dtos.User.Request
         
         public string ProfilePictureSeed { get; init; }
         
-        // Size limit 10mb
-        [MaxFileSize(10000000)]
+        [MaxFileSize(MaxUploadFileSize)]
         public IFormFile ProfilePictureFile { get; init; }
     }
 }
