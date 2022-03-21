@@ -30,6 +30,10 @@ class Util {
     }
   }
 
+  static Future<void> googleLoginFailedDialog(BuildContext context) {
+    return Util.openDialog(context, "Google login failed", message: "Something went wrong with the login. Please try again.");
+  }
+
   static Future<void> openDialog(
     BuildContext context,
     String title, {
@@ -52,6 +56,7 @@ class Util {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text(title),
           content: SingleChildScrollView(
             child: ListBody(

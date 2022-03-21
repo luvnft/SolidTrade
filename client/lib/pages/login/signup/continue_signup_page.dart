@@ -77,7 +77,14 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
     int initialBalance = int.parse(_initialBalanceController.text);
     String email = FirebaseAuth.instance.currentUser!.email!;
 
-    var response = await userService.createUser(name, username, email, initialBalance, profilePictureSeed: widget.dicebearSeed);
+    var response = await userService.createUser(
+      name,
+      username,
+      email,
+      initialBalance,
+      profilePictureSeed: widget.dicebearSeed,
+      profilePictureFile: widget.profilePictureBytes,
+    );
 
     if (response.isSuccessful) {
       final userId = response.result!.id;

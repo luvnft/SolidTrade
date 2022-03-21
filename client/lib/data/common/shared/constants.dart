@@ -1,4 +1,6 @@
 class Constants {
+  static const forgotOrLostAccountFormLink = "https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/";
+
   static const endpointHistoricalPosition = "/historicalpositions/";
   static const endpointKnockout = "/knockouts/";
   static const endpointOngoingKnockout = "/knockouts/ongoing/";

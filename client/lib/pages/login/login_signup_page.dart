@@ -104,7 +104,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
     var user = FirebaseAuth.instance.currentUser ?? await UtilUserService.signInWithGoogle();
 
     if (user == null) {
-      Util.openDialog(context, "Login failed", message: "Something went wrong with the login. Please try again.");
+      Util.googleLoginFailedDialog(context);
       return;
     }
 

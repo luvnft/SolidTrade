@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
@@ -14,8 +16,16 @@ class UserService extends IService<RequestResponse<User>?> {
     String email,
     int initialBalance, {
     String? profilePictureSeed,
+    Uint8List? profilePictureFile,
   }) async {
-    var result = await DataRequestService.userDataRequestService.createUser(displayName, username, initialBalance, email, profilePictureSeed: profilePictureSeed);
+    var result = await DataRequestService.userDataRequestService.createUser(
+      displayName,
+      username,
+      initialBalance,
+      email,
+      profilePictureSeed: profilePictureSeed,
+      profilePictureFile: profilePictureFile,
+    );
 
     behaviorSubject.add(result);
     return result;

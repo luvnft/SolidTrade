@@ -1,14 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginSignIn extends StatelessWidget with STWidget {
   LoginSignIn({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
     var user = await UtilUserService.signInWithGoogle();
 
     if (user == null) {
-      Util.openDialog(context, "Login failed", message: "Something went wrong with the login. Please try again.");
+      Util.googleLoginFailedDialog(context);
       return;
     }
 
@@ -40,7 +42,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
   }
 
   void _handleClickForgotOrLostGoogleAccount() {
-    // TODO: Link to form where user recovery can be requested.
+    launch(Constants.forgotOrLostAccountFormLink);
   }
 
   @override

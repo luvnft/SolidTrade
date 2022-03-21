@@ -9,12 +9,15 @@ class LoginHome extends StatelessWidget with STWidget {
 
   final TabController tabController;
 
-  Future<void> _handleClickCreateAccount() async {
+  Future<void> _handleClickCreateAccount(BuildContext context) async {
     var user = await UtilUserService.signInWithGoogle();
 
     if (user != null) {
       tabController.animateTo(0);
+      return;
     }
+
+    Util.googleLoginFailedDialog(context);
   }
 
   void _handleClickLoginUser() => tabController.animateTo(2);
@@ -37,7 +40,7 @@ class LoginHome extends StatelessWidget with STWidget {
             const Text("Create new account with Google"),
           ],
           colors: colors,
-          onPressed: _handleClickCreateAccount,
+          onPressed: () => _handleClickCreateAccount(context),
         ),
         const SizedBox(height: 10),
         Util.roundedButton([
