@@ -70,7 +70,8 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   }
 
   Future<void> _handleClickCreateAccount() async {
-    // TODO: Show Loading dialog.
+    var dialogKey = GlobalKey();
+    Util.showLoadingDialog(context, dialogKey);
 
     String name = _nameController.text;
     String username = _usernameController.text;
@@ -91,11 +92,14 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
       await historicalPositionService.fetchHistoricalPositions(userId);
       await portfolioService.fetchPortfolioByUserId(userId);
 
+      Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       return;
     }
 
-    // TODO: Show popup with error message.
+    Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
+
+    Util.openDialog(context, "Could not create user", message: response.error!.userFriendlyMessage);
   }
 
   @override

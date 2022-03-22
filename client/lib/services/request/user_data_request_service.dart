@@ -19,6 +19,7 @@ class UserDataRequestService extends IBaseRequestService {
       "DisplayName": displayName,
       "Username": username,
       "Email": email,
+      "ProfilePictureSeed": profilePictureSeed.toString(),
       "InitialBalance": initialBalance.toString(),
     };
 

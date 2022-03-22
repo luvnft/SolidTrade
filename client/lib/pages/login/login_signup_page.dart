@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/pages/login/signup/continue_signup_page.dart';
 import 'package:solidtrade/pages/settings/crop_image.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
@@ -53,6 +54,11 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
+
+    if (await image.length() > Constants.fileUploadLimitInBytes) {
+      Util.openDialog(context, "File too large", message: "Sorry, this image is too big.");
+      return;
+    }
 
     if (kIsWeb) {
       ui.Image? croppedImage = await Util.pushToRoute<ui.Image>(context, CropImageScreen(bytes: await image.readAsBytes()));

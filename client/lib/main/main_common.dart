@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
@@ -31,14 +30,20 @@ bool hadFatalException = false;
 Future<void> commonMain(Environment environment) async {
   await Startup.initializeApp();
 
+  registerFlutterErrorHandler();
+
+  runApp(MyApp(navigatorKey: navigatorKey));
+}
+
+void registerFlutterErrorHandler() {
+  if (kDebugMode) {
+    return;
+  }
+
   FlutterError.onError = (details) {
-    // Exclude image errors. These are already being handled.
+    // We can exclude image errors, because these are already being handled.
     if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
       return;
-    }
-
-    if (kDebugMode) {
-      throw details;
     }
 
     if (hadFatalException) return;
@@ -52,8 +57,6 @@ Future<void> commonMain(Environment environment) async {
       });
     });
   };
-
-  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class Startup {

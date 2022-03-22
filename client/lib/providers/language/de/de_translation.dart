@@ -19,7 +19,7 @@ class DeTranslation implements ITranslation {
   INavigationBarTranslation get navigationBar => DeNavigationBarTranslation();
 
   @override
-  ISpashTranslation get splash => DeSpashTranslation();
+  ISplashTranslation get splash => DeSplashTranslation();
 
   @override
   IUserAppBarTranslation get userAppBar => DeUserAppBarTranslation();
@@ -29,6 +29,34 @@ class DeTranslation implements ITranslation {
 
   @override
   IProductViewTranslation get productView => DeProductViewTranslation();
+
+  @override
+  IChartTranslation get chart => DeChartTranslation();
+}
+
+class DeChartTranslation implements IChartTranslation {
+  @override
+  IChartDateRangeViewTranslation get chartDateRangeView => DeChartDateRangeViewTranslation();
+}
+
+class DeChartDateRangeViewTranslation implements IChartDateRangeViewTranslation {
+  @override
+  String get fiveYear => "5Y";
+
+  @override
+  String get oneDay => "1T";
+
+  @override
+  String get oneMonth => "1M";
+
+  @override
+  String get oneWeek => "1W";
+
+  @override
+  String get oneYear => "1Y";
+
+  @override
+  String get sixMonth => "6M";
 }
 
 class DeCommonTranslation implements ICommonTranslation {
@@ -70,7 +98,7 @@ class DeUserAppBarTranslation implements IUserAppBarTranslation {
   String get invite => "Einladen";
 }
 
-class DeSpashTranslation implements ISpashTranslation {
+class DeSplashTranslation implements ISplashTranslation {
   @override
   String get loading => "Lädt";
 }

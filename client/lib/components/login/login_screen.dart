@@ -9,14 +9,16 @@ class LoginScreen extends StatelessWidget with STWidget {
     Key? key,
     required this.title,
     required this.subTitle,
-    required this.imageUrl,
+    this.imageUrl,
+    this.assetName,
     this.additionalWidgets,
     this.imageAsBytes,
   }) : super(key: key);
 
   final String title;
   final String subTitle;
-  final String imageUrl;
+  final String? imageUrl;
+  final String? assetName;
   final Uint8List? imageAsBytes;
   final List<Widget>? additionalWidgets;
 
@@ -60,13 +62,21 @@ class LoginScreen extends StatelessWidget with STWidget {
                       boxFit: BoxFit.cover,
                       loadingBoxShape: BoxShape.rectangle,
                     )
-                  : Util.loadImage(
-                      imageUrl,
-                      constraints.maxWidth,
-                      borderRadius: BorderRadius.circular(25),
-                      boxFit: BoxFit.cover,
-                      loadingBoxShape: BoxShape.rectangle,
-                    ),
+                  : imageUrl != null
+                      ? Util.loadImage(
+                          imageUrl!,
+                          constraints.maxWidth,
+                          borderRadius: BorderRadius.circular(25),
+                          boxFit: BoxFit.cover,
+                          loadingBoxShape: BoxShape.rectangle,
+                        )
+                      : Util.loadImageFromAssets(
+                          assetName!,
+                          constraints.maxWidth,
+                          borderRadius: BorderRadius.circular(25),
+                          boxFit: BoxFit.cover,
+                          loadingBoxShape: BoxShape.rectangle,
+                        ),
               const SizedBox(height: 20),
               ...getTitleContent(constraints, context),
               const Spacer(),

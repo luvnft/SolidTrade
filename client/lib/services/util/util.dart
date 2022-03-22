@@ -9,24 +9,24 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/data/enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
 class Util {
-  // TODO: Should use language translation in the future.
-  static String chartDateRangeToString(ChartDateRangeView range) {
+  static String chartDateRangeToString(ITranslation translation, ChartDateRangeView range) {
     switch (range) {
       case ChartDateRangeView.oneDay:
-        return "1D";
+        return translation.chart.chartDateRangeView.oneDay;
       case ChartDateRangeView.oneWeek:
-        return "1W";
+        return translation.chart.chartDateRangeView.oneWeek;
       case ChartDateRangeView.oneMonth:
-        return "1M";
+        return translation.chart.chartDateRangeView.oneMonth;
       case ChartDateRangeView.sixMonth:
-        return "6M";
+        return translation.chart.chartDateRangeView.sixMonth;
       case ChartDateRangeView.oneYear:
-        return "1Y";
+        return translation.chart.chartDateRangeView.oneYear;
       case ChartDateRangeView.fiveYear:
-        return "5Y";
+        return translation.chart.chartDateRangeView.fiveYear;
     }
   }
 
@@ -118,6 +118,24 @@ class Util {
     );
   }
 
+  static Widget loadImageFromAssets(String assetName, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
+    borderRadius ??= BorderRadius.circular(90);
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: Image.asset(
+          assetName,
+          fit: boxFit,
+          height: size,
+          width: size,
+        ),
+      ),
+    );
+  }
+
   static Widget loadSvgImage(String url, double width, double height) {
     return SvgPicture.network(
       url,
@@ -200,6 +218,38 @@ class Util {
     }
 
     return EnumToString.fromString(LanguageTicker.values, tickers.firstWhere((ticker) => ticker == appLocale.languageCode))!;
+  }
+
+  static Future<void> showLoadingDialog(BuildContext context, GlobalKey key, {String waitingText = "Loading..."}) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          key: key,
+          children: [
+            Center(
+              child: Row(
+                children: [
+                  const SizedBox(width: 20),
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.blue[100],
+                    valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
+                    strokeWidth: 4,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                    width: 20,
+                  ),
+                  Text(waitingText),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

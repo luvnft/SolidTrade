@@ -19,7 +19,7 @@ class EnTranslation implements ITranslation {
   INavigationBarTranslation get navigationBar => EnNavigationBarTranslation();
 
   @override
-  ISpashTranslation get splash => SpashTranslation();
+  ISplashTranslation get splash => SplashTranslation();
 
   @override
   IUserAppBarTranslation get userAppBar => EnUserAppBarTranslation();
@@ -29,6 +29,34 @@ class EnTranslation implements ITranslation {
 
   @override
   IProductViewTranslation get productView => EnProductViewTranslation();
+
+  @override
+  IChartTranslation get chart => EnChartTranslation();
+}
+
+class EnChartTranslation implements IChartTranslation {
+  @override
+  IChartDateRangeViewTranslation get chartDateRangeView => EnChartDateRangeViewTranslation();
+}
+
+class EnChartDateRangeViewTranslation implements IChartDateRangeViewTranslation {
+  @override
+  String get fiveYear => "5Y";
+
+  @override
+  String get oneDay => "1D";
+
+  @override
+  String get oneMonth => "1M";
+
+  @override
+  String get oneWeek => "1W";
+
+  @override
+  String get oneYear => "1Y";
+
+  @override
+  String get sixMonth => "6M";
 }
 
 class EnCommonTranslation implements ICommonTranslation {
@@ -94,7 +122,7 @@ class EnNavigationBarTranslation implements INavigationBarTranslation {
   String get search => "Search";
 }
 
-class SpashTranslation implements ISpashTranslation {
+class SplashTranslation implements ISplashTranslation {
   @override
   String get loading => "Loading";
 }

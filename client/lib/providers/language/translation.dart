@@ -9,8 +9,9 @@ abstract class ITranslation {
   IPortfolioTranslation get portfolio;
   ISettingsTranslation get settings;
   INavigationBarTranslation get navigationBar;
-  ISpashTranslation get splash;
+  ISplashTranslation get splash;
   IUserAppBarTranslation get userAppBar;
+  IChartTranslation get chart;
   ICommonTranslation get common;
 }
 
@@ -29,11 +30,24 @@ class SharedTranslations {
   ];
 }
 
+abstract class IChartTranslation {
+  IChartDateRangeViewTranslation get chartDateRangeView;
+}
+
+abstract class IChartDateRangeViewTranslation {
+  String get oneDay;
+  String get oneWeek;
+  String get oneMonth;
+  String get sixMonth;
+  String get oneYear;
+  String get fiveYear;
+}
+
 abstract class ICommonTranslation {
   String get httpFriendlyErrorResponse;
 }
 
-abstract class ISpashTranslation {
+abstract class ISplashTranslation {
   String get loading;
 }
 

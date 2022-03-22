@@ -25,10 +25,9 @@ class LoginHome extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     return LoginScreen(
-      imageUrl: "https://c.tenor.com/wQ5IslyynbkAAAAC/elon-musk-smoke.gif",
-      // title: "Too broke to start investing? Fear not.",
+      assetName: "assets/images/welcome_image.jpg",
       title: "Too broke to start investing?\n",
-      subTitle: "Start paper trading with Stocks, ETFs and Derivatives. Try new investment strategies and compare your portfilio with friends and others!",
+      subTitle: "Start paper trading with Stocks, ETFs and Derivatives. Try new investment strategies and compare your portfolio with friends and others!",
       additionalWidgets: [
         Util.roundedButton(
           [

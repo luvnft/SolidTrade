@@ -62,7 +62,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
                 // TODO: Create a list of quotes appropriate for knockouts and warrants. One quote will be randomly selected and displayed.
                 // This should also be done for the splash screen. Although on the splash screen we may only support english quotes, for knockouts and warrants
                 // we support multiple languages.
-                "10x to the moon 🚀🌑 or lose it all.", // The max length is 42.
+                "10x to the moon 🚀🌑 or lose it all.",
                 productInfo.derivativeProductCount.knockOutProduct!,
               )
             : const SizedBox.shrink(),

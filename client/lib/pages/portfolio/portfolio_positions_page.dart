@@ -36,13 +36,21 @@ class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with ST
           var hasAnyPositions = portfolio.knockOutPositions.isNotEmpty || portfolio.ongoingKnockOutPositions.isNotEmpty || portfolio.ongoingWarrantPositions.isNotEmpty || portfolio.stockPositions.isNotEmpty || portfolio.warrantPositions.isNotEmpty;
 
           if (!hasAnyPositions) {
+            const stockViewUserMessage = "Nothing to see here yet 😉\nWhy not start investing and experience how it feels to lose money professionally!";
+            const outstandingOrdersViewUserMessage = "No current outstanding orders 😉";
+            final userMessage = widget.isViewingOutstandingOrders ? outstandingOrdersViewUserMessage : stockViewUserMessage;
+
             return Column(
               children: [
                 const Divider(color: Colors.grey),
                 const SizedBox(height: 5),
                 positionTitle,
-
-                // TODO: Some message the encourage the user to start.
+                const SizedBox(height: 15),
+                Text(
+                  userMessage,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 5),
               ],
             );
           }

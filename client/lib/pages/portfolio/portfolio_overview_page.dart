@@ -57,7 +57,7 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                           TextSpan(text: '+3.20%', style: TextStyle(fontWeight: FontWeight.bold, color: colors.stockGreen)),
                           const TextSpan(text: ' while the S&P 500 is down '),
                           const TextSpan(text: '-1.30%', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                          const TextSpan(text: '. Therefore out performing the index by '),
+                          const TextSpan(text: '. Therefore outperforming the index by '),
                           const TextSpan(text: '+4.50%', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
                         ],
                       ),

@@ -27,6 +27,9 @@ class LoginSignIn extends StatelessWidget with STWidget {
       return;
     }
 
+    var dialogKey = GlobalKey();
+    Util.showLoadingDialog(context, dialogKey);
+
     var response = await userService.fetchUser(user.uid);
 
     if (response.isSuccessful) {
@@ -34,11 +37,13 @@ class LoginSignIn extends StatelessWidget with STWidget {
       await historicalPositionService.fetchHistoricalPositions(userId);
       await portfolioService.fetchPortfolioByUserId(userId);
 
+      Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       return;
     }
 
-    // TODO: Show popup with error message.
+    Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
+    Util.openDialog(context, "Login failed", message: response.error!.userFriendlyMessage);
   }
 
   void _handleClickForgotOrLostGoogleAccount() {

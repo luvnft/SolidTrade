@@ -156,8 +156,8 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
             }
 
             if (!trProductInfoSnap.data!.isSuccessful) {
-              // TODO: Show popup with the error message.
-              return showLoadingSkeleton(BoxShape.rectangle);
+              Util.openDialog(context, "Loading product failed", message: "Sorry, something went wrong while trying to load this product.");
+              return Text("Something didn't go right. Please try again later.");
             }
 
             TrProductInfo productInfo = trProductInfoSnap.data!.result!;
@@ -187,11 +187,9 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                   );
                 }
 
-                // final currentPrice = isBuy ? priceInfo.ask!.price : priceInfo.bid.price;
                 final currentPrice = isBuy ? 2.3 : priceInfo.bid.price;
 
                 final percentMissingToFill = !isLimit ? (currentPrice / widget.info.price) : (widget.info.price / currentPrice);
-
                 return _ongoingProductTile(productInfo, percentMissingToFill, currentPrice, details);
               },
             );

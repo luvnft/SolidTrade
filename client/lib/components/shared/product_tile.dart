@@ -55,8 +55,8 @@ class _ProductTileState extends State<ProductTile> with STWidget {
             }
 
             if (!trProductInfoSnap.data!.isSuccessful) {
-              // TODO: Show popup with the error message.
-              return showLoadingSkeleton(BoxShape.rectangle);
+              Util.openDialog(context, "Loading product failed", message: "Sorry, something went wrong while trying to load this product.");
+              return Text("Something didn't go right. Please try again later.");
             }
 
             TrProductInfo productInfo = trProductInfoSnap.data!.result!;
