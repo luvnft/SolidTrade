@@ -1,4 +1,3 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
 import 'package:solidtrade/data/models/ongoing_knockout_position.dart';
 import 'package:solidtrade/data/models/ongoing_warrant_position.dart';

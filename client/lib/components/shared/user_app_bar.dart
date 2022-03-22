@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/st_stream_builder.dart';

@@ -4,14 +4,12 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/portfolio/outstanding_portfolio_list_tile.dart';
 import 'package:solidtrade/components/portfolio/portfolio_list_tile.dart';
 import 'package:solidtrade/components/portfolio/portfolio_overview_title.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/product_tile_info.dart';
 import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/models/outstanding_order_model.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class PortfolioPositionsPage extends StatefulWidget {
   const PortfolioPositionsPage({Key? key, required this.isViewingOutstandingOrders}) : super(key: key);

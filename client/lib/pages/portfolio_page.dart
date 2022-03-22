@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_overview_page.dart';
