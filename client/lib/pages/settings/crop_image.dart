@@ -1,127 +1,203 @@
-import 'dart:ui' as ui;
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:crop/crop.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
+import 'dart:async';
+import 'package:image/image.dart' as im;
+import 'dart:math';
 
-class CropImageScreen extends StatefulWidget {
-  const CropImageScreen({Key? key, required this.bytes}) : super(key: key);
-  final Uint8List bytes;
+class Cropper extends StatefulWidget {
+  final Uint8List image;
+
+  const Cropper({Key? key, required this.image}) : super(key: key);
 
   @override
-  State<CropImageScreen> createState() => _CropImageScreenState();
+  _CropperState createState() => _CropperState();
 }
 
-class _CropImageScreenState extends State<CropImageScreen> with STWidget {
-  final controller = CropController(aspectRatio: 1 / 1);
-  void _handleClickDiscard() {
-    Navigator.pop(context);
+class _CropperState extends State<Cropper> {
+  late Uint8List resultImg;
+  late double scale = 1.0;
+  late double zeroScale; //Initial scale to fit image in bounding crop box.
+  late Offset offset = const Offset(0.0, 0.0); //Used in translation of image.
+  late double cropRatio = 1 / 1; //aspect ratio of desired crop.
+  late im.Image decoded; //decoded image to get pixel dimensions
+  late double imgWidth; //img pixel width
+  late double imgHeight; //img pixel height
+  late Size cropArea; //Size of crop bonding box
+  late double cropPad; //Aesthetic crop box padding.
+  late double pXa; //Positive X available in translation
+  late double pYa; //Positive Y available in translation
+  late double totalX; //Total X of scaled image
+  late double totalY; //Total Y of scaled image
+  final Completer _decoded = Completer<bool>();
+  final Completer _encoded = Completer<Uint8List>();
+
+  @override
+  initState() {
+    _decodeImg();
+    super.initState();
   }
 
-  void _handleClickSaveCroppedImage(ui.Image cropped) {
-    Navigator.of(context).pop(cropped);
-    Navigator.of(context).pop(cropped);
+  _decodeImg() {
+    if (_decoded.isCompleted) return;
+    decoded = im.decodeImage(widget.image)!;
+    imgWidth = decoded.width.toDouble();
+    imgHeight = decoded.height.toDouble();
+    _decoded.complete(true);
   }
 
-  void _handleClickSave() async {
-    final pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final cropped = await controller.crop(pixelRatio: pixelRatio);
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          backgroundColor: colors.background,
-          appBar: AppBar(
-            title: const Text('Crop Result'),
-            centerTitle: true,
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
-              Center(
-                child: RawImage(
-                  image: cropped,
-                ),
-              ),
-              const SizedBox(height: 35),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Go back")),
-                  const SizedBox(width: 20),
-                  ElevatedButton(onPressed: () => _handleClickSaveCroppedImage(cropped), child: const Text("Crop")),
-                ],
-              )
-            ],
-          ),
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+  _encodeImage(im.Image cropped) async {
+    resultImg = Uint8List.fromList(im.encodePng(cropped));
+    _encoded.complete(resultImg);
   }
+
+  void _cropImage() async {
+    double xPercent = pXa != 0.0 ? 1.0 - (offset.dx + pXa) / (2 * pXa) : 0.0;
+    double yPercent = pYa != 0.0 ? 1.0 - (offset.dy + pYa) / (2 * pYa) : 0.0;
+    double cropXpx = imgWidth * cropArea.width / totalX;
+    double cropYpx = imgHeight * cropArea.height / totalY;
+    double x0 = (imgWidth - cropXpx) * xPercent;
+    double y0 = (imgHeight - cropYpx) * yPercent;
+    im.Image cropped = im.copyCrop(decoded, x0.toInt(), y0.toInt(), cropXpx.toInt(), cropYpx.toInt());
+    _encodeImage(cropped);
+    Navigator.pop(context, _encoded.future);
+  }
+
+  computeRelativeDim(double newScale) {
+    totalX = newScale * cropArea.height * imgWidth / imgHeight;
+    totalY = newScale * cropArea.height;
+    pXa = 0.5 * (totalX - cropArea.width);
+    pYa = 0.5 * (totalY - cropArea.height);
+  }
+
+  bool init = true;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: colors.background,
+      appBar: AppBar(
+        title: Text('Crop Photo'),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: _cropImage,
+          tooltip: 'Crop',
+          icon: Icon(Icons.crop),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, null),
+            child: Text('Cancel'),
+          )
+        ],
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Crop(
-              backgroundColor: colors.background,
-              controller: controller,
-              shape: BoxShape.rectangle,
-              child: Image.memory(widget.bytes, width: 100, height: 100),
-              helper: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: colors.blueBackground, width: 2),
-                ),
-              ),
+            child: FutureBuilder(
+              future: _decoded.future,
+              builder: (ctx, snap) {
+                if (!snap.hasData)
+                  return Center(
+                    child: Text('Loading...'),
+                  );
+                return LayoutBuilder(
+                  builder: (ctx, cstr) {
+                    if (init) {
+                      cropPad = cstr.maxHeight * 0.05;
+                      double tmpWidth = cstr.maxWidth - 2 * cropPad;
+                      double tmpHeight = cstr.maxHeight - 2 * cropPad;
+                      cropArea = (tmpWidth / cropRatio > tmpHeight) ? Size(tmpHeight * cropRatio, tmpHeight) : Size(tmpWidth, tmpWidth / cropRatio);
+                      zeroScale = cropArea.height / imgHeight;
+                      computeRelativeDim(scale);
+                      init = false;
+                    }
+                    return GestureDetector(
+                      onPanUpdate: (pan) {
+                        double dy;
+                        double dx;
+                        if (pan.delta.dy > 0)
+                          dy = min(pan.delta.dy, pYa - offset.dy);
+                        else
+                          dy = max(pan.delta.dy, -pYa - offset.dy);
+                        if (pan.delta.dx > 0)
+                          dx = min(pan.delta.dx, pXa - offset.dx);
+                        else
+                          dx = max(pan.delta.dx, -pXa - offset.dx);
+                        setState(() => offset += Offset(dx, dy));
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            color: Colors.black.withOpacity(0.5),
+                            height: cstr.maxHeight,
+                            width: cstr.maxWidth,
+                            child: ClipRect(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: cropArea.height,
+                                width: cropArea.width,
+                                child: Transform.translate(
+                                  offset: offset,
+                                  child: Transform.scale(
+                                    scale: scale * zeroScale,
+                                    child: OverflowBox(
+                                      maxWidth: imgWidth,
+                                      maxHeight: imgHeight,
+                                      child: Image.memory(
+                                        widget.image,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          IgnorePointer(
+                            child: Center(
+                              child: Container(
+                                height: cropArea.height,
+                                width: cropArea.width,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
-          Container(
-            height: 100,
-            color: colors.foreground,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: IconButton(
-                    icon: const Icon(Icons.cancel, color: Colors.red, size: 30),
-                    tooltip: 'Reset',
-                    onPressed: () {
-                      setState(() {
-                        controller.rotation = 0;
-                        controller.scale = 1;
-                        controller.offset = Offset.zero;
-                      });
-                    },
-                  ),
-                ),
-                Expanded(
+          Row(
+            children: <Widget>[
+              Text('Scale:'),
+              Expanded(
+                child: SliderTheme(
+                  data: theme.sliderTheme,
                   child: Slider(
-                    divisions: 200,
-                    value: controller.scale,
+                    divisions: 50,
+                    value: scale,
                     min: 1,
-                    max: 10,
+                    max: 2,
+                    label: '$scale',
                     onChanged: (n) {
+                      double dy;
+                      double dx;
+                      computeRelativeDim(n);
+                      dy = (offset.dy > 0) ? min(offset.dy, pYa) : max(offset.dy, -pYa);
+                      dx = (offset.dx > 0) ? min(offset.dx, pXa) : max(offset.dx, -pXa);
                       setState(() {
-                        controller.scale = n;
+                        offset = Offset(dx, dy);
+                        scale = n;
                       });
                     },
                   ),
                 ),
-                const SizedBox(width: 50),
-                TextButton(onPressed: _handleClickDiscard, child: const Text("Discard", style: TextStyle(color: Colors.red))),
-                const SizedBox(width: 30),
-                TextButton(onPressed: _handleClickSave, child: const Text("Save", style: TextStyle(color: Colors.green))),
-                const SizedBox(width: 20),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:crop/crop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +11,8 @@ import 'package:solidtrade/components/login/login_screen.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/pages/login/signup/continue_signup_page.dart';
 import 'package:solidtrade/pages/settings/crop_image.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
-import 'dart:ui' as ui;
 
 class LoginSignUp extends StatefulWidget {
   const LoginSignUp({Key? key}) : super(key: key);
@@ -28,7 +25,6 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
   Uint8List? imageAsBytes;
   bool showSeedInputField = true;
 
-  final cropController = CropController(aspectRatio: 1 / 1);
   String _dicebearSeed = "your-custom-seed";
   late String _tempCurrentSeed;
 
@@ -63,28 +59,38 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
     var isGifFile = image.name.endsWith(".gif");
 
     if (kIsWeb) {
-      ByteBuffer buffer;
+      var bytes = await image.readAsBytes();
 
       if (!isGifFile) {
-        ui.Image? croppedImage = await Util.pushToRoute<ui.Image>(context, CropImageScreen(bytes: await image.readAsBytes()));
+        var cropResult = await Navigator.push<Future<Uint8List>?>(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => Cropper(
+              image: bytes,
+            ),
+          ),
+        );
 
-        if (croppedImage == null) return;
+        if (cropResult == null) {
+          return;
+        }
 
-        buffer = (await croppedImage.toByteData())!.buffer;
+        var image = await cropResult;
+
+        setState(() {
+          showSeedInputField = false;
+          imageAsBytes = image;
+        });
+
+        return;
       }
 
-      buffer = (await image.readAsBytes()).buffer;
-
       setState(() {
-        imageAsBytes = Uint8List.view(buffer);
+        showSeedInputField = false;
+        imageAsBytes = bytes;
       });
-
       return;
     }
-
-    Log.d(image.name);
-    Log.d(image.mimeType);
-    Log.d(image.path);
 
     File? cropped;
 
@@ -121,7 +127,13 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
       return;
     }
 
-    Util.pushToRoute(context, ContinueSignupScreen(user: user, dicebearSeed: _dicebearSeed, profilePictureBytes: imageAsBytes));
+    Util.pushToRoute(
+        context,
+        ContinueSignupScreen(
+          user: user,
+          dicebearSeed: _dicebearSeed,
+          profilePictureBytes: imageAsBytes,
+        ));
   }
 
   @override
