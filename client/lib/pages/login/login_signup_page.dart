@@ -60,12 +60,20 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
       return;
     }
 
+    var isGifFile = image.name.endsWith(".gif");
+
     if (kIsWeb) {
-      ui.Image? croppedImage = await Util.pushToRoute<ui.Image>(context, CropImageScreen(bytes: await image.readAsBytes()));
+      ByteBuffer buffer;
 
-      if (croppedImage == null) return;
+      if (!isGifFile) {
+        ui.Image? croppedImage = await Util.pushToRoute<ui.Image>(context, CropImageScreen(bytes: await image.readAsBytes()));
 
-      var buffer = (await croppedImage.toByteData())!.buffer;
+        if (croppedImage == null) return;
+
+        buffer = (await croppedImage.toByteData())!.buffer;
+      }
+
+      buffer = (await image.readAsBytes()).buffer;
 
       setState(() {
         imageAsBytes = Uint8List.view(buffer);
@@ -79,7 +87,6 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
     Log.d(image.path);
 
     File? cropped;
-    var isGifFile = image.name.endsWith(".gif");
 
     // For gif's cropping can not be applied
     cropped = isGifFile
