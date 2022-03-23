@@ -123,7 +123,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                               style: TextStyle(color: details.textColor),
                             ),
                             Text(
-                              details.plusMinusProductNamePrefix + details.absolutChange.toDefaultPrice(maxFractionDigits: 2),
+                              details.plusMinusProductNamePrefix + details.absoluteChange.toDefaultPrice(maxFractionDigits: 2),
                               style: TextStyle(color: details.textColor),
                             ),
                           ],

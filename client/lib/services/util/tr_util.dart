@@ -37,7 +37,7 @@ class TrUtil {
 
     return TrUiProductDetails(
       percentageChange: percentageChange,
-      absolutChange: absoluteChange,
+      absoluteChange: absoluteChange,
       isUp: isUp,
       plusMinusProductNamePrefix: plusMinus,
       productTitle: productTitle,
@@ -140,7 +140,7 @@ class TrUtil {
 
 class TrUiProductDetails {
   final double percentageChange;
-  final double absolutChange;
+  final double absoluteChange;
   final bool isUp;
   final String plusMinusProductNamePrefix;
   final String productTitle;
@@ -150,7 +150,7 @@ class TrUiProductDetails {
 
   TrUiProductDetails({
     required this.percentageChange,
-    required this.absolutChange,
+    required this.absoluteChange,
     required this.isUp,
     required this.plusMinusProductNamePrefix,
     required this.productTitle,
