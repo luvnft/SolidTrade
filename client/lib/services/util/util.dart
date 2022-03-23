@@ -101,6 +101,10 @@ class Util {
   }
 
   static Widget loadImageFromMemory(Uint8List bytes, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
+    print("test");
+    print(bytes.length);
+    print(bytes.lengthInBytes);
+    print(bytes);
     borderRadius ??= BorderRadius.circular(90);
 
     return SizedBox(
