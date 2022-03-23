@@ -3,6 +3,7 @@ import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/pages/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
+import 'package:solidtrade/services/request/data_request_service.dart';
 
 // TODO: Try nato font
 // TODO: Maybe try stock preview to a product tile
@@ -22,7 +23,9 @@ class MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void restart() {
+  Future<void> restart() async {
+    await DataRequestService.trApiDataRequestService.disconnect();
+
     Startup.initializeApp();
     setState(() {
       widget.navigatorKey = GlobalKey<NavigatorState>();

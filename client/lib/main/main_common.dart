@@ -181,7 +181,6 @@ Widget _showErrorHandleMessage(BuildContext context) {
                             backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
                           ),
                           onPressed: () async {
-                            await DataRequestService.trApiDataRequestService.disconnect();
                             myAppState.restart();
                           },
                           child: const Text(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:solidtrade/data/models/common/delete_user_response.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/user.dart';
@@ -57,5 +58,20 @@ class UserDataRequestService extends IBaseRequestService {
     var response = requestResponse.result!;
     var data = jsonDecode(response.body);
     return RequestResponse.successful(User.fromJson(data));
+  }
+
+  Future<RequestResponse<DeleteUserResponse>> deleteUser() async {
+    var requestResponse = await makeRequest(
+      HttpMethod.delete,
+      Constants.endpointUser,
+    );
+
+    if (!requestResponse.isSuccessful) {
+      return RequestResponse.inheritErrorResponse(requestResponse);
+    }
+
+    var response = requestResponse.result!;
+    var data = jsonDecode(response.body);
+    return RequestResponse.successful(DeleteUserResponse.fromJson(data));
   }
 }

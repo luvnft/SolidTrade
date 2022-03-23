@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:rxdart/subjects.dart';
+import 'package:solidtrade/data/models/common/delete_user_response.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
@@ -52,6 +53,20 @@ class UserService extends IService<RequestResponse<User>?> {
     return RequestResponse.successful({
       "Authorization": "Bearer " + token.token!,
     });
+  }
+
+  Future<RequestResponse<DeleteUserResponse>> deleteUser() async {
+    var response = await DataRequestService.userDataRequestService.deleteUser();
+
+    if (response.isSuccessful) {
+      behaviorSubject.add(RequestResponse.failed({
+        "userFriendlyMessage": "User account has been deleted."
+      }));
+
+      return response;
+    }
+
+    return response;
   }
 
   Future<fire.IdTokenResult>? getFirebaseUserAuthToken() => fire.FirebaseAuth.instance.currentUser?.getIdTokenResult();

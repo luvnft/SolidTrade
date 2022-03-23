@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/providers/language/de/de_translation.dart';
 import 'package:solidtrade/providers/language/en/en_translation.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
+import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/user_util.dart';
+import 'package:solidtrade/services/util/util.dart';
 
 class SettingsPage extends StatelessWidget with STWidget {
   SettingsPage({Key? key}) : super(key: key);
+
+  final userService = GetIt.instance.get<UserService>();
 
   void _changeLanguage(BuildContext context, ITranslation lang) {
     configurationProvider.languageProvider.updateLanguage(lang);
@@ -15,6 +22,22 @@ class SettingsPage extends StatelessWidget with STWidget {
 
   void _changeColorTheme(BuildContext context, ColorThemeType type) {
     configurationProvider.themeProvider.updateTheme(type);
+  }
+
+  Future<void> handleClickDeleteAccount(BuildContext context) async {
+    var response = await UtilUserService.deleteAccount(userService);
+
+    var title = response.isSuccessful ? "Account deleted" : "Account deletion failed";
+
+    await Util.openDialog(
+      context,
+      title,
+      message: response.isSuccessful ? "Account deleted successfully" : response.error!.userFriendlyMessage,
+    );
+
+    if (response.isSuccessful) {
+      myAppState.restart();
+    }
   }
 
   @override
@@ -54,6 +77,12 @@ class SettingsPage extends StatelessWidget with STWidget {
                 },
                 child: Text(translations.settings.changeLanguage),
               ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => handleClickDeleteAccount(context),
+                child: const Text("Delete account", style: TextStyle(color: Colors.red)),
+              ),
+              const SizedBox(height: 30)
             ],
           ),
         ),
