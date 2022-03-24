@@ -2,7 +2,7 @@ import 'package:solidtrade/data/enums/lang_ticker.dart';
 
 class Constants {
   static const forgotOrLostAccountFormLink = "https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/";
-  static const fileUploadLimitInBytes = 10000000; // 10MB
+  static const fileUploadLimitInBytes = 25000000; // 25MB
 
   static const endpointHistoricalPosition = "/historicalpositions/";
   static const endpointKnockout = "/knockouts/";

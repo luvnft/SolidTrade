@@ -169,7 +169,7 @@ namespace SolidTradeServer.Services
 
         private static int GetAdjustedQualityCompressionRatio(long fileSize)
         {
-            const int threshold = 2000000; // 2MB
+            const int threshold = 1000000; // 1MB
             var ratio = (double) threshold / fileSize;
 
             return ratio >= 1 ? 100 : (int)(ratio * 100);
