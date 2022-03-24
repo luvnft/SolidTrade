@@ -62,6 +62,10 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
       var bytes = await image.readAsBytes();
 
       if (!isGifFile) {
+        final closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+
+        await Future.delayed(const Duration(milliseconds: 400));
+
         var cropResult = await Navigator.push<Future<Uint8List>?>(
           context,
           MaterialPageRoute(
@@ -71,15 +75,17 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
           ),
         );
 
+        closeDialog();
+
         if (cropResult == null) {
           return;
         }
 
-        var image = await cropResult;
+        var croppedImageResult = await cropResult;
 
         setState(() {
           showSeedInputField = false;
-          imageAsBytes = image;
+          imageAsBytes = croppedImageResult;
         });
 
         return;

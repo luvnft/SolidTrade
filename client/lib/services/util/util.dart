@@ -220,24 +220,25 @@ class Util {
     return EnumToString.fromString(LanguageTicker.values, tickers.firstWhere((ticker) => ticker == appLocale.languageCode))!;
   }
 
-  static Future<void> showLoadingDialog(BuildContext context, GlobalKey key, {String waitingText = "Loading..."}) {
-    return showDialog(
+  static void Function() showLoadingDialog(BuildContext context, {String waitingText = "Loading...", bool showIndicator = true}) {
+    showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           backgroundColor: Theme.of(context).backgroundColor,
-          key: key,
           children: [
             Center(
               child: Row(
                 children: [
                   const SizedBox(width: 20),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.blue[100],
-                    valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
-                    strokeWidth: 4,
-                  ),
+                  showIndicator
+                      ? CircularProgressIndicator(
+                          backgroundColor: Colors.blue[100],
+                          valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
+                          strokeWidth: 4,
+                        )
+                      : const SizedBox.shrink(),
                   const SizedBox(
                     height: 10,
                     width: 20,
@@ -250,6 +251,8 @@ class Util {
         );
       },
     );
+
+    return () => Navigator.of(context, rootNavigator: true).pop();
   }
 }
 

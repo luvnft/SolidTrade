@@ -27,8 +27,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
       return;
     }
 
-    var dialogKey = GlobalKey();
-    Util.showLoadingDialog(context, dialogKey);
+    var closeDialog = Util.showLoadingDialog(context);
 
     var response = await userService.fetchUser(user.uid);
 
@@ -42,7 +41,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
       return;
     }
 
-    Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
+    closeDialog();
     Util.openDialog(context, "Login failed", message: response.error!.userFriendlyMessage);
   }
 

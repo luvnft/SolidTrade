@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:image/image.dart' as im;
 import 'dart:math';
 
+import 'package:solidtrade/services/util/util.dart';
+
 class Cropper extends StatefulWidget {
   final Uint8List image;
 
@@ -51,6 +53,10 @@ class _CropperState extends State<Cropper> {
   }
 
   void _cropImage() async {
+    var closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
     double xPercent = pXa != 0.0 ? 1.0 - (offset.dx + pXa) / (2 * pXa) : 0.0;
     double yPercent = pYa != 0.0 ? 1.0 - (offset.dy + pYa) / (2 * pYa) : 0.0;
     double cropXpx = imgWidth * cropArea.width / totalX;
@@ -59,6 +65,8 @@ class _CropperState extends State<Cropper> {
     double y0 = (imgHeight - cropYpx) * yPercent;
     im.Image cropped = im.copyCrop(decoded, x0.toInt(), y0.toInt(), cropXpx.toInt(), cropYpx.toInt());
     _encodeImage(cropped);
+
+    closeDialog();
     Navigator.pop(context, _encoded.future);
   }
 

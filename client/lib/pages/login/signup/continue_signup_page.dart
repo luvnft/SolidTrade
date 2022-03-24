@@ -70,8 +70,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   }
 
   Future<void> _handleClickCreateAccount() async {
-    var dialogKey = GlobalKey();
-    Util.showLoadingDialog(context, dialogKey);
+    final closeDialog = Util.showLoadingDialog(context);
 
     String name = _nameController.text;
     String username = _usernameController.text;
@@ -97,7 +96,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
       return;
     }
 
-    Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
+    closeDialog();
 
     Util.openDialog(context, "Could not create user", message: response.error!.userFriendlyMessage);
   }
