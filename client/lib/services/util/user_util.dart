@@ -6,11 +6,11 @@ import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 
 class UtilUserService {
-  static Future<User?> signInWithGoogle({bool signOutFirst = true}) async {
-    if (signOutFirst) {
-      await FirebaseAuth.instance.signOut();
-      await GoogleSignIn().disconnect();
-      await GoogleSignIn().signOut();
+  static Future<User?> signInWithGoogle({bool disconnectFirst = true}) async {
+    if (disconnectFirst) {
+      try {
+        await GoogleSignIn().disconnect();
+      } catch (e) {}
     }
 
     // Trigger the authentication flow
