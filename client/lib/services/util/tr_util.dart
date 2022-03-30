@@ -28,8 +28,8 @@ class TrUtil {
     final isUp = percentageChange == 1 || 1 < percentageChange;
     final plusMinus = isUp ? "+" : "";
 
-    final productTitle = isStockPosition ? productInfo.shortName : _getDerivitiveProductTitle(productInfo);
-    final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivitiveProductSubtitle(productInfo);
+    final productTitle = isStockPosition ? productInfo.shortName : _getDerivativesProductTitle(productInfo);
+    final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivativesProductSubtitle(productInfo);
 
     final colorMode = _configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? "light" : "dark";
 
@@ -62,11 +62,11 @@ class TrUtil {
     return name.length > 18 ? shortName : name;
   }
 
-  static String _getDerivitiveProductTitle(TrProductInfo info) {
+  static String _getDerivativesProductTitle(TrProductInfo info) {
     return "${info.derivativeInfo!.properties.optionType.capitalize()} @${info.derivativeInfo!.properties.strike.toStringAsFixed(2)}";
   }
 
-  static String _getDerivitiveProductSubtitle(TrProductInfo info) {
+  static String _getDerivativesProductSubtitle(TrProductInfo info) {
     return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
   }
 
@@ -86,18 +86,6 @@ class TrUtil {
 
     return false;
   }
-
-  // List<HistoricalPosition> getRemaindingHistoricalPositions(List<HistoricalPosition> positions) {
-  //   List<HistoricalPosition> results = [];
-  //   for (var position in positions) {
-  //     int index = results.indexWhere((p) => p.isin == position.isin);
-  //     if (index != -1) {
-  //       var result = results[index];
-  //       result[index] = HistoricalPosition.copy(result, numberOfShares);
-  //     }
-  //   }
-  //   return results;
-  // }
 
   static Map<DateTime, HistoricalPosition> getCurrentNumberOfSharesForPortfolioPosition(List<DateTime> dates, List<HistoricalPosition> pps) {
     final Map<DateTime, HistoricalPosition> map = {};
