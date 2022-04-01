@@ -139,8 +139,8 @@ namespace SolidTradeServer
             var filter = new BasicAuthAuthorizationFilter(
                 new BasicAuthAuthorizationFilterOptions
                 {
-                    // Require secure connection for dashboard
-                    RequireSsl = true,
+                    // Because we are using nginx as a reverse proxy, ssl will not be required
+                    RequireSsl = false,
                     // Case sensitive login checking
                     LoginCaseSensitive = true,
                     Users = new[]
