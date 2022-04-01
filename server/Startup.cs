@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FirebaseAdmin;
@@ -6,20 +8,24 @@ using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
+using Hangfire.Dashboard.Resources;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
+using SolidTradeServer.Common;
 using SolidTradeServer.Data.Common;
 using SolidTradeServer.Data.Models.Converters;
 using SolidTradeServer.Data.Models.Errors;
+using SolidTradeServer.Data.Models.Errors.Common;
 using SolidTradeServer.Filters;
 using SolidTradeServer.Services;
 using SolidTradeServer.Services.Cache;
@@ -83,6 +89,15 @@ namespace SolidTradeServer
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
             });
             
+            services.Configure<ApiBehaviorOptions>(apiBehaviorOptions =>
+                apiBehaviorOptions.InvalidModelStateResponseFactory = 
+                    actionContext => new BadRequestObjectResult(new InvalidModelState
+                    {
+                        Title = "Validation error",
+                        Message = "Something went wrong validating request.",
+                        UserFriendlyMessage = Shared.GetUserFriendlyValidationError(actionContext),
+                    }));
+
             services.AddCors(opt =>
             {
                 opt.AddDefaultPolicy(builder =>

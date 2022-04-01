@@ -46,6 +46,14 @@ namespace SolidTradeServer.Common
                 NamingStrategy = new CamelCaseNamingStrategy()
             },
         };
+
+        public static string GetUserFriendlyValidationError(ActionContext actionContext)
+        {
+            (string fieldName, var value) = actionContext.ModelState.First(e => e.Value.Errors.Any());
+            string errorMessage = value.Errors.First().ErrorMessage;
+
+            return $"{fieldName} validation error. {errorMessage}";
+        }
         
         public static OneOf<T, UnexpectedError> ConvertToObject<T>(string content, JsonSerializerSettings jsonSerializerOptions = null)
         {
