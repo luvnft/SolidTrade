@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static SolidTradeServer.Common.ErrorMessages;
 
 namespace SolidTradeServer.Data.Dtos.Shared.Common
 {
@@ -8,7 +9,7 @@ namespace SolidTradeServer.Data.Dtos.Shared.Common
         public string Isin { get; init; }
         
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(1, int.MaxValue, ErrorMessage = CountOfNumberOfSharedMessage)]
         public int NumberOfShares { get; init; }
     }
 }

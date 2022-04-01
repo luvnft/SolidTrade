@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using SolidTradeServer.Data.Models.Annotations;
+using SolidTradeServer.Data.Models.Annotations.Group;
 using static SolidTradeServer.Common.Shared;
 
 namespace SolidTradeServer.Data.Dtos.User.Request
@@ -16,7 +17,7 @@ namespace SolidTradeServer.Data.Dtos.User.Request
         public string Email { get; init; }
         
         [Required]
-        [MinLength(3)]
+        [UsernameValidator]
         public string Username { get; init; }
         
         [Required]
