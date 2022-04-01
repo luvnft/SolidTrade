@@ -74,7 +74,7 @@ namespace SolidTradeServer.Services
             }
             
             
-            if (await _database.Users.AsQueryable().AnyAsync(u => EF.Functions.Like(u.Username, $"%{user.Username}%")))
+            if (await _database.Users.AsQueryable().AnyAsync(u => EF.Functions.Like(u.Email, $"%{user.Email}%")))
             {
                 return new ErrorResponse(new UserUpdateFailed
                 {
