@@ -259,6 +259,7 @@ namespace SolidTradeServer.Services
             user.Email = dto.Email ?? user.Email;
             user.Username = dto.Username ?? user.Username;
             user.DisplayName = dto.DisplayName ?? user.DisplayName;
+            user.HasPublicPortfolio = dto.PublicPortfolio ?? user.HasPublicPortfolio;
 
             string prevProfilePicture = null;
             if (updatedProfilePicture is not null && updatedProfilePicture != user.ProfilePictureUrl)
