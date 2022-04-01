@@ -369,7 +369,7 @@ namespace SolidTradeServer.Services
 
         private async Task<OneOf<Success, UnexpectedError>> DeleteUserProfilePicture(string profilePictureUrl)
         {
-            return await _cloudinaryService.DeleteProfilePicture(profilePictureUrl);
+            return await _cloudinaryService.DeleteImage(profilePictureUrl);
         }
     }
 }

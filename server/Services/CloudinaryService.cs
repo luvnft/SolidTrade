@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Resources;
 using System.Threading.Tasks;
 using CloudinaryDotNet;
@@ -47,10 +48,7 @@ namespace SolidTradeServer.Services
             => UploadProfileImage(new FileDescription(file.Name, file.OpenReadStream()),
                 GetAdjustedQualityCompressionRatio(file.Length), uid, $"Projects/SolidTrade-{_environment}/");
 
-        public Task<OneOf<Success, UnexpectedError>> DeleteProfilePicture(string url) 
-            => DeleteImage(url);
-
-        private async Task<OneOf<Success, UnexpectedError>> DeleteImage(string url)
+        public async Task<OneOf<Success, UnexpectedError>> DeleteImage(string url)
         {
             var httpOrHttps = url.StartsWith("https") ? "https" : "http";
 
@@ -64,7 +62,15 @@ namespace SolidTradeServer.Services
                 var publicId = s1.Substring(slashIndex + 1, s1.LastIndexOf('.') - slashIndex - 1);
 
                 var deletionParams = new DeletionParams(publicId);
-                await _cloudinary.DestroyAsync(deletionParams);
+                var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
+
+                if (deletionResult.Error is not null)
+                {
+                    var exception = new Exception("Cloudinary deletion failed");
+                    exception.Data.Add("Error", deletionResult.Error.Message);
+                    
+                    throw exception;
+                }
                 
                 _logger.Information("Deletion image with url {@ImageUrl} and public id {@PublicId} was successful", url, publicId);
                 return new Success();

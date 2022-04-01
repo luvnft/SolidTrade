@@ -56,6 +56,7 @@ namespace SolidTradeServer
             services.AddSingleton<RemoveKnockedOutProductsJobsService>();
             services.AddSingleton<RemoveOngoingExpiredTradeJobsService>();
             services.AddSingleton<RemoveExpiredWarrantProductsJobsService>();
+            services.AddSingleton<RemoveUnusedProductImageRelationsJobsService>();
 
             services.AddTransient<UserService>();
             services.AddTransient<StockService>();
@@ -172,10 +173,17 @@ namespace SolidTradeServer
 
             if (removeExpiredWarrantProductsJobsService is null)
                 throw new Exception("The service RemoveExpiredWarrantProductsJobsService could not be provided.");
+
+            var removeUnusedProductImageRelationsJobsService = serviceProvider.GetService<RemoveUnusedProductImageRelationsJobsService>();
+
+            if (removeUnusedProductImageRelationsJobsService is null)
+                throw new Exception("The service RemoveUnusedProductImageRelationsJobsService could not be provided.");
             
             recurringJobManager.AddOrUpdate("Remove Ongoing expired trades", () => removeOngoingExpiredTradeJobsService.StartAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate("Remove Expired warrants", () => removeExpiredWarrantProductsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
             recurringJobManager.AddOrUpdate("Remove Knocked out products", () => removeKnockedOutProductsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
+            recurringJobManager.AddOrUpdate("Remove unused product images relations",
+                () => removeUnusedProductImageRelationsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
             
             // Insures the trade republic service is being instantiated at the beginning of the application.
             app.ApplicationServices.GetService<TradeRepublicApiService>();

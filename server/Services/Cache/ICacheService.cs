@@ -23,5 +23,10 @@ namespace SolidTradeServer.Services.Cache
         /// <param name="value">The item that should be cached.</param>
         /// <param name="minutesToExpiration">How long the item should be cached. This is optional and if not specified will default to 10 minutes.</param>
         void SetCachedValue<T>(string identifier, T value, int? minutesToExpiration = null);
+
+        /// <summary>
+        /// Clears the cache for a specific type.
+        /// </summary>
+        void Clear<T>();
     }
 }
