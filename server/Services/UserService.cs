@@ -56,7 +56,7 @@ namespace SolidTradeServer.Services
             };
 
             var usernameTaken = await _database.Users.AsQueryable()
-                .AnyAsync(u => EF.Functions.Like(u.Username, $"%{user.Username}%"));
+                .AnyAsync(u => EF.Functions.Like(u.Username, $"{user.Username}"));
             
             var userUidAlreadyInUse = await _database.Users.AsQueryable()
                 .AnyAsync(u => u.Uid == user.Uid);
@@ -74,7 +74,7 @@ namespace SolidTradeServer.Services
             }
             
             
-            if (await _database.Users.AsQueryable().AnyAsync(u => EF.Functions.Like(u.Email, $"%{user.Email}%")))
+            if (await _database.Users.AsQueryable().AnyAsync(u => EF.Functions.Like(u.Email, $"{user.Email}")))
             {
                 return new ErrorResponse(new UserUpdateFailed
                 {
@@ -215,7 +215,7 @@ namespace SolidTradeServer.Services
                 }, HttpStatusCode.NotFound);
             
             if (dto.Username is not null && await _database.Users
-                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Username, $"%{user.Username}%")))
+                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Username, $"{user.Username}")))
             {
                 return new ErrorResponse(new UserUpdateFailed
                 {
@@ -226,7 +226,7 @@ namespace SolidTradeServer.Services
             }
 
             if (dto.Email is not null && await _database.Users
-                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Email, $"%{dto.Email}%")))
+                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Email, $"{dto.Email}")))
             {
                 return new ErrorResponse(new UserUpdateFailed
                 {
