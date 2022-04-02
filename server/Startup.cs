@@ -61,6 +61,7 @@ namespace SolidTradeServer
             services.AddSingleton<ICacheService, CacheService>();
             services.AddSingleton<RemoveKnockedOutProductsJobsService>();
             services.AddSingleton<RemoveOngoingExpiredTradeJobsService>();
+            services.AddSingleton<CheckAndPerformStockSplitJobsService>();
             services.AddSingleton<RemoveExpiredWarrantProductsJobsService>();
             services.AddSingleton<RemoveUnusedProductImageRelationsJobsService>();
 
@@ -193,10 +194,16 @@ namespace SolidTradeServer
 
             if (removeUnusedProductImageRelationsJobsService is null)
                 throw new Exception("The service RemoveUnusedProductImageRelationsJobsService could not be provided.");
+
+            var checkAndPerformStockSplitJobsService = serviceProvider.GetService<CheckAndPerformStockSplitJobsService>();
+
+            if (checkAndPerformStockSplitJobsService is null)
+                throw new Exception("The service CheckAndPerformStockSplitJobsService could not be provided.");
             
             recurringJobManager.AddOrUpdate("Remove Ongoing expired trades", () => removeOngoingExpiredTradeJobsService.StartAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate("Remove Expired warrants", () => removeExpiredWarrantProductsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
             recurringJobManager.AddOrUpdate("Remove Knocked out products", () => removeKnockedOutProductsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
+            recurringJobManager.AddOrUpdate("Check and perform stock splits", () => checkAndPerformStockSplitJobsService.StartAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate("Remove unused product images relations",
                 () => removeUnusedProductImageRelationsJobsService.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
             

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SolidTradeServer.Data.Entities.Common;
+using SolidTradeServer.Data.Models.Common.Position;
 using SolidTradeServer.Data.Models.Enums;
 using static SolidTradeServer.Common.Constants;
 
 namespace SolidTradeServer.Data.Entities
 {
-    public class HistoricalPosition : BaseEntity
+    public class HistoricalPosition : BaseEntity, IPosition
     {
         public int UserId { get; set; }
         
