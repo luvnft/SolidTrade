@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "com.rosemote.solidtrade"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
