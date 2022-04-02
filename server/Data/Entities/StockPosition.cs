@@ -13,7 +13,7 @@ namespace SolidTradeServer.Data.Entities
         [MaxLength(12)]
         public string Isin { get; set; }
         
-        public int NumberOfShares { get; set; }
+        public decimal NumberOfShares { get; set; }
         public decimal BuyInPrice { get; set; }
     }
 }

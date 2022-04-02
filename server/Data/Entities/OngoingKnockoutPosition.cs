@@ -29,6 +29,6 @@ namespace SolidTradeServer.Data.Entities
         
         [Required]
         [Range(1, int.MaxValue)]
-        public int NumberOfShares  { get; set; }
+        public decimal NumberOfShares  { get; set; }
     }
 }

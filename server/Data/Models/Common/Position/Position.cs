@@ -3,6 +3,6 @@
     public class Position : IPosition
     {
         public decimal BuyInPrice { get; set; }
-        public int NumberOfShares { get; set; }
+        public decimal NumberOfShares { get; set; }
     }
 }

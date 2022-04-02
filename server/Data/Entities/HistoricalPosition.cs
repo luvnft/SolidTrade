@@ -21,7 +21,7 @@ namespace SolidTradeServer.Data.Entities
         public decimal Performance { get; set; }
         
         [Required]
-        public int NumberOfShares { get; set; }
+        public decimal NumberOfShares { get; set; }
         
         [Required]
         [MaxLength(12)]

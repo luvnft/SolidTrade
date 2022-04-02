@@ -10,6 +10,6 @@ namespace SolidTradeServer.Data.Dtos.Shared.Common
         
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = CountOfNumberOfSharedMessage)]
-        public int NumberOfShares { get; init; }
+        public decimal NumberOfShares { get; init; }
     }
 }

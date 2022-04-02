@@ -23,6 +23,6 @@ namespace SolidTradeServer.Data.Dtos.Shared.OngoingPosition.Request
         public DateTimeOffset? GoodUntil { get; set; }
         
         [Range(1, int.MaxValue)]
-        public int NumberOfShares { get; set; }
+        public decimal NumberOfShares { get; set; }
     }
 }

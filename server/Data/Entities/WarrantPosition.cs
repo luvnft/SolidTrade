@@ -14,6 +14,6 @@ namespace SolidTradeServer.Data.Entities
         public string Isin { get; set; }
         
         public decimal BuyInPrice { get; set; }
-        public int NumberOfShares { get; set; }
+        public decimal NumberOfShares { get; set; }
     }
 }
