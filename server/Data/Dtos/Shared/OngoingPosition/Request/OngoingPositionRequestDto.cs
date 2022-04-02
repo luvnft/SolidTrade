@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using SolidTradeServer.Data.Models.Annotations;
 using SolidTradeServer.Data.Models.Enums;
+using static SolidTradeServer.Common.Constants;
 using static SolidTradeServer.Common.ErrorMessages;
 
 namespace SolidTradeServer.Data.Dtos.Shared.OngoingPosition.Request
@@ -22,7 +23,7 @@ namespace SolidTradeServer.Data.Dtos.Shared.OngoingPosition.Request
         [IsFutureDate(ErrorMessage = GoodUntilErrorMessage)]
         public DateTimeOffset? GoodUntil { get; set; }
         
-        [Range(1, int.MaxValue)]
+        [Range(MinimumNumberOfShares, int.MaxValue)]
         public decimal NumberOfShares { get; set; }
     }
 }

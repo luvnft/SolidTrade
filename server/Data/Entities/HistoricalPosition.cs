@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SolidTradeServer.Data.Entities.Common;
 using SolidTradeServer.Data.Models.Enums;
+using static SolidTradeServer.Common.Constants;
 
 namespace SolidTradeServer.Data.Entities
 {
@@ -21,6 +22,7 @@ namespace SolidTradeServer.Data.Entities
         public decimal Performance { get; set; }
         
         [Required]
+        [Range(MinimumNumberOfShares, int.MaxValue)]
         public decimal NumberOfShares { get; set; }
         
         [Required]
