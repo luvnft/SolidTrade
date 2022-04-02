@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using SolidTradeServer.Data.Models.Annotations;
 using SolidTradeServer.Data.Models.Annotations.Group;
-using static SolidTradeServer.Common.Shared;
+using static SolidTradeServer.Common.Constants;
 
 namespace SolidTradeServer.Data.Dtos.User.Request
 {

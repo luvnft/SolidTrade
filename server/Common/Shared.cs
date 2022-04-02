@@ -23,8 +23,6 @@ namespace SolidTradeServer.Common
         
         public const string LogMessageTemplate = "{@LogParameters}";
 
-        // Size limit 10mb
-        public const int MaxUploadFileSize = 10000000; 
         public static string UidHeader => "_Uid";
 
         public static string GetTradeRepublicProductInfoRequestString(string isin)
