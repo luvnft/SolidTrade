@@ -32,12 +32,26 @@ class SettingsPage extends StatelessWidget with STWidget {
     await Util.openDialog(
       context,
       title,
-      message: response.isSuccessful ? "Account deleted successfully" : response.error!.userFriendlyMessage,
+      message: response.isSuccessful ? "Account deleted successfully.\nPress okay to continue." : response.error!.userFriendlyMessage,
+      closeText: "Okay",
     );
 
     if (response.isSuccessful) {
       myAppState.restart();
     }
+  }
+
+  Future<void> handleClickSignOut(BuildContext context) async {
+    await UtilUserService.signOut();
+
+    await Util.openDialog(
+      context,
+      "Sign out was successful",
+      message: "Sign out was successful.\nPress okay to continue.",
+      closeText: "Okay",
+    );
+
+    myAppState.restart();
   }
 
   @override
@@ -78,6 +92,11 @@ class SettingsPage extends StatelessWidget with STWidget {
                 child: Text(translations.settings.changeLanguage),
               ),
               const Spacer(),
+              TextButton(
+                onPressed: () => handleClickSignOut(context),
+                child: const Text("Sign out", style: TextStyle(color: Colors.red)),
+              ),
+              const SizedBox(height: 10),
               TextButton(
                 onPressed: () => handleClickDeleteAccount(context),
                 child: const Text("Delete account", style: TextStyle(color: Colors.red)),

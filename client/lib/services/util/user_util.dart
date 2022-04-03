@@ -8,9 +8,7 @@ import 'package:solidtrade/services/util/debug/log.dart';
 class UtilUserService {
   static Future<User?> signInWithGoogle({bool disconnectFirst = true}) async {
     if (disconnectFirst) {
-      try {
-        await GoogleSignIn().disconnect();
-      } catch (e) {}
+      await _tryGoogleSigninDisconnect();
     }
 
     // Trigger the authentication flow
@@ -38,6 +36,19 @@ class UtilUserService {
     return FirebaseAuth.instance.currentUser;
   }
 
+  static Future<void> signOut() async {
+    await _tryGoogleSigninDisconnect();
+    FirebaseAuth.instance.signOut();
+    GoogleSignIn().signOut();
+  }
+
+  static Future<void> _tryGoogleSigninDisconnect() async {
+    try {
+      await GoogleSignIn().disconnect();
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
   static Future<RequestResponse<DeleteUserResponse>> deleteAccount(UserService userService) async {
     var response = await userService.deleteUser();
 
@@ -45,9 +56,7 @@ class UtilUserService {
       return response;
     }
 
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().disconnect();
-    await GoogleSignIn().signOut();
+    await signOut();
     return response;
   }
 }
