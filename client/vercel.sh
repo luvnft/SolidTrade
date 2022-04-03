@@ -1,15 +1,9 @@
 #!/bin/sh
+mkdir ./flutter-sdk && cd ./flutter-sdk
 
-sudo yum install xz
-
-# Load flutter sdk
-curl https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.10.3-stable.tar.xz --output flutter-sdk.tar.xz
-
-ls
-
-tar -xf ./flutter-sdk.tar.xz
-
-ls ./flutter/bin
+# Add Flutter
+git clone -b flutter-2.8-candidate.20 https://github.com/flutter/flutter.git
+./flutter/bin/flutter --version
 
 # Add flutter to path
 export PATH="$PATH:`pwd`/flutter/bin"
