@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_request_model.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_request_response.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
@@ -124,7 +125,7 @@ class TrApiDataRequestService {
         onResponseCallback: (response) {
           unsub(id);
           if (response.startsWith("{\"errors\"")) {
-            completer.complete(RequestResponse<T>.failedWithUserFriendlyMessage("Something went wrong. Please try again later."));
+            completer.complete(RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
             return;
           }
 
@@ -150,7 +151,7 @@ class TrApiDataRequestService {
         id: id,
         onResponseCallback: (response) {
           if (response.startsWith("{\"errors\"")) {
-            var errorResult = RequestResponse<T>.failedWithUserFriendlyMessage("Something went wrong. Please try again later.");
+            var errorResult = RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage);
             subject.add(TrRequestResponse(id, errorResult));
             return;
           }
