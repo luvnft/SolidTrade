@@ -5,7 +5,7 @@ curl https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/
 
 ls
 
-tar -xf flutter-sdk.tar.xz
+tar -xf ./flutter-sdk.tar.xz
 
 ls ./flutter/bin
 
