@@ -84,20 +84,23 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Card(
-                    margin: EdgeInsets.zero,
+                  Container(
                     color: colors.softBackground,
-                    elevation: 0,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 20),
-                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), child: const Text("Overview"), style: buttonStyle(0))),
-                        const SizedBox(width: 10),
-                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), child: const Text("Open positions"), style: buttonStyle(1))),
-                        const SizedBox(width: 10),
-                        SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), child: const Text("Closed positions"), style: buttonStyle(2))),
-                        const SizedBox(height: 70),
-                      ],
+                    child: Card(
+                      color: colors.softBackground,
+                      margin: EdgeInsets.zero,
+                      elevation: 0,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 20),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), child: const Text("Overview"), style: buttonStyle(0))),
+                          const SizedBox(width: 10),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), child: const Text("Open positions"), style: buttonStyle(1))),
+                          const SizedBox(width: 10),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), child: const Text("Closed positions"), style: buttonStyle(2))),
+                          const SizedBox(height: 70),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
