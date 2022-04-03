@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Load flutter sdk
-wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.10.3-stable.tar.xz -O flutter-sdk.tar.xz
+curl https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.10.3-stable.tar.xz --output flutter-sdk.tar.xz
 
 tar xf flutter-sdk.tar.xz
 
