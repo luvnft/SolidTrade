@@ -14,7 +14,7 @@ class OutstandingOrderModel implements IBaseEntity {
 
   final String isin;
   final double price;
-  final int numberOfShares;
+  final double numberOfShares;
   final DateTime goodUntil;
   final EnterOrExitPositionType type;
 

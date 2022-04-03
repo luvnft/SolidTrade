@@ -10,7 +10,7 @@ class KnockoutPosition implements IBaseEntity {
 
   final String isin;
   final double buyInPrice;
-  final int numberOfShares;
+  final double numberOfShares;
 
   const KnockoutPosition({
     required this.id,

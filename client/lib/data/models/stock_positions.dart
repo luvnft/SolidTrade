@@ -10,7 +10,7 @@ class StockPosition implements IBaseEntity {
 
   final String isin;
   final double buyInPrice;
-  final int numberOfShares;
+  final double numberOfShares;
 
   const StockPosition({
     required this.id,

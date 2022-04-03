@@ -8,7 +8,7 @@ class WarrantPosition {
 
   final String isin;
   final double buyInPrice;
-  final int numberOfShares;
+  final double numberOfShares;
 
   const WarrantPosition({
     required this.id,

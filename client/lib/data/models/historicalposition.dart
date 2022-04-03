@@ -14,7 +14,7 @@ class HistoricalPosition implements IBaseEntity {
   final String isin;
   final double buyInPrice;
   final double performance;
-  final int numberOfShares;
+  final double numberOfShares;
   final BuyOrSell buyOrSell;
   final PositionType positionType;
 
@@ -44,7 +44,7 @@ class HistoricalPosition implements IBaseEntity {
     );
   }
 
-  factory HistoricalPosition.copy(HistoricalPosition hp, int numberOfShares) {
+  factory HistoricalPosition.copy(HistoricalPosition hp, double numberOfShares) {
     return HistoricalPosition(
       id: hp.id,
       buyInPrice: hp.buyInPrice,
