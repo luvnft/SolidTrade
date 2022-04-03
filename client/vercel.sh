@@ -1,8 +1,11 @@
 #!/bin/sh
-mkdir ./flutter-sdk && cd ./flutter-sdk
 
-# Add Flutter
-git clone -b flutter-2.8-candidate.20 https://github.com/flutter/flutter.git
+# Load flutter sdk
+wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.10.3-stable.tar.xz -O flutter-sdk.tar.xz
+
+tar xf flutter-sdk.tar.xz
+
+ls ./flutter/bin
 
 # Add flutter to path
 export PATH="$PATH:`pwd`/flutter/bin"
