@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
@@ -30,20 +29,20 @@ bool hadFatalException = false;
 Future<void> commonMain(Environment environment) async {
   await Startup.initializeApp();
 
-  registerFlutterErrorHandler();
+  registerFlutterErrorHandler(environment);
 
   runApp(MyApp(navigatorKey: navigatorKey));
 }
 
-void registerFlutterErrorHandler() {
-  if (kDebugMode) {
-    return;
-  }
-
+void registerFlutterErrorHandler(Environment environment) {
   FlutterError.onError = (details) {
     // We can exclude image errors, because these are already being handled.
     if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
       return;
+    }
+
+    if (environment == Environment.development) {
+      throw details;
     }
 
     if (hadFatalException) return;
