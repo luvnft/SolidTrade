@@ -34,7 +34,17 @@ class RequestResponse<T> {
         result: null);
   }
 
-  factory RequestResponse.failedDueValidationError() {
+  factory RequestResponse.failedDueValidationError({Map<String, dynamic>? data}) {
+    if (data != null && data.containsKey("userFriendlyMessage")) {
+      return RequestResponse(
+        error: ErrorModel.fromJson({
+          "userFriendlyMessage": data["userFriendlyMessage"],
+        }),
+        isSuccessful: false,
+        result: null,
+      );
+    }
+
     var provider = GetIt.instance.get<ConfigurationProvider>();
 
     return RequestResponse(

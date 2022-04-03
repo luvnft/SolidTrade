@@ -166,7 +166,11 @@ abstract class IBaseRequestService {
 
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
-        return RequestResponse.failedDueValidationError();
+        try {
+          return RequestResponse.failedDueValidationError(data: jsonDecode(response.body));
+        } catch (_) {
+          return RequestResponse.failedDueValidationError();
+        }
       } else if (response.statusCode == 502) {
         RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
       } else {
