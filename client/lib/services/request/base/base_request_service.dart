@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 
@@ -15,6 +16,26 @@ abstract class IBaseRequestService {
   static final String baseUrl = ConfigReader.getBaseUrl();
 
   Future<RequestResponse<http.Response>> makeRequest(
+    HttpMethod method,
+    String endpoint, {
+    Map<String, String> headers = const {
+      "Content-Type": "application/json"
+    },
+    Object? body,
+    Map<String, String>? queryParameters,
+    bool selfHandleErrorCode = true,
+  }) {
+    return _makeRequest(
+      method,
+      endpoint,
+      headers: headers,
+      body: body,
+      queryParameters: queryParameters,
+      selfHandleErrorCode: selfHandleErrorCode,
+    ).catchError((_) => Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage)));
+  }
+
+  Future<RequestResponse<http.Response>> _makeRequest(
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
@@ -72,6 +93,28 @@ abstract class IBaseRequestService {
   }
 
   Future<RequestResponse<http.Response>> makeRequestWithMultipartFile(
+    HttpMethod method,
+    String endpoint, {
+    Map<String, String> headers = const {
+      "Content-Type": "application/json"
+    },
+    Map<String, String> fields = const {},
+    Map<String, List<int>> files = const {},
+    Map<String, String>? queryParameters,
+    bool selfHandleErrorCode = true,
+  }) {
+    return _makeRequestWithMultipartFile(
+      method,
+      endpoint,
+      headers: headers,
+      fields: fields,
+      files: files,
+      queryParameters: queryParameters,
+      selfHandleErrorCode: selfHandleErrorCode,
+    ).catchError((_) => Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage)));
+  }
+
+  Future<RequestResponse<http.Response>> _makeRequestWithMultipartFile(
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {

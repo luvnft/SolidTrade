@@ -13,6 +13,9 @@ class Constants {
   static const endpointUser = "/users/";
   static const endpointWarrant = "/warrants/";
 
+  static const genericErrorMessage = "Something went wrong. Please try again later.";
+  static const notLoggedInMessage = "User session expired.\nPlease login.";
+
   static const thousand = 1000;
   static const million = 1000000;
   static const billion = 1000000000;

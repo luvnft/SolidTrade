@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:rxdart/subjects.dart';
+import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/common/delete_user_response.dart';
 import 'package:solidtrade/data/common/error/request_response.dart';
 import 'package:solidtrade/data/models/user.dart';
@@ -39,6 +40,20 @@ class UserService extends IService<RequestResponse<User>?> {
     return result;
   }
 
+  Future<RequestResponse<User>> fetchUserCurrentUser() async {
+    var uid = fire.FirebaseAuth.instance.currentUser?.uid;
+
+    RequestResponse<User> result;
+    if (uid != null) {
+      result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
+    } else {
+      result = RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
+    }
+
+    behaviorSubject.add(result);
+    return result;
+  }
+
   void updateUser(User user) {
     behaviorSubject.add(RequestResponse.successful(user));
   }
@@ -47,7 +62,7 @@ class UserService extends IService<RequestResponse<User>?> {
     final token = await getFirebaseUserAuthToken();
 
     if (token == null) {
-      return RequestResponse.failedWithUserFriendlyMessage("User session expired.\nPlease reopen the app.");
+      return RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
     }
 
     return RequestResponse.successful({

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/st_logo.dart';
 import 'package:solidtrade/main/main_common.dart';
+import 'package:solidtrade/pages/home_page.dart';
 import 'package:solidtrade/pages/welcome_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
@@ -48,23 +49,23 @@ class _SplashState extends State<Splash> with STWidget {
 
     await Firebase.initializeApp();
 
-    await _fadeAnimationFuture;
-    // var userRequest = await userService.fetchUser();
-    // if (userRequest.isSuccessful) {
-    //   await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
-    //   await portfolioService.fetchPortfolioByUserId();
+    var userRequest = await userService.fetchUserCurrentUser();
+    if (userRequest.isSuccessful) {
+      await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
+      await portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
 
-    //   Log.d("fetched user info successfully");
+      Log.d("Fetched user info successfully");
 
-    //   await delay;
+      await _fadeAnimationFuture;
+      await delay;
 
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-    //   return;
-    // }
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      return;
+    }
 
     delay.ignore();
-    Log.w("User request failed.");
-    // Log.w(userRequest.error!.userFriendlyMessage);
+    _fadeAnimationFuture.ignore();
+    Log.w("User login failed. Proceeding to login");
 
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
   }
