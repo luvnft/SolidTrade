@@ -1,8 +1,6 @@
 #!/bin/sh
 
-cat /etc/os-release
-
-sudo apt-get install xz-utils
+sudo yum install xz
 
 # Load flutter sdk
 curl https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.10.3-stable.tar.xz --output flutter-sdk.tar.xz
