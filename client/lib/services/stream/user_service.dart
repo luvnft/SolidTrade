@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart' as fire;
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_messaging/firebase_messaging.dart' as msg;
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/common/delete_user_response.dart';
@@ -41,7 +42,7 @@ class UserService extends IService<RequestResponse<User>?> {
   }
 
   Future<RequestResponse<User>> fetchUserCurrentUser() async {
-    var uid = fire.FirebaseAuth.instance.currentUser?.uid;
+    var uid = auth.FirebaseAuth.instance.currentUser?.uid;
 
     RequestResponse<User> result;
     if (uid != null) {
@@ -70,6 +71,18 @@ class UserService extends IService<RequestResponse<User>?> {
     });
   }
 
+  Future<RequestResponse<Map<String, String>>> getUserDeviceHeader() async {
+    final token = await getUserMessagingDeviceToken();
+
+    if (token == null) {
+      return RequestResponse.failedWithUserFriendlyMessage("Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.");
+    }
+
+    return RequestResponse.successful({
+      "DeviceToken": token,
+    });
+  }
+
   Future<RequestResponse<DeleteUserResponse>> deleteUser() async {
     var response = await DataRequestService.userDataRequestService.deleteUser();
 
@@ -84,5 +97,6 @@ class UserService extends IService<RequestResponse<User>?> {
     return response;
   }
 
-  Future<fire.IdTokenResult>? getFirebaseUserAuthToken() => fire.FirebaseAuth.instance.currentUser?.getIdTokenResult();
+  Future<auth.IdTokenResult>? getFirebaseUserAuthToken() => auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
+  Future<String?> getUserMessagingDeviceToken() => msg.FirebaseMessaging.instance.getToken();
 }

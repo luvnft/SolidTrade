@@ -55,8 +55,15 @@ abstract class IBaseRequestService {
       return RequestResponse.inheritErrorResponse(auth);
     }
 
+    var deviceToken = await userService.getUserDeviceHeader();
+
+    if (!deviceToken.isSuccessful && deviceToken.result == null) {
+      return RequestResponse.inheritErrorResponse(deviceToken);
+    }
+
     http.Response response;
     Map<String, String> requestHeaders = {
+      ...?deviceToken.result,
       ...?auth.result,
       ...headers,
     };
@@ -135,8 +142,15 @@ abstract class IBaseRequestService {
       return RequestResponse.inheritErrorResponse(auth);
     }
 
+    var deviceToken = await userService.getUserDeviceHeader();
+
+    if (!deviceToken.isSuccessful && deviceToken.result == null) {
+      return RequestResponse.inheritErrorResponse(deviceToken);
+    }
+
     http.Response response;
     Map<String, String> requestHeaders = {
+      ...?deviceToken.result,
       ...?auth.result,
       ...headers,
     };

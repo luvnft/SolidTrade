@@ -12,14 +12,21 @@ namespace SolidTradeServer.Controllers
     public class PortfolioController : Controller
     {
         private readonly PortfolioService _portfolioService;
+        private readonly NotificationService _notificationService;
 
-        public PortfolioController(PortfolioService portfolioService)
+        public PortfolioController(PortfolioService portfolioService, NotificationService notificationService)
         {
             _portfolioService = portfolioService;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetPortfolioRequestDto dto)
-            => MatchResult(await _portfolioService.GetPortfolio(dto, Request.Headers[Shared.UidHeader]));
+        {
+            // Temporary send notification test
+            await _notificationService.SendNotification(-1, Request.Headers["DeviceToken"], "Test", "Message");
+            
+            return MatchResult(await _portfolioService.GetPortfolio(dto, Request.Headers[Shared.UidHeader]));
+        }
     }
 }

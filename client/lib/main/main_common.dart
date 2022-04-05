@@ -14,6 +14,7 @@ import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/enums/environment.dart';
 import 'package:solidtrade/app.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/services/stream/messaging_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
@@ -87,6 +88,7 @@ class Startup {
     getItService.registerSingleton<SharedPreferences>(prefs);
     getItService.registerSingleton<UserService>(UserService());
     getItService.registerSingleton<PortfolioService>(PortfolioService());
+    getItService.registerSingleton<MessagingService>(MessagingService());
     getItService.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
     getItService.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
     getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
