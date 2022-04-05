@@ -26,7 +26,7 @@ class MyAppState extends State<MyApp> {
   Future<void> restart() async {
     await DataRequestService.trApiDataRequestService.disconnect();
 
-    Startup.initializeApp();
+    Startup.initializeApp(environment);
     setState(() {
       widget.navigatorKey = GlobalKey<NavigatorState>();
       navigatorKey = widget.navigatorKey;

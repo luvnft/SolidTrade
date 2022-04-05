@@ -29,8 +29,7 @@ late MyAppState myAppState;
 bool hadFatalException = false;
 
 Future<void> commonMain(Environment env) async {
-  await Startup.initializeApp();
-  environment = env;
+  await Startup.initializeApp(env);
 
   registerFlutterErrorHandler(env);
 
@@ -65,7 +64,8 @@ class Startup {
   static bool languageHasToBeInitialized = false;
   static bool colorThemeHasToBeInitialized = false;
 
-  static Future<void> initializeApp() async {
+  static Future<void> initializeApp(Environment env) async {
+    environment = env;
     colorThemeHasToBeInitialized = false;
     languageHasToBeInitialized = false;
     hadFatalException = false;
