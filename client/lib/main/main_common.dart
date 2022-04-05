@@ -24,13 +24,15 @@ import 'package:solidtrade/services/stream/user_service.dart';
 import '../mapper.g.dart' as mapper;
 
 var navigatorKey = GlobalKey<NavigatorState>();
+late Environment environment;
 late MyAppState myAppState;
 bool hadFatalException = false;
 
-Future<void> commonMain(Environment environment) async {
+Future<void> commonMain(Environment env) async {
   await Startup.initializeApp();
+  environment = env;
 
-  registerFlutterErrorHandler(environment);
+  registerFlutterErrorHandler(env);
 
   runApp(MyApp(navigatorKey: navigatorKey));
 }

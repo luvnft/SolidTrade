@@ -1,25 +1,29 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:solidtrade/data/enums/environment.dart';
+import 'package:solidtrade/main/main_common.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class Log {
-  static final logger = Logger(printer: SimpleLogPrinter());
+  static final logger = Logger(printer: SimpleLogPrinter(), filter: ProductionFilter());
+
+  static bool get shouldLog => environment != Environment.production;
 
   static void d(Object? value) {
-    if (kDebugMode) logger.i(value);
+    if (shouldLog) logger.i(value);
   }
 
   static void i(Object? value) {
-    if (kDebugMode) logger.i(value);
+    if (shouldLog) logger.i(value);
   }
 
   static void w(Object? value) {
-    if (kDebugMode) logger.w(value);
+    if (shouldLog) logger.w(value);
   }
 
   static void f(Object? value) {
-    if (kDebugMode) logger.e(value);
+    if (shouldLog) logger.e(value);
   }
 }
 
