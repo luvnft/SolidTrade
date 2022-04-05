@@ -32,7 +32,7 @@ abstract class IBaseRequestService {
       body: body,
       queryParameters: queryParameters,
       selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((_) => Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage)));
+    ).catchError((error) => handleRequestError(error));
   }
 
   Future<RequestResponse<http.Response>> _makeRequest(
@@ -118,7 +118,7 @@ abstract class IBaseRequestService {
       files: files,
       queryParameters: queryParameters,
       selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((_) => Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage)));
+    ).catchError((error) => handleRequestError(error));
   }
 
   Future<RequestResponse<http.Response>> _makeRequestWithMultipartFile(
@@ -193,6 +193,11 @@ abstract class IBaseRequestService {
     }
 
     return RequestResponse.successful(response);
+  }
+
+  Future<RequestResponse<http.Response>> handleRequestError(dynamic error) {
+    Log.f(error);
+    return Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
   }
 }
 
