@@ -22,6 +22,9 @@ echo $App_Config | base64 -di > ./assets/config/app_config.json
 # Write out firebase credentials as js file
 echo $Firebase_Credentials | base64 -di > ./web/credentials.js
 
+# Write out firebase messaging credentials as js file
+echo $Firebase_Messaging_Credentials | base64 -di > ./web/firebase-messaging-sw.js
+
 # Install dependencies
 flutter pub get
 
