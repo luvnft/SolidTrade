@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
+  "description": "A platform which allows paper trading Stocks, ETFs, Crypto and Derivatives. And also allows to view and compare your portfolio with friends and others!",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [

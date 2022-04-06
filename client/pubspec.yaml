@@ -1,5 +1,7 @@
 name: solidtrade
-description: A new Flutter project.
+description:
+  A platform which allows paper trading Stocks, ETFs, Crypto and Derivatives.
+  And also allows to view and compare your portfolio with friends and others!
 
 publish_to: "none"
 
