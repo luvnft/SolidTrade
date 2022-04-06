@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -76,6 +77,31 @@ class Util {
         );
       },
     );
+  }
+
+  static Future<bool> requestNotificationPermissionsWithUserFriendlyPopup(BuildContext context) async {
+    var currentSettings = await FirebaseMessaging.instance.getNotificationSettings();
+
+    if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
+      return true;
+    }
+
+    // TODO: If we plan to add notifications that will appear to the user. This message must be changed.
+    // Because saying "notifications will NOT appear to the user." doesn't apply then anymore and therefor the message must be changed.
+    await openDialog(
+      context,
+      "Allow notifications",
+      message: "A popup will appear and ask permissions to send notifications. This is necessary for the server communication. Don't worry notifications will NOT appear to the user.",
+    );
+
+    var settings = await FirebaseMessaging.instance.requestPermission();
+    final isGranted = settings.authorizationStatus == AuthorizationStatus.authorized;
+
+    if (!isGranted) {
+      await openDialog(context, "Oh snap", message: "Seems like notifications has been denied for solidtrade. Please open your browser notifications settings and allow notifications for solidtrade.");
+    }
+
+    return isGranted;
   }
 
   static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {

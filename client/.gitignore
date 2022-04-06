@@ -49,6 +49,7 @@ app.*.map.json
 /assets/config
 google-services.json
 credentials.js
+firebase-messaging-sw.js
 
 # Generated files
 mapper.g.dart

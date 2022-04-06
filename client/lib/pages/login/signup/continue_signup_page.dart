@@ -70,6 +70,12 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   }
 
   Future<void> _handleClickCreateAccount() async {
+    var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
+
+    if (!successful) {
+      return;
+    }
+
     final closeDialog = Util.showLoadingDialog(context);
 
     String name = _nameController.text;

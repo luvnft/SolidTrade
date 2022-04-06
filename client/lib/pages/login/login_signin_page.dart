@@ -20,6 +20,12 @@ class LoginSignIn extends StatelessWidget with STWidget {
   final userService = GetIt.instance.get<UserService>();
 
   Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
+    var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
+
+    if (!successful) {
+      return;
+    }
+
     var user = await UtilUserService.signInWithGoogle();
 
     if (user == null) {
