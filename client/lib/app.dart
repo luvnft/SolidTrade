@@ -44,7 +44,7 @@ class MyAppState extends State<MyApp> {
         final colors = configurationProvider.themeProvider.theme;
         return MaterialApp(
           navigatorKey: widget.navigatorKey,
-          title: 'Solidtrade',
+          title: 'Solidtrade™',
           theme: ThemeData(
             backgroundColor: colors.background,
             scaffoldBackgroundColor: colors.background,
