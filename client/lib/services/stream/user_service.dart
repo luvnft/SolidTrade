@@ -11,7 +11,10 @@ import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 
 class UserService extends IService<RequestResponse<User>?> {
-  UserService() : super(BehaviorSubject.seeded(null));
+  UserService() : super(BehaviorSubject.seeded(null)) {
+    // This resolves the common problem using firebase web. See here for more: https://github.com/firebase/flutterfire/issues/5964
+    auth.FirebaseAuth.instance.currentUser;
+  }
 
   Future<RequestResponse<User>> createUser(
     String displayName,
