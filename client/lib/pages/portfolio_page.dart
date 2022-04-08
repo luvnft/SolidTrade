@@ -2,12 +2,10 @@ import 'package:flutter/rendering.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_overview_page.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_positions_page.dart';
-import 'package:solidtrade/pages/settings_page.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class PortfolioPage extends StatefulWidget {
   const PortfolioPage({Key? key}) : super(key: key);
@@ -28,14 +26,6 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
     PortfolioOverviewPage(),
   ];
   int selectedIndex = 0;
-
-  void _onClickOpenSettings() {
-    Util.pushToRoute(context, SettingsPage());
-  }
-
-  void _onClickFetchForUpdate() {
-    historicalPositionService.fetchHistoricalPositions(11003);
-  }
 
   void _changeIndex(int index) {
     setState(() {

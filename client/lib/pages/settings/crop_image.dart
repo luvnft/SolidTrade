@@ -104,10 +104,11 @@ class _CropperState extends State<Cropper> {
             child: FutureBuilder(
               future: _decoded.future,
               builder: (ctx, snap) {
-                if (!snap.hasData)
+                if (!snap.hasData) {
                   return Center(
                     child: Text('Loading...'),
                   );
+                }
                 return LayoutBuilder(
                   builder: (ctx, cstr) {
                     if (init) {
@@ -123,14 +124,16 @@ class _CropperState extends State<Cropper> {
                       onPanUpdate: (pan) {
                         double dy;
                         double dx;
-                        if (pan.delta.dy > 0)
+                        if (pan.delta.dy > 0) {
                           dy = min(pan.delta.dy, pYa - offset.dy);
-                        else
+                        } else {
                           dy = max(pan.delta.dy, -pYa - offset.dy);
-                        if (pan.delta.dx > 0)
+                        }
+                        if (pan.delta.dx > 0) {
                           dx = min(pan.delta.dx, pXa - offset.dx);
-                        else
+                        } else {
                           dx = max(pan.delta.dx, -pXa - offset.dx);
+                        }
                         setState(() => offset += Offset(dx, dy));
                       },
                       child: Stack(
