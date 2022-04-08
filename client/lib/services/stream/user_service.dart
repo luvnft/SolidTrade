@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart' as msg;
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/common/delete_user_response.dart';
@@ -13,7 +14,9 @@ import 'package:solidtrade/services/stream/base/base_service.dart';
 class UserService extends IService<RequestResponse<User>?> {
   UserService() : super(BehaviorSubject.seeded(null)) {
     // This resolves the common problem using firebase web. See here for more: https://github.com/firebase/flutterfire/issues/5964
-    auth.FirebaseAuth.instance.currentUser;
+    if (kIsWeb) {
+      auth.FirebaseAuth.instance.currentUser;
+    }
   }
 
   Future<RequestResponse<User>> createUser(
