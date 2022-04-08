@@ -1,4 +1,6 @@
-class WarrantPosition {
+import 'package:solidtrade/data/models/base_entity.dart';
+
+class WarrantPosition implements IBaseEntity {
   @override
   final int id;
   @override
