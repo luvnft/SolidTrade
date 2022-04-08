@@ -43,7 +43,9 @@ void registerFlutterErrorHandler(Environment environment) {
       return;
     }
 
-    if (environment == Environment.development) {
+    if (environment != Environment.production) {
+      // ignore: avoid_print
+      print(details);
       throw details;
     }
 
