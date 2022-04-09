@@ -15,30 +15,30 @@ import 'base/transient_base_service.dart';
 class TrProductPriceService extends ITransientService<TrProductPrice> {
   TrProductPriceService() : super(BehaviorSubject.seeded(null));
 
-  void requestTrProductPrice(String isinWithExtention) {
+  void requestTrProductPrice(String isinWithExtension) {
     StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription;
 
     subscription = DataRequestService.trApiDataRequestService
         .makeRequestAsync<TrProductPrice>(
-          Constants.getTrProductPriceRequestString(isinWithExtention),
+          Constants.getTrProductPriceRequestString(isinWithExtension),
         )
         .listen((event) => onEvent(event, subscription));
   }
 
-  Future<RequestResponse<TrProductInfo>> requestTrProductPriceByIsinWithoutExtention(String isinWithoutExtention) async {
-    var info = await GetIt.instance.get<TrProductInfoService>().requestTrProductInfo(isinWithoutExtention);
+  Future<RequestResponse<TrProductInfo>> requestTrProductPriceByIsinWithoutExtention(String isinWithoutExtension) async {
+    var info = await GetIt.instance.get<TrProductInfoService>().requestTrProductInfo(isinWithoutExtension);
 
     if (!info.isSuccessful) {
       return info;
     }
 
-    var isinWithExtention = "${info.result!.isin}.${info.result!.exchangeIds.first}";
+    var isinWithExtension = "${info.result!.isin}.${info.result!.exchangeIds.first}";
 
     StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription;
 
     subscription = DataRequestService.trApiDataRequestService
         .makeRequestAsync<TrProductPrice>(
-          Constants.getTrProductPriceRequestString(isinWithExtention),
+          Constants.getTrProductPriceRequestString(isinWithExtension),
         )
         .listen((event) => onEvent(event, subscription));
 
