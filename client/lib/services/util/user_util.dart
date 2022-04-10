@@ -14,8 +14,6 @@ class UtilUserService {
     // Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
 
-    Log.w(googleUser?.email);
-
     if (googleUser == null) {
       return null;
     }
@@ -28,8 +26,6 @@ class UtilUserService {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
-    Log.f(FirebaseAuth.instance.currentUser);
 
     await FirebaseAuth.instance.signInWithCredential(credential);
 

@@ -67,7 +67,6 @@ class ProductDetails extends StatelessWidget with STWidget {
 
     final derivativeInfo = productInfo.derivativeInfo!;
     final firstTradingDay = DateTime.parse(derivativeInfo.properties.firstTradingDay);
-    Log.d(firstTradingDay);
     final lastTradingDay = derivativeInfo.properties.lastTradingDay != null ? DateTime.parse(derivativeInfo.properties.lastTradingDay!) : null;
 
     final tradingTimes = productInfo.exchanges.first.tradingTimes;
