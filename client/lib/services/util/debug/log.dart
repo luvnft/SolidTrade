@@ -11,7 +11,7 @@ class Log {
   static bool get shouldLog => environment != Environment.production;
 
   static void d(Object? value) {
-    if (shouldLog) logger.i(value);
+    if (shouldLog) logger.d(value);
   }
 
   static void i(Object? value) {
