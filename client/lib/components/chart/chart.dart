@@ -1,81 +1,91 @@
-import 'dart:math';
-
-import 'package:dotted_line/dotted_line.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Chart extends StatefulWidget {
-  const Chart({Key? key, required this.chartDateRangeStream}) : super(key: key);
+  const Chart({
+    Key? key,
+    this.secondaryStreamData,
+    required this.primaryXAxis,
+    required this.primaryStreamData,
+  }) : super(key: key);
 
-  // TODO: Consume stream into chart.
-  final ChartDateRangeService chartDateRangeStream;
+  final Stream<List<MapEntry<dynamic, double>>>? secondaryStreamData;
+  final Stream<List<MapEntry<dynamic, double>>> primaryStreamData;
+  final ChartAxis primaryXAxis;
 
   @override
   State<Chart> createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> with STWidget {
-  final Random random = Random();
+  final List<MapEntry<dynamic, double>> _secondaryData = [];
+  final List<MapEntry<dynamic, double>> _data = [];
 
-  late TrackballBehavior _trackballBehavior;
+  final TrackballBehavior _trackballBehavior = TrackballBehavior(
+    enable: true,
+    tooltipSettings: const InteractiveTooltip(format: 'point.y€'),
+    tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
+  );
+
+  StreamSubscription? _dataSecondarySubscription;
+  StreamSubscription? _dataSubscription;
 
   @override
   void initState() {
-    _trackballBehavior = TrackballBehavior(
-      enable: true,
-      tooltipSettings: const InteractiveTooltip(format: 'point.y€'),
-      tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
-    );
     super.initState();
+    _dataSubscription = widget.primaryStreamData.listen(onDataStreamUpdate);
+    _dataSecondarySubscription = widget.secondaryStreamData?.listen(onSecondaryDataStreamUpdate);
   }
 
-  List<_SalesData> data = [
-    _SalesData('Jan', 35),
-    _SalesData('Feb', 28),
-    _SalesData('Mar', 34),
-    _SalesData('Apr', 32),
-    _SalesData('May', 40)
-  ];
+  void onDataStreamUpdate(List<MapEntry<dynamic, double>> event) {
+    _data.clear();
+    setState(() {
+      _data.addAll(event);
+    });
+  }
 
-  List<_SalesData> lastTradingDayCClose = [
-    _SalesData('Jan', 20),
-    _SalesData('May', 20)
-  ];
+  void onSecondaryDataStreamUpdate(List<MapEntry<dynamic, double>> event) {
+    _secondaryData.clear();
+    setState(() {
+      _secondaryData.addAll(event);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _dataSubscription?.cancel();
+    _dataSecondarySubscription?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
+      primaryXAxis: widget.primaryXAxis,
       trackballBehavior: _trackballBehavior,
-      annotations: <CartesianChartAnnotation>[
-        CartesianChartAnnotation(
-          widget: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
-              width: constraints.maxWidth,
-              child: DottedLine(dashColor: colors.foreground),
-            ),
-          ),
-          coordinateUnit: CoordinateUnit.point,
-          region: AnnotationRegion.plotArea,
-          x: (data.length - 1) * 0.503,
-          y: 12,
+      series: <ChartSeries<MapEntry<dynamic, double>, dynamic>>[
+        LineSeries<MapEntry<dynamic, double>, dynamic>(
+          dataSource: _data,
+          animationDuration: 500,
+          enableTooltip: true,
+          xValueMapper: (MapEntry<dynamic, double> x, _) => x.key,
+          yValueMapper: (MapEntry<dynamic, double> y, _) => y.value,
         ),
-      ],
-      series: <ChartSeries<_SalesData, String>>[
-        LineSeries<_SalesData, String>(
-          dataSource: data,
-          xValueMapper: (_SalesData sales, _) => sales.year,
-          yValueMapper: (_SalesData sales, _) => sales.sales,
+        LineSeries<MapEntry<dynamic, double>, dynamic>(
+          dataSource: _secondaryData,
+          animationDuration: 500,
+          enableTooltip: false,
+          color: Colors.grey,
+          dashArray: [
+            6,
+            8
+          ],
+          xValueMapper: (MapEntry<dynamic, double> x, _) => x.key,
+          yValueMapper: (MapEntry<dynamic, double> y, _) => y.value,
         ),
       ],
     );
   }
-}
-
-class _SalesData {
-  _SalesData(this.year, this.sales);
-
-  final String year;
-  final double sales;
 }

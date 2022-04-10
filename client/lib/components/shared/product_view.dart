@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -15,10 +17,13 @@ import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/services/stream/abstract/tr_continuous_product_prices_service.dart';
 import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
+import 'package:solidtrade/services/util/util.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProductView extends StatefulWidget {
@@ -39,13 +44,25 @@ class ProductView extends StatefulWidget {
 
 class _ProductViewState extends State<ProductView> with STWidget {
   final TrStockDetailsService stockDetailsService = GetIt.instance.get<TrStockDetailsService>();
-
   final PortfolioService portfolioService = GetIt.instance.get<PortfolioService>();
-
   final chartDateRangeStream = ChartDateRangeService();
+  final Completer<bool> _trContinuousPricesServiceIsInitialized = Completer();
+
+  late TrContinuousProductPricesService trContinuousPricesService;
 
   bool showProductInAppbar = false;
   bool widgetWasDisposed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    trContinuousPricesService = TrContinuousProductPricesService(
+      chartDateRangeStream.stream$,
+      widget.trProductPriceStream,
+      "${widget.productInfo.isin}.${widget.productInfo.exchangeIds.first}",
+    );
+    _trContinuousPricesServiceIsInitialized.complete(true);
+  }
 
   List<Widget> section(
     BuildContext context,
@@ -84,6 +101,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
 
   @override
   void dispose() {
+    trContinuousPricesService.onDispose();
     widgetWasDisposed = true;
     super.dispose();
   }
@@ -152,7 +170,23 @@ class _ProductViewState extends State<ProductView> with STWidget {
                         },
                         child: productAppBar,
                       ),
-                      SizedBox(width: double.infinity, height: chartHeight, child: Chart(chartDateRangeStream: chartDateRangeStream)),
+                      SizedBox(
+                        width: double.infinity,
+                        height: chartHeight,
+                        child: FutureBuilder<bool>(
+                          future: _trContinuousPricesServiceIsInitialized.future,
+                          builder: (context, snap) {
+                            if (!snap.hasData || !snap.data!) {
+                              return showLoadingSkeleton(BoxShape.rectangle);
+                            }
+                            return Chart(
+                              primaryXAxis: DateTimeAxis(),
+                              primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
+                              secondaryStreamData: trContinuousPricesService.secondaryStream$,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(height: 5),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 10),

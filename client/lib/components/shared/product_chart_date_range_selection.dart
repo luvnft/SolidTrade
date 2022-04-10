@@ -31,7 +31,7 @@ class ProductChartDateRangeSelection extends StatelessWidget with STWidget {
           ),
           onPressed: () => changeDateRange(ChartDateRangeView.values[index]),
           child: Text(
-            Util.chartDateRangeToString(translations, ChartDateRangeView.values[index]),
+            Util.chartDateRangeToTranslatedString(translations, ChartDateRangeView.values[index]),
           ),
         ),
       ));

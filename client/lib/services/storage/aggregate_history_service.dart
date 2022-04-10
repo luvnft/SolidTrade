@@ -6,7 +6,7 @@ import 'package:solidtrade/services/request/data_request_service.dart';
 class AggregateHistoryService {
   final Map<String, TrAggregateHistory> _histories = {};
 
-  Future<RequestResponse<TrAggregateHistory>> getTrAggregateHistory(String isinWithExtension, {String range = "1d"}) async {
+  Future<RequestResponse<TrAggregateHistory>> getTrAggregateHistory(String isinWithExtension, String range) async {
     final key = "$isinWithExtension-$range";
 
     if (_histories.containsKey(key)) {

@@ -30,7 +30,7 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
           children: [
             SizedBox(
               height: chartHeight,
-              child: Chart(chartDateRangeStream: chartDateRangeStream),
+              // child: Chart(chartDateRangeStream: chartDateRangeStream, chartData: []),
             ),
             STStreamBuilder<User>(
               stream: userService.stream$,

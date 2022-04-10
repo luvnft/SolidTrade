@@ -14,7 +14,7 @@ import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
 class Util {
-  static String chartDateRangeToString(ITranslation translation, ChartDateRangeView range) {
+  static String chartDateRangeToTranslatedString(ITranslation translation, ChartDateRangeView range) {
     switch (range) {
       case ChartDateRangeView.oneDay:
         return translation.chart.chartDateRangeView.oneDay;
@@ -28,6 +28,23 @@ class Util {
         return translation.chart.chartDateRangeView.oneYear;
       case ChartDateRangeView.fiveYear:
         return translation.chart.chartDateRangeView.fiveYear;
+    }
+  }
+
+  static String chartDateRangeToString(ChartDateRangeView range) {
+    switch (range) {
+      case ChartDateRangeView.oneDay:
+        return "1d";
+      case ChartDateRangeView.oneWeek:
+        return "5d";
+      case ChartDateRangeView.oneMonth:
+        return "1m";
+      case ChartDateRangeView.sixMonth:
+        return "6m";
+      case ChartDateRangeView.oneYear:
+        return "1y";
+      case ChartDateRangeView.fiveYear:
+        return "5y";
     }
   }
 
