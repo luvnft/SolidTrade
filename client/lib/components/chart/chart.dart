@@ -98,14 +98,14 @@ class _ChartState extends State<Chart> with STWidget {
           xValueMapper: (MapEntry<dynamic, double> x, _) => x.key,
           yValueMapper: (MapEntry<dynamic, double> y, _) => y.value,
         ),
-        LineSeries<MapEntry<dynamic, double>, dynamic>(
+        FastLineSeries<MapEntry<dynamic, double>, dynamic>(
           dataSource: _secondaryData,
           animationDuration: 500,
           enableTooltip: false,
           color: Colors.grey,
           dashArray: [
-            6,
-            8
+            3,
+            6
           ],
           xValueMapper: (MapEntry<dynamic, double> x, _) => x.key,
           yValueMapper: (MapEntry<dynamic, double> y, _) => y.value,

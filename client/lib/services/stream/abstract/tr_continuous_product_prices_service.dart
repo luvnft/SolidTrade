@@ -116,14 +116,11 @@ class TrContinuousProductPricesService implements Disposable {
 
     var preOpenPrice = _currentView == ChartDateRangeView.oneDay ? _preOpen! : _currentAggregateHistory.first.value;
 
-    var x1 = MapEntry(_currentAggregateHistory.first.key, preOpenPrice);
-    var x2 = MapEntry(DateTime.fromMillisecondsSinceEpoch(_expectedClosingTime), preOpenPrice);
+    var dataPoints = _currentAggregateHistory.map((e) => MapEntry(e.key, preOpenPrice)).toList();
+    dataPoints.add(MapEntry(DateTime.fromMillisecondsSinceEpoch(_expectedClosingTime), preOpenPrice));
 
     _secondaryBehaviorSubject.add(TrContinuousProductPricesEvent(
-      data: [
-        x1,
-        x2
-      ],
+      data: dataPoints,
       type: TrContinuousProductPricesEventType.fullUpdate,
     ));
   }
