@@ -16,8 +16,6 @@ class TrContinuousProductPricesService implements Disposable {
   final BehaviorSubject<TrContinuousProductPricesEvent> _behaviorSubject = BehaviorSubject.seeded(TrContinuousProductPricesEvent.empty());
   ValueStream<TrContinuousProductPricesEvent> get primaryProductPricesStream$ => _behaviorSubject.stream;
   ValueStream<TrContinuousProductPricesEvent> get secondaryStream$ => _secondaryBehaviorSubject.stream;
-  bool get currentHasValue => _behaviorSubject.hasValue;
-  // List<MapEntry<DateTime, double>> get _current => _behaviorSubject.value;
 
   final AggregateHistoryService _aggregateHistoryService = GetIt.instance.get<AggregateHistoryService>();
   final List<MapEntry<DateTime, double>> _currentAggregateHistory = [];
@@ -101,6 +99,8 @@ class TrContinuousProductPricesService implements Disposable {
 
       return result;
     }
+
+    if (!_behaviorSubject.hasListener) return;
 
     var result = await processNewTrProductPrice();
 
