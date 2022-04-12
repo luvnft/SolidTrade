@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/common/shared/tr/tr_continuous_product_prices_event.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Chart extends StatefulWidget {
@@ -11,8 +12,8 @@ class Chart extends StatefulWidget {
     required this.primaryStreamData,
   }) : super(key: key);
 
-  final Stream<List<MapEntry<dynamic, double>>>? secondaryStreamData;
-  final Stream<List<MapEntry<dynamic, double>>> primaryStreamData;
+  final Stream<TrContinuousProductPricesEvent>? secondaryStreamData;
+  final Stream<TrContinuousProductPricesEvent> primaryStreamData;
   final ChartAxis primaryXAxis;
 
   @override
@@ -39,17 +40,41 @@ class _ChartState extends State<Chart> with STWidget {
     _dataSecondarySubscription = widget.secondaryStreamData?.listen(onSecondaryDataStreamUpdate);
   }
 
-  void onDataStreamUpdate(List<MapEntry<dynamic, double>> event) {
-    _data.clear();
+  void onDataStreamUpdate(TrContinuousProductPricesEvent event) {
     setState(() {
-      _data.addAll(event);
+      switch (event.type) {
+        case TrContinuousProductPricesEventType.fullUpdate:
+          _data.clear();
+          _data.addAll(event.data);
+          break;
+        case TrContinuousProductPricesEventType.lastValueUpdate:
+          if (_data.isNotEmpty) {
+            _data.last = event.data.first;
+          }
+          break;
+        case TrContinuousProductPricesEventType.additionUpdate:
+          _data.addAll(event.data);
+          break;
+      }
     });
   }
 
-  void onSecondaryDataStreamUpdate(List<MapEntry<dynamic, double>> event) {
-    _secondaryData.clear();
+  void onSecondaryDataStreamUpdate(TrContinuousProductPricesEvent event) {
     setState(() {
-      _secondaryData.addAll(event);
+      switch (event.type) {
+        case TrContinuousProductPricesEventType.fullUpdate:
+          _secondaryData.clear();
+          _secondaryData.addAll(event.data);
+          break;
+        case TrContinuousProductPricesEventType.lastValueUpdate:
+          if (_secondaryData.isNotEmpty) {
+            _secondaryData.last = event.data.first;
+          }
+          break;
+        case TrContinuousProductPricesEventType.additionUpdate:
+          _secondaryData.addAll(event.data);
+          break;
+      }
     });
   }
 

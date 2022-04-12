@@ -16,6 +16,7 @@ import 'package:solidtrade/data/common/shared/position_type.dart';
 import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
+import 'package:solidtrade/data/enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/stream/abstract/tr_continuous_product_prices_service.dart';
 import 'package:solidtrade/services/stream/chart_date_range_service.dart';
@@ -48,6 +49,8 @@ class _ProductViewState extends State<ProductView> with STWidget {
   final chartDateRangeStream = ChartDateRangeService();
   final Completer<bool> _trContinuousPricesServiceIsInitialized = Completer();
 
+  late ChartAxis primaryXChartAxis;
+  late StreamSubscription<ChartDateRangeView> chartDateRangeStreamSubscription;
   late TrContinuousProductPricesService trContinuousPricesService;
 
   bool showProductInAppbar = false;
@@ -61,7 +64,16 @@ class _ProductViewState extends State<ProductView> with STWidget {
       widget.trProductPriceStream,
       "${widget.productInfo.isin}.${widget.productInfo.exchangeIds.first}",
     );
+
+    chartDateRangeStreamSubscription = chartDateRangeStream.stream$.listen(onChartRangeChange);
+    onChartRangeChange(chartDateRangeStream.current);
     _trContinuousPricesServiceIsInitialized.complete(true);
+  }
+
+  void onChartRangeChange(ChartDateRangeView range) {
+    setState(() {
+      primaryXChartAxis = range == ChartDateRangeView.oneDay ? DateTimeAxis() : DateTimeCategoryAxis();
+    });
   }
 
   List<Widget> section(
@@ -101,6 +113,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
 
   @override
   void dispose() {
+    chartDateRangeStreamSubscription.cancel();
     trContinuousPricesService.onDispose();
     widgetWasDisposed = true;
     super.dispose();
@@ -180,7 +193,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                               return showLoadingSkeleton(BoxShape.rectangle);
                             }
                             return Chart(
-                              primaryXAxis: DateTimeAxis(),
+                              primaryXAxis: primaryXChartAxis,
                               primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
                               secondaryStreamData: trContinuousPricesService.secondaryStream$,
                             );
