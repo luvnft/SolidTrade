@@ -39,7 +39,7 @@ namespace SolidTradeServer.Services
             var cachedValue = _cacheService.GetCachedValue<GetProductImageResponseDto>(GetIdentifier(dto.Isin, dto.ThemeColor!.Value));
 
             if (!cachedValue.Expired)
-                return cachedValue.Value;
+                return CorrectGetProductImageResponseDto(cachedValue.Value, dto.IsWeb);
             
             var productImageRelation = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(_database.ProductImageRelations, p =>
                 p.Isin == dto.Isin && p.ThemeColor == dto.ThemeColor);
@@ -48,8 +48,8 @@ namespace SolidTradeServer.Services
             {
                 var responseDto = _mapper.Map<GetProductImageResponseDto>(productImageRelation);
                 
-                _cacheService.SetCachedValue(GetIdentifier(dto.Isin, dto.ThemeColor!.Value), dto, int.MaxValue);
-                return responseDto;
+                _cacheService.SetCachedValue(GetIdentifier(dto.Isin, dto.ThemeColor!.Value), responseDto, int.MaxValue);
+                return CorrectGetProductImageResponseDto(responseDto, dto.IsWeb);
             }
 
             var result = await CreateProductImage(dto.Isin);
@@ -61,8 +61,12 @@ namespace SolidTradeServer.Services
 
             var (lightThemeResponse, darkThemeResponse) = result.AsT0;
             
-            _cacheService.SetCachedValue(GetIdentifier(lightThemeResponse.Isin, lightThemeResponse.ThemeColor), dto, int.MaxValue);
-            _cacheService.SetCachedValue(GetIdentifier(darkThemeResponse.Isin, darkThemeResponse.ThemeColor), dto, int.MaxValue);
+            _cacheService.SetCachedValue(
+                GetIdentifier(lightThemeResponse.Isin, lightThemeResponse.ThemeColor), 
+                _mapper.Map<GetProductImageResponseDto>(lightThemeResponse), int.MaxValue);
+            _cacheService.SetCachedValue(
+                GetIdentifier(darkThemeResponse.Isin, darkThemeResponse.ThemeColor), 
+                _mapper.Map<GetProductImageResponseDto>(darkThemeResponse), int.MaxValue);
 
             try
             {
@@ -73,7 +77,10 @@ namespace SolidTradeServer.Services
                 await _database.SaveChangesAsync();
                 _logger.Information("Save product image relation with isin {@Isin} was successful", dto.Isin);
                 
-                return _mapper.Map<GetProductImageResponseDto>(dto.ThemeColor == lightThemeResponse.ThemeColor ? lightThemeResponse : darkThemeResponse);
+                return CorrectGetProductImageResponseDto(
+                    _mapper.Map<GetProductImageResponseDto>(dto.ThemeColor == lightThemeResponse.ThemeColor
+                        ? lightThemeResponse
+                        : darkThemeResponse), dto.IsWeb);
             }
             catch (Exception e)
             {
@@ -138,6 +145,16 @@ namespace SolidTradeServer.Services
         }
 
         public static string GetIdentifier(string isin, ProductImageThemeColor themeColor)
-            => isin + "-" + themeColor;
+            => $"{isin}-{themeColor}";
+
+        private static GetProductImageResponseDto CorrectGetProductImageResponseDto(GetProductImageResponseDto dto,
+            bool isWeb)
+        {
+            if (isWeb)
+                return dto;
+            
+            dto.RedirectUrl = dto.RedirectUrl[..^3] + "svg";
+            return dto;
+        }
     }
 }

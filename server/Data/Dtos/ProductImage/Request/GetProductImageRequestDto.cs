@@ -10,5 +10,8 @@ namespace SolidTradeServer.Data.Dtos.ProductImage.Request
 
         [Required] 
         public ProductImageThemeColor? ThemeColor { get; set; }
+
+        [Required]
+        public bool IsWeb { get; set; }
     }
 }

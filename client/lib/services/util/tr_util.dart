@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/shared/name_for_large_number.dart';
@@ -40,7 +41,7 @@ class TrUtil {
       plusMinusProductNamePrefix: plusMinus,
       productTitle: productTitle,
       productSubtitle: productSubtitle,
-      imageUrl: _baseUrl + "/image?Isin=$imageIsin&ThemeColor=$colorMode",
+      imageUrl: _baseUrl + "/image?Isin=$imageIsin&ThemeColor=$colorMode&IsWeb=$kIsWeb",
       textColor: isUp ? _configurationProvider.themeProvider.theme.stockGreen : _configurationProvider.themeProvider.theme.stockRed,
     );
   }
