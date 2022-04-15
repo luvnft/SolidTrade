@@ -32,6 +32,7 @@ class _ChartState extends State<Chart> with STWidget {
 
   StreamSubscription? _dataSecondarySubscription;
   StreamSubscription? _dataSubscription;
+  bool isHoldingDownOnChart = false;
 
   @override
   void initState() {
@@ -41,40 +42,52 @@ class _ChartState extends State<Chart> with STWidget {
   }
 
   void onDataStreamUpdate(TrContinuousProductPricesEvent event) {
+    switch (event.type) {
+      case TrContinuousProductPricesEventType.fullUpdate:
+        _data.clear();
+        _data.addAll(event.data);
+        break;
+      case TrContinuousProductPricesEventType.lastValueUpdate:
+        if (_data.isNotEmpty) {
+          _data.last = event.data.first;
+        }
+        break;
+      case TrContinuousProductPricesEventType.additionUpdate:
+        _data.addAll(event.data);
+        break;
+    }
+
+    if (isHoldingDownOnChart) {
+      return;
+    }
+
     setState(() {
-      switch (event.type) {
-        case TrContinuousProductPricesEventType.fullUpdate:
-          _data.clear();
-          _data.addAll(event.data);
-          break;
-        case TrContinuousProductPricesEventType.lastValueUpdate:
-          if (_data.isNotEmpty) {
-            _data.last = event.data.first;
-          }
-          break;
-        case TrContinuousProductPricesEventType.additionUpdate:
-          _data.addAll(event.data);
-          break;
-      }
+      _data;
     });
   }
 
   void onSecondaryDataStreamUpdate(TrContinuousProductPricesEvent event) {
+    switch (event.type) {
+      case TrContinuousProductPricesEventType.fullUpdate:
+        _secondaryData.clear();
+        _secondaryData.addAll(event.data);
+        break;
+      case TrContinuousProductPricesEventType.lastValueUpdate:
+        if (_secondaryData.isNotEmpty) {
+          _secondaryData.last = event.data.first;
+        }
+        break;
+      case TrContinuousProductPricesEventType.additionUpdate:
+        _secondaryData.addAll(event.data);
+        break;
+    }
+
+    if (isHoldingDownOnChart) {
+      return;
+    }
+
     setState(() {
-      switch (event.type) {
-        case TrContinuousProductPricesEventType.fullUpdate:
-          _secondaryData.clear();
-          _secondaryData.addAll(event.data);
-          break;
-        case TrContinuousProductPricesEventType.lastValueUpdate:
-          if (_secondaryData.isNotEmpty) {
-            _secondaryData.last = event.data.first;
-          }
-          break;
-        case TrContinuousProductPricesEventType.additionUpdate:
-          _secondaryData.addAll(event.data);
-          break;
-      }
+      _secondaryData;
     });
   }
 
@@ -90,6 +103,8 @@ class _ChartState extends State<Chart> with STWidget {
     return SfCartesianChart(
       primaryXAxis: widget.primaryXAxis,
       trackballBehavior: _trackballBehavior,
+      onChartTouchInteractionDown: (_) => isHoldingDownOnChart = true,
+      onChartTouchInteractionUp: (_) => isHoldingDownOnChart = false,
       series: <ChartSeries<MapEntry<dynamic, double>, dynamic>>[
         LineSeries<MapEntry<dynamic, double>, dynamic>(
           dataSource: _data,
@@ -102,6 +117,7 @@ class _ChartState extends State<Chart> with STWidget {
           dataSource: _secondaryData,
           animationDuration: 500,
           enableTooltip: false,
+          isVisible: _secondaryData.isNotEmpty,
           color: Colors.grey,
           dashArray: [
             3,
