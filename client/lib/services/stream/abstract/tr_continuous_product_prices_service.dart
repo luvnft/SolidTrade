@@ -64,7 +64,7 @@ class TrContinuousProductPricesService implements Disposable {
     return TrContinuousProductPricesEvent(data: _currentAggregateHistory, type: TrContinuousProductPricesEventType.fullUpdate);
   }
 
-  Future<void> onNewTrProductPrice(RequestResponse<TrProductPrice>? response) async {
+  Future<void> onNewTrProductPrice(RequestResponse<TrProductPrice>? response, {int numberOfRetriesMade = 0}) async {
     Future<TrContinuousProductPricesEvent?> processNewTrProductPrice() async {
       if (response == null) {
         return null;
@@ -100,7 +100,13 @@ class TrContinuousProductPricesService implements Disposable {
       return result;
     }
 
-    if (!_behaviorSubject.hasListener) return;
+    if (!_behaviorSubject.hasListener) {
+      if (numberOfRetriesMade++ > 5) {
+        return;
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+      return onNewTrProductPrice(response, numberOfRetriesMade: numberOfRetriesMade);
+    }
 
     var result = await processNewTrProductPrice();
 
