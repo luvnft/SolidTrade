@@ -193,7 +193,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                               return showLoadingSkeleton(BoxShape.rectangle);
                             }
                             return Chart(
-                              primaryXAxis: primaryXChartAxis,
+                              dateTimeXAxis: primaryXChartAxis,
                               primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
                               secondaryStreamData: trContinuousPricesService.secondaryStream$,
                             );
