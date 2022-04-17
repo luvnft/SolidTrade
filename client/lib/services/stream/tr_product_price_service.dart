@@ -25,7 +25,7 @@ class TrProductPriceService extends ITransientService<TrProductPrice> {
         .listen((event) => onEvent(event, subscription));
   }
 
-  Future<RequestResponse<TrProductInfo>> requestTrProductPriceByIsinWithoutExtention(String isinWithoutExtension) async {
+  Future<RequestResponse<TrProductInfo>> requestTrProductPriceByIsinWithoutExtension(String isinWithoutExtension) async {
     var info = await GetIt.instance.get<TrProductInfoService>().requestTrProductInfo(isinWithoutExtension);
 
     if (!info.isSuccessful) {

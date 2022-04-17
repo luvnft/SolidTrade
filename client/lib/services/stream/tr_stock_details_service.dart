@@ -9,13 +9,13 @@ class TrStockDetailsService extends IService<RequestResponse<TrStockDetails>?> {
   TrStockDetailsService() : super(BehaviorSubject.seeded(null));
   final Map<String, RequestResponse<TrStockDetails>> _cache = {};
 
-  Future<RequestResponse<TrStockDetails>> requestTrProductInfo(String isinWithoutExtention) async {
+  Future<RequestResponse<TrStockDetails>> requestTrProductInfo(String isinWithoutExtension) async {
     RequestResponse<TrStockDetails>? response;
-    if (_cache.containsKey(isinWithoutExtention)) {
-      response = _cache[isinWithoutExtention]!;
+    if (_cache.containsKey(isinWithoutExtension)) {
+      response = _cache[isinWithoutExtension]!;
     } else {
-      response = await DataRequestService.trApiDataRequestService.makeRequest<TrStockDetails>(Constants.getTrStockDetailsRequestString(isinWithoutExtention));
-      _cache[isinWithoutExtention] = response;
+      response = await DataRequestService.trApiDataRequestService.makeRequest<TrStockDetails>(Constants.getTrStockDetailsRequestString(isinWithoutExtension));
+      _cache[isinWithoutExtension] = response;
     }
 
     behaviorSubject.add(response);

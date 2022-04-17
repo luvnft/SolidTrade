@@ -8,8 +8,8 @@ import 'package:solidtrade/services/stream/base/base_service.dart';
 class TrProductInfoService extends IService<RequestResponse<TrProductInfo>?> {
   TrProductInfoService() : super(BehaviorSubject.seeded(null));
 
-  Future<RequestResponse<TrProductInfo>> requestTrProductInfo(String isinWithoutExtention) async {
-    var response = await DataRequestService.trApiDataRequestService.makeRequest<TrProductInfo>(Constants.getTrProductInfoRequestString(isinWithoutExtention));
+  Future<RequestResponse<TrProductInfo>> requestTrProductInfo(String isinWithoutExtension) async {
+    var response = await DataRequestService.trApiDataRequestService.makeRequest<TrProductInfo>(Constants.getTrProductInfoRequestString(isinWithoutExtension));
 
     behaviorSubject.add(response);
     return response;

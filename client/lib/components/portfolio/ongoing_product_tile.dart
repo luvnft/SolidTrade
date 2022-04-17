@@ -33,7 +33,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
   @override
   void initState() {
     super.initState();
-    trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtention(widget.info.isin);
+    trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtension(widget.info.isin);
   }
 
   Widget _ongoingProductTile(TrProductInfo productInfo, double percentMissingToFill, double currentPrice, TrUiProductDetails details) {

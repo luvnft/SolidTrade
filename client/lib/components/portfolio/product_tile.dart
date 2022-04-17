@@ -28,8 +28,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
   @override
   void initState() {
     super.initState();
-    // TODO: Fix typos
-    trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtention(widget.info.isin);
+    trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtension(widget.info.isin);
   }
 
   void _onClickProduct(TrProductInfo info) {
