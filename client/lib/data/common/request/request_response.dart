@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/data/common/error/error_model.dart';
+import 'package:solidtrade/data/common/request/error_response.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 class RequestResponse<T> {

@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';

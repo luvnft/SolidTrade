@@ -1,5 +1,5 @@
 import 'package:rxdart/subjects.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';

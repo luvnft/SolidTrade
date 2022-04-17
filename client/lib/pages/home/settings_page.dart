@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
-import 'package:solidtrade/main/main_common.dart';
+import 'package:solidtrade/app//main_common.dart';
 import 'package:solidtrade/providers/language/de/de_translation.dart';
 import 'package:solidtrade/providers/language/en/en_translation.dart';
 import 'package:solidtrade/providers/language/translation.dart';

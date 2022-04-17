@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/historicalposition.dart';
 import 'package:solidtrade/services/request/base/base_request_service.dart';

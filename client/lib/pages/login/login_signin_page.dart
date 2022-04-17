@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/login/login_screen.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/pages/home_page.dart';
+import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';

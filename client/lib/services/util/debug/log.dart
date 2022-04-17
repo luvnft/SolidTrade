@@ -2,7 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:solidtrade/data/enums/environment.dart';
-import 'package:solidtrade/main/main_common.dart';
+import 'package:solidtrade/app//main_common.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class Log {

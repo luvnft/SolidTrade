@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/chart/chart.dart';
-import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
+import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_positions_page.dart';

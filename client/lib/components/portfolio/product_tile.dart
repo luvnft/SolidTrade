@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/product_view.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/components/shared/product_view/product_view.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/product_tile_info.dart';
-import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
+import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
@@ -28,6 +28,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
   @override
   void initState() {
     super.initState();
+    // TODO: Fix typos
     trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtention(widget.info.isin);
   }
 

@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_continuous_product_prices_event.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/enums/chart_date_range_view.dart';
-import 'package:solidtrade/services/storage/aggregate_history_service.dart';
+import 'package:solidtrade/services/stream/aggregate_history_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
 

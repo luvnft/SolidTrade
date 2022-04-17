@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/product_view.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
-import 'package:solidtrade/data/common/shared/position_type.dart';
-import 'package:solidtrade/data/common/shared/st_stream_builder.dart';
+import 'package:solidtrade/components/shared/product_view/product_view.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
+import 'package:solidtrade/data/enums/position_type.dart';
+import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';

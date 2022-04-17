@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/main/main_common.dart';
-import 'package:solidtrade/pages/splash.dart';
+import 'package:solidtrade/app//main_common.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/pages/common/splash.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 

@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 
 class TrRequestResponse<T> {
   final int id;

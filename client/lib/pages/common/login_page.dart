@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/login/login_home_page.dart';
+import 'package:solidtrade/pages/login/login_signin_page.dart';
 import 'package:solidtrade/pages/login/login_signup_page.dart';
-
-import 'login/login_signin_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:solidtrade/components/shared/name_for_large_number.dart';
+import 'package:solidtrade/data/enums/name_for_large_number.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/services/util/tr_util.dart';

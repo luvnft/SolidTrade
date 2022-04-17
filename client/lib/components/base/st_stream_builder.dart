@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:solidtrade/data/common/error/request_response.dart';
+import 'package:solidtrade/data/common/request/request_response.dart';
 
 import 'dart:async' show StreamSubscription;
 
-import 'package:solidtrade/data/common/shared/request_response_stream_result.dart';
+import 'package:solidtrade/data/common/request/request_response_stream_result.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 typedef AsyncWidgetBuilderRequestResponse<T> = Widget Function(BuildContext context, T value);
