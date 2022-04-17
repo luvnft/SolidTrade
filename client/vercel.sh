@@ -34,7 +34,7 @@ flutter pub run build_runner build
 # Build web app
 if [ "$Deployment" = "Production" ];
 then
-  flutter build web --release -t lib/main/main_prod.dart
+  flutter build web --release -t lib/app/main_prod.dart
 else
-  flutter build web --release -t lib/main/main_staging.dart
+  flutter build web --release -t lib/app/main_staging.dart
 fi

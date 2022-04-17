@@ -8,14 +8,14 @@
       "name": "Flutter development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main/main_dev.dart",
+      "program": "lib/app/main_dev.dart",
       "args": ["--web-port=49983"]
     },
     {
       "name": "Flutter development release mode",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main/main_dev.dart",
+      "program": "lib/app/main_dev.dart",
       "args": ["--web-port=49983 --release"]
     }
   ]
