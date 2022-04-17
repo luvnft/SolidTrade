@@ -100,6 +100,7 @@ class _ChartState extends State<Chart> with STWidget {
       trackballBehavior: TrackballBehavior(
         enable: true,
         tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        lineColor: colors.lessSoftForeground,
       ),
       onTrackballPositionChanging: (args) {
         args.chartPointInfo.label = args.chartPointInfo.label! + "€";
@@ -127,6 +128,7 @@ class _ChartState extends State<Chart> with STWidget {
           enableTooltip: true,
           xValueMapper: (MapEntry<DateTime, double> x, _) => x.key,
           yValueMapper: (MapEntry<DateTime, double> y, _) => y.value,
+          color: _data.last.value >= _data.first.value ? colors.stockGreen : colors.stockRed,
         ),
         FastLineSeries<MapEntry<DateTime, double>, DateTime>(
           name: "Close",
