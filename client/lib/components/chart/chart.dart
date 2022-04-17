@@ -128,7 +128,7 @@ class _ChartState extends State<Chart> with STWidget {
           enableTooltip: true,
           xValueMapper: (MapEntry<DateTime, double> x, _) => x.key,
           yValueMapper: (MapEntry<DateTime, double> y, _) => y.value,
-          color: _data.last.value >= _data.first.value ? colors.stockGreen : colors.stockRed,
+          color: _data.isEmpty || (_data.last.value >= _data.first.value) ? colors.stockGreen : colors.stockRed,
         ),
         FastLineSeries<MapEntry<DateTime, double>, DateTime>(
           name: "Close",
