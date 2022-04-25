@@ -93,9 +93,7 @@ class UserService extends IService<RequestResponse<User>?> {
     var response = await DataRequestService.userDataRequestService.deleteUser();
 
     if (response.isSuccessful) {
-      behaviorSubject.add(RequestResponse.failed({
-        "userFriendlyMessage": "User account has been deleted."
-      }));
+      behaviorSubject.add(RequestResponse.successful(current!.result!));
 
       return response;
     }
