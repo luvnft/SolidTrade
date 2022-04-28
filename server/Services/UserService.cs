@@ -215,7 +215,7 @@ namespace SolidTradeServer.Services
                 }, HttpStatusCode.NotFound);
             
             if (dto.Username is not null && await _database.Users
-                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Username, $"{user.Username}")))
+                .AsQueryable().AnyAsync(u => EF.Functions.Like(u.Username, $"{dto.Username}")))
             {
                 return new ErrorResponse(new UserUpdateFailed
                 {
