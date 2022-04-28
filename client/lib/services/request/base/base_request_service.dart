@@ -155,7 +155,7 @@ abstract class IBaseRequestService {
       ...headers,
     };
 
-    var request = http.MultipartRequest("POST", uri);
+    var request = http.MultipartRequest(method.name, uri);
     request.fields.addAll(fields);
 
     for (var file in files.entries) {
