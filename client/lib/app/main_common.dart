@@ -26,11 +26,9 @@ import '../mapper.g.dart' as mapper;
 var navigatorKey = GlobalKey<NavigatorState>();
 late Environment environment;
 late MyAppState myAppState;
-bool hadFatalException = false;
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
-
   registerFlutterErrorHandler(env);
 
   runApp(MyApp(navigatorKey: navigatorKey));
@@ -46,17 +44,31 @@ void registerFlutterErrorHandler(Environment environment) {
     if (environment != Environment.production) {
       // ignore: avoid_print
       print(details);
-      return;
     }
-
-    if (hadFatalException) return;
-    hadFatalException = true;
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 1), () {
-        navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) {
-          return _showErrorHandleMessage(context);
-        }));
+        final context = navigatorKey.currentState!.context;
+        final snackBar = SnackBar(
+          duration: const Duration(seconds: 15),
+          content: Row(children: [
+            const Flexible(
+              child: Text('We are sorry. Something went wrong. If you are facing any issues reload the app.'),
+            ),
+            SnackBarAction(
+              label: 'Reload',
+              onPressed: () async => await myAppState.restart(),
+              textColor: Colors.red,
+            ),
+            SnackBarAction(
+              label: 'Dismiss',
+              onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+              textColor: Colors.blue,
+            ),
+          ]),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
     });
   };
@@ -70,7 +82,6 @@ class Startup {
     environment = env;
     colorThemeHasToBeInitialized = false;
     languageHasToBeInitialized = false;
-    hadFatalException = false;
 
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -121,112 +132,4 @@ class Startup {
 
     return defaultTheme;
   }
-}
-
-Widget _showErrorHandleMessage(BuildContext context) {
-  final config = GetIt.instance.get<ConfigurationProvider>();
-
-  final screenWidth = MediaQuery.of(context).size.width;
-  final screenHeight = MediaQuery.of(context).size.height;
-
-  final shouldAdjust = screenWidth * 0.70 > screenHeight;
-  double horizontalMargin = 0;
-
-  if (shouldAdjust) {
-    horizontalMargin = 0.15 * screenWidth;
-  }
-
-  return SafeArea(
-    child: Container(
-      margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
-      child: Container(
-        color: config.themeProvider.theme.background,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Material(
-              color: config.themeProvider.theme.softBackground,
-              elevation: 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Image.asset(
-                    "assets/images/confused_travolta.gif",
-                  ),
-                  Text(
-                    "That's not supposed to happen 🤔",
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontSize: 30,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Well well well, see who's app just crashed.\nThis should not happen again. You can restart the app or just continue. This may however cause unexpected behaviors.\nSorry for the inconvenience.",
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 35,
-                        width: screenWidth * .35,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
-                          ),
-                          onPressed: () async {
-                            myAppState.restart();
-                          },
-                          child: const Text(
-                            "Reopen app",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 35,
-                        width: screenWidth * .35,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 165, 255)),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Just continue...",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10)
-                ],
-              ),
-            ),
-            const SizedBox(height: 50)
-          ],
-        ),
-      ),
-    ),
-  );
 }
