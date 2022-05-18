@@ -86,6 +86,11 @@ class _ChartState extends State<Chart> with STWidget {
     });
   }
 
+  Color get _displayLineColor {
+    final bool isNegative = !(_data.isEmpty || _secondaryData.isEmpty || (_data.last.value >= _secondaryData.first.value));
+    return isNegative ? colors.stockRed : colors.stockGreen;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -128,7 +133,7 @@ class _ChartState extends State<Chart> with STWidget {
           enableTooltip: true,
           xValueMapper: (MapEntry<DateTime, double> x, _) => x.key,
           yValueMapper: (MapEntry<DateTime, double> y, _) => y.value,
-          color: _data.isEmpty || (_data.last.value >= _data.first.value) ? colors.stockGreen : colors.stockRed,
+          color: _displayLineColor,
         ),
         FastLineSeries<MapEntry<DateTime, double>, DateTime>(
           name: "Close",
