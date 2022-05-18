@@ -5,8 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/common/st_logo.dart';
 import 'package:solidtrade/app/main_common.dart';
-import 'package:solidtrade/pages/common/welcome_page.dart';
-import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';

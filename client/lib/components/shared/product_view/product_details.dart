@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class ProductDetails extends StatelessWidget with STWidget {

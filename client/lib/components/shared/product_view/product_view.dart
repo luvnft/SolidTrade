@@ -11,7 +11,6 @@ import 'package:solidtrade/components/shared/product_view/product_chart_date_ran
 import 'package:solidtrade/components/shared/product_view/product_details.dart';
 import 'package:solidtrade/components/shared/product_view/product_information.dart';
 import 'package:solidtrade/components/shared/product_view/product_metrics.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/enums/position_type.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
@@ -291,7 +290,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                                 margin: const EdgeInsets.all(5),
                                 child: TextButton(
                                   onPressed: () {},
-                                  child: Text("Sell", style: TextStyle(color: Colors.white)),
+                                  child: const Text("Sell", style: TextStyle(color: Colors.white)),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(colors.stockRed),
                                     foregroundColor: MaterialStateProperty.all(colors.foreground),
@@ -304,7 +303,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                           margin: const EdgeInsets.all(5),
                           child: TextButton(
                             onPressed: () {},
-                            child: Text("Buy", style: TextStyle(color: Colors.white)),
+                            child: const Text("Buy", style: TextStyle(color: Colors.white)),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(colors.stockGreen),
                               foregroundColor: MaterialStateProperty.all(colors.foreground),

@@ -64,7 +64,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
     int maxLines = 1,
   }) {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       width: double.infinity,
       height: maxLines == 1 ? 90 : 200,
       child: Column(
@@ -78,7 +78,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
             onChanged: (content) => callback(content),
             controller: controller,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               hintText: hintText,
               labelText: title,
             ),

@@ -84,17 +84,17 @@ class _CropperState extends State<Cropper> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crop Photo'),
+        title: const Text('Crop Photo'),
         centerTitle: true,
         leading: IconButton(
           onPressed: _cropImage,
           tooltip: 'Crop',
-          icon: Icon(Icons.crop),
+          icon: const Icon(Icons.crop),
         ),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context, null),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           )
         ],
       ),
@@ -105,7 +105,7 @@ class _CropperState extends State<Cropper> {
               future: _decoded.future,
               builder: (ctx, snap) {
                 if (!snap.hasData) {
-                  return Center(
+                  return const Center(
                     child: Text('Loading...'),
                   );
                 }
@@ -184,7 +184,7 @@ class _CropperState extends State<Cropper> {
           ),
           Row(
             children: <Widget>[
-              Text('Scale:'),
+              const Text('Scale:'),
               Expanded(
                 child: SliderTheme(
                   data: theme.sliderTheme,
