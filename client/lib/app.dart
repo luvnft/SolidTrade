@@ -50,9 +50,45 @@ class MyAppState extends State<MyApp> {
             scaffoldBackgroundColor: colors.background,
             textTheme: Theme.of(context).textTheme.apply(bodyColor: colors.foreground, displayColor: colors.foreground),
           ),
-          home: const Splash(),
+          home: const PreSplash(),
         );
       },
     );
+  }
+}
+
+class PreSplash extends StatefulWidget {
+  const PreSplash({Key? key}) : super(key: key);
+
+  @override
+  State<PreSplash> createState() => PreSplashState();
+}
+
+class PreSplashState extends State<PreSplash> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const Splash(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, -1.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
