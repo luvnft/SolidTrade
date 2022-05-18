@@ -13,6 +13,7 @@ abstract class ITranslation {
   IUserAppBarTranslation get userAppBar;
   IChartTranslation get chart;
   ICommonTranslation get common;
+  IWelcomeTranslation get welcome;
 }
 
 class SharedTranslations {
@@ -32,6 +33,10 @@ class SharedTranslations {
 
 abstract class IChartTranslation {
   IChartDateRangeViewTranslation get chartDateRangeView;
+}
+
+abstract class IWelcomeTranslation {
+  String get getStarted;
 }
 
 abstract class IChartDateRangeViewTranslation {

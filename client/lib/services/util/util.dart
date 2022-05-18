@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:solidtrade/data/enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
@@ -58,7 +60,8 @@ class Util {
     String closeText = "Okay",
     String? message,
     Iterable<String>? messages,
-    Iterable<Widget>? widgets,
+    List<Widget>? widgets,
+    List<Widget>? actionWidgets,
   }) {
     if (widgets == null) {
       if (messages == null) {
@@ -66,7 +69,7 @@ class Util {
           Text(message!)
         ];
       } else {
-        widgets = messages.map((text) => Text(text));
+        widgets = messages.map((text) => Text(text)).toList();
       }
     }
 
@@ -83,14 +86,13 @@ class Util {
               ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(closeText),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+          actions: actionWidgets ??
+              [
+                TextButton(
+                  child: Text(closeText),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
         );
       },
     );
@@ -296,6 +298,92 @@ class Util {
     );
 
     return () => Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  static Future<bool> showUnsavedChangesWarningDialog(
+    BuildContext context, {
+    String title = 'Unsaved Settings',
+    String content = 'Are you sure you dont want to Save?',
+    String confirmText = 'Don\'t Save changes',
+  }) async {
+    bool discardChanges = false;
+
+    await openDialog(context, title, message: content, actionWidgets: [
+      TextButton(
+        child: const Text('Go Back'),
+        onPressed: () => Navigator.pop(context),
+      ),
+      TextButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.red),
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
+        child: Text(confirmText),
+        onPressed: () {
+          discardChanges = true;
+          Navigator.of(context).pop();
+        },
+      ),
+    ]);
+
+    return discardChanges;
+  }
+}
+
+class UtilCupertino {
+  static Future<void> showCupertinoDialog(
+    BuildContext context, {
+    required String title,
+    required String message,
+    required List<Widget> widgets,
+    CupertinoActionSheetAction? cancelButton,
+  }) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text(title),
+        message: Text(message),
+        actions: widgets,
+        cancelButton: cancelButton ??
+            CupertinoActionSheetAction(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel', style: TextStyle(color: Colors.red[300])),
+            ),
+      ),
+    );
+  }
+
+  static List<CupertinoActionSheetAction> languageActionSheets(BuildContext context, LanguageProvider languageProvider) {
+    void onChangeLanguage(LanguageTicker langTicker) {
+      languageProvider.updateLanguage(LanguageProvider.byTicker(langTicker).language);
+      Navigator.pop(context);
+    }
+
+    return LanguageTicker.values
+        .map((e) => CupertinoActionSheetAction(
+              onPressed: () => onChangeLanguage(e),
+              child: Text(e.name),
+            ))
+        .toList();
+  }
+
+  static List<CupertinoActionSheetAction> colorThemeActionSheets(BuildContext context, ThemeProvider themeProvider) {
+    void onChangeTheme(ColorThemeType theme) {
+      themeProvider.updateTheme(theme);
+      Navigator.pop(context);
+    }
+
+    return ColorThemeType.values
+        .map((e) => CupertinoActionSheetAction(
+              onPressed: () => onChangeTheme(e),
+              child: Text(e.name),
+            ))
+        .toList();
   }
 }
 

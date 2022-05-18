@@ -32,11 +32,19 @@ class EnTranslation implements ITranslation {
 
   @override
   IChartTranslation get chart => EnChartTranslation();
+
+  @override
+  IWelcomeTranslation get welcome => EnWelcomeTranslation();
 }
 
 class EnChartTranslation implements IChartTranslation {
   @override
   IChartDateRangeViewTranslation get chartDateRangeView => EnChartDateRangeViewTranslation();
+}
+
+class EnWelcomeTranslation implements IWelcomeTranslation {
+  @override
+  String get getStarted => "Get Started";
 }
 
 class EnChartDateRangeViewTranslation implements IChartDateRangeViewTranslation {

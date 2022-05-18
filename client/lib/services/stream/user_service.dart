@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart' as msg;
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:solidtrade/data/common/settings/update_user_dto.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/common/delete_user_response.dart';
 import 'package:solidtrade/data/common/request/request_response.dart';
@@ -40,6 +41,13 @@ class UserService extends IService<RequestResponse<User>?> {
     return result;
   }
 
+  Future<RequestResponse<User>> updateUser(UpdateUserDto dto) async {
+    var result = await DataRequestService.userDataRequestService.updateUser(dto, current!.result!);
+
+    behaviorSubject.add(result);
+    return result;
+  }
+
   Future<RequestResponse<User>> fetchUser(String uid) async {
     var result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
 
@@ -59,10 +67,6 @@ class UserService extends IService<RequestResponse<User>?> {
 
     behaviorSubject.add(result);
     return result;
-  }
-
-  void updateUser(User user) {
-    behaviorSubject.add(RequestResponse.successful(user));
   }
 
   Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {

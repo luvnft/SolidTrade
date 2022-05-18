@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/common/st_logo.dart';
 import 'package:solidtrade/pages/common/login_page.dart';
-import 'package:solidtrade/pages/home/settings_page.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -15,8 +14,13 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> with STWidget {
-  void _handleClickSettings() {
-    Util.pushToRoute(context, SettingsPage());
+  void _handleClickChangeLanguage() {
+    UtilCupertino.showCupertinoDialog(
+      context,
+      title: 'Language',
+      message: 'Choose a language',
+      widgets: UtilCupertino.languageActionSheets(context, configurationProvider.languageProvider),
+    );
   }
 
   void _handleClickContinue() {
@@ -88,7 +92,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 children: [
                   Util.roundedButton([
                     const SizedBox(width: 20),
-                    Text("Get Started", style: TextStyle(color: colors.background)),
+                    Text(translations.welcome.getStarted, style: TextStyle(color: colors.background)),
                     SizedBox(child: Icon(Icons.keyboard_arrow_right_rounded, color: colors.background)),
                     const SizedBox(width: 10),
                   ], onPressed: _handleClickContinue, colors: colors, backgroundColor: colors.foreground),
@@ -100,8 +104,8 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 child: Container(
                   padding: const EdgeInsets.all(30),
                   child: TextButton(
-                    child: Icon(Icons.settings, color: colors.foreground),
-                    onPressed: _handleClickSettings,
+                    child: Icon(Icons.public, color: colors.foreground),
+                    onPressed: _handleClickChangeLanguage,
                   ),
                 ),
               )

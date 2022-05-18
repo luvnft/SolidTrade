@@ -32,11 +32,19 @@ class DeTranslation implements ITranslation {
 
   @override
   IChartTranslation get chart => DeChartTranslation();
+
+  @override
+  IWelcomeTranslation get welcome => DeWelcomeTranslation();
 }
 
 class DeChartTranslation implements IChartTranslation {
   @override
   IChartDateRangeViewTranslation get chartDateRangeView => DeChartDateRangeViewTranslation();
+}
+
+class DeWelcomeTranslation implements IWelcomeTranslation {
+  @override
+  String get getStarted => "Loslegen";
 }
 
 class DeChartDateRangeViewTranslation implements IChartDateRangeViewTranslation {

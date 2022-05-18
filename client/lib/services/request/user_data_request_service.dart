@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:solidtrade/data/common/settings/update_user_dto.dart';
 import 'package:solidtrade/data/models/common/delete_user_response.dart';
 import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
@@ -33,6 +34,31 @@ class UserDataRequestService extends IBaseRequestService {
 
     var requestResponse = await makeRequestWithMultipartFile(
       HttpMethod.post,
+      Constants.endpointUser,
+      fields: body,
+      files: files,
+    );
+
+    if (!requestResponse.isSuccessful) {
+      return RequestResponse.inheritErrorResponse(requestResponse);
+    }
+
+    var response = requestResponse.result!;
+    var data = jsonDecode(response.body);
+    return RequestResponse.successful(User.fromJson(data));
+  }
+
+  Future<RequestResponse<User>> updateUser(UpdateUserDto dto, User currentUser) async {
+    var body = dto.toMapWithOnlyChangedProperties(currentUser);
+
+    Map<String, List<int>> files = dto.profilePictureFile != null
+        ? {
+            "ProfilePictureFile": dto.profilePictureFile!
+          }
+        : {};
+
+    var requestResponse = await makeRequestWithMultipartFile(
+      HttpMethod.patch,
       Constants.endpointUser,
       fields: body,
       files: files,
