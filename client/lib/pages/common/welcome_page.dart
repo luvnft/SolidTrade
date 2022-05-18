@@ -4,6 +4,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/common/st_logo.dart';
 import 'package:solidtrade/pages/common/login_page.dart';
 import 'package:solidtrade/providers/language/translation.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -20,6 +21,15 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
       title: 'Language',
       message: 'Choose a language',
       widgets: UtilCupertino.languageActionSheets(context, configurationProvider.languageProvider),
+    );
+  }
+
+  void _handleClickChangeTheme() {
+    UtilCupertino.showCupertinoDialog(
+      context,
+      title: 'Change Theme',
+      message: 'Choose a color theme',
+      widgets: UtilCupertino.colorThemeActionSheets(context, configurationProvider.themeProvider),
     );
   }
 
@@ -99,14 +109,20 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 ],
               ),
               const Spacer(),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  padding: const EdgeInsets.all(30),
-                  child: TextButton(
-                    child: Icon(Icons.public, color: colors.foreground),
-                    onPressed: _handleClickChangeLanguage,
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      child: Icon(colors.themeColorType == ColorThemeType.light ? Icons.sunny : Icons.nightlight_round_outlined, color: colors.foreground),
+                      onPressed: _handleClickChangeTheme,
+                    ),
+                    TextButton(
+                      child: Icon(Icons.public, color: colors.foreground),
+                      onPressed: _handleClickChangeLanguage,
+                    )
+                  ],
                 ),
               )
             ],
