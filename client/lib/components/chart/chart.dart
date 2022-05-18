@@ -108,7 +108,6 @@ class _ChartState extends State<Chart> with STWidget {
         lineColor: colors.lessSoftForeground,
       ),
       onTrackballPositionChanging: (args) {
-        args.chartPointInfo.label = args.chartPointInfo.label! + "€";
         var data = args.chartPointInfo.series!.dataSource as List<MapEntry<DateTime, double>>;
 
         String str;
@@ -122,6 +121,7 @@ class _ChartState extends State<Chart> with STWidget {
         // We do this because when the character U+003a ":" is used the text is not centered for some reason.
         // To bypass this issue we use the character U+0589 "։" which looks the same and also keep the text centered.
         args.chartPointInfo.header = str.replaceFirst(":", "։");
+        args.chartPointInfo.label = "${num.parse(args.chartPointInfo.label!).toStringAsFixed(2)}€";
       },
       onChartTouchInteractionDown: (_) => isHoldingDownOnChart = true,
       onChartTouchInteractionUp: (_) => isHoldingDownOnChart = false,
