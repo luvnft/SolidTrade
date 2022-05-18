@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
 
 import 'dart:async' show StreamSubscription;
 
@@ -12,7 +11,7 @@ typedef AsyncWidgetBuilderRequestResponse<T> = Widget Function(BuildContext cont
 class STStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshotRequestResponse<T>> {
   const STStreamBuilder({
     Key? key,
-    required Stream<RequestResponse<T>?> stream,
+    required Stream<T?> stream,
     required this.builder,
   }) : super(key: key, stream: stream);
 
@@ -27,14 +26,8 @@ class STStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshotRequestRespon
   }
 
   @override
-  RequestResponseResult<AsyncSnapshotRequestResponse<T>> afterData(RequestResponseResult<AsyncSnapshotRequestResponse<T>> current, RequestResponse<T>? data) {
-    if (data == null) {
-      return RequestResponseResult.loading();
-    } else if (!data.isSuccessful) {
-      return RequestResponseResult.errorWidget(Text(data.error!.userFriendlyMessage ?? "ERR"));
-    }
-
-    return RequestResponseResult.result(AsyncSnapshotRequestResponse.withData(ConnectionState.done, data.result!));
+  RequestResponseResult<AsyncSnapshotRequestResponse<T>> afterData(RequestResponseResult<AsyncSnapshotRequestResponse<T>> current, T? data) {
+    return RequestResponseResult.result(AsyncSnapshotRequestResponse.withData(ConnectionState.done, data));
   }
 }
 
@@ -48,7 +41,7 @@ class AsyncSnapshotRequestResponse<T> {
 
   const AsyncSnapshotRequestResponse.waiting() : this._(ConnectionState.waiting, null, null, null);
 
-  const AsyncSnapshotRequestResponse.withData(ConnectionState state, T data) : this._(state, data, null, null);
+  const AsyncSnapshotRequestResponse.withData(ConnectionState state, T? data) : this._(state, data, null, null);
 
   const AsyncSnapshotRequestResponse.withError(
     ConnectionState state,
@@ -92,13 +85,13 @@ class AsyncSnapshotRequestResponse<T> {
 abstract class StreamBuilderBase<T, S> extends StatefulWidget {
   const StreamBuilderBase({Key? key, required this.stream}) : super(key: key);
 
-  final Stream<RequestResponse<T>?> stream;
+  final Stream<T?> stream;
 
   RequestResponseResult<S> initial();
 
   RequestResponseResult<S> afterConnected(RequestResponseResult<S> current) => current;
 
-  RequestResponseResult<S> afterData(RequestResponseResult<S> current, RequestResponse<T>? data);
+  RequestResponseResult<S> afterData(RequestResponseResult<S> current, T? data);
 
   RequestResponseResult<S> afterError(RequestResponseResult<S> current, Object error, StackTrace stackTrace) => current;
 
@@ -113,7 +106,7 @@ abstract class StreamBuilderBase<T, S> extends StatefulWidget {
 }
 
 class _StreamBuilderBaseState<T, S> extends State<StreamBuilderBase<T, S>> {
-  StreamSubscription<RequestResponse<T>?>? _subscription; // ignore: cancel_subscriptions
+  StreamSubscription<T?>? _subscription;
   late RequestResponseResult<S> _summary;
 
   @override
@@ -145,7 +138,7 @@ class _StreamBuilderBaseState<T, S> extends State<StreamBuilderBase<T, S>> {
   }
 
   void _subscribe() {
-    _subscription = widget.stream.listen((RequestResponse<T>? data) {
+    _subscription = widget.stream.listen((data) {
       setState(() {
         _summary = widget.afterData(_summary, data);
       });

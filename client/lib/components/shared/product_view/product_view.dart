@@ -35,7 +35,7 @@ class ProductView extends StatefulWidget {
     required this.positionType,
   }) : super(key: key);
 
-  final Stream<RequestResponse<TrProductPrice>?> trProductPriceStream;
+  final Stream<TrProductPrice?> trProductPriceStream;
   final TrProductInfo productInfo;
   final PositionType positionType;
 

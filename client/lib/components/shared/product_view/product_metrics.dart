@@ -17,8 +17,8 @@ class ProductMetrics extends StatelessWidget with STWidget {
     required this.productInfo,
     Key? key,
   }) : super(key: key);
-  final Stream<RequestResponse<TrProductPrice>?> trProductPriceStream;
-  final Stream<RequestResponse<TrStockDetails>?> trStockDetailsStream;
+  final Stream<TrProductPrice?> trProductPriceStream;
+  final Stream<TrStockDetails?> trStockDetailsStream;
   final TrProductInfo productInfo;
   final bool isStock;
 

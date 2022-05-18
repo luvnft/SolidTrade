@@ -9,7 +9,7 @@ import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class ProductDetails extends StatelessWidget with STWidget {
   ProductDetails({Key? key, required this.trStockDetailsStream, required this.productInfo, required this.isStock}) : super(key: key);
-  final Stream<RequestResponse<TrStockDetails>?> trStockDetailsStream;
+  final Stream<TrStockDetails?> trStockDetailsStream;
   final TrProductInfo productInfo;
   final bool isStock;
 

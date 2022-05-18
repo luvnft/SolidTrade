@@ -20,7 +20,7 @@ class ProductAppBar extends StatelessWidget with STWidget {
   }) : super(key: key);
 
   final aggregateHistoryService = GetIt.instance.get<AggregateHistoryService>();
-  final Stream<RequestResponse<TrProductPrice>?> trProductPriceStream;
+  final Stream<TrProductPrice?> trProductPriceStream;
   final TrProductInfo productInfo;
   final PositionType positionType;
 

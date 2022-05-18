@@ -12,7 +12,7 @@ import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 
-class UserService extends IService<RequestResponse<User>?> {
+class UserService extends IService<User?> {
   UserService() : super(BehaviorSubject.seeded(null)) {
     // This resolves the common problem using firebase web. See here for more: https://github.com/firebase/flutterfire/issues/5964
     if (kIsWeb) {
@@ -37,21 +37,28 @@ class UserService extends IService<RequestResponse<User>?> {
       profilePictureFile: profilePictureFile,
     );
 
-    behaviorSubject.add(result);
+    if (result.isSuccessful) {
+      behaviorSubject.add(result.result);
+    }
+
     return result;
   }
 
   Future<RequestResponse<User>> updateUser(UpdateUserDto dto) async {
-    var result = await DataRequestService.userDataRequestService.updateUser(dto, current!.result!);
+    var result = await DataRequestService.userDataRequestService.updateUser(dto, current!);
 
-    behaviorSubject.add(result);
+    if (result.isSuccessful) {
+      behaviorSubject.add(result.result);
+    }
     return result;
   }
 
   Future<RequestResponse<User>> fetchUser(String uid) async {
     var result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
 
-    behaviorSubject.add(result);
+    if (result.isSuccessful) {
+      behaviorSubject.add(result.result);
+    }
     return result;
   }
 
@@ -65,7 +72,9 @@ class UserService extends IService<RequestResponse<User>?> {
       result = RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
     }
 
-    behaviorSubject.add(result);
+    if (result.isSuccessful) {
+      behaviorSubject.add(result.result);
+    }
     return result;
   }
 
@@ -97,7 +106,7 @@ class UserService extends IService<RequestResponse<User>?> {
     var response = await DataRequestService.userDataRequestService.deleteUser();
 
     if (response.isSuccessful) {
-      behaviorSubject.add(RequestResponse.successful(current!.result!));
+      behaviorSubject.add(current!);
 
       return response;
     }

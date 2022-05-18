@@ -5,20 +5,26 @@ import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 
-class TrStockDetailsService extends IService<RequestResponse<TrStockDetails>?> {
+class TrStockDetailsService extends IService<TrStockDetails?> {
   TrStockDetailsService() : super(BehaviorSubject.seeded(null));
-  final Map<String, RequestResponse<TrStockDetails>> _cache = {};
+  final Map<String, TrStockDetails> _cache = {};
 
   Future<RequestResponse<TrStockDetails>> requestTrProductInfo(String isinWithoutExtension) async {
-    RequestResponse<TrStockDetails>? response;
+    RequestResponse<TrStockDetails>? result;
     if (_cache.containsKey(isinWithoutExtension)) {
-      response = _cache[isinWithoutExtension]!;
+      result = RequestResponse.successful(_cache[isinWithoutExtension]!);
     } else {
-      response = await DataRequestService.trApiDataRequestService.makeRequest<TrStockDetails>(Constants.getTrStockDetailsRequestString(isinWithoutExtension));
-      _cache[isinWithoutExtension] = response;
+      result = await DataRequestService.trApiDataRequestService.makeRequest<TrStockDetails>(Constants.getTrStockDetailsRequestString(isinWithoutExtension));
+
+      if (result.isSuccessful) {
+        _cache[isinWithoutExtension] = result.result!;
+      }
     }
 
-    behaviorSubject.add(response);
-    return response;
+    if (result.isSuccessful) {
+      behaviorSubject.add(result.result);
+    }
+
+    return result;
   }
 }

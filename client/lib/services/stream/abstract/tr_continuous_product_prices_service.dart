@@ -19,7 +19,7 @@ class TrContinuousProductPricesService implements Disposable {
 
   final AggregateHistoryService _aggregateHistoryService = GetIt.instance.get<AggregateHistoryService>();
   final List<MapEntry<DateTime, double>> _currentAggregateHistory = [];
-  final Stream<RequestResponse<TrProductPrice>?> _priceStream;
+  final Stream<TrProductPrice?> _priceStream;
   final Stream<ChartDateRangeView> _chartDateRangeStream;
   final String _isinWithExtension;
 
@@ -64,17 +64,11 @@ class TrContinuousProductPricesService implements Disposable {
     return TrContinuousProductPricesEvent(data: _currentAggregateHistory, type: TrContinuousProductPricesEventType.fullUpdate);
   }
 
-  Future<void> onNewTrProductPrice(RequestResponse<TrProductPrice>? response, {int numberOfRetriesMade = 0}) async {
+  Future<void> onNewTrProductPrice(TrProductPrice? price, {int numberOfRetriesMade = 0}) async {
     Future<TrContinuousProductPricesEvent?> processNewTrProductPrice() async {
-      if (response == null) {
+      if (price == null) {
         return null;
       }
-
-      if (!response.isSuccessful) {
-        return null;
-      }
-
-      var price = response.result!;
 
       TrContinuousProductPricesEvent result;
 
@@ -105,7 +99,7 @@ class TrContinuousProductPricesService implements Disposable {
         return;
       }
       await Future.delayed(const Duration(milliseconds: 100));
-      return onNewTrProductPrice(response, numberOfRetriesMade: numberOfRetriesMade);
+      return onNewTrProductPrice(price, numberOfRetriesMade: numberOfRetriesMade);
     }
 
     var result = await processNewTrProductPrice();

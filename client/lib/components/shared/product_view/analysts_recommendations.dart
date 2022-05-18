@@ -9,7 +9,7 @@ enum BuyHoldSell { buy, hold, sell }
 
 class AnalystsRecommendations extends StatelessWidget with STWidget {
   AnalystsRecommendations({Key? key, required this.trStockDetailsStream}) : super(key: key);
-  final Stream<RequestResponse<TrStockDetails>?> trStockDetailsStream;
+  final Stream<TrStockDetails?> trStockDetailsStream;
 
   Widget _analystsResultWidget(BuildContext context, BuyHoldSell buyHoldSell, double percent) {
     Color color;

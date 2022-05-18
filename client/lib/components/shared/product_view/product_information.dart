@@ -5,7 +5,7 @@ import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 
 class ProductInformation extends StatelessWidget {
   const ProductInformation({Key? key, required this.trStockDetailsStream}) : super(key: key);
-  final Stream<RequestResponse<TrStockDetails>?> trStockDetailsStream;
+  final Stream<TrStockDetails?> trStockDetailsStream;
 
   @override
   Widget build(BuildContext context) {
