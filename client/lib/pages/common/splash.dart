@@ -34,19 +34,19 @@ class _SplashState extends State<Splash> with STWidget {
     super.initState();
 
     _fadeContent();
-    _navigateToHome();
+    _preFetchUser();
   }
 
   void _fadeContent() {
-    _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 100), () {
+    _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 600), () {
       setState(() {
         _visible = !_visible;
       });
     });
   }
 
-  Future<void> _navigateToHome() async {
-    var delay = Future.delayed(const Duration(seconds: 1));
+  Future<void> _preFetchUser() async {
+    var delay = Future.delayed(const Duration(milliseconds: 2500));
 
     await Firebase.initializeApp();
 
@@ -67,24 +67,8 @@ class _SplashState extends State<Splash> with STWidget {
 
       await _fadeAnimationFuture;
       await delay;
-      Navigator.of(context).pop();
 
-      Navigator.of(context).pushReplacement(PageRouteBuilder(
-        transitionDuration: const Duration(seconds: 1),
-        pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.ease;
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          final offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ));
+      Navigator.pop(context, true);
       return;
     }
 
@@ -92,7 +76,7 @@ class _SplashState extends State<Splash> with STWidget {
     _fadeAnimationFuture.ignore();
     Log.w("User login failed. Proceeding to login");
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
+    Navigator.pop(context, false);
   }
 
   @override
