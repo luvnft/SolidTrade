@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -44,6 +45,8 @@ class LoginScreen extends StatelessWidget with STWidget {
     ];
   }
 
+  double calculateImageSize(BoxConstraints constraints) => max(constraints.maxHeight, constraints.maxWidth) * 0.5;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -57,7 +60,7 @@ class LoginScreen extends StatelessWidget with STWidget {
               imageAsBytes != null
                   ? Util.loadImageFromMemory(
                       imageAsBytes!,
-                      constraints.maxWidth,
+                      calculateImageSize(constraints),
                       borderRadius: BorderRadius.circular(25),
                       boxFit: BoxFit.cover,
                       loadingBoxShape: BoxShape.rectangle,
@@ -65,14 +68,14 @@ class LoginScreen extends StatelessWidget with STWidget {
                   : imageUrl != null
                       ? Util.loadImage(
                           imageUrl!,
-                          constraints.maxWidth,
+                          calculateImageSize(constraints),
                           borderRadius: BorderRadius.circular(25),
                           boxFit: BoxFit.cover,
                           loadingBoxShape: BoxShape.rectangle,
                         )
                       : Util.loadImageFromAssets(
                           assetName!,
-                          constraints.maxWidth,
+                          calculateImageSize(constraints),
                           borderRadius: BorderRadius.circular(25),
                           boxFit: BoxFit.cover,
                           loadingBoxShape: BoxShape.rectangle,
