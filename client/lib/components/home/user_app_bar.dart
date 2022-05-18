@@ -52,10 +52,20 @@ class UserAppBar extends StatelessWidget with STWidget {
                         ),
                       ),
                     ),
-                    const Text(
-                      "Your Portfolio🚀",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Your Portfolio🚀",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          "@${user.username}",
+                          style: TextStyle(fontSize: 14, color: colors.lessSoftForeground),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 Row(
