@@ -16,7 +16,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/app/main_dev.dart",
-      "args": ["--web-port=49983 --release"]
+      "args": ["--web-port=49983", "--release"]
     }
   ]
 }
