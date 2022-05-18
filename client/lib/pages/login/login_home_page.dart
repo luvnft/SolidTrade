@@ -26,7 +26,7 @@ class LoginHome extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     return LoginScreen(
       assetName: "assets/images/welcome_image.jpg",
-      title: "Too broke to start investing?\n",
+      title: "Too broke to start investing?",
       subTitle: "Start paper trading with Stocks, ETFs and Derivatives. Try new investment strategies and compare your portfolio with friends and others!",
       additionalWidgets: [
         Util.roundedButton(
