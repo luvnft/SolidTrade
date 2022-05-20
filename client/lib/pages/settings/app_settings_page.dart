@@ -12,9 +12,12 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/custom/timer_button.dart';
 import 'package:solidtrade/data/common/settings/update_user_dto.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
+import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/models/user.dart';
 import 'package:solidtrade/pages/settings/crop_image.dart';
 import 'package:solidtrade/pages/settings/profile_settings_page.dart';
+import 'package:solidtrade/providers/language/language_provider.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 
 import 'package:solidtrade/services/util/user_util.dart';
@@ -30,12 +33,17 @@ class AppPreferences extends StatefulWidget {
 
 class _AppPreferencesState extends State<AppPreferences> with STWidget {
   final _userService = GetIt.instance.get<UserService>();
+  late int _initialColorTheme;
+  late int _initialLanguage;
+
   late UpdateUserDto _updateUserDto;
   Uint8List? _imageAsBytes;
 
   @override
   void initState() {
     super.initState();
+    _initialColorTheme = colors.themeColorType.index;
+    _initialLanguage = translations.langTicker.index;
 
     _updateUserDto = UpdateUserDto(
       bio: widget.user.bio,
@@ -54,12 +62,25 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
     ),
   );
 
-  bool get _hasUpdatedProfile => _updateUserDto.hasUpdatedProfileByUser(widget.user) || _imageAsBytes != null;
+  bool get _hasUpdatedPreferences => _hasUpdatedAppSettings || _hasUpdateProfile;
+
+  bool get _hasUpdatedAppSettings {
+    return _initialColorTheme != colors.themeColorType.index || _initialLanguage != translations.langTicker.index;
+  }
+
+  bool get _hasUpdateProfile {
+    return _updateUserDto.hasUpdatedProfileByUser(widget.user) || _imageAsBytes != null;
+  }
+
+  void revertAppSettingsChanges() {
+    configurationProvider.languageProvider.updateLanguage(LanguageProvider.byTicker(LanguageTicker.values[_initialLanguage]).language);
+    configurationProvider.themeProvider.updateTheme(ColorThemeType.values[_initialColorTheme]);
+  }
 
   Future<void> _handleUpdateProfile() async {
     _updateUserDto.profilePictureFile = _imageAsBytes;
 
-    if (!_hasUpdatedProfile) {
+    if (!_hasUpdateProfile) {
       Navigator.pop(context);
       return;
     }
@@ -82,12 +103,13 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
   }
 
   Future<void> _handleDiscardProfileUpdate() async {
-    if (!_hasUpdatedProfile) {
+    if (!_hasUpdatedPreferences) {
       Navigator.pop(context);
       return;
     }
 
     if (await Util.showUnsavedChangesWarningDialog(context)) {
+      revertAppSettingsChanges();
       Navigator.of(context).pop();
     }
   }
