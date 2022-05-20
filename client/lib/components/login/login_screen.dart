@@ -60,7 +60,6 @@ class LoginScreen extends StatelessWidget with STWidget {
           style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
         ),
       ),
-      const Spacer(),
     ];
   }
 
@@ -69,48 +68,56 @@ class LoginScreen extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * .88,
+      builder: (BuildContext context, BoxConstraints constraints) => CustomScrollView(
+        controller: ScrollController(),
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              children: [
+                imageAsBytes != null
+                    ? Util.loadImageFromMemory(
+                        imageAsBytes!,
+                        calculateImageSize(constraints),
+                        borderRadius: BorderRadius.circular(25),
+                        boxFit: BoxFit.cover,
+                        loadingBoxShape: BoxShape.rectangle,
+                      )
+                    : imageUrl != null
+                        ? Util.loadImage(
+                            imageUrl!,
+                            calculateImageSize(constraints),
+                            borderRadius: BorderRadius.circular(25),
+                            boxFit: BoxFit.cover,
+                            loadingBoxShape: BoxShape.rectangle,
+                          )
+                        : Util.loadImageFromAssets(
+                            assetName!,
+                            calculateImageSize(constraints),
+                            borderRadius: BorderRadius.circular(25),
+                            boxFit: BoxFit.cover,
+                            loadingBoxShape: BoxShape.rectangle,
+                          ),
+                const SizedBox(height: 20),
+                ...getTitleContent(constraints, context),
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ...additionalWidgets ??
+                            [
+                              const SizedBox.shrink()
+                            ],
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-          child: Column(
-            children: [
-              imageAsBytes != null
-                  ? Util.loadImageFromMemory(
-                      imageAsBytes!,
-                      calculateImageSize(constraints),
-                      borderRadius: BorderRadius.circular(25),
-                      boxFit: BoxFit.cover,
-                      loadingBoxShape: BoxShape.rectangle,
-                    )
-                  : imageUrl != null
-                      ? Util.loadImage(
-                          imageUrl!,
-                          calculateImageSize(constraints),
-                          borderRadius: BorderRadius.circular(25),
-                          boxFit: BoxFit.cover,
-                          loadingBoxShape: BoxShape.rectangle,
-                        )
-                      : Util.loadImageFromAssets(
-                          assetName!,
-                          calculateImageSize(constraints),
-                          borderRadius: BorderRadius.circular(25),
-                          boxFit: BoxFit.cover,
-                          loadingBoxShape: BoxShape.rectangle,
-                        ),
-              const SizedBox(height: 20),
-              ...getTitleContent(constraints, context),
-              ...[
-                ...additionalWidgets ??
-                    [
-                      const SizedBox.shrink()
-                    ],
-                // const SizedBox(height: 15),
-              ]
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

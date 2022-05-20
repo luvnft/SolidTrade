@@ -143,6 +143,38 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
         ));
   }
 
+  List<Widget> _roundedButtons(bool showButtons) {
+    if (!showButtons) {
+      return [];
+    }
+
+    return [
+      Util.roundedButton(
+        [
+          const SizedBox(width: 2),
+          const Text(
+            "Upload own picture. GIFs are also supported!",
+          ),
+          const SizedBox(width: 2),
+        ],
+        colors: colors,
+        onPressed: _handleClickUploadImage,
+      ),
+      const SizedBox(height: 10),
+      Util.roundedButton(
+        [
+          const Spacer(flex: 3),
+          const Text("Looks good? Continue here"),
+          const Spacer(),
+          const Icon(Icons.chevron_right),
+          const Spacer(),
+        ],
+        colors: colors,
+        onPressed: _handleClickContinueSignUp,
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -171,29 +203,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
                 )
               : const SizedBox.shrink(),
           const SizedBox(height: 10),
-          Util.roundedButton(
-            [
-              const SizedBox(width: 2),
-              const Text(
-                "Upload own picture. GIFs are also supported!",
-              ),
-              const SizedBox(width: 2),
-            ],
-            colors: colors,
-            onPressed: _handleClickUploadImage,
-          ),
-          const SizedBox(height: 10),
-          Util.roundedButton(
-            [
-              const Spacer(flex: 3),
-              const Text("Looks good? Continue here"),
-              const Spacer(),
-              const Icon(Icons.chevron_right),
-              const Spacer(),
-            ],
-            colors: colors,
-            onPressed: _handleClickContinueSignUp,
-          ),
+          ..._roundedButtons(!isKeyboardVisible),
         ],
       ),
     );
