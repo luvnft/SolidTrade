@@ -35,14 +35,13 @@ class Quotes {
     QuoteInfo(lang: LanguageTicker.en, quote: "TSLA to the moon🚀"),
     QuoteInfo(lang: LanguageTicker.en, quote: "A wise man once said with wisdom comes 100X leverage🚀"),
     QuoteInfo(lang: LanguageTicker.en, quote: "Why buy ETFs if you can buy Knockouts with 100X leverage🤷‍♂️"),
-    QuoteInfo(lang: LanguageTicker.en, quote: "What is a Margin Call and why can’t I buy more TSLA?!"),
+    QuoteInfo(lang: LanguageTicker.en, quote: "What is a Margin Call and why can't I buy more TSLA?!"),
     QuoteInfo(lang: LanguageTicker.en, quote: "The Big Long🚀"),
     QuoteInfo(lang: LanguageTicker.en, quote: "Some people are actually making money in the stock market?"),
     QuoteInfo(lang: LanguageTicker.en, quote: "My portfolio is doing better than usual today\n Meanwhile, Portfolio down 70%"),
     QuoteInfo(lang: LanguageTicker.en, quote: "Anyone knows a Trade Republic money glitch?"),
     QuoteInfo(lang: LanguageTicker.en, quote: "With great leverage comes greater profits. Technically..."),
-    QuoteInfo(lang: LanguageTicker.en, quote: "12. great leverage comes greater profits. Technically..."),
-    QuoteInfo(lang: LanguageTicker.en, quote: "Ever heard of technical analysis? It’s pretty much astrology for men. Try it!"),
+    QuoteInfo(lang: LanguageTicker.en, quote: "Ever heard of technical analysis? It's pretty much astrology for men. Try it!"),
   ];
 
   // TODO: Add more quotes...
