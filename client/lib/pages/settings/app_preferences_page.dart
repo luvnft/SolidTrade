@@ -351,10 +351,10 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: Material(
                     elevation: 5,
+                    color: colors.background,
                     child: GestureDetector(
                       onTap: _handleClickChangeProfilePicture,
                       child: Container(
-                        color: colors.background,
                         child: _imageAsBytes != null
                             ? Util.loadImageFromMemory(
                                 _imageAsBytes!,
