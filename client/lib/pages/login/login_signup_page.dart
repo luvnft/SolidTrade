@@ -152,7 +152,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
         title: "Welcome to Solidtrade!",
         subTitle: "Ready to create your solidtrade profile? Let's start with your profile picture!\nType a custom seed to generate a picture or upload your own custom image.",
         alternativeTitle: "Type a custom seed to generate a picture!",
-        useAlternativeTitleContent: !isKeyboardVisible,
+        useAlternativeTitleContent: isKeyboardVisible,
         additionalWidgets: [
           showSeedInputField
               ? SizedBox(

@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget with STWidget {
   final List<Widget>? additionalWidgets;
 
   List<Widget> getTitleContent(BoxConstraints constraints, BuildContext context) {
-    if (!useAlternativeTitleContent) {
+    if (useAlternativeTitleContent) {
       if (alternativeTitle == null) {
         return [];
       }
@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget with STWidget {
                     [
                       const SizedBox.shrink()
                     ],
-                const SizedBox(height: 15),
+                // const SizedBox(height: 15),
               ]
             ],
           ),
