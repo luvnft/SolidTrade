@@ -43,11 +43,12 @@ class LoginHome extends StatelessWidget with STWidget {
         ),
         const SizedBox(height: 10),
         Util.roundedButton([
-          const Spacer(flex: 3),
-          const Text("Already have an account? Sign In here."),
-          const Spacer(),
+          const Spacer(flex: 8),
+          SizedBox(width: IconTheme.of(context).size),
+          const Text("Already have an account? Sign In here"),
+          const Spacer(flex: 7),
           const Icon(Icons.keyboard_arrow_right_rounded),
-          const Spacer(),
+          const Spacer(flex: 1),
         ], colors: colors, onPressed: _handleClickLoginUser),
       ],
     );

@@ -163,11 +163,12 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
       const SizedBox(height: 10),
       Util.roundedButton(
         [
-          const Spacer(flex: 3),
+          const Spacer(flex: 8),
+          SizedBox(width: IconTheme.of(context).size),
           const Text("Looks good? Continue here"),
-          const Spacer(),
-          const Icon(Icons.chevron_right),
-          const Spacer(),
+          const Spacer(flex: 7),
+          const Icon(Icons.keyboard_arrow_right_rounded),
+          const Spacer(flex: 1),
         ],
         colors: colors,
         onPressed: _handleClickContinueSignUp,
