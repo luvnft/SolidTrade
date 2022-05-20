@@ -3,9 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/models/user.dart';
-import 'package:solidtrade/pages/settings/app_settings_page.dart';
+import 'package:solidtrade/pages/settings/app_preferences_page.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class UserAppBar extends StatelessWidget with STWidget {
