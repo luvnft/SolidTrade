@@ -10,20 +10,38 @@ class LoginScreen extends StatelessWidget with STWidget {
     Key? key,
     required this.title,
     required this.subTitle,
+    this.alternativeTitle,
     this.imageUrl,
     this.assetName,
     this.additionalWidgets,
     this.imageAsBytes,
+    this.useAlternativeTitleContent = false,
   }) : super(key: key);
 
   final String title;
   final String subTitle;
+  final String? alternativeTitle;
+  final bool useAlternativeTitleContent;
   final String? imageUrl;
   final String? assetName;
   final Uint8List? imageAsBytes;
   final List<Widget>? additionalWidgets;
 
   List<Widget> getTitleContent(BoxConstraints constraints, BuildContext context) {
+    if (!useAlternativeTitleContent) {
+      if (alternativeTitle == null) {
+        return [];
+      }
+
+      return [
+        Text(
+          alternativeTitle!,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+        ),
+      ];
+    }
+
     return [
       Container(
         margin: const EdgeInsets.symmetric(horizontal: 40),
@@ -41,7 +59,8 @@ class LoginScreen extends StatelessWidget with STWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
         ),
-      )
+      ),
+      const Spacer(),
     ];
   }
 
@@ -82,7 +101,6 @@ class LoginScreen extends StatelessWidget with STWidget {
                         ),
               const SizedBox(height: 20),
               ...getTitleContent(constraints, context),
-              const Spacer(),
               ...[
                 ...additionalWidgets ??
                     [

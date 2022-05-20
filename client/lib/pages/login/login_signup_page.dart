@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -144,53 +145,57 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoginScreen(
-      imageUrl: "https://avatars.dicebear.com/api/micah/$_dicebearSeed.svg",
-      imageAsBytes: imageAsBytes,
-      title: "Welcome to Solidtrade!",
-      subTitle: "Ready to create your solidtrade profile? Let's start with your profile picture!\nType a custom seed to generate a picture or upload your own custom image.",
-      additionalWidgets: [
-        showSeedInputField
-            ? SizedBox(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.all(10),
-                    border: OutlineInputBorder(),
-                    hintText: 'Why not enter your name 😉',
+    return KeyboardVisibilityBuilder(
+      builder: (_, isKeyboardVisible) => LoginScreen(
+        imageUrl: "https://avatars.dicebear.com/api/micah/$_dicebearSeed.svg",
+        imageAsBytes: imageAsBytes,
+        title: "Welcome to Solidtrade!",
+        subTitle: "Ready to create your solidtrade profile? Let's start with your profile picture!\nType a custom seed to generate a picture or upload your own custom image.",
+        alternativeTitle: "Type a custom seed to generate a picture!",
+        useAlternativeTitleContent: !isKeyboardVisible,
+        additionalWidgets: [
+          showSeedInputField
+              ? SizedBox(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(10),
+                      border: OutlineInputBorder(),
+                      hintText: 'Why not enter your name 😉',
+                    ),
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                    initialValue: _dicebearSeed,
+                    onChanged: _handleChangeSeed,
                   ),
-                  style: const TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                  initialValue: _dicebearSeed,
-                  onChanged: _handleChangeSeed,
-                ),
-              )
-            : const SizedBox.shrink(),
-        const SizedBox(height: 10),
-        Util.roundedButton(
-          [
-            const SizedBox(width: 2),
-            const Text(
-              "Upload own picture. GIFs are also supported!",
-            ),
-            const SizedBox(width: 2),
-          ],
-          colors: colors,
-          onPressed: _handleClickUploadImage,
-        ),
-        const SizedBox(height: 10),
-        Util.roundedButton(
-          [
-            const Spacer(flex: 3),
-            const Text("Looks good? Continue here"),
-            const Spacer(),
-            const Icon(Icons.chevron_right),
-            const Spacer(),
-          ],
-          colors: colors,
-          onPressed: _handleClickContinueSignUp,
-        ),
-      ],
+                )
+              : const SizedBox.shrink(),
+          const SizedBox(height: 10),
+          Util.roundedButton(
+            [
+              const SizedBox(width: 2),
+              const Text(
+                "Upload own picture. GIFs are also supported!",
+              ),
+              const SizedBox(width: 2),
+            ],
+            colors: colors,
+            onPressed: _handleClickUploadImage,
+          ),
+          const SizedBox(height: 10),
+          Util.roundedButton(
+            [
+              const Spacer(flex: 3),
+              const Text("Looks good? Continue here"),
+              const Spacer(),
+              const Icon(Icons.chevron_right),
+              const Spacer(),
+            ],
+            colors: colors,
+            onPressed: _handleClickContinueSignUp,
+          ),
+        ],
+      ),
     );
   }
 }
