@@ -35,6 +35,8 @@ Future<void> commonMain(Environment env) async {
 }
 
 void registerFlutterErrorHandler(Environment environment) {
+  var isShowingErrorSnackBar = false;
+
   FlutterError.onError = (details) {
     // We can exclude image errors, because these are already being handled.
     if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
@@ -47,6 +49,12 @@ void registerFlutterErrorHandler(Environment environment) {
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // We dont want to stack error snack bars. There for we only create one, if there currently is not other.
+      if (isShowingErrorSnackBar) {
+        return;
+      }
+
+      isShowingErrorSnackBar = true;
       Future.delayed(const Duration(seconds: 1), () {
         final context = navigatorKey.currentState!.context;
         final snackBar = SnackBar(
@@ -68,7 +76,7 @@ void registerFlutterErrorHandler(Environment environment) {
           ]),
         );
 
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar).closed.then((_) => isShowingErrorSnackBar = false);
       });
     });
   };
