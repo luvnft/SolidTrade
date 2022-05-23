@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -68,56 +69,50 @@ class LoginScreen extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => CustomScrollView(
-        controller: ScrollController(),
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              children: [
-                imageAsBytes != null
-                    ? Util.loadImageFromMemory(
-                        imageAsBytes!,
+      builder: (BuildContext context, BoxConstraints constraints) => PreventColumnRenderFlexOverflowWrapper(
+        child: Column(
+          children: [
+            imageAsBytes != null
+                ? Util.loadImageFromMemory(
+                    imageAsBytes!,
+                    calculateImageSize(constraints),
+                    borderRadius: BorderRadius.circular(25),
+                    boxFit: BoxFit.cover,
+                    loadingBoxShape: BoxShape.rectangle,
+                  )
+                : imageUrl != null
+                    ? Util.loadImage(
+                        imageUrl!,
                         calculateImageSize(constraints),
                         borderRadius: BorderRadius.circular(25),
                         boxFit: BoxFit.cover,
                         loadingBoxShape: BoxShape.rectangle,
                       )
-                    : imageUrl != null
-                        ? Util.loadImage(
-                            imageUrl!,
-                            calculateImageSize(constraints),
-                            borderRadius: BorderRadius.circular(25),
-                            boxFit: BoxFit.cover,
-                            loadingBoxShape: BoxShape.rectangle,
-                          )
-                        : Util.loadImageFromAssets(
-                            assetName!,
-                            calculateImageSize(constraints),
-                            borderRadius: BorderRadius.circular(25),
-                            boxFit: BoxFit.cover,
-                            loadingBoxShape: BoxShape.rectangle,
-                          ),
-                const SizedBox(height: 20),
-                ...getTitleContent(constraints, context),
-                Flexible(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ...additionalWidgets ??
-                            [
-                              const SizedBox.shrink()
-                            ],
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+                    : Util.loadImageFromAssets(
+                        assetName!,
+                        calculateImageSize(constraints),
+                        borderRadius: BorderRadius.circular(25),
+                        boxFit: BoxFit.cover,
+                        loadingBoxShape: BoxShape.rectangle,
+                      ),
+            const SizedBox(height: 20),
+            ...getTitleContent(constraints, context),
+            Flexible(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ...additionalWidgets ??
+                        [
+                          const SizedBox.shrink()
+                        ],
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
