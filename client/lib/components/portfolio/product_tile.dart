@@ -31,13 +31,14 @@ class _ProductTileState extends State<ProductTile> with STWidget {
     trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtension(widget.info.isin);
   }
 
-  void _onClickProduct(TrProductInfo info) {
+  void _onClickProduct(TrProductInfo info, TrUiProductDetails details) {
     Util.pushToRoute(
       context,
       ProductView(
         positionType: widget.info.positionType,
         productInfo: info,
         trProductPriceStream: trProductPriceService.stream$,
+        productDetails: details,
       ),
     );
   }
@@ -80,13 +81,14 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                     minimumSize: const Size(50, 30),
                     alignment: Alignment.centerLeft,
                   ),
-                  onPressed: () => _onClickProduct(productInfo),
+                  onPressed: () => _onClickProduct(productInfo, details),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Util.loadImage(
                         details.imageUrl,
                         40,
+                        backgroundColor: colors.softBackground,
                       ),
                       const SizedBox(width: 10),
                       Column(

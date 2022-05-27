@@ -16,12 +16,20 @@ abstract class IColorTheme {
   Color get background;
   Color get softBackground;
 
-  // Splash screen
+  // Common colors for validation
+  Color get redErrorBackground;
+  Color get redErrorText;
+
+  // Unique colors
   Color get splashScreenColor;
+  Color get orderDescriptionColor;
 
   // Images
   String get logoAsGif;
-  String get loginBlurredBackground;
+  String get limitOrderBuy;
+  String get limitOrderSell;
+  String get stopOrderBuy;
+  String get stopOrderSell;
 
   // Common stock colors
   Color get lightGreen;
@@ -54,6 +62,7 @@ class SharedColorThemes {
 
   static const Color stockRedLight = Color.fromRGBO(255, 232, 226, 1);
   static const Color stockRed = Color.fromRGBO(252, 99, 55, 1);
+  static const Color redErrorText = Colors.red;
 
   static const Color unselectedItem = Colors.grey;
 }
@@ -81,7 +90,16 @@ class LightColorTheme implements IColorTheme {
   String get logoAsGif => "assets/images/light-logo.gif";
 
   @override
-  String get loginBlurredBackground => "assets/images/light-blurred-login-background.jpg";
+  String get limitOrderBuy => "assets/images/order_types/buy_limit_order_light.jpg";
+
+  @override
+  String get limitOrderSell => "assets/images/order_types/sell_limit_order_light.jpg";
+
+  @override
+  String get stopOrderBuy => "assets/images/order_types/buy_stop_order_light.jpg";
+
+  @override
+  String get stopOrderSell => "assets/images/order_types/sell_stop_order_light.jpg";
 
   @override
   Color get selectedItem => Colors.black;
@@ -124,6 +142,15 @@ class LightColorTheme implements IColorTheme {
 
   @override
   Color get splashScreenColor => const Color.fromRGBO(251, 251, 251, 1);
+
+  @override
+  Color get orderDescriptionColor => const Color.fromRGBO(247, 247, 247, 1);
+
+  @override
+  Color get redErrorBackground => const Color.fromARGB(255, 253, 229, 227);
+
+  @override
+  Color get redErrorText => SharedColorThemes.redErrorText;
 }
 
 class DarkColorTheme implements IColorTheme {
@@ -149,7 +176,16 @@ class DarkColorTheme implements IColorTheme {
   String get logoAsGif => "assets/images/dark-logo.gif";
 
   @override
-  String get loginBlurredBackground => "assets/images/dark-blurred-login-background.jpg";
+  String get limitOrderBuy => "assets/images/order_types/buy_limit_order_dark.jpg";
+
+  @override
+  String get limitOrderSell => "assets/images/order_types/sell_limit_order_dark.jpg";
+
+  @override
+  String get stopOrderBuy => "assets/images/order_types/buy_stop_order_dark.jpg";
+
+  @override
+  String get stopOrderSell => "assets/images/order_types/sell_stop_order_dark.jpg";
 
   @override
   Color get selectedItem => Colors.white;
@@ -192,6 +228,15 @@ class DarkColorTheme implements IColorTheme {
 
   @override
   Color get splashScreenColor => const Color.fromRGBO(4, 4, 4, 1);
+
+  @override
+  Color get orderDescriptionColor => const Color.fromRGBO(0, 0, 0, 1);
+
+  @override
+  Color get redErrorBackground => const Color.fromARGB(255, 66, 18, 14);
+
+  @override
+  Color get redErrorText => SharedColorThemes.redErrorText;
 }
 
 class ThemeProvider {

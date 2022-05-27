@@ -1,6 +1,9 @@
+import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
+import 'package:solidtrade/data/enums/buy_or_sell.dart';
 import 'package:solidtrade/data/enums/name_for_large_number.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
 import '../translation.dart';
@@ -35,6 +38,76 @@ class EnTranslation implements ITranslation {
 
   @override
   IWelcomeTranslation get welcome => EnWelcomeTranslation();
+
+  @override
+  ICreateOrderViewTranslation get createOrderView => EnCreateOrderViewTranslation();
+
+  @override
+  IEditOrderSettingsTranslation get editOrderSettingsView => EnEditOrderSettingsTranslation();
+}
+
+class EnEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
+  @override
+  String buyLimitOrderDescription(String tickerOrName, double currentPrice) => "Trigger a limit buy if $tickerOrName€ decreases from ${currentPrice.toDefaultPrice()} to:";
+
+  @override
+  String buyStopOrderDescription(String tickerOrName, double currentPrice) => "Buy at market price if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:";
+
+  @override
+  String sellLimitOrderDescription(String tickerOrName, double currentPrice) => "Trigger a limit sell if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:";
+
+  @override
+  String sellStopOrderDescription(String tickerOrName, double currentPrice) => "Sell at market price if $tickerOrName decreases from ${currentPrice.toDefaultPrice()} to:";
+
+  @override
+  String get errorMessagePriceMustBeHigher => "The specified price must be more than the market price";
+
+  @override
+  String get errorMessagePriceMustBeLower => "The specified price must be less than the market price";
+
+  @override
+  String get errorMessagePriceCannotBeEmptyOrZero => "The price given can not be empty or zero";
+
+  @override
+  String get errorMessageInsufficientFunds => "You dont have sufficient funds for this transaction";
+
+  @override
+  String get errorMessageNumberOfSharesCannotBeZero => "The specified number of shares can not be zero";
+}
+
+class EnCreateOrderViewTranslation implements ICreateOrderViewTranslation {
+  @override
+  String buyLimitOrderDescription(String tickerOrName) => "Set the limit price, or the maximum price at which you're willing to buy $tickerOrName. Your order will only be fulfilled at your limit price or lower.";
+
+  @override
+  String buyStopOrderDescription(String tickerOrName) => "Set a stop price above the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.";
+
+  @override
+  String sellLimitOrderDescription(String tickerOrName) => "Set the limit price, or the minimum price at which you're willing to sell $tickerOrName. Your order will only be fulfilled at your limit price or higher.";
+
+  @override
+  String sellStopOrderDescription(String tickerOrName) => "Set a stop price below the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.";
+
+  @override
+  String buySellProduct(BuyOrSell buyOrSell, String tickerOrName) => "${buyOrSell.name} $tickerOrName";
+
+  @override
+  String cashAvailable(double cash) => "Cash available: ${cash.toDefaultPrice()}";
+
+  @override
+  String get changeAsTextLiteral => "Change";
+
+  @override
+  String get createOrderAsTextLiteral => "Create order";
+
+  @override
+  String sharesOwned(double numberOfShares) => "Shares owned: $numberOfShares";
+
+  @override
+  String totalPrice(double totalPrice) => "Total price: ${totalPrice.toDefaultPrice()}";
+
+  @override
+  String stopLimitText(OrderType orderType) => "${orderType.name} price";
 }
 
 class EnChartTranslation implements IChartTranslation {
@@ -70,6 +143,12 @@ class EnChartDateRangeViewTranslation implements IChartDateRangeViewTranslation 
 class EnCommonTranslation implements ICommonTranslation {
   @override
   String get httpFriendlyErrorResponse => "Something went wrong. Please make sure your input is valid.";
+
+  @override
+  String get buyAsTextLiteral => "Buy";
+
+  @override
+  String get sellAsTextLiteral => "Sell";
 }
 
 class EnPortfolioTranslation implements IPortfolioTranslation {}

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/chart/chart.dart';
+import 'package:solidtrade/components/shared/create_order_view/create_order_view.dart';
 import 'package:solidtrade/components/shared/product_view/analysts_recommendations.dart';
 import 'package:solidtrade/components/shared/product_view/derivatives_selection.dart';
 import 'package:solidtrade/components/shared/product_view/product_app_bar.dart';
@@ -11,6 +12,7 @@ import 'package:solidtrade/components/shared/product_view/product_chart_date_ran
 import 'package:solidtrade/components/shared/product_view/product_details.dart';
 import 'package:solidtrade/components/shared/product_view/product_information.dart';
 import 'package:solidtrade/components/shared/product_view/product_metrics.dart';
+import 'package:solidtrade/data/enums/buy_or_sell.dart';
 import 'package:solidtrade/data/enums/position_type.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
@@ -32,9 +34,11 @@ class ProductView extends StatefulWidget {
     required this.trProductPriceStream,
     required this.productInfo,
     required this.positionType,
+    required this.productDetails,
   }) : super(key: key);
 
   final Stream<TrProductPrice?> trProductPriceStream;
+  final TrUiProductDetails productDetails;
   final TrProductInfo productInfo;
   final PositionType positionType;
 
@@ -108,6 +112,18 @@ class _ProductViewState extends State<ProductView> with STWidget {
 
   Widget divider() {
     return Container(margin: const EdgeInsets.symmetric(horizontal: 20), child: Divider(color: colors.softForeground, thickness: 3));
+  }
+
+  void _pushToCreateOrder(BuyOrSell buyOrSell) {
+    Util.pushToRoute(
+      context,
+      CreateOrderView(
+        productInfo: widget.productInfo,
+        buyOrSell: buyOrSell,
+        trProductPriceStream: widget.trProductPriceStream,
+        productDetails: widget.productDetails,
+      ),
+    );
   }
 
   @override
@@ -289,7 +305,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                                 width: buttonWidth,
                                 margin: const EdgeInsets.all(5),
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () => _pushToCreateOrder(BuyOrSell.sell),
                                   child: const Text("Sell", style: TextStyle(color: Colors.white)),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(colors.stockRed),
@@ -302,7 +318,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
                           width: buttonWidth,
                           margin: const EdgeInsets.all(5),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () => _pushToCreateOrder(BuyOrSell.buy),
                             child: const Text("Buy", style: TextStyle(color: Colors.white)),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(colors.stockGreen),

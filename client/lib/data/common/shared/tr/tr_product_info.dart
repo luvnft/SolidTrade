@@ -18,6 +18,9 @@ class TrProductInfo {
   String? issuerDisplayName;
   DerivativeInfo? derivativeInfo;
 
+  String get tickerOrShortName => isCrypto ? homeSymbol! : intlSymbol ?? shortName;
+  bool get isCrypto => typeId == "crypto";
+
   TrProductInfo({
     required this.active,
     required this.exchangeIds,

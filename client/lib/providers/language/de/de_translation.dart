@@ -1,6 +1,9 @@
+import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
+import 'package:solidtrade/data/enums/buy_or_sell.dart';
 import 'package:solidtrade/data/enums/name_for_large_number.dart';
 import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
 import '../translation.dart';
@@ -35,6 +38,78 @@ class DeTranslation implements ITranslation {
 
   @override
   IWelcomeTranslation get welcome => DeWelcomeTranslation();
+
+  @override
+  ICreateOrderViewTranslation get createOrderView => DeCreateOrderViewTranslation();
+
+  @override
+  IEditOrderSettingsTranslation get editOrderSettingsView => DeEditOrderSettingsTranslation();
+}
+
+class DeEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
+  String _defaultSuffixText(String tickerOrName, double currentPrice) => "Jetziger $tickerOrName kurs liegt bei ${currentPrice.toDefaultPrice()}.";
+
+  @override
+  String buyLimitOrderDescription(String tickerOrName, double currentPrice) => "Löse einen Limitkauf aus, wenn der $tickerOrName kurs unter den gewünschten preis fällt. ${_defaultSuffixText(tickerOrName, currentPrice)}";
+
+  @override
+  String buyStopOrderDescription(String tickerOrName, double currentPrice) => "Kaufen Sie zum Marktpreis, wenn der $tickerOrName kurs über den gewünschten preis steigt. ${_defaultSuffixText(tickerOrName, currentPrice)}";
+
+  @override
+  String sellLimitOrderDescription(String tickerOrName, double currentPrice) => "Löse einen Limitverkauf aus, wenn der $tickerOrName kurs über den gewünschten preis steigt. ${_defaultSuffixText(tickerOrName, currentPrice)}";
+
+  @override
+  String sellStopOrderDescription(String tickerOrName, double currentPrice) => "Verkaufen Sie zum Marktpreis, wenn der $tickerOrName kurs unter den gewünschten preis fällt. ${_defaultSuffixText(tickerOrName, currentPrice)}";
+
+  @override
+  String get errorMessagePriceMustBeHigher => "Der angegebene Preis muss höher sein als der Marktpreis";
+
+  @override
+  String get errorMessagePriceMustBeLower => "Der angegebene Preis muss niedriger sein als der Marktpreis";
+
+  @override
+  String get errorMessagePriceCannotBeEmptyOrZero => "Der angegebene Preis kann nicht null sein";
+
+  @override
+  String get errorMessageInsufficientFunds => "Ihr Kapital ist nicht ausreichend für diese Transaktion";
+
+  @override
+  String get errorMessageNumberOfSharesCannotBeZero => "Die Anzahl der Anteile muss über null sein";
+}
+
+class DeCreateOrderViewTranslation implements ICreateOrderViewTranslation {
+  @override
+  String buyLimitOrderDescription(String tickerOrName) => "Legen Sie den Limitpreis fest, d.h. den maximalen Preis, zu dem Sie bereit sind, $tickerOrName zu kaufen. Ihr Auftrag wird nur zu Ihrem Limitpreis oder niedriger ausgeführt.";
+
+  @override
+  String buyStopOrderDescription(String tickerOrName) => "Legen Sie einen Stoppkurs über dem aktuellen $tickerOrName-Kurs fest. Wenn der Stop-Kurs erreicht ist, wird Ihre Stop-Order zu einer Market-Order und wird dann zum besten verfügbaren Kurs ausgeführt.";
+
+  @override
+  String sellLimitOrderDescription(String tickerOrName) => "Legen Sie den Limitpreis fest, also den Mindestpreis, zu dem Sie bereit sind, $tickerOrName verkaufen. Ihr Auftrag wird nur zu Ihrem Limitpreis oder höher ausgeführt.";
+
+  @override
+  String sellStopOrderDescription(String tickerOrName) => "Legen Sie einen Stoppkurs unter dem aktuellen $tickerOrName-Kurs fest. Wenn der Stop-Kurs erreicht ist, wird Ihre Stop-Order zu einer Market-Order und wird dann zum besten verfügbaren Kurs ausgeführt.";
+
+  @override
+  String buySellProduct(BuyOrSell buyOrSell, String tickerOrName) => "${buyOrSell.name} $tickerOrName";
+
+  @override
+  String cashAvailable(double cash) => "Verfügbares Geld: ${cash.toDefaultPrice()}";
+
+  @override
+  String get changeAsTextLiteral => "Ändern";
+
+  @override
+  String get createOrderAsTextLiteral => "Order ausführen";
+
+  @override
+  String sharesOwned(double numberOfShares) => "Anteile im Besitz: $numberOfShares";
+
+  @override
+  String totalPrice(double totalPrice) => "Gesamtpreis: ${totalPrice.toDefaultPrice()}";
+
+  @override
+  String stopLimitText(OrderType orderType) => "${orderType.name} preis";
 }
 
 class DeChartTranslation implements IChartTranslation {
@@ -70,6 +145,12 @@ class DeChartDateRangeViewTranslation implements IChartDateRangeViewTranslation 
 class DeCommonTranslation implements ICommonTranslation {
   @override
   String get httpFriendlyErrorResponse => "Es ist ein Fehler aufgetreten. Bitte vergewissern Sie sich, dass Ihre Eingabe gültig ist.";
+
+  @override
+  String get buyAsTextLiteral => "Kaufe";
+
+  @override
+  String get sellAsTextLiteral => "Verkaufe";
 }
 
 class DePortfolioTranslation implements IPortfolioTranslation {}

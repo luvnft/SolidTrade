@@ -38,7 +38,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
 
   Widget _ongoingProductTile(TrProductInfo productInfo, double percentMissingToFill, double currentPrice, TrUiProductDetails details) {
     return _ongoingProductTileWithCustomProperties(
-      onPressed: () => _onClickProduct(productInfo),
+      onPressed: () => _onClickProduct(productInfo, details),
       imageUrl: details.imageUrl,
       productTitle: details.productTitle,
       productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
@@ -132,13 +132,14 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
     );
   }
 
-  void _onClickProduct(TrProductInfo info) {
+  void _onClickProduct(TrProductInfo info, TrUiProductDetails details) {
     Util.pushToRoute(
       context,
       ProductView(
         positionType: widget.positionType,
         productInfo: info,
         trProductPriceStream: trProductPriceService.stream$,
+        productDetails: details,
       ),
     );
   }

@@ -123,7 +123,14 @@ class Util {
     return isGranted;
   }
 
-  static Widget loadImage(String url, double size, {BorderRadius? borderRadius, BoxFit? boxFit, BoxShape loadingBoxShape = BoxShape.circle}) {
+  static Widget loadImage(
+    String url,
+    double size, {
+    BorderRadius? borderRadius,
+    BoxFit? boxFit,
+    BoxShape loadingBoxShape = BoxShape.circle,
+    Color backgroundColor = Colors.transparent,
+  }) {
     borderRadius ??= BorderRadius.circular(90);
 
     return SizedBox(
@@ -131,15 +138,18 @@ class Util {
       height: size,
       child: ClipRRect(
         borderRadius: borderRadius,
-        child: CachedNetworkImage(
-          fit: boxFit,
-          imageUrl: url,
-          height: size,
-          width: size,
-          placeholder: (context, url) => SkeletonAvatar(
-            style: SkeletonAvatarStyle(shape: loadingBoxShape),
+        child: Container(
+          color: backgroundColor,
+          child: CachedNetworkImage(
+            fit: boxFit,
+            imageUrl: url,
+            height: size,
+            width: size,
+            placeholder: (context, url) => SkeletonAvatar(
+              style: SkeletonAvatarStyle(shape: loadingBoxShape),
+            ),
+            errorWidget: (context, url, error) => loadSvgImage(url, size, size),
           ),
-          errorWidget: (context, url, error) => loadSvgImage(url, size, size),
         ),
       ),
     );
@@ -205,16 +215,19 @@ class Util {
     List<Widget> content, {
     required void Function() onPressed,
     required IColorTheme colors,
+    BorderRadius? borderRadius,
     Color? backgroundColor,
     Color? foregroundColor,
+    double height = 50,
   }) {
     foregroundColor ??= colors.foreground;
     backgroundColor ??= colors.background;
+    borderRadius ??= BorderRadius.circular(45);
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(45),
+      borderRadius: borderRadius,
       child: SizedBox(
-        height: 50,
+        height: height,
         child: TextButton(
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(foregroundColor),

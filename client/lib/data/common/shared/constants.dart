@@ -2,6 +2,7 @@ import 'package:solidtrade/data/enums/lang_ticker.dart';
 
 class Constants {
   static const forgotOrLostAccountFormLink = "https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/";
+  static const learnMoreAboutOrderTypesLink = "https://www.investopedia.com/investing/basics-trading-stock-know-your-orders/";
   static const fileUploadLimitInBytes = 10000000; // 10MB
 
   static const endpointHistoricalPosition = "/historicalpositions/";
