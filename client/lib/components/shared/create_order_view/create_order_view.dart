@@ -17,6 +17,7 @@ import 'package:solidtrade/data/enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
+import 'package:solidtrade/services/util/local_auth_util.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -198,8 +199,13 @@ class _CreateOrderViewState extends State<CreateOrderView> with STWidget {
     );
   }
 
-// TODO: Create order
-  void _createOrder() {}
+  Future<void> _createOrder() async {
+    if (!(await UtilLocalAuth.authenticate())) {
+      return;
+    }
+
+    // TODO: Create order
+  }
 
   OrderSettingsView get _getOrderSettingsView => OrderSettingsView(
         buyOrSell: widget.buyOrSell,

@@ -19,6 +19,7 @@ import 'package:solidtrade/pages/settings/profile_settings_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/local_auth_util.dart';
 
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -139,7 +140,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       ],
     );
 
-    if (!deleteAccount) {
+    if (!deleteAccount || !(await UtilLocalAuth.authenticate())) {
       return;
     }
 
@@ -185,7 +186,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       ],
     );
 
-    if (!signOut) {
+    if (!signOut || !(await UtilLocalAuth.authenticate())) {
       return;
     }
 

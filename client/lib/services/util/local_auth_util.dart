@@ -5,14 +5,13 @@ import 'package:solidtrade/services/util/debug/log.dart';
 class UtilLocalAuth {
   static final LocalAuthentication _auth = LocalAuthentication();
 
-  static Future<bool?> authenticate() async {
+  static Future<bool> authenticate() async {
     if (!await _auth.isDeviceSupported()) {
-      return null;
+      return true;
     }
 
-    var authenticated = false;
     try {
-      authenticated = await _auth.authenticate(
+      return await _auth.authenticate(
         localizedReason: 'Scan your fingerprint (or face or whatever) to authenticate',
         options: const AuthenticationOptions(
           useErrorDialogs: true,
@@ -24,7 +23,5 @@ class UtilLocalAuth {
       Log.w(e);
       return false;
     }
-
-    return authenticated;
   }
 }
