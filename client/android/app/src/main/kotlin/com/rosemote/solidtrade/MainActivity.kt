@@ -1,4 +1,4 @@
-package com.rosemote.solidtrade
+package com.rosemite.solidtrade
 
 import io.flutter.embedding.android.FlutterActivity
 

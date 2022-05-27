@@ -49,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.rosemote.solidtrade"
+        applicationId "com.rosemite.solidtrade"
         minSdkVersion 19
         targetSdkVersion 30
         multiDexEnabled true
