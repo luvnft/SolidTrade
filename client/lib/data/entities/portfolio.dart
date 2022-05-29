@@ -1,9 +1,9 @@
-import 'package:solidtrade/data/models/base_entity.dart';
-import 'package:solidtrade/data/models/knockout_position.dart';
-import 'package:solidtrade/data/models/ongoing_knockout_position.dart';
-import 'package:solidtrade/data/models/ongoing_warrant_position.dart';
-import 'package:solidtrade/data/models/stock_positions.dart';
-import 'package:solidtrade/data/models/warrant_position.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/knockout_position.dart';
+import 'package:solidtrade/data/entities/ongoing_knockout_position.dart';
+import 'package:solidtrade/data/entities/ongoing_warrant_position.dart';
+import 'package:solidtrade/data/entities/stock_positions.dart';
+import 'package:solidtrade/data/entities/warrant_position.dart';
 
 class Portfolio implements IBaseEntity {
   @override

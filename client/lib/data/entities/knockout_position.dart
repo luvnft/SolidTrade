@@ -1,6 +1,6 @@
-import 'package:solidtrade/data/models/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
 
-class WarrantPosition implements IBaseEntity {
+class KnockoutPosition implements IBaseEntity {
   @override
   final int id;
   @override
@@ -12,7 +12,7 @@ class WarrantPosition implements IBaseEntity {
   final double buyInPrice;
   final double numberOfShares;
 
-  const WarrantPosition({
+  const KnockoutPosition({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -21,8 +21,8 @@ class WarrantPosition implements IBaseEntity {
     required this.numberOfShares,
   });
 
-  factory WarrantPosition.fromJson(Map<String, dynamic> json) {
-    return WarrantPosition(
+  factory KnockoutPosition.fromJson(Map<String, dynamic> json) {
+    return KnockoutPosition(
       id: json["id"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),

@@ -1,7 +1,7 @@
-import 'package:solidtrade/data/models/historicalposition.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/data/entities/historicalposition.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
 
-import 'base_entity.dart';
+import '../entities/base/base_entity.dart';
 
 class User implements IBaseEntity {
   @override

@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/enums/position_type.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 
 class ProductTileInfo {
   final PositionType positionType;

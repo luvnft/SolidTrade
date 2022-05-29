@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
 
 class Constants {
   static const forgotOrLostAccountFormLink = "https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/";

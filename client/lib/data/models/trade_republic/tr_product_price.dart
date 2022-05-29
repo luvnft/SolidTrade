@@ -1,5 +1,5 @@
 import 'package:simple_json_mapper/simple_json_mapper.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 
 @JsonObject()
 class TrProductPrice {

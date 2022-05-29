@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/models/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
 
 class StockPosition implements IBaseEntity {
   @override

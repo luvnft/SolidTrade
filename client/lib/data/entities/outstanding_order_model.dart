@@ -1,8 +1,8 @@
-import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
-import 'package:solidtrade/data/models/ongoing_knockout_position.dart';
-import 'package:solidtrade/data/models/ongoing_warrant_position.dart';
+import 'package:solidtrade/data/entities/ongoing_knockout_position.dart';
+import 'package:solidtrade/data/entities/ongoing_warrant_position.dart';
+import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
 
-import 'base_entity.dart';
+import '../entities/base/base_entity.dart';
 
 class OutstandingOrderModel implements IBaseEntity {
   @override

@@ -1,8 +1,8 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
-import 'package:solidtrade/data/models/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
 
-class OngoingWarrantPosition implements IBaseEntity {
+class OngoingKnockoutPosition implements IBaseEntity {
   @override
   final int id;
   @override
@@ -16,7 +16,7 @@ class OngoingWarrantPosition implements IBaseEntity {
   final DateTime goodUntil;
   final EnterOrExitPositionType type;
 
-  const OngoingWarrantPosition({
+  const OngoingKnockoutPosition({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -27,8 +27,8 @@ class OngoingWarrantPosition implements IBaseEntity {
     required this.type,
   });
 
-  factory OngoingWarrantPosition.fromJson(Map<String, dynamic> json) {
-    return OngoingWarrantPosition(
+  factory OngoingKnockoutPosition.fromJson(Map<String, dynamic> json) {
+    return OngoingKnockoutPosition(
       id: json["id"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),

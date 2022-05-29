@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:solidtrade/data/common/settings/update_user_dto.dart';
-import 'package:solidtrade/data/models/common/delete_user_response.dart';
+import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
+import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
 import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/models/user.dart';

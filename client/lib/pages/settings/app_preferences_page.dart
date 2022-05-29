@@ -10,7 +10,7 @@ import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/custom/timer_button.dart';
-import 'package:solidtrade/data/common/settings/update_user_dto.dart';
+import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/enums/lang_ticker.dart';
 import 'package:solidtrade/data/models/user.dart';

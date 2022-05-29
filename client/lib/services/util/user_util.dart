@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:solidtrade/data/models/common/delete_user_response.dart';
+import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
 import 'package:solidtrade/data/common/request/request_response.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 

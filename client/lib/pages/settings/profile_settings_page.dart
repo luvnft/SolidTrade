@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/settings/update_user_dto.dart';
+import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
