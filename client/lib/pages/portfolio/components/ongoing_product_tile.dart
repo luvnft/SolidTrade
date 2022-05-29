@@ -135,7 +135,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
   void _onClickProduct(TrProductInfo info, TrUiProductDetails details) {
     Util.pushToRoute(
       context,
-      ProductView(
+      ProductPage(
         positionType: widget.positionType,
         productInfo: info,
         trProductPriceStream: trProductPriceService.stream$,

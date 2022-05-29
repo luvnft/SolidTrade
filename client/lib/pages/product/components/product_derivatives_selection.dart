@@ -79,7 +79,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            translations.productView.derivativesRiskDisclaimer,
+            translations.ProductPage.derivativesRiskDisclaimer,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
           ),
         )

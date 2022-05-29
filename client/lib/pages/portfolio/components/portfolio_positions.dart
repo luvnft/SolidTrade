@@ -11,15 +11,15 @@ import 'package:solidtrade/data/models/outstanding_order_model.dart';
 import 'package:solidtrade/data/models/portfolio.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 
-class PortfolioPositionsPage extends StatefulWidget {
-  const PortfolioPositionsPage({Key? key, required this.isViewingOutstandingOrders}) : super(key: key);
+class PortfolioPositions extends StatefulWidget {
+  const PortfolioPositions({Key? key, required this.isViewingOutstandingOrders}) : super(key: key);
   final bool isViewingOutstandingOrders;
 
   @override
-  _PortfolioPositionsPageState createState() => _PortfolioPositionsPageState();
+  _PortfolioPositionsState createState() => _PortfolioPositionsState();
 }
 
-class _PortfolioPositionsPageState extends State<PortfolioPositionsPage> with STWidget {
+class _PortfolioPositionsState extends State<PortfolioPositions> with STWidget {
   final portfolioService = GetIt.instance.get<PortfolioService>();
 
   @override

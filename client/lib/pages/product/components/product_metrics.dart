@@ -50,8 +50,8 @@ class ProductMetrics extends StatelessWidget with STWidget {
           children: [
             _constructMetric(
               width,
-              translations.productView.marketCap,
-              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productView.nameOfNumberPrefix(tupleNameForNumber.t1),
+              translations.ProductPage.marketCap,
+              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.ProductPage.nameOfNumberPrefix(tupleNameForNumber.t1),
             ),
             _constructMetric(width, "P/E", result.company.peRatioSnapshot?.toStringAsFixed(2) ?? "--"),
           ],

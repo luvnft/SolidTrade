@@ -69,7 +69,7 @@ class TrUtil {
     return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
   }
 
-  static int productViewGetAnalystsCount(Recommendations recommendations) {
+  static int ProductPageGetAnalystsCount(Recommendations recommendations) {
     return recommendations.buy + recommendations.hold + recommendations.outperform + recommendations.sell + recommendations.underperform;
   }
 

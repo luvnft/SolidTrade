@@ -28,8 +28,8 @@ import 'package:solidtrade/services/util/util.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ProductView extends StatefulWidget {
-  const ProductView({
+class ProductPage extends StatefulWidget {
+  const ProductPage({
     Key? key,
     required this.trProductPriceStream,
     required this.productInfo,
@@ -43,10 +43,10 @@ class ProductView extends StatefulWidget {
   final PositionType positionType;
 
   @override
-  State<ProductView> createState() => _ProductViewState();
+  State<ProductPage> createState() => _ProductPageState();
 }
 
-class _ProductViewState extends State<ProductView> with STWidget {
+class _ProductPageState extends State<ProductPage> with STWidget {
   final TrStockDetailsService stockDetailsService = GetIt.instance.get<TrStockDetailsService>();
   final PortfolioService portfolioService = GetIt.instance.get<PortfolioService>();
   final chartDateRangeStream = ChartDateRangeService();
@@ -117,7 +117,7 @@ class _ProductViewState extends State<ProductView> with STWidget {
   void _pushToCreateOrder(BuyOrSell buyOrSell) {
     Util.pushToRoute(
       context,
-      CreateOrderView(
+      CreateOrderPage(
         productInfo: widget.productInfo,
         buyOrSell: buyOrSell,
         trProductPriceStream: widget.trProductPriceStream,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:solidtrade/components/base/prevent_render_flex_overflow_wrapper.dart';
+import 'package:solidtrade/components/custom/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/create_order_view/order_settings_view.dart';
@@ -21,8 +21,8 @@ import 'package:solidtrade/services/util/local_auth_util.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
-class CreateOrderView extends StatefulWidget {
-  const CreateOrderView({
+class CreateOrderPage extends StatefulWidget {
+  const CreateOrderPage({
     Key? key,
     required this.productInfo,
     required this.buyOrSell,
@@ -35,10 +35,10 @@ class CreateOrderView extends StatefulWidget {
   final BuyOrSell buyOrSell;
 
   @override
-  State<CreateOrderView> createState() => _CreateOrderViewState();
+  State<CreateOrderPage> createState() => _CreateOrderPageState();
 }
 
-class _CreateOrderViewState extends State<CreateOrderView> with STWidget {
+class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   final _portfolioService = GetIt.instance.get<PortfolioService>();
   late TrProductPrice _currentPrice;
 
@@ -81,7 +81,7 @@ class _CreateOrderViewState extends State<CreateOrderView> with STWidget {
               children: [
                 Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyText1),
                 const SizedBox(height: 1),
-                Text(translations.createOrderView.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w400)),
+                Text(translations.CreateOrderPage.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w400)),
               ],
             ),
             actions: [
@@ -115,7 +115,7 @@ class _CreateOrderViewState extends State<CreateOrderView> with STWidget {
                       Row(
                         children: [
                           Text(
-                            translations.createOrderView.buySellProduct(
+                            translations.CreateOrderPage.buySellProduct(
                               widget.buyOrSell,
                               widget.productInfo.tickerOrShortName,
                             ),
@@ -179,11 +179,11 @@ class _CreateOrderViewState extends State<CreateOrderView> with STWidget {
                           onPressed: _enableCreateOrderButton ? _createOrder : null,
                           child: Text(
                             _isMarketOrder
-                                ? translations.createOrderView.buySellProduct(
+                                ? translations.CreateOrderPage.buySellProduct(
                                     widget.buyOrSell,
                                     widget.productInfo.tickerOrShortName,
                                   )
-                                : translations.createOrderView.createOrderAsTextLiteral,
+                                : translations.CreateOrderPage.createOrderAsTextLiteral,
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),
@@ -333,7 +333,7 @@ class SharesInput extends StatelessWidget with STWidget {
                 children: [
                   Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 2.5),
-                  Text(translations.createOrderView.sharesOwned(numberOfSharesOwned), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
+                  Text(translations.CreateOrderPage.sharesOwned(numberOfSharesOwned), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
                 ],
               ),
               Expanded(
@@ -357,7 +357,7 @@ class SharesInput extends StatelessWidget with STWidget {
                       ),
                       style: TextStyle(color: colors.foreground),
                     ),
-                    Text(translations.createOrderView.totalPrice(totalPrice), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
+                    Text(translations.CreateOrderPage.totalPrice(totalPrice), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
                   ],
                 ),
               ),
@@ -396,7 +396,7 @@ class EditStopLimitPrice extends StatelessWidget with STWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(translations.createOrderView.stopLimitText(orderType), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+                  Text(translations.CreateOrderPage.stopLimitText(orderType), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 2.5),
                   Text("1 $name = ${price.toDefaultPrice()}", style: const TextStyle(fontWeight: FontWeight.w400)),
                 ],
@@ -405,7 +405,7 @@ class EditStopLimitPrice extends StatelessWidget with STWidget {
                 [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(translations.createOrderView.changeAsTextLiteral),
+                    child: Text(translations.CreateOrderPage.changeAsTextLiteral),
                   )
                 ],
                 height: 40,

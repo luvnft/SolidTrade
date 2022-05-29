@@ -54,16 +54,16 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
       stream: trStockDetailsStream,
       builder: (context, details) {
         Recommendations recommendations = details.analystRating.recommendations;
-        double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.productViewGetAnalystsCount(recommendations));
-        double holdRecommendation = recommendations.hold / (TrUtil.productViewGetAnalystsCount(recommendations));
-        double sellRecommendation = (recommendations.sell + recommendations.underperform) / (TrUtil.productViewGetAnalystsCount(recommendations));
+        double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.ProductPageGetAnalystsCount(recommendations));
+        double holdRecommendation = recommendations.hold / (TrUtil.ProductPageGetAnalystsCount(recommendations));
+        double sellRecommendation = (recommendations.sell + recommendations.underperform) / (TrUtil.ProductPageGetAnalystsCount(recommendations));
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              translations.productView.whatAnalystsSayContent(details),
+              translations.ProductPage.whatAnalystsSayContent(details),
             ),
             const SizedBox(height: 10),
             SizedBox(

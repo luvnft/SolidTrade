@@ -31,7 +31,7 @@ class DeTranslation implements ITranslation {
   ICommonTranslation get common => DeCommonTranslation();
 
   @override
-  IProductViewTranslation get productView => DeProductViewTranslation();
+  IProductPageTranslation get ProductPage => DeProductPageTranslation();
 
   @override
   IChartTranslation get chart => DeChartTranslation();
@@ -40,7 +40,7 @@ class DeTranslation implements ITranslation {
   IWelcomeTranslation get welcome => DeWelcomeTranslation();
 
   @override
-  ICreateOrderViewTranslation get createOrderView => DeCreateOrderViewTranslation();
+  ICreateOrderPageTranslation get CreateOrderPage => DeCreateOrderPageTranslation();
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => DeEditOrderSettingsTranslation();
@@ -77,7 +77,7 @@ class DeEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
   String get errorMessageNumberOfSharesCannotBeZero => "Die Anzahl der Anteile muss über null sein";
 }
 
-class DeCreateOrderViewTranslation implements ICreateOrderViewTranslation {
+class DeCreateOrderPageTranslation implements ICreateOrderPageTranslation {
   @override
   String buyLimitOrderDescription(String tickerOrName) => "Legen Sie den Limitpreis fest, d.h. den maximalen Preis, zu dem Sie bereit sind, $tickerOrName zu kaufen. Ihr Auftrag wird nur zu Ihrem Limitpreis oder niedriger ausgeführt.";
 
@@ -155,10 +155,10 @@ class DeCommonTranslation implements ICommonTranslation {
 
 class DePortfolioTranslation implements IPortfolioTranslation {}
 
-class DeProductViewTranslation implements IProductViewTranslation {
+class DeProductPageTranslation implements IProductPageTranslation {
   @override
   String whatAnalystsSayContent(TrStockDetails details) {
-    return "Die durchschnittliche Aktienkursschätzung liegt bei ${details.analystRating.targetPrice.average}. Die höchste Schätzung liegt bei ${details.analystRating.targetPrice.high.toStringAsFixed(2)} € und die niedrigste Schätzung bei ${details.analystRating.targetPrice.low.toStringAsFixed(2)} €.\n\nDiese Aktie wird von ${TrUtil.productViewGetAnalystsCount(details.analystRating.recommendations)} Analysten bewertet.";
+    return "Die durchschnittliche Aktienkursschätzung liegt bei ${details.analystRating.targetPrice.average}. Die höchste Schätzung liegt bei ${details.analystRating.targetPrice.high.toStringAsFixed(2)} € und die niedrigste Schätzung bei ${details.analystRating.targetPrice.low.toStringAsFixed(2)} €.\n\nDiese Aktie wird von ${TrUtil.ProductPageGetAnalystsCount(details.analystRating.recommendations)} Analysten bewertet.";
   }
 
   @override

@@ -34,7 +34,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
   void _onClickProduct(TrProductInfo info, TrUiProductDetails details) {
     Util.pushToRoute(
       context,
-      ProductView(
+      ProductPage(
         positionType: widget.info.positionType,
         productInfo: info,
         trProductPriceStream: trProductPriceService.stream$,

@@ -22,7 +22,7 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
 
   var pages = [
     PortfolioOverviewPage(),
-    Container(margin: const EdgeInsets.symmetric(horizontal: 20), child: const PortfolioPositionsPage(isViewingOutstandingOrders: true)),
+    Container(margin: const EdgeInsets.symmetric(horizontal: 20), child: const PortfolioPositions(isViewingOutstandingOrders: true)),
     PortfolioOverviewPage(),
   ];
   int selectedIndex = 0;

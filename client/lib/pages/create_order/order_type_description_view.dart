@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solidtrade/components/base/prevent_render_flex_overflow_wrapper.dart';
+import 'package:solidtrade/components/custom/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/shared/common/learn_about_order_types_button.dart';
 import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
@@ -40,7 +40,23 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
               const Spacer(),
               Image.asset(_orderTypeImage),
               const Spacer(flex: 3),
-              LearnAboutOrderTypesButton(),
+              TextButton(
+                onPressed: _onClickLearnAboutOrderTypes,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.info, size: 25),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "Tip: Want to learn more about order types?",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: colors.foreground),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 10),
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -92,18 +108,18 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
           case OrderType.market:
             throw ("Did not expect market order");
           case OrderType.stop:
-            return translations.createOrderView.buyStopOrderDescription(name);
+            return translations.CreateOrderPage.buyStopOrderDescription(name);
           case OrderType.limit:
-            return translations.createOrderView.buyLimitOrderDescription(name);
+            return translations.CreateOrderPage.buyLimitOrderDescription(name);
         }
       case BuyOrSell.sell:
         switch (orderType) {
           case OrderType.market:
             throw ("Did not expect market order");
           case OrderType.stop:
-            return translations.createOrderView.sellStopOrderDescription(name);
+            return translations.CreateOrderPage.sellStopOrderDescription(name);
           case OrderType.limit:
-            return translations.createOrderView.sellLimitOrderDescription(name);
+            return translations.CreateOrderPage.sellLimitOrderDescription(name);
         }
     }
   }
@@ -112,4 +128,6 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
     var result = await Util.pushToRoute(context, nextPage);
     Navigator.pop(context, result);
   }
+
+  void _onClickLearnAboutOrderTypes() => launch(Constants.learnMoreAboutOrderTypesLink);
 }

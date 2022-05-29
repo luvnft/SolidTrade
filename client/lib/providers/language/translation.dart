@@ -7,8 +7,8 @@ import 'package:solidtrade/data/enums/lang_ticker.dart';
 abstract class ITranslation {
   LanguageTicker get langTicker;
 
-  IProductViewTranslation get productView;
-  ICreateOrderViewTranslation get createOrderView;
+  IProductPageTranslation get ProductPage;
+  ICreateOrderPageTranslation get CreateOrderPage;
   IEditOrderSettingsTranslation get editOrderSettingsView;
   IPortfolioTranslation get portfolio;
   ISettingsTranslation get settings;
@@ -64,14 +64,14 @@ abstract class ISplashTranslation {
 
 abstract class IPortfolioTranslation {}
 
-abstract class IProductViewTranslation {
+abstract class IProductPageTranslation {
   String whatAnalystsSayContent(TrStockDetails details);
   String nameOfNumberPrefix(NameForLargeNumber nameForLargeNumber);
   String get marketCap;
   String get derivativesRiskDisclaimer;
 }
 
-abstract class ICreateOrderViewTranslation {
+abstract class ICreateOrderPageTranslation {
   String buyLimitOrderDescription(String tickerOrName);
   String buyStopOrderDescription(String tickerOrName);
   String sellLimitOrderDescription(String tickerOrName);

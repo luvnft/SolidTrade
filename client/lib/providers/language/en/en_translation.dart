@@ -31,7 +31,7 @@ class EnTranslation implements ITranslation {
   ICommonTranslation get common => EnCommonTranslation();
 
   @override
-  IProductViewTranslation get productView => EnProductViewTranslation();
+  IProductPageTranslation get ProductPage => EnProductPageTranslation();
 
   @override
   IChartTranslation get chart => EnChartTranslation();
@@ -40,7 +40,7 @@ class EnTranslation implements ITranslation {
   IWelcomeTranslation get welcome => EnWelcomeTranslation();
 
   @override
-  ICreateOrderViewTranslation get createOrderView => EnCreateOrderViewTranslation();
+  ICreateOrderPageTranslation get CreateOrderPage => EnCreateOrderPageTranslation();
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => EnEditOrderSettingsTranslation();
@@ -75,7 +75,7 @@ class EnEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
   String get errorMessageNumberOfSharesCannotBeZero => "The specified number of shares can not be zero";
 }
 
-class EnCreateOrderViewTranslation implements ICreateOrderViewTranslation {
+class EnCreateOrderPageTranslation implements ICreateOrderPageTranslation {
   @override
   String buyLimitOrderDescription(String tickerOrName) => "Set the limit price, or the maximum price at which you're willing to buy $tickerOrName. Your order will only be fulfilled at your limit price or lower.";
 
@@ -153,10 +153,10 @@ class EnCommonTranslation implements ICommonTranslation {
 
 class EnPortfolioTranslation implements IPortfolioTranslation {}
 
-class EnProductViewTranslation implements IProductViewTranslation {
+class EnProductPageTranslation implements IProductPageTranslation {
   @override
   String whatAnalystsSayContent(TrStockDetails details) {
-    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.productViewGetAnalystsCount(details.analystRating.recommendations)} analysts.";
+    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.ProductPageGetAnalystsCount(details.analystRating.recommendations)} analysts.";
   }
 
   @override
