@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/data/enums/name_for_large_number.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/data/enums/position_type.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/data/common/shared/tuple.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/config/config_reader.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/common/tuple.dart';
+import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
-import 'package:solidtrade/providers/config/config_reader.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
@@ -69,7 +69,7 @@ class TrUtil {
     return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
   }
 
-  static int ProductPageGetAnalystsCount(Recommendations recommendations) {
+  static int productPageGetAnalystsCount(Recommendations recommendations) {
     return recommendations.buy + recommendations.hold + recommendations.outperform + recommendations.sell + recommendations.underperform;
   }
 

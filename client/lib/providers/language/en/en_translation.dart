@@ -1,8 +1,8 @@
-import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
-import 'package:solidtrade/data/enums/name_for_large_number.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
@@ -31,7 +31,7 @@ class EnTranslation implements ITranslation {
   ICommonTranslation get common => EnCommonTranslation();
 
   @override
-  IProductPageTranslation get ProductPage => EnProductPageTranslation();
+  IProductPageTranslation get productPage => EnProductPageTranslation();
 
   @override
   IChartTranslation get chart => EnChartTranslation();
@@ -40,7 +40,7 @@ class EnTranslation implements ITranslation {
   IWelcomeTranslation get welcome => EnWelcomeTranslation();
 
   @override
-  ICreateOrderPageTranslation get CreateOrderPage => EnCreateOrderPageTranslation();
+  ICreateOrderPageTranslation get createOrderPage => EnCreateOrderPageTranslation();
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => EnEditOrderSettingsTranslation();
@@ -156,7 +156,7 @@ class EnPortfolioTranslation implements IPortfolioTranslation {}
 class EnProductPageTranslation implements IProductPageTranslation {
   @override
   String whatAnalystsSayContent(TrStockDetails details) {
-    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.ProductPageGetAnalystsCount(details.analystRating.recommendations)} analysts.";
+    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.productPageGetAnalystsCount(details.analystRating.recommendations)} analysts.";
   }
 
   @override

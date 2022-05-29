@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 
 enum OrderType {
   market,

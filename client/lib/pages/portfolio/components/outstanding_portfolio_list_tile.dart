@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/portfolio/portfolio_overview_title.dart';
-import 'package:solidtrade/components/portfolio/ongoing_product_tile.dart';
-import 'package:solidtrade/data/enums/position_type.dart';
-import 'package:solidtrade/data/models/outstanding_order_model.dart';
+import 'package:solidtrade/data/entities/outstanding_order_model.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
+import 'package:solidtrade/pages/portfolio/components/ongoing_product_tile.dart';
+import 'package:solidtrade/pages/portfolio/components/portfolio_overview_title.dart';
 
 class OutstandingOrdersPortfolioListTile extends StatelessWidget with STWidget {
   OutstandingOrdersPortfolioListTile({Key? key, required this.title, required this.products, required this.positionType}) : super(key: key);

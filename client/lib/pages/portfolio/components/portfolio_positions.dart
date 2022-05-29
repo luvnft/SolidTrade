@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/portfolio/outstanding_portfolio_list_tile.dart';
-import 'package:solidtrade/components/portfolio/portfolio_list_tile.dart';
-import 'package:solidtrade/components/portfolio/portfolio_overview_title.dart';
-import 'package:solidtrade/data/enums/position_type.dart';
-import 'package:solidtrade/data/common/shared/product_tile_info.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/models/outstanding_order_model.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/data/entities/outstanding_order_model.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
+import 'package:solidtrade/data/models/common/product_tile_info.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
+import 'package:solidtrade/pages/portfolio/components/outstanding_portfolio_list_tile.dart';
+import 'package:solidtrade/pages/portfolio/components/portfolio_list_tile.dart';
+import 'package:solidtrade/pages/portfolio/components/portfolio_overview_title.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 
 class PortfolioPositions extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
 enum BuyHoldSell { buy, hold, sell }
@@ -54,16 +54,16 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
       stream: trStockDetailsStream,
       builder: (context, details) {
         Recommendations recommendations = details.analystRating.recommendations;
-        double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.ProductPageGetAnalystsCount(recommendations));
-        double holdRecommendation = recommendations.hold / (TrUtil.ProductPageGetAnalystsCount(recommendations));
-        double sellRecommendation = (recommendations.sell + recommendations.underperform) / (TrUtil.ProductPageGetAnalystsCount(recommendations));
+        double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.productPageGetAnalystsCount(recommendations));
+        double holdRecommendation = recommendations.hold / (TrUtil.productPageGetAnalystsCount(recommendations));
+        double sellRecommendation = (recommendations.sell + recommendations.underperform) / (TrUtil.productPageGetAnalystsCount(recommendations));
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              translations.ProductPage.whatAnalystsSayContent(details),
+              translations.productPage.whatAnalystsSayContent(details),
             ),
             const SizedBox(height: 10),
             SizedBox(

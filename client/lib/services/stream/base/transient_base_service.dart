@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:rxdart/subjects.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_request_response.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';

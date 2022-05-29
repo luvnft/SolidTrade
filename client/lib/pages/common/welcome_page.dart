@@ -1,8 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/common/st_logo.dart';
-import 'package:solidtrade/pages/common/login_page.dart';
+import 'package:solidtrade/components/common/st_logo.dart';
+import 'package:solidtrade/pages/signup_and_signin/base/login_page.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/util.dart';

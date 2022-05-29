@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 
 class ProductInformation extends StatelessWidget {
   const ProductInformation({Key? key, required this.trStockDetailsStream}) : super(key: key);

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
-import 'package:solidtrade/data/models/user.dart';
-import 'package:solidtrade/pages/portfolio/portfolio_positions_page.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
+import 'package:solidtrade/data/entities/user.dart';
+import 'package:solidtrade/pages/portfolio/components/portfolio_positions.dart';
 import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
@@ -60,7 +60,7 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    PortfolioPositionsPage(isViewingOutstandingOrders: isViewingOutstandingOrders)
+                    PortfolioPositions(isViewingOutstandingOrders: isViewingOutstandingOrders)
                   ],
                 ),
               ),

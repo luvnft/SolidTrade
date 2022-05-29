@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 
 class DerivativesSelection extends StatelessWidget with STWidget {
   DerivativesSelection({Key? key, required this.productInfo}) : super(key: key);
@@ -79,7 +79,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            translations.ProductPage.derivativesRiskDisclaimer,
+            translations.productPage.derivativesRiskDisclaimer,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
           ),
         )

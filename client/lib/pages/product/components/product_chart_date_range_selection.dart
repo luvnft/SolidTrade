@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/enums/chart_date_range_view.dart';
+import 'package:solidtrade/data/models/enums/client_enums/chart_date_range_view.dart';
 import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -10,7 +10,7 @@ class ProductChartDateRangeSelection extends StatelessWidget with STWidget {
 
   void changeDateRange(ChartDateRangeView range) => chartDateRangeStream.changeChartDateRange(range);
 
-  List<Widget> constrcutSelections(int currentIndex) {
+  List<Widget> constructSelections(int currentIndex) {
     List<Widget> widgets = [];
 
     for (var index = 0; index < ChartDateRangeView.values.length; index++) {
@@ -52,7 +52,7 @@ class ProductChartDateRangeSelection extends StatelessWidget with STWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ...constrcutSelections(snap.data!.index),
+            ...constructSelections(snap.data!.index),
           ],
         );
       },

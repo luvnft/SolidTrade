@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_continuous_product_prices_event.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_continuous_product_prices_event.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Chart extends StatefulWidget {

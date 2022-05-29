@@ -4,9 +4,9 @@ import 'dart:typed_data';
 
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/data/entities/user.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/base/base_request_service.dart';
 
 class UserDataRequestService extends IBaseRequestService {

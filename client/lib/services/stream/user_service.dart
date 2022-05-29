@@ -5,10 +5,10 @@ import 'package:firebase_messaging/firebase_messaging.dart' as msg;
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
 import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/data/entities/user.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 

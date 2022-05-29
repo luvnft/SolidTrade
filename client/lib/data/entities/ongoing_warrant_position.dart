@@ -1,6 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:solidtrade/data/enums/enter_or_exit_position_type.dart';
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
 
 class OngoingWarrantPosition implements IBaseEntity {
   @override

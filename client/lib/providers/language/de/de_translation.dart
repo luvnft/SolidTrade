@@ -1,11 +1,11 @@
-import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
-import 'package:solidtrade/data/enums/name_for_large_number.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
+import '../../../data/models/enums/client_enums/lang_ticker.dart';
 import '../translation.dart';
 
 class DeTranslation implements ITranslation {
@@ -31,7 +31,7 @@ class DeTranslation implements ITranslation {
   ICommonTranslation get common => DeCommonTranslation();
 
   @override
-  IProductPageTranslation get ProductPage => DeProductPageTranslation();
+  IProductPageTranslation get productPage => DeProductPageTranslation();
 
   @override
   IChartTranslation get chart => DeChartTranslation();
@@ -40,7 +40,7 @@ class DeTranslation implements ITranslation {
   IWelcomeTranslation get welcome => DeWelcomeTranslation();
 
   @override
-  ICreateOrderPageTranslation get CreateOrderPage => DeCreateOrderPageTranslation();
+  ICreateOrderPageTranslation get createOrderPage => DeCreateOrderPageTranslation();
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => DeEditOrderSettingsTranslation();
@@ -158,7 +158,7 @@ class DePortfolioTranslation implements IPortfolioTranslation {}
 class DeProductPageTranslation implements IProductPageTranslation {
   @override
   String whatAnalystsSayContent(TrStockDetails details) {
-    return "Die durchschnittliche Aktienkursschätzung liegt bei ${details.analystRating.targetPrice.average}. Die höchste Schätzung liegt bei ${details.analystRating.targetPrice.high.toStringAsFixed(2)} € und die niedrigste Schätzung bei ${details.analystRating.targetPrice.low.toStringAsFixed(2)} €.\n\nDiese Aktie wird von ${TrUtil.ProductPageGetAnalystsCount(details.analystRating.recommendations)} Analysten bewertet.";
+    return "Die durchschnittliche Aktienkursschätzung liegt bei ${details.analystRating.targetPrice.average}. Die höchste Schätzung liegt bei ${details.analystRating.targetPrice.high.toStringAsFixed(2)} € und die niedrigste Schätzung bei ${details.analystRating.targetPrice.low.toStringAsFixed(2)} €.\n\nDiese Aktie wird von ${TrUtil.productPageGetAnalystsCount(details.analystRating.recommendations)} Analysten bewertet.";
   }
 
   @override

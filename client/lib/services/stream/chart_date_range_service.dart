@@ -1,5 +1,5 @@
 import 'package:rxdart/subjects.dart';
-import 'package:solidtrade/data/enums/chart_date_range_view.dart';
+import 'package:solidtrade/data/models/enums/client_enums/chart_date_range_view.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
 
 class ChartDateRangeService extends IService<ChartDateRangeView> {

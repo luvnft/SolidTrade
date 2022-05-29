@@ -1,14 +1,14 @@
-import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
-import 'package:solidtrade/data/enums/name_for_large_number.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
-import 'package:solidtrade/data/enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 
 abstract class ITranslation {
   LanguageTicker get langTicker;
 
-  IProductPageTranslation get ProductPage;
-  ICreateOrderPageTranslation get CreateOrderPage;
+  IProductPageTranslation get productPage;
+  ICreateOrderPageTranslation get createOrderPage;
   IEditOrderSettingsTranslation get editOrderSettingsView;
   IPortfolioTranslation get portfolio;
   ISettingsTranslation get settings;

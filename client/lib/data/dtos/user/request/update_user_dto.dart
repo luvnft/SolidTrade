@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:solidtrade/data/models/user.dart';
+import 'package:solidtrade/data/entities/user.dart';
 
 class UpdateUserDto {
   String bio;

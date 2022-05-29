@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:solidtrade/components/custom/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class LoginScreen extends StatelessWidget with STWidget {

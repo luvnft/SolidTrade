@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_stock_details.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
@@ -50,8 +50,8 @@ class ProductMetrics extends StatelessWidget with STWidget {
           children: [
             _constructMetric(
               width,
-              translations.ProductPage.marketCap,
-              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.ProductPage.nameOfNumberPrefix(tupleNameForNumber.t1),
+              translations.productPage.marketCap,
+              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productPage.nameOfNumberPrefix(tupleNameForNumber.t1),
             ),
             _constructMetric(width, "P/E", result.company.peRatioSnapshot?.toStringAsFixed(2) ?? "--"),
           ],

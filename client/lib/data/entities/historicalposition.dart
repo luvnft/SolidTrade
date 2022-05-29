@@ -1,7 +1,7 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
-import 'package:solidtrade/data/enums/position_type.dart';
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 
 class HistoricalPosition implements IBaseEntity {
   @override

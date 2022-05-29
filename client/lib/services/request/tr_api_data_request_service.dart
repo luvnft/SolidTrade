@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_mapper/simple_json_mapper.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_request_model.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_request_response.dart';
-import 'package:solidtrade/providers/config/config_reader.dart';
+import 'package:solidtrade/config/config_reader.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_request_model.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_request_response.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

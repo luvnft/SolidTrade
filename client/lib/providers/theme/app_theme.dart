@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solidtrade/data/enums/shared_preferences_keys.dart';
+import 'package:solidtrade/data/models/enums/client_enums/shared_preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 abstract class IColorTheme {

@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/pages/portfolio/components/portfolio_positions.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_overview_page.dart';
-import 'package:solidtrade/pages/portfolio/portfolio_positions_page.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:flutter/material.dart';

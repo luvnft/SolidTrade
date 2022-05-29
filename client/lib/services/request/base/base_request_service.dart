@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/providers/config/config_reader.dart';
+import 'package:solidtrade/config/config_reader.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 

@@ -1,6 +1,6 @@
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/common/shared/constants.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/base/base_request_service.dart';
 import 'dart:convert';
 

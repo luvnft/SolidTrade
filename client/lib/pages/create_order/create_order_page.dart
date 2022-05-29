@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:solidtrade/components/custom/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/create_order_view/order_settings_view.dart';
-import 'package:solidtrade/components/shared/create_order_view/order_type_description_view.dart';
-import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
-import 'package:solidtrade/components/shared/create_order_view/order_validation_hint.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
-import 'package:solidtrade/data/models/portfolio.dart';
+import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
+import 'package:solidtrade/data/entities/portfolio.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
+import 'package:solidtrade/pages/create_order/components/order_validation_hint.dart';
+import 'package:solidtrade/pages/create_order/order_settings_view.dart';
+import 'package:solidtrade/pages/create_order/order_type_description_view.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
@@ -81,7 +81,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
               children: [
                 Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyText1),
                 const SizedBox(height: 1),
-                Text(translations.CreateOrderPage.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w400)),
+                Text(translations.createOrderPage.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w400)),
               ],
             ),
             actions: [
@@ -115,7 +115,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
                       Row(
                         children: [
                           Text(
-                            translations.CreateOrderPage.buySellProduct(
+                            translations.createOrderPage.buySellProduct(
                               widget.buyOrSell,
                               widget.productInfo.tickerOrShortName,
                             ),
@@ -179,11 +179,11 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
                           onPressed: _enableCreateOrderButton ? _createOrder : null,
                           child: Text(
                             _isMarketOrder
-                                ? translations.CreateOrderPage.buySellProduct(
+                                ? translations.createOrderPage.buySellProduct(
                                     widget.buyOrSell,
                                     widget.productInfo.tickerOrShortName,
                                   )
-                                : translations.CreateOrderPage.createOrderAsTextLiteral,
+                                : translations.createOrderPage.createOrderAsTextLiteral,
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),
@@ -333,7 +333,7 @@ class SharesInput extends StatelessWidget with STWidget {
                 children: [
                   Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 2.5),
-                  Text(translations.CreateOrderPage.sharesOwned(numberOfSharesOwned), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
+                  Text(translations.createOrderPage.sharesOwned(numberOfSharesOwned), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
                 ],
               ),
               Expanded(
@@ -357,7 +357,7 @@ class SharesInput extends StatelessWidget with STWidget {
                       ),
                       style: TextStyle(color: colors.foreground),
                     ),
-                    Text(translations.CreateOrderPage.totalPrice(totalPrice), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
+                    Text(translations.createOrderPage.totalPrice(totalPrice), style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground))
                   ],
                 ),
               ),
@@ -396,7 +396,7 @@ class EditStopLimitPrice extends StatelessWidget with STWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(translations.CreateOrderPage.stopLimitText(orderType), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+                  Text(translations.createOrderPage.stopLimitText(orderType), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 2.5),
                   Text("1 $name = ${price.toDefaultPrice()}", style: const TextStyle(fontWeight: FontWeight.w400)),
                 ],
@@ -405,7 +405,7 @@ class EditStopLimitPrice extends StatelessWidget with STWidget {
                 [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(translations.CreateOrderPage.changeAsTextLiteral),
+                    child: Text(translations.createOrderPage.changeAsTextLiteral),
                   )
                 ],
                 height: 40,

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/common/st_logo.dart';
+import 'package:solidtrade/components/common/st_logo.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';

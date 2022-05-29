@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/product_view/product_view.dart';
-import 'package:solidtrade/data/common/request/request_response.dart';
-import 'package:solidtrade/data/common/shared/product_tile_info.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_info.dart';
-import 'package:solidtrade/data/common/shared/tr/tr_product_price.dart';
+import 'package:solidtrade/data/models/common/product_tile_info.dart';
+import 'package:solidtrade/data/models/request_response/request_response.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
+import 'package:solidtrade/pages/product/product_page.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:solidtrade/components/custom/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/shared/common/learn_about_order_types_button.dart';
-import 'package:solidtrade/components/shared/create_order_view/order_type_selection.dart';
-import 'package:solidtrade/data/enums/buy_or_sell.dart';
+import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/services/util/util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderTypeDescriptionView extends StatelessWidget with STWidget {
   OrderTypeDescriptionView({
@@ -108,18 +109,18 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
           case OrderType.market:
             throw ("Did not expect market order");
           case OrderType.stop:
-            return translations.CreateOrderPage.buyStopOrderDescription(name);
+            return translations.createOrderPage.buyStopOrderDescription(name);
           case OrderType.limit:
-            return translations.CreateOrderPage.buyLimitOrderDescription(name);
+            return translations.createOrderPage.buyLimitOrderDescription(name);
         }
       case BuyOrSell.sell:
         switch (orderType) {
           case OrderType.market:
             throw ("Did not expect market order");
           case OrderType.stop:
-            return translations.CreateOrderPage.sellStopOrderDescription(name);
+            return translations.createOrderPage.sellStopOrderDescription(name);
           case OrderType.limit:
-            return translations.CreateOrderPage.sellLimitOrderDescription(name);
+            return translations.createOrderPage.sellLimitOrderDescription(name);
         }
     }
   }

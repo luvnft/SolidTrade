@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/login/login_screen.dart';
+import 'package:solidtrade/pages/signup_and_signin/components/login_screen.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 

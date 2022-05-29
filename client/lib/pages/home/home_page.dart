@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/components/home/user_app_bar.dart';
-import 'package:solidtrade/pages/home/portfolio_page.dart';
+import 'package:solidtrade/pages/home/components/user_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/pages/portfolio/portfolio_page.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 
