@@ -71,7 +71,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                   widget.info.positionType,
                 );
 
-                final subtitle = productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle;
+                final subtitle = productInfo.isCrypto ? productInfo.homeSymbol! : details.productSubtitle;
 
                 final extraMargin = (subtitle.length > 20 ? 8 : null)?.toDouble();
 

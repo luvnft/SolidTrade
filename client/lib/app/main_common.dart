@@ -14,12 +14,17 @@ import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/app.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/services/stream/knockout_service.dart';
 import 'package:solidtrade/services/stream/messaging_service.dart';
+import 'package:solidtrade/services/stream/ongoing_knockout_service.dart';
+import 'package:solidtrade/services/stream/ongoing_warrant_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
+import 'package:solidtrade/services/stream/stock_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/stream/warrant_service.dart';
 
 import '../mapper.g.dart' as mapper;
 
@@ -110,6 +115,11 @@ class Startup {
     getItService.allowReassignment = true;
     getItService.registerSingleton<SharedPreferences>(prefs);
     getItService.registerSingleton<UserService>(UserService());
+    getItService.registerSingleton<StockService>(StockService());
+    getItService.registerSingleton<WarrantService>(WarrantService());
+    getItService.registerSingleton<KnockoutService>(KnockoutService());
+    getItService.registerSingleton<OngoingWarrantService>(OngoingWarrantService());
+    getItService.registerSingleton<OngoingKnockoutService>(OngoingKnockoutService());
     getItService.registerSingleton<PortfolioService>(PortfolioService());
     getItService.registerSingleton<MessagingService>(MessagingService());
     getItService.registerSingleton<TrStockDetailsService>(TrStockDetailsService());

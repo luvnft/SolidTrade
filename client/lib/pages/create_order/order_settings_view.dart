@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
-import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/pages/create_order/components/order_validation_hint.dart';
+import 'package:solidtrade/services/util/extensions/order_type_extensions.dart';
 import 'package:solidtrade/services/util/extensions/stream_extensions.dart';
 
 class OrderSettingsView extends StatefulWidget {

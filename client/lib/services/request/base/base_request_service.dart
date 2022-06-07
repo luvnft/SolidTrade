@@ -12,8 +12,8 @@ import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:http_parser/http_parser.dart' as parser;
 
 abstract class IBaseRequestService {
-  final UserService userService = GetIt.instance.get<UserService>();
-  static final String baseUrl = ConfigReader.getBaseUrl();
+  final UserService _userService = GetIt.instance.get<UserService>();
+  static final String _baseUrl = ConfigReader.getBaseUrl();
 
   Future<RequestResponse<http.Response>> makeRequest(
     HttpMethod method,
@@ -32,7 +32,7 @@ abstract class IBaseRequestService {
       body: body,
       queryParameters: queryParameters,
       selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((error) => handleRequestError(error));
+    ).catchError((error) => _handleRequestError(error));
   }
 
   Future<RequestResponse<http.Response>> _makeRequest(
@@ -45,17 +45,17 @@ abstract class IBaseRequestService {
     Map<String, String>? queryParameters,
     bool selfHandleErrorCode = true,
   }) async {
-    final uri = Uri.https(baseUrl, endpoint, queryParameters);
+    final uri = Uri.https(_baseUrl, endpoint, queryParameters);
 
     Log.d(uri);
 
-    var auth = await userService.getUserAuthenticationHeader();
+    var auth = await _userService.getUserAuthenticationHeader();
 
     if (!auth.isSuccessful && auth.result == null) {
       return RequestResponse.inheritErrorResponse(auth);
     }
 
-    var deviceToken = await userService.getUserDeviceHeader();
+    var deviceToken = await _userService.getUserDeviceHeader();
 
     if (!deviceToken.isSuccessful && deviceToken.result == null) {
       return RequestResponse.inheritErrorResponse(deviceToken);
@@ -86,13 +86,15 @@ abstract class IBaseRequestService {
     Log.d("Response status code: ${response.statusCode}");
     Log.d("Response body: ${response.body}");
 
+    var responseBody = jsonDecode(response.body);
+
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
-        return RequestResponse.failedDueValidationError();
+        return RequestResponse.failedDueValidationError(responseBody);
       } else if (response.statusCode == 502) {
         RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
       } else {
-        return RequestResponse.failed(jsonDecode(response.body));
+        return RequestResponse.failed(responseBody);
       }
     }
 
@@ -118,7 +120,7 @@ abstract class IBaseRequestService {
       files: files,
       queryParameters: queryParameters,
       selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((error) => handleRequestError(error));
+    ).catchError((error) => _handleRequestError(error));
   }
 
   Future<RequestResponse<http.Response>> _makeRequestWithMultipartFile(
@@ -132,17 +134,17 @@ abstract class IBaseRequestService {
     Map<String, String>? queryParameters,
     bool selfHandleErrorCode = true,
   }) async {
-    final uri = Uri.https(baseUrl, endpoint, queryParameters);
+    final uri = Uri.https(_baseUrl, endpoint, queryParameters);
 
     Log.d(uri);
 
-    var auth = await userService.getUserAuthenticationHeader();
+    var auth = await _userService.getUserAuthenticationHeader();
 
     if (!auth.isSuccessful && auth.result == null) {
       return RequestResponse.inheritErrorResponse(auth);
     }
 
-    var deviceToken = await userService.getUserDeviceHeader();
+    var deviceToken = await _userService.getUserDeviceHeader();
 
     if (!deviceToken.isSuccessful && deviceToken.result == null) {
       return RequestResponse.inheritErrorResponse(deviceToken);
@@ -178,12 +180,14 @@ abstract class IBaseRequestService {
     Log.d("Response status code: ${response.statusCode}");
     Log.d("Response body: ${response.body}");
 
+    var responseBody = jsonDecode(response.body);
+
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
         try {
-          return RequestResponse.failedDueValidationError(data: jsonDecode(response.body));
+          return RequestResponse.failedDueValidationError(responseBody);
         } catch (_) {
-          return RequestResponse.failedDueValidationError();
+          return RequestResponse.failedDueValidationError(responseBody);
         }
       } else if (response.statusCode == 502) {
         RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
@@ -195,9 +199,19 @@ abstract class IBaseRequestService {
     return RequestResponse.successful(response);
   }
 
-  Future<RequestResponse<http.Response>> handleRequestError(dynamic error) {
+  Future<RequestResponse<http.Response>> _handleRequestError(dynamic error) {
     Log.f(error);
     return Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
+  }
+
+  RequestResponse<T> handleRequestResponse<T>(RequestResponse<http.Response> requestResponse, T Function(dynamic) createResponseObject) {
+    if (!requestResponse.isSuccessful) {
+      return RequestResponse.inheritErrorResponse(requestResponse);
+    }
+
+    var response = requestResponse.result!;
+    var data = jsonDecode(response.body);
+    return RequestResponse.successful(createResponseObject.call(data));
   }
 }
 

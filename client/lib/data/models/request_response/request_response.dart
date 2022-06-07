@@ -34,8 +34,8 @@ class RequestResponse<T> {
         result: null);
   }
 
-  factory RequestResponse.failedDueValidationError({Map<String, dynamic>? data}) {
-    if (data != null && data.containsKey("userFriendlyMessage")) {
+  factory RequestResponse.failedDueValidationError(Map<String, dynamic> data) {
+    if (data.containsKey("userFriendlyMessage")) {
       return RequestResponse(
         error: ErrorModel.fromJson({
           "userFriendlyMessage": data["userFriendlyMessage"],

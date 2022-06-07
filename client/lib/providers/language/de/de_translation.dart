@@ -1,7 +1,7 @@
 import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
+import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
-import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 

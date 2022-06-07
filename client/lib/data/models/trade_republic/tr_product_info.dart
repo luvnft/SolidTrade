@@ -1,4 +1,5 @@
 import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 
 @JsonObject()
 class TrProductInfo {
@@ -18,8 +19,28 @@ class TrProductInfo {
   String? issuerDisplayName;
   DerivativeInfo? derivativeInfo;
 
-  String get tickerOrShortName => isCrypto ? homeSymbol! : intlSymbol ?? shortName;
+  String get tickerOrShortName => isCrypto ? homeSymbol! : intlSymbol ?? derivativeInfo?.underlying.name ?? shortName;
   bool get isCrypto => typeId == "crypto";
+  bool get isStock => typeId == "stock";
+  bool get isDerivative => typeId == "derivative";
+  String get isinWithExchangeExtension => "$isin.${exchangeIds.first}";
+
+  PositionType get getType {
+    if (isStock || isCrypto) {
+      return PositionType.stock;
+    }
+
+    if (isDerivative) {
+      switch (derivativeInfo!.productGroupType) {
+        case "knockOutProduct":
+          return PositionType.knockout;
+        case "vanillaWarrant":
+          return PositionType.warrant;
+      }
+    }
+
+    throw "Undefined product type";
+  }
 
   TrProductInfo({
     required this.active,
@@ -68,11 +89,12 @@ class ProductTags {
 
 class DerivativeInfo {
   final String productCategoryName;
+  final String productGroupType;
   final DerivativeUnderlying underlying;
   final bool knocked;
   final DerivativeInfoProperties properties;
 
-  DerivativeInfo({required this.productCategoryName, required this.knocked, required this.underlying, required this.properties});
+  DerivativeInfo({required this.productCategoryName, required this.knocked, required this.underlying, required this.properties, required this.productGroupType});
 }
 
 class DerivativeInfoProperties {
@@ -82,7 +104,7 @@ class DerivativeInfoProperties {
   final double size;
   final String settlementType;
   final String firstTradingDay;
-  final double delta;
+  double? delta;
   String? lastTradingDay;
   double? leverage;
   String? expiry;
@@ -94,10 +116,10 @@ class DerivativeInfoProperties {
     required this.size,
     required this.settlementType,
     required this.firstTradingDay,
-    required this.delta,
     this.lastTradingDay,
     this.leverage,
     this.expiry,
+    this.delta,
   });
 }
 

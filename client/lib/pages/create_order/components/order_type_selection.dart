@@ -1,36 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/custom/bottom_model.dart';
+import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
-
-enum OrderType {
-  market,
-  stop,
-  limit,
-}
-
-extension OrderTypeExtension on OrderType {
-  String get name {
-    switch (this) {
-      case OrderType.market:
-        return "Market";
-      case OrderType.stop:
-        return "Stop";
-      case OrderType.limit:
-        return "Limit";
-    }
-  }
-
-  String get fullName {
-    switch (this) {
-      case OrderType.market:
-        return "Market order";
-      case OrderType.stop:
-        return "Stop order";
-      case OrderType.limit:
-        return "Limit order";
-    }
-  }
-}
 
 class _OrderInfo {
   final String title;
@@ -51,52 +23,11 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
   final OrderType orderType;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            width: MediaQuery.of(context).size.width * 0.2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Divider(
-                color: colors.softForeground,
-                thickness: 6,
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 20,
-            ),
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Order types", style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w600)),
-                const Text("Choose how you would like your order to be executed.")
-              ],
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              color: colors.softBackground,
-              child: Column(
-                children: [
-                  ..._loadButtons(context),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => BottomModel(
+        title: "Order types",
+        subtitle: "Choose how you would like your order to be executed.",
+        content: _loadButtons(context),
+      );
 
   Iterable<Widget> _loadButtons(BuildContext context) => OrderType.values.map((type) => orderTypeButton(context, Key(type.name), type));
 

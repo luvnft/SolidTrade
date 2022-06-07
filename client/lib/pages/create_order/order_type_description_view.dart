@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
-import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
+import 'package:solidtrade/services/util/extensions/order_type_extensions.dart';
 import 'package:solidtrade/services/util/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 

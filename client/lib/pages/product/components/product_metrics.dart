@@ -76,7 +76,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
             ? _constructMetric(
                 width,
                 "Delta",
-                di.properties.delta.toStringAsFixed(2),
+                di.properties.delta!.toStringAsFixed(2),
               )
             : _constructMetric(
                 width,
