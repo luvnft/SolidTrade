@@ -267,7 +267,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   Future<RequestResponse> _makeAndGetRequestResponse() {
-    switch (widget.productInfo.getType) {
+    switch (widget.productInfo.positionType) {
       case PositionType.warrant:
         if (_isMarketOrder) {
           return _warrantService.buyOrSellAtMarketPrice(
@@ -391,7 +391,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
         color: colors.background,
         child: SafeArea(
           top: false,
-          child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType),
+          child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType, positionType: widget.productInfo.positionType),
         ),
       ),
     );

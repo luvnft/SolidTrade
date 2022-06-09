@@ -3,6 +3,8 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/custom/bottom_model.dart';
 import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
+import 'package:solidtrade/services/util/util.dart';
 
 class _OrderInfo {
   final String title;
@@ -18,7 +20,9 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
     Key? key,
     required this.buyOrSell,
     required this.orderType,
+    required this.positionType,
   }) : super(key: key);
+  final PositionType positionType;
   final BuyOrSell buyOrSell;
   final OrderType orderType;
 
@@ -32,6 +36,19 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
   Iterable<Widget> _loadButtons(BuildContext context) => OrderType.values.map((type) => orderTypeButton(context, Key(type.name), type));
 
   Widget orderTypeButton(BuildContext context, Key key, OrderType type) {
+    void handleClick() async {
+      if (type != OrderType.market && positionType == PositionType.stock) {
+        await Util.openDialog(
+          context,
+          "Unsupported feature",
+          message: "Stop and limit orders are currently only supported for knockouts and warrants.",
+        );
+        Navigator.pop(context);
+        return;
+      }
+      Navigator.pop(context, type);
+    }
+
     final orderInfo = _getOrderInfo(buyOrSell, type);
 
     return Container(
@@ -45,7 +62,7 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
             hoverColor: colors.blueBackground,
             splashColor: colors.blueBackground,
             highlightColor: Colors.transparent,
-            onTap: () => Navigator.pop(context, type),
+            onTap: handleClick,
             child: Container(
               padding: const EdgeInsets.only(top: 5, bottom: 7.5, left: 10),
               child: Row(

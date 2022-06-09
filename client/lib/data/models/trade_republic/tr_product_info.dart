@@ -25,7 +25,7 @@ class TrProductInfo {
   bool get isDerivative => typeId == "derivative";
   String get isinWithExchangeExtension => "$isin.${exchangeIds.first}";
 
-  PositionType get getType {
+  PositionType get positionType {
     if (isStock || isCrypto) {
       return PositionType.stock;
     }
