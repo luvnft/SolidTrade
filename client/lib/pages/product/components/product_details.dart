@@ -83,7 +83,7 @@ class ProductDetails extends StatelessWidget with STWidget {
     ];
 
     if (lastTradingDay != null) {
-      details.add(_detailEntry(context, "First Trading Day", dateFormatter.format(lastTradingDay)));
+      details.add(_detailEntry(context, "Last Trading Day", dateFormatter.format(lastTradingDay)));
     }
 
     if (derivativeInfo.properties.expiry != null) {
