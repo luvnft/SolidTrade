@@ -140,6 +140,7 @@ namespace SolidTradeServer.Services
                 {
                     Title = "User not found",
                     Message = $"The user with id: {id} could not be found.",
+                    UserFriendlyMessage = "The user you are looking for could not be found.",
                 }, HttpStatusCode.NotFound);
             }
             
@@ -166,6 +167,7 @@ namespace SolidTradeServer.Services
                 {
                     Title = "User not found",
                     Message = $"The user with uid: {queriedUid} could not be found.",
+                    UserFriendlyMessage = "The user you are looking for could not be found.",
                 }, HttpStatusCode.NotFound);
             }
 
@@ -212,6 +214,7 @@ namespace SolidTradeServer.Services
                 {
                     Title = "User not found",
                     Message = $"User with uid: {uid} could not be found.",
+                    UserFriendlyMessage = "The user you are looking for could not be found.",
                 }, HttpStatusCode.NotFound);
             
             if (dto.Username is not null && await _database.Users
