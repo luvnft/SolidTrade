@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:solidtrade/config/config_reader.dart';
-import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
+import 'package:solidtrade/services/request/base/base_http_response_handler.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
 
@@ -15,7 +15,7 @@ abstract class IBaseRequestService {
   final UserService _userService = GetIt.instance.get<UserService>();
   static final String _baseUrl = ConfigReader.getBaseUrl();
 
-  Future<RequestResponse<http.Response>> makeRequest(
+  HttpResponseHandler<T> makeRequest<T>(
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
@@ -23,16 +23,14 @@ abstract class IBaseRequestService {
     },
     Object? body,
     Map<String, String>? queryParameters,
-    bool selfHandleErrorCode = true,
   }) {
-    return _makeRequest(
+    return HttpResponseHandler<T>(_makeRequest(
       method,
       endpoint,
       headers: headers,
       body: body,
       queryParameters: queryParameters,
-      selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((error) => _handleRequestError(error));
+    ));
   }
 
   Future<RequestResponse<http.Response>> _makeRequest(
@@ -90,7 +88,7 @@ abstract class IBaseRequestService {
 
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
-        return RequestResponse.failedDueValidationError(responseBody);
+        return RequestResponse.failedUnexpectedly(responseBody);
       } else if (response.statusCode == 502) {
         RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
       } else {
@@ -101,7 +99,7 @@ abstract class IBaseRequestService {
     return RequestResponse.successful(response);
   }
 
-  Future<RequestResponse<http.Response>> makeRequestWithMultipartFile(
+  HttpResponseHandler<T> makeRequestWithMultipartFile<T>(
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
@@ -112,7 +110,7 @@ abstract class IBaseRequestService {
     Map<String, String>? queryParameters,
     bool selfHandleErrorCode = true,
   }) {
-    return _makeRequestWithMultipartFile(
+    return HttpResponseHandler<T>(_makeRequestWithMultipartFile(
       method,
       endpoint,
       headers: headers,
@@ -120,7 +118,7 @@ abstract class IBaseRequestService {
       files: files,
       queryParameters: queryParameters,
       selfHandleErrorCode: selfHandleErrorCode,
-    ).catchError((error) => _handleRequestError(error));
+    ));
   }
 
   Future<RequestResponse<http.Response>> _makeRequestWithMultipartFile(
@@ -185,9 +183,9 @@ abstract class IBaseRequestService {
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
         try {
-          return RequestResponse.failedDueValidationError(responseBody);
+          return RequestResponse.failedUnexpectedly(responseBody);
         } catch (_) {
-          return RequestResponse.failedDueValidationError(responseBody);
+          return RequestResponse.failedUnexpectedly(responseBody);
         }
       } else if (response.statusCode == 502) {
         RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
@@ -197,21 +195,6 @@ abstract class IBaseRequestService {
     }
 
     return RequestResponse.successful(response);
-  }
-
-  Future<RequestResponse<http.Response>> _handleRequestError(dynamic error) {
-    Log.f(error);
-    return Future(() => RequestResponse<http.Response>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
-  }
-
-  RequestResponse<T> handleRequestResponse<T>(RequestResponse<http.Response> requestResponse, T Function(dynamic) createResponseObject) {
-    if (!requestResponse.isSuccessful) {
-      return RequestResponse.inheritErrorResponse(requestResponse);
-    }
-
-    var response = requestResponse.result!;
-    var data = jsonDecode(response.body);
-    return RequestResponse.successful(createResponseObject.call(data));
   }
 }
 

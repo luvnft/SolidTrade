@@ -21,35 +21,24 @@ class RequestResponse<T> {
     return RequestResponse(error: ErrorModel.fromJson(json), isSuccessful: false, result: null);
   }
 
-  factory RequestResponse.inheritErrorResponse(RequestResponse error) {
-    return RequestResponse(error: error.error, isSuccessful: false, result: null);
+  factory RequestResponse.inheritErrorResponse(RequestResponse response) {
+    return RequestResponse(error: response.error, isSuccessful: false, result: null);
   }
 
   factory RequestResponse.failedWithUserFriendlyMessage(String message) {
     return RequestResponse(
-        error: ErrorModel.fromJson({
-          "userFriendlyMessage": message
-        }),
-        isSuccessful: false,
-        result: null);
+      error: ErrorModel.fromJson({
+        "userFriendlyMessage": message
+      }),
+      isSuccessful: false,
+      result: null,
+    );
   }
 
-  factory RequestResponse.failedDueValidationError(Map<String, dynamic> data) {
-    if (data.containsKey("userFriendlyMessage")) {
-      return RequestResponse(
-        error: ErrorModel.fromJson({
-          "userFriendlyMessage": data["userFriendlyMessage"],
-        }),
-        isSuccessful: false,
-        result: null,
-      );
-    }
-
-    var provider = GetIt.instance.get<ConfigurationProvider>();
-
+  factory RequestResponse.failedUnexpectedly(Map<String, dynamic> data) {
     return RequestResponse(
       error: ErrorModel.fromJson({
-        "userFriendlyMessage": provider.languageProvider.language.common.httpFriendlyErrorResponse,
+        "userFriendlyMessage": data["userFriendlyMessage"] ?? data["message"] ?? GetIt.instance.get<ConfigurationProvider>().languageProvider.language.common.httpFriendlyErrorResponse,
       }),
       isSuccessful: false,
       result: null,

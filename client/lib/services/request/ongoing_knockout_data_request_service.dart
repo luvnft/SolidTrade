@@ -9,7 +9,10 @@ import 'package:solidtrade/services/request/base/base_request_service.dart';
 class OngoingKnockoutDataRequestService extends IBaseRequestService {
   Future<RequestResponse<OngoingKnockoutPosition>> enterOrExitOngoingOrder(BuyOrSell buyOrSell, OngoingPositionRequestDto dto) async {
     final body = JsonMapper.serialize(dto);
-    var requestResponse = await makeRequest(buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete, Constants.endpointOngoingKnockout, body: body);
-    return handleRequestResponse(requestResponse, (data) => OngoingKnockoutPosition.fromJson(data));
+    return await makeRequest<OngoingKnockoutPosition>(
+      buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete,
+      Constants.endpointOngoingKnockout,
+      body: body,
+    ).create((data) => OngoingKnockoutPosition.fromJson(data));
   }
 }

@@ -9,7 +9,10 @@ import 'package:solidtrade/services/request/base/base_request_service.dart';
 class StockDataRequestService extends IBaseRequestService {
   Future<RequestResponse<StockPosition>> buyOrSellAtMarketPrice(BuyOrSell buyOrSell, BuyOrSellRequestDto dto) async {
     final body = JsonMapper.serialize(dto);
-    var requestResponse = await makeRequest(buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete, Constants.endpointStock, body: body);
-    return handleRequestResponse(requestResponse, (data) => StockPosition.fromJson(data));
+    return await makeRequest<StockPosition>(
+      buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete,
+      Constants.endpointStock,
+      body: body,
+    ).create((data) => StockPosition.fromJson(data));
   }
 }

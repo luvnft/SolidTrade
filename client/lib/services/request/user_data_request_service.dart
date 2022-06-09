@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
@@ -32,20 +31,12 @@ class UserDataRequestService extends IBaseRequestService {
           }
         : {};
 
-    var requestResponse = await makeRequestWithMultipartFile(
+    return await makeRequestWithMultipartFile<User>(
       HttpMethod.post,
       Constants.endpointUser,
       fields: body,
       files: files,
-    );
-
-    if (!requestResponse.isSuccessful) {
-      return RequestResponse.inheritErrorResponse(requestResponse);
-    }
-
-    var response = requestResponse.result!;
-    var data = jsonDecode(response.body);
-    return RequestResponse.successful(User.fromJson(data));
+    ).create((data) => User.fromJson(data));
   }
 
   Future<RequestResponse<User>> updateUser(UpdateUserDto dto, User currentUser) async {
@@ -57,48 +48,24 @@ class UserDataRequestService extends IBaseRequestService {
           }
         : {};
 
-    var requestResponse = await makeRequestWithMultipartFile(
+    return await makeRequestWithMultipartFile<User>(
       HttpMethod.patch,
       Constants.endpointUser,
       fields: body,
       files: files,
-    );
-
-    if (!requestResponse.isSuccessful) {
-      return RequestResponse.inheritErrorResponse(requestResponse);
-    }
-
-    var response = requestResponse.result!;
-    var data = jsonDecode(response.body);
-    return RequestResponse.successful(User.fromJson(data));
+    ).create((data) => User.fromJson(data));
   }
 
   Future<RequestResponse<User>> fetchUserByUid(String uid) async {
-    var requestResponse = await makeRequest(HttpMethod.get, Constants.endpointUser, queryParameters: {
+    return await makeRequest<User>(HttpMethod.get, Constants.endpointUser, queryParameters: {
       "Uid": uid,
-    });
-
-    if (!requestResponse.isSuccessful) {
-      return RequestResponse.inheritErrorResponse(requestResponse);
-    }
-
-    var response = requestResponse.result!;
-    var data = jsonDecode(response.body);
-    return RequestResponse.successful(User.fromJson(data));
+    }).create((data) => User.fromJson(data));
   }
 
   Future<RequestResponse<DeleteUserResponse>> deleteUser() async {
-    var requestResponse = await makeRequest(
+    return await makeRequest<DeleteUserResponse>(
       HttpMethod.delete,
       Constants.endpointUser,
-    );
-
-    if (!requestResponse.isSuccessful) {
-      return RequestResponse.inheritErrorResponse(requestResponse);
-    }
-
-    var response = requestResponse.result!;
-    var data = jsonDecode(response.body);
-    return RequestResponse.successful(DeleteUserResponse.fromJson(data));
+    ).create((data) => DeleteUserResponse.fromJson(data));
   }
 }

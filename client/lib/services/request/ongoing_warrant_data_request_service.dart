@@ -9,7 +9,10 @@ import 'package:solidtrade/services/request/base/base_request_service.dart';
 class OngoingWarrantDataRequestService extends IBaseRequestService {
   Future<RequestResponse<OngoingWarrantPosition>> enterOrExitOngoingOrder(BuyOrSell buyOrSell, OngoingPositionRequestDto dto) async {
     final body = JsonMapper.serialize(dto);
-    var requestResponse = await makeRequest(buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete, Constants.endpointOngoingWarrant, body: body);
-    return handleRequestResponse(requestResponse, (data) => OngoingWarrantPosition.fromJson(data));
+    return await makeRequest<OngoingWarrantPosition>(
+      buyOrSell == BuyOrSell.buy ? HttpMethod.post : HttpMethod.delete,
+      Constants.endpointOngoingWarrant,
+      body: body,
+    ).create((data) => OngoingWarrantPosition.fromJson(data));
   }
 }
