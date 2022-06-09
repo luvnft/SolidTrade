@@ -38,7 +38,7 @@ class ProductDetails extends StatelessWidget with STWidget {
 
   List<Widget> _loadDetailEntries(BuildContext context) {
     final dateFormatter = DateFormat("dd.MM.yyyy");
-    final tradingHoursFormatter = DateFormat("hh:mm");
+    final tradingHoursFormatter = DateFormat("HH:mm");
 
     final isCrypto = productInfo.typeId == "crypto";
     final ticker = isCrypto ? productInfo.homeSymbol! : productInfo.intlSymbol ?? "--";
