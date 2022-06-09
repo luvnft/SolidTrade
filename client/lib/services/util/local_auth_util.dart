@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
@@ -6,7 +7,7 @@ class UtilLocalAuth {
   static final LocalAuthentication _auth = LocalAuthentication();
 
   static Future<bool> authenticate() async {
-    if (!await _auth.isDeviceSupported()) {
+    if (kIsWeb || !await _auth.isDeviceSupported()) {
       return true;
     }
 
