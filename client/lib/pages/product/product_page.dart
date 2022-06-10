@@ -75,7 +75,15 @@ class _ProductPageState extends State<ProductPage> with STWidget {
 
   void onChartRangeChange(ChartDateRangeView range) {
     setState(() {
-      primaryXChartAxis = range == ChartDateRangeView.oneDay ? DateTimeAxis() : DateTimeCategoryAxis();
+      primaryXChartAxis = range == ChartDateRangeView.oneDay
+          ? DateTimeAxis(
+              majorGridLines: const MajorGridLines(width: 0),
+              axisLine: const AxisLine(width: 0),
+            )
+          : DateTimeCategoryAxis(
+              majorGridLines: const MajorGridLines(width: 0),
+              axisLine: const AxisLine(width: 0),
+            );
     });
   }
 

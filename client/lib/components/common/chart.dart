@@ -91,6 +91,17 @@ class _ChartState extends State<Chart> with STWidget {
     return isNegative ? colors.stockRed : colors.stockGreen;
   }
 
+  double get _yAxisStartingPoint {
+    if (_data.isEmpty) {
+      return 0;
+    }
+    var values = _data.map((e) => e.value).toList();
+    values.sort();
+
+    var result = (values.first - (values.last - values.first) * 0.5).roundToDouble();
+    return result.isNegative ? 0 : result;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -102,6 +113,11 @@ class _ChartState extends State<Chart> with STWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
       primaryXAxis: widget.dateTimeXAxis,
+      primaryYAxis: NumericAxis(
+        visibleMinimum: _yAxisStartingPoint,
+        majorGridLines: const MajorGridLines(width: 0),
+        axisLine: const AxisLine(width: 0),
+      ),
       trackballBehavior: TrackballBehavior(
         enable: true,
         tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
