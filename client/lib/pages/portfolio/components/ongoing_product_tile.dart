@@ -4,6 +4,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/entities/outstanding_order_model.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
@@ -25,8 +26,8 @@ class OngoingProductTile extends StatefulWidget {
 
 class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
   final trProductPriceService = GetIt.instance.get<TrProductPriceService>();
-  late bool isBuy = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.buyStopOrder;
-  late bool isLimit = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.sellLimitOrder;
+  late final bool isBuy = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.buyStopOrder;
+  late final bool isLimit = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.sellLimitOrder;
 
   late Future<RequestResponse<TrProductInfo>> trProductInfoFuture;
 
@@ -43,9 +44,9 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
       productTitle: details.productTitle,
       productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
       percentMissingToFill: percentMissingToFill,
-      percentMissingToFillString: percentMissingToFill.toStringAsFixed(2) + "%",
-      startPriceText: widget.info.price.toDefaultPrice(),
-      endPriceText: currentPrice.toDefaultPrice(),
+      percentMissingToFillString: (percentMissingToFill * 100).toStringAsFixed(2) + "%",
+      currentPriceText: currentPrice.toDefaultPrice(),
+      targetPriceText: widget.info.price.toDefaultPrice(),
     );
   }
 
@@ -56,8 +57,8 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
     required String productSubtitle,
     required double percentMissingToFill,
     required String percentMissingToFillString,
-    required String startPriceText,
-    required String endPriceText,
+    required String currentPriceText,
+    required String targetPriceText,
     bool showPriceText = true,
     TextAlign? textAlign,
     TextStyle? textStyle,
@@ -115,11 +116,11 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        startPriceText,
+                        currentPriceText,
                         style: TextStyle(color: colors.foreground),
                       ),
                       Text(
-                        endPriceText,
+                        targetPriceText,
                         style: TextStyle(color: colors.foreground),
                       ),
                     ],
@@ -181,16 +182,28 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                     percentMissingToFill: 0,
                     percentMissingToFillString: "This product can no longer be bought or sold. This might happen if the product is expired or is knocked out. This product may not be showing by next week.",
                     showPriceText: false,
-                    startPriceText: "",
-                    endPriceText: "",
+                    currentPriceText: "",
+                    targetPriceText: "",
                     textAlign: TextAlign.center,
                     textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.normal),
                   );
                 }
 
-                final currentPrice = isBuy ? 2.3 : priceInfo.bid.price;
+                final currentPrice = priceInfo.getPriceDependingOfBuyOrSell(isBuy ? BuyOrSell.buy : BuyOrSell.sell);
 
-                final percentMissingToFill = !isLimit ? (currentPrice / widget.info.price) : (widget.info.price / currentPrice);
+                double percentMissingToFill;
+
+                switch (widget.info.type) {
+                  case EnterOrExitPositionType.sellLimitOrder:
+                  case EnterOrExitPositionType.buyStopOrder:
+                    percentMissingToFill = currentPrice / widget.info.price;
+                    break;
+                  case EnterOrExitPositionType.buyLimitOrder:
+                  case EnterOrExitPositionType.sellStopOrder:
+                    percentMissingToFill = widget.info.price / currentPrice;
+                    break;
+                }
+
                 return _ongoingProductTile(productInfo, percentMissingToFill, currentPrice, details);
               },
             );
