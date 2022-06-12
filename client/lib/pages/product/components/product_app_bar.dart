@@ -50,7 +50,7 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
     ),
   );
 
-  // TODO: Use "productInfo.positionType" instad?
+  // TODO: Use "productInfo.positionType" instead?
   String _getProductTicker() {
     switch (widget.productInfo.typeId) {
       case "stock":
