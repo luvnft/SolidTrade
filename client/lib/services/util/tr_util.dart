@@ -7,6 +7,7 @@ import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/common/tuple.dart';
 import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_aggregate_history.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
@@ -18,11 +19,13 @@ class TrUtil {
   static final _configurationProvider = GetIt.instance.get<ConfigurationProvider>();
   static final _baseUrl = "https://" + ConfigReader.getBaseUrl();
 
-  static TrUiProductDetails getTrUiProductDetails(TrProductPrice priceInfo, TrProductInfo productInfo, PositionType positionType) {
+  static TrUiProductDetails getTrUiProductDetails(TrProductPrice priceInfo, TrProductInfo productInfo, PositionType positionType, {List<TrAggregateHistoryEntry>? entires}) {
     final isStockPosition = positionType == PositionType.stock;
 
-    final percentageChange = priceInfo.bid.price / priceInfo.pre.price;
-    final absoluteChange = priceInfo.bid.price - priceInfo.pre.price;
+    final positionChange = entires != null ? _getCustomRangePositionChange(entires) : _getTodaysPositionChange(priceInfo);
+
+    final percentageChange = positionChange.t1;
+    final absoluteChange = positionChange.t2;
 
     final isUp = percentageChange == 1 || 1 < percentageChange;
     final plusMinus = isUp ? "+" : "";
@@ -44,6 +47,18 @@ class TrUtil {
       imageUrl: _baseUrl + "/image?Isin=$imageIsin&ThemeColor=$colorMode&IsWeb=$kIsWeb",
       textColor: isUp ? _configurationProvider.themeProvider.theme.stockGreen : _configurationProvider.themeProvider.theme.stockRed,
     );
+  }
+
+  static Tuple<double, double> _getTodaysPositionChange(TrProductPrice priceInfo) {
+    final percentageChange = priceInfo.bid.price / priceInfo.pre.price;
+    final absoluteChange = priceInfo.bid.price - priceInfo.pre.price;
+    return Tuple(t1: percentageChange, t2: absoluteChange);
+  }
+
+  static Tuple<double, double> _getCustomRangePositionChange(List<TrAggregateHistoryEntry> entires) {
+    final percentageChange = entires.first.close / entires.last.close;
+    final absoluteChange = entires.first.close - entires.last.close;
+    return Tuple(t1: percentageChange, t2: absoluteChange);
   }
 
   static Tuple<NameForLargeNumber, double> getNameForNumber(double number) {

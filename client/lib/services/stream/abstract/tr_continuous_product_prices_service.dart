@@ -8,7 +8,6 @@ import 'package:solidtrade/data/models/trade_republic/tr_continuous_product_pric
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/services/stream/aggregate_history_service.dart';
 import 'package:solidtrade/services/util/debug/log.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class TrContinuousProductPricesService implements Disposable {
   final BehaviorSubject<TrContinuousProductPricesEvent> _secondaryBehaviorSubject = BehaviorSubject.seeded(TrContinuousProductPricesEvent.empty());
@@ -46,7 +45,7 @@ class TrContinuousProductPricesService implements Disposable {
   }
 
   Future<TrContinuousProductPricesEvent?> fetchAndAddTrAggregateHistory(ChartDateRangeView range) async {
-    var response = await _aggregateHistoryService.getTrAggregateHistory(_isinWithExtension, Util.chartDateRangeToString(range));
+    var response = await _aggregateHistoryService.getTrAggregateHistory(_isinWithExtension, range);
 
     if (!response.isSuccessful) {
       // TODO: Handle...

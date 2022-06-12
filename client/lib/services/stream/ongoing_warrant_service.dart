@@ -6,7 +6,6 @@ import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
-import 'package:solidtrade/services/util/extensions/order_type_extensions.dart';
 
 class OngoingWarrantService extends IService<OngoingWarrantPosition?> {
   OngoingWarrantService() : super(BehaviorSubject.seeded(null));

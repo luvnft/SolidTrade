@@ -26,7 +26,6 @@ import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/stock_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
-import 'package:solidtrade/services/util/extensions/order_type_extensions.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';

@@ -33,23 +33,6 @@ class Util {
     }
   }
 
-  static String chartDateRangeToString(ChartDateRangeView range) {
-    switch (range) {
-      case ChartDateRangeView.oneDay:
-        return "1d";
-      case ChartDateRangeView.oneWeek:
-        return "5d";
-      case ChartDateRangeView.oneMonth:
-        return "1m";
-      case ChartDateRangeView.sixMonth:
-        return "6m";
-      case ChartDateRangeView.oneYear:
-        return "1y";
-      case ChartDateRangeView.fiveYear:
-        return "5y";
-    }
-  }
-
   static Future<void> googleLoginFailedDialog(BuildContext context) {
     return Util.openDialog(context, "Google login failed", message: "Something went wrong with the login. Please try again.");
   }
