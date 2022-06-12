@@ -56,8 +56,8 @@ class TrUtil {
   }
 
   static Tuple<double, double> _getCustomRangePositionChange(List<TrAggregateHistoryEntry> entires) {
-    final percentageChange = entires.first.close / entires.last.close;
-    final absoluteChange = entires.first.close - entires.last.close;
+    final percentageChange = entires.last.close / entires.first.close;
+    final absoluteChange = entires.last.close - entires.first.close;
     return Tuple(t1: percentageChange, t2: absoluteChange);
   }
 

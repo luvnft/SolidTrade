@@ -159,6 +159,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
       positionType: widget.positionType,
       productInfo: widget.productInfo,
       trProductPriceStream: widget.trProductPriceStream,
+      chartDateRangeViewStream: chartDateRangeStream.stream$,
     );
 
     return Scaffold(
