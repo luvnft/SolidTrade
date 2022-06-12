@@ -134,6 +134,8 @@ class _ProductPageState extends State<ProductPage> with STWidget {
     );
   }
 
+  void _onClickLeadingButton() => Navigator.pop(context);
+
   @override
   void dispose() {
     chartDateRangeStreamSubscription.cancel();
@@ -164,8 +166,13 @@ class _ProductPageState extends State<ProductPage> with STWidget {
         backgroundColor: colors.background,
         foregroundColor: colors.foreground,
         elevation: 0,
+        titleSpacing: 0,
         titleTextStyle: Theme.of(context).textTheme.bodyText2,
-        leadingWidth: 30,
+        leading: IconButton(
+          onPressed: _onClickLeadingButton,
+          icon: const Icon(Icons.arrow_back),
+        ),
+        leadingWidth: 40,
         title: LayoutBuilder(
           builder: (context, constraints) {
             return showProductInAppbar
@@ -204,7 +211,11 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                             });
                           }
                         },
-                        child: productAppBar,
+                        child: SizedBox(
+                          width: constraints.maxWidth,
+                          height: 50,
+                          child: !showProductInAppbar ? productAppBar : const SizedBox.shrink(),
+                        ),
                       ),
                       SizedBox(
                         width: double.infinity,
