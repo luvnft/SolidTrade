@@ -86,6 +86,34 @@ class _ChartState extends State<Chart> with STWidget {
     });
   }
 
+  void onTrackballPositionChanging(TrackballArgs args) {
+    var data = args.chartPointInfo.series!.dataSource as List<MapEntry<DateTime, double>>;
+
+    String str;
+    if (data.last.key.difference(data.first.key) < const Duration(days: 1)) {
+      str = DateFormat("HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
+    } else {
+      str = DateFormat("dd.MM.yyyy HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
+    }
+
+    /// FYI: The character U+0589 "։" could be confused with the character U+003a "։", which is more common in source code.
+    // We do this because when the character U+003a ":" is used the text is not centered for some reason.
+    // To bypass this issue we use the character U+0589 "։" which looks the same and also keep the text centered.
+    args.chartPointInfo.header = str.replaceFirst(":", "։");
+
+    if (args.chartPointInfo.series?.name != translations.common.changeAsTextLiteral) {
+      args.chartPointInfo.label = "${num.parse(args.chartPointInfo.label!).toStringAsFixed(2)}€";
+      return;
+    }
+
+    var selectedPoint = args.chartPointInfo.chartDataPoint!.yValue as double;
+    var percent = (selectedPoint / data.first.value - 1) * 100;
+    var changePrefix = percent.isNegative ? "" : "+";
+
+    args.chartPointInfo.label = "$changePrefix${percent.toStringAsFixed(2)}%";
+    args.chartPointInfo.chartDataPoint!.pointColorMapper = percent.isNegative ? colors.stockRed : colors.stockGreen;
+  }
+
   Color get _displayLineColor {
     final bool isNegative = !(_data.isEmpty || _secondaryData.isEmpty || (_data.last.value >= _secondaryData.first.value));
     return isNegative ? colors.stockRed : colors.stockGreen;
@@ -123,25 +151,19 @@ class _ChartState extends State<Chart> with STWidget {
         tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
         lineColor: colors.lessSoftForeground,
       ),
-      onTrackballPositionChanging: (args) {
-        var data = args.chartPointInfo.series!.dataSource as List<MapEntry<DateTime, double>>;
-
-        String str;
-        if (data.last.key.difference(data.first.key) < const Duration(days: 1)) {
-          str = DateFormat("HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
-        } else {
-          str = DateFormat("dd.MM.yyyy HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
-        }
-
-        /// FYI: The character U+0589 "։" could be confused with the character U+003a "։", which is more common in source code.
-        // We do this because when the character U+003a ":" is used the text is not centered for some reason.
-        // To bypass this issue we use the character U+0589 "։" which looks the same and also keep the text centered.
-        args.chartPointInfo.header = str.replaceFirst(":", "։");
-        args.chartPointInfo.label = "${num.parse(args.chartPointInfo.label!).toStringAsFixed(2)}€";
-      },
+      onTrackballPositionChanging: onTrackballPositionChanging,
       onChartTouchInteractionDown: (_) => isHoldingDownOnChart = true,
       onChartTouchInteractionUp: (_) => isHoldingDownOnChart = false,
       series: <ChartSeries<MapEntry<DateTime, double>, DateTime>>[
+        LineSeries<MapEntry<DateTime, double>, DateTime>(
+          name: translations.common.changeAsTextLiteral,
+          dataSource: _data,
+          animationDuration: 500,
+          enableTooltip: true,
+          xValueMapper: (MapEntry<DateTime, double> x, _) => x.key,
+          yValueMapper: (MapEntry<DateTime, double> y, _) => y.value,
+          color: _displayLineColor,
+        ),
         LineSeries<MapEntry<DateTime, double>, DateTime>(
           name: "Current",
           dataSource: _data,
@@ -150,6 +172,7 @@ class _ChartState extends State<Chart> with STWidget {
           xValueMapper: (MapEntry<DateTime, double> x, _) => x.key,
           yValueMapper: (MapEntry<DateTime, double> y, _) => y.value,
           color: _displayLineColor,
+          // isVisible: false,
         ),
         FastLineSeries<MapEntry<DateTime, double>, DateTime>(
           name: "Close",
