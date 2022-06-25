@@ -165,7 +165,7 @@ class _ChartState extends State<Chart> with STWidget {
           color: _displayLineColor,
         ),
         LineSeries<MapEntry<DateTime, double>, DateTime>(
-          name: "Current",
+          name: "Latest",
           dataSource: _data,
           animationDuration: 500,
           enableTooltip: true,
