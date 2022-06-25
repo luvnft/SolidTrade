@@ -56,6 +56,7 @@ abstract class ICommonTranslation {
   String get httpFriendlyErrorResponse;
   String get buyAsTextLiteral;
   String get sellAsTextLiteral;
+  String get changeAsTextLiteral;
 }
 
 abstract class ISplashTranslation {
@@ -82,7 +83,6 @@ abstract class ICreateOrderPageTranslation {
   String buySellProduct(BuyOrSell buyOrSell, String tickerOrName);
   String stopLimitText(OrderType orderType);
 
-  String get changeAsTextLiteral;
   String get createOrderAsTextLiteral;
   String totalPrice(double totalPrice);
 }

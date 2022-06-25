@@ -496,7 +496,7 @@ class _SelectGoodUntilDate extends StatelessWidget with STWidget {
         Text("Order active until the date: $_formattedDate"),
       ],
       onPressed: () => _showDatePicker(context),
-      buttonText: translations.createOrderPage.changeAsTextLiteral,
+      buttonText: translations.common.changeAsTextLiteral,
     );
   }
 
@@ -556,7 +556,7 @@ class _EditStopLimitPrice extends StatelessWidget with STWidget {
         Text("1 $name = ${price.toDefaultPrice()}", style: const TextStyle(fontWeight: FontWeight.w400)),
       ],
       onPressed: onPressed,
-      buttonText: translations.createOrderPage.changeAsTextLiteral,
+      buttonText: translations.common.changeAsTextLiteral,
     );
   }
 }

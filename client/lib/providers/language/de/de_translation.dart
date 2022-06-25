@@ -97,9 +97,6 @@ class DeCreateOrderPageTranslation implements ICreateOrderPageTranslation {
   String cashAvailable(double cash) => "Verfügbares Geld: ${cash.toDefaultPrice()}";
 
   @override
-  String get changeAsTextLiteral => "Ändern";
-
-  @override
   String get createOrderAsTextLiteral => "Order ausführen";
 
   @override
@@ -151,6 +148,9 @@ class DeCommonTranslation implements ICommonTranslation {
 
   @override
   String get sellAsTextLiteral => "Verkaufe";
+
+  @override
+  String get changeAsTextLiteral => "Ändern";
 }
 
 class DePortfolioTranslation implements IPortfolioTranslation {}

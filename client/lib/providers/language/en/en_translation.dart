@@ -95,9 +95,6 @@ class EnCreateOrderPageTranslation implements ICreateOrderPageTranslation {
   String cashAvailable(double cash) => "Cash available: ${cash.toDefaultPrice()}";
 
   @override
-  String get changeAsTextLiteral => "Change";
-
-  @override
   String get createOrderAsTextLiteral => "Create order";
 
   @override
@@ -149,6 +146,9 @@ class EnCommonTranslation implements ICommonTranslation {
 
   @override
   String get sellAsTextLiteral => "Sell";
+
+  @override
+  String get changeAsTextLiteral => "Change";
 }
 
 class EnPortfolioTranslation implements IPortfolioTranslation {}
