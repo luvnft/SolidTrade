@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 class STLogo extends StatefulWidget {
-  const STLogo(this.gifAsset, {required UniqueKey key, this.animationDuration = const Duration(milliseconds: 4000)}) : super(key: key);
+  const STLogo(
+    this.gifAsset, {
+    required UniqueKey key,
+    this.size = 100,
+    this.animationDuration = const Duration(milliseconds: 4000),
+  }) : super(key: key);
   final String gifAsset;
+  final double size;
   final Duration animationDuration;
 
   @override
@@ -31,8 +37,8 @@ class _STLogoState extends State<STLogo> {
     _assetAsImage = widget.gifAsset.substring(0, widget.gifAsset.indexOf(".gif")) + ".jpg";
     myImage = Image.asset(
       _assetAsImage,
-      width: 100,
-      height: 100,
+      width: widget.size,
+      height: widget.size,
     );
 
     _awaitAnimationDuration = Future.delayed(widget.animationDuration, () {
@@ -63,13 +69,14 @@ class _STLogoState extends State<STLogo> {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-        firstChild: Image(
-          image: getImage(),
-          width: 100,
-          height: 100,
-        ),
-        secondChild: myImage,
-        crossFadeState: _showLogoAsImage ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-        duration: const Duration(milliseconds: 10));
+      firstChild: Image(
+        image: getImage(),
+        width: widget.size,
+        height: widget.size,
+      ),
+      secondChild: myImage,
+      crossFadeState: _showLogoAsImage ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 10),
+    );
   }
 }
