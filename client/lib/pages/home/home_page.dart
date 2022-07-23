@@ -3,6 +3,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/home/components/user_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_page.dart';
+import 'package:solidtrade/pages/search/search_page.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 
@@ -18,11 +19,11 @@ class _HomePageState extends State<HomePage> with STWidget {
 
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    PortfolioPage(),
-    Text("data"),
-    Text("data"),
-    Text("data"),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const PortfolioPage(),
+    SearchPage(),
+    const Text("data"),
+    const Text("data"),
   ];
 
   void _handleItemIndexClick(int index) {

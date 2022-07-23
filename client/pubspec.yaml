@@ -61,3 +61,4 @@ flutter:
     - assets/config/
     - assets/images/
     - assets/images/order_types/
+    - assets/images/categories/
