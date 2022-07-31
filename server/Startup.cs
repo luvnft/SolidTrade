@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
@@ -100,6 +99,17 @@ namespace SolidTradeServer
                         UserFriendlyMessage = Shared.GetUserFriendlyValidationError(actionContext),
                     }));
 
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             services.AddHangfire(config =>
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
@@ -119,19 +129,7 @@ namespace SolidTradeServer
                 app.UseDeveloperExceptionPage();
             }
             
-            // Enable cors
-            app.Use((httpContext, next) =>
-            {
-                httpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                httpContext.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-                httpContext.Response.Headers.Add("Access-Control-Allow-Methods", "*");
-            
-                if (httpContext.Request.Method != "OPTIONS")
-                    return next();
-            
-                httpContext.Response.StatusCode = 204;
-                return Task.CompletedTask;
-            });
+            app.UseCors();
             
             app.UseRouting();
 
