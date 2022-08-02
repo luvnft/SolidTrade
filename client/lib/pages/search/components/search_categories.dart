@@ -45,6 +45,7 @@ class SearchCategories extends StatelessWidget {
           (category) => _CategoryItemWidget(
             key: Key(category.name),
             categoryItem: category,
+            onPressCategory: onPressCategory,
           ),
         ),
       );
@@ -68,35 +69,39 @@ class SearchCategories extends StatelessWidget {
 }
 
 class _CategoryItemWidget extends StatelessWidget with STWidget {
-  _CategoryItemWidget({Key? key, required this.categoryItem}) : super(key: key);
+  _CategoryItemWidget({Key? key, required this.categoryItem, required this.onPressCategory}) : super(key: key);
+  final void Function(String category) onPressCategory;
   final _CategoryItem categoryItem;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.softBackground,
-        border: Border.all(color: colors.lessSoftForeground, width: 1.75),
-        borderRadius: BorderRadius.circular(25),
-      ),
+    return GestureDetector(
+      onTap: () => onPressCategory.call(categoryItem.name),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 1, top: 1, left: 5, right: 0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              margin: const EdgeInsets.only(left: 2.5),
-              child: Image.asset(
-                categoryItem.assetPath,
+        decoration: BoxDecoration(
+          color: colors.softBackground,
+          border: Border.all(color: colors.lessSoftForeground, width: 1.75),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 1, top: 1, left: 5, right: 0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                margin: const EdgeInsets.only(left: 2.5),
+                child: Image.asset(
+                  categoryItem.assetPath,
+                ),
               ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(categoryItem.name),
-            ),
-          ],
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(categoryItem.name),
+              ),
+            ],
+          ),
         ),
       ),
     );

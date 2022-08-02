@@ -1,13 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/pages/search/components/learn_the_basics.dart';
 import 'package:solidtrade/pages/search/components/search_categories.dart';
+import 'package:solidtrade/pages/search/components/search_input_field.dart';
+import 'package:solidtrade/pages/search/search_view.dart';
 import 'package:solidtrade/services/util/extensions/build_context_extensions.dart';
+import 'package:solidtrade/services/util/util.dart';
 
-class SearchPage extends StatelessWidget with STWidget {
-  SearchPage({Key? key}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> with STWidget {
+  final String _inputFieldHeroTag = "HeroTag:SearchInputField";
   Text _constructTitle(String title) => Text(
         title,
         style: const TextStyle(
@@ -34,39 +45,22 @@ class SearchPage extends StatelessWidget with STWidget {
                 color: colors.foreground,
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              decoration: BoxDecoration(
-                // color: colors.background,
-                color: colors.softBackground,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: colors.foreground, width: 2),
-              ),
-              child: LayoutBuilder(
-                builder: (context, constraints) => Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.search,
-                      size: 20,
-                      color: colors.foreground,
+            Hero(
+              tag: _inputFieldHeroTag,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: colors.softBackground,
+                  ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => SearchInputField(
+                      enableField: false,
+                      onGestureTap: _onSearchFieldTap,
                     ),
-                    SizedBox(
-                      width: constraints.maxWidth - 30,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          hintText: 'Search companies...',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: colors.foreground),
-                        ),
-                        style: TextStyle(fontSize: 16, color: colors.foreground),
-                        onChanged: _handleChangeSearch,
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -92,6 +86,39 @@ class SearchPage extends StatelessWidget with STWidget {
     );
   }
 
-  void _handleChangeSearch(String input) {}
-  void _handlePressCategory(String category) {}
+  bool _hasNavigatedToSearch = false;
+
+  void _handlePressCategory(String category) {
+    // TODO: Implement...
+    print(category);
+  }
+
+  void _onSearchFieldTap() {
+    if (!_hasNavigatedToSearch) {
+      Util.pushToRoute(
+        context,
+        SearchView(
+          inputFieldHeroTag: _inputFieldHeroTag,
+          child: SearchInputField(
+            autofocus: true,
+            customLeadingWidget: SizedBox(
+              width: 20,
+              height: 20,
+              child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 20,
+                  color: colors.foreground,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) => FocusScope.of(context).unfocus());
+        Future.delayed(const Duration(milliseconds: 200)).then((_) => _hasNavigatedToSearch = false);
+      });
+    }
+  }
 }
