@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
@@ -21,21 +22,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
   final TrProductInfo productInfo;
   final bool isStock;
 
-  Widget _constructMetric(double itemWidth, String name, String value) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: itemWidth * 0.03),
-      width: itemWidth * 0.44,
-      child: Row(
-        children: [
-          Text(name),
-          const Spacer(),
-          Text(value),
-        ],
-      ),
-    );
-  }
-
-  Widget _additionalStockInfoIfExistent(double width) {
+  Widget _additionalStockInfoIfExistent() {
     if (!isStock) {
       return const SizedBox.shrink();
     }
@@ -48,49 +35,63 @@ class ProductMetrics extends StatelessWidget with STWidget {
         final tupleNameForNumber = hasMarketCapValue ? TrUtil.getNameForNumber(result.company.marketCapSnapshot!) : null;
         return Row(
           children: [
-            _constructMetric(
-              width,
-              translations.productPage.marketCap,
-              tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productPage.nameOfNumberPrefix(tupleNameForNumber.t1),
+            _Metric(
+              name: translations.productPage.marketCap,
+              value: tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productPage.nameOfNumberPrefix(tupleNameForNumber.t1),
             ),
-            _constructMetric(width, "P/E", result.company.peRatioSnapshot?.toStringAsFixed(2) ?? "--"),
+            _Metric(name: "P/E", value: result.company.peRatioSnapshot?.toStringAsFixed(2)),
           ],
         );
       },
     );
   }
 
-  Widget _additionalDerivativesInfoIfExistent(
-    double width,
-  ) {
+  List<Widget> _additionalDerivativesInfoIfExistent() {
+    List<Widget> rows = [];
+
     if (productInfo.derivativeInfo == null) {
-      return const SizedBox.shrink();
+      return rows;
     }
 
     DerivativeInfo di = productInfo.derivativeInfo!;
 
-    return Row(
-      children: [
-        _constructMetric(width, "Strike", di.properties.strike.toPrice(di.properties.currency)),
-        productInfo.derivativeInfo!.productCategoryName == "Warrant"
-            ? _constructMetric(
-                width,
-                "Delta",
-                di.properties.delta!.toStringAsFixed(2),
-              )
-            : _constructMetric(
-                width,
-                "Leverage",
-                di.properties.leverage?.toStringAsFixed(2) ?? "Not specified",
-              ),
-      ],
+    rows.add(
+      Row(
+        children: [
+          _Metric(name: "Strike", value: di.properties.strike.toPrice(di.properties.currency)),
+          productInfo.positionType == PositionType.warrant
+              ? _Metric(
+                  name: "Delta",
+                  value: di.properties.delta!.toStringAsFixed(2),
+                )
+              : _Metric(
+                  name: "Leverage",
+                  value: di.properties.leverage?.toStringAsFixed(2),
+                  fallbackValue: "Not specified",
+                ),
+        ],
+      ),
     );
+
+    if (productInfo.positionType == PositionType.knockout) {
+      rows.add(
+        Row(
+          children: [
+            _Metric(
+              name: "Barrier",
+              value: di.properties.barrier?.toPrice(di.properties.currency),
+            ),
+            _Metric.empty(),
+          ],
+        ),
+      );
+    }
+
+    return rows;
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.9;
-
     return Card(
       elevation: 0,
       borderOnForeground: false,
@@ -104,32 +105,58 @@ class ProductMetrics extends StatelessWidget with STWidget {
       color: colors.themeColorType == ColorThemeType.dark ? colors.softBackground : colors.background,
       child: STStreamBuilder<TrProductPrice>(
         stream: trProductPriceStream,
-        builder: (context, prices) {
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    _constructMetric(width, "Bid", prices.bid.price.toDefaultPrice()),
-                    _constructMetric(width, "Ask", prices.ask?.price.toDefaultPrice() ?? "--"),
-                  ],
-                ),
-                productInfo.derivativeInfo == null
-                    ? Row(
-                        children: [
-                          _constructMetric(width, "Open", prices.open.price.toDefaultPrice()),
-                          _constructMetric(width, "Close", prices.pre.price.toDefaultPrice()),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
-                _additionalStockInfoIfExistent(width),
-                _additionalDerivativesInfoIfExistent(width),
-              ],
-            ),
-          );
-        },
+        builder: (context, prices) => Container(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _Metric(name: "Bid", value: prices.bid.price.toDefaultPrice()),
+                  _Metric(name: "Ask", value: prices.ask?.price.toDefaultPrice()),
+                ],
+              ),
+              !productInfo.isDerivative
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _Metric(name: "Open", value: prices.open.price.toDefaultPrice()),
+                        _Metric(name: "Close", value: prices.pre.price.toDefaultPrice()),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+              _additionalStockInfoIfExistent(),
+              ..._additionalDerivativesInfoIfExistent(),
+            ],
+          ),
+        ),
       ),
     );
   }
+}
+
+class _Metric extends StatelessWidget {
+  const _Metric({Key? key, required this.name, required this.value, this.fallbackValue = "--"}) : super(key: key);
+  final String fallbackValue;
+  final String? value;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(name),
+            Text(value ?? fallbackValue),
+          ],
+        ),
+      ),
+    );
+  }
+
+  factory _Metric.empty() => const _Metric(name: "", value: "");
 }

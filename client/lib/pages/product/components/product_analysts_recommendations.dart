@@ -39,7 +39,7 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
           style: Theme.of(context).textTheme.subtitle1!.copyWith(color: color),
         ),
         Text(
-          (percent * 100).toStringAsFixed(1) + "%",
+          percent.toStringAsFixed(1) + "%",
           style: Theme.of(context).textTheme.headline6!.copyWith(color: textColor),
         )
       ],
@@ -48,15 +48,13 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * .85;
-
     return STStreamBuilder<TrStockDetails>(
       stream: trStockDetailsStream,
       builder: (context, details) {
         Recommendations recommendations = details.analystRating.recommendations;
-        double buyRecommendation = (recommendations.buy + recommendations.outperform) / (TrUtil.productPageGetAnalystsCount(recommendations));
-        double holdRecommendation = recommendations.hold / (TrUtil.productPageGetAnalystsCount(recommendations));
-        double sellRecommendation = (recommendations.sell + recommendations.underperform) / (TrUtil.productPageGetAnalystsCount(recommendations));
+        double buyRecommendation = 100 * (recommendations.buy + recommendations.outperform) / TrUtil.productPageGetAnalystsCount(recommendations);
+        double holdRecommendation = 100 * recommendations.hold / TrUtil.productPageGetAnalystsCount(recommendations);
+        double sellRecommendation = 100 * (recommendations.sell + recommendations.underperform) / TrUtil.productPageGetAnalystsCount(recommendations);
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -66,17 +64,14 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
               translations.productPage.whatAnalystsSayContent(details),
             ),
             const SizedBox(height: 10),
-            SizedBox(
-              width: width + 5,
-              child: Row(
-                children: [
-                  Container(color: colors.stockGreen, height: 10, width: width * buyRecommendation),
-                  const SizedBox(width: 2.5),
-                  Container(color: colors.softForeground, height: 10, width: width * holdRecommendation),
-                  const SizedBox(width: 2.5),
-                  Container(color: colors.stockRed, height: 10, width: width * sellRecommendation),
-                ],
-              ),
+            Row(
+              children: [
+                Expanded(flex: buyRecommendation.toInt(), child: Container(color: colors.stockGreen, height: 10)),
+                const SizedBox(width: 2.5),
+                Expanded(flex: holdRecommendation.toInt(), child: Container(color: colors.softForeground, height: 10)),
+                const SizedBox(width: 2.5),
+                Expanded(flex: sellRecommendation.toInt(), child: Container(color: colors.stockRed, height: 10)),
+              ],
             ),
             const SizedBox(height: 5),
             Row(children: [
