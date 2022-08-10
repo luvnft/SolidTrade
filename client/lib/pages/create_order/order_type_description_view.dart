@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
@@ -22,57 +23,59 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colors.orderDescriptionColor,
-      appBar: AppBar(elevation: 0, backgroundColor: colors.orderDescriptionColor, foregroundColor: colors.foreground),
-      body: Container(
-        margin: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
-        child: PreventColumnRenderFlexOverflowWrapper(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                orderType.fullName,
-                style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(height: 10),
-              Text(_orderDescription, style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground)),
-              const Spacer(),
-              Image.asset(_orderTypeImage),
-              const Spacer(flex: 3),
-              TextButton(
-                onPressed: _onClickLearnAboutOrderTypes,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.info, size: 25),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "Tip: Want to learn more about order types?",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: colors.foreground),
+    return STPage(
+      page: () => Scaffold(
+        backgroundColor: colors.orderDescriptionColor,
+        appBar: AppBar(elevation: 0, backgroundColor: colors.orderDescriptionColor, foregroundColor: colors.foreground),
+        body: Container(
+          margin: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
+          child: PreventColumnRenderFlexOverflowWrapper(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  orderType.fullName,
+                  style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 10),
+                Text(_orderDescription, style: TextStyle(fontSize: 16.5, color: colors.lessSoftForeground)),
+                const Spacer(),
+                Image.asset(_orderTypeImage),
+                const Spacer(flex: 3),
+                TextButton(
+                  onPressed: _onClickLearnAboutOrderTypes,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.info, size: 25),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "Tip: Want to learn more about order types?",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: colors.foreground),
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  onPressed: () => _pushToNextPage(context),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(color: Colors.white),
+                    onPressed: () => _pushToNextPage(context),
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

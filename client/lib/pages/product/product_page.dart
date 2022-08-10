@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/common/chart.dart';
@@ -162,196 +163,198 @@ class _ProductPageState extends State<ProductPage> with STWidget {
       chartDateRangeViewStream: chartDateRangeStream.stream$,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colors.background,
-        foregroundColor: colors.foreground,
-        elevation: 0,
-        titleSpacing: 0,
-        titleTextStyle: Theme.of(context).textTheme.bodyText2,
-        leading: IconButton(
-          onPressed: _onClickLeadingButton,
-          icon: const Icon(Icons.arrow_back),
+    return STPage(
+      page: () => Scaffold(
+        appBar: AppBar(
+          backgroundColor: colors.background,
+          foregroundColor: colors.foreground,
+          elevation: 0,
+          titleSpacing: 0,
+          titleTextStyle: Theme.of(context).textTheme.bodyText2,
+          leading: IconButton(
+            onPressed: _onClickLeadingButton,
+            icon: const Icon(Icons.arrow_back),
+          ),
+          leadingWidth: 40,
+          title: LayoutBuilder(
+            builder: (context, constraints) {
+              return showProductInAppbar
+                  ? SizedBox(
+                      width: constraints.maxWidth,
+                      child: productAppBar,
+                    )
+                  : const SizedBox.shrink();
+            },
+          ),
         ),
-        leadingWidth: 40,
-        title: LayoutBuilder(
-          builder: (context, constraints) {
-            return showProductInAppbar
-                ? SizedBox(
-                    width: constraints.maxWidth,
-                    child: productAppBar,
-                  )
-                : const SizedBox.shrink();
-          },
-        ),
-      ),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
-          height: constraints.maxHeight,
-          child: Column(
-            children: [
-              SizedBox(
-                height: constraints.maxHeight - bottomBarHeight,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      VisibilityDetector(
-                        key: const Key("VisibilityDetectorKey"),
-                        onVisibilityChanged: (VisibilityInfo info) {
-                          if (widgetWasDisposed) {
-                            return;
-                          }
-
-                          if (info.visibleFraction == 0 && showProductInAppbar == false) {
-                            setState(() {
-                              showProductInAppbar = true;
-                            });
-                          } else if (showProductInAppbar) {
-                            setState(() {
-                              showProductInAppbar = false;
-                            });
-                          }
-                        },
-                        child: SizedBox(
-                          width: constraints.maxWidth,
-                          height: 50,
-                          child: !showProductInAppbar ? productAppBar : const SizedBox.shrink(),
-                        ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: chartHeight,
-                        child: FutureBuilder<bool>(
-                          future: _trContinuousPricesServiceIsInitialized.future,
-                          builder: (context, snap) {
-                            if (!snap.hasData || !snap.data!) {
-                              return showLoadingSkeleton(BoxShape.rectangle);
-                            }
-                            return Chart(
-                              dateTimeXAxis: primaryXChartAxis,
-                              primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
-                              secondaryStreamData: trContinuousPricesService.secondaryStream$,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 30,
-                        child: ProductChartDateRangeSelection(
-                          chartDateRangeStream: chartDateRangeStream,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      ...section(
-                        context,
-                        "📈 Statistics",
-                        ProductMetrics(
-                          trProductPriceStream: widget.trProductPriceStream,
-                          trStockDetailsStream: stockDetailsService.stream$,
-                          isStock: isStock,
-                          productInfo: widget.productInfo,
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      ),
-                      ...section(
-                        context,
-                        "🤔 What Analysts Say",
-                        AnalystsRecommendations(
-                          trStockDetailsStream: stockDetailsService.stream$,
-                        ),
-                        isStock: isStock,
-                        onlyShowIfProductIsStock: true,
-                      ),
-                      ...section(
-                        context,
-                        "💎 Derivatives",
-                        DerivativesSelection(
-                          productInfo: widget.productInfo,
-                        ),
-                        isStock: isStock,
-                        onlyShowIfProductIsStock: true,
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
-                        shouldShow: widget.productInfo.derivativeProductCount.knockOutProduct != null || widget.productInfo.derivativeProductCount.vanillaWarrant != null,
-                      ),
-                      ...section(
-                        context,
-                        "ℹ️ About ${widget.productInfo.shortName}",
-                        ProductInformation(
-                          trStockDetailsStream: stockDetailsService.stream$,
-                        ),
-                        isStock: isStock,
-                        onlyShowIfProductIsStock: true,
-                      ),
-                      ...section(
-                        context,
-                        "ℹ️ Details",
-                        ProductDetails(
-                          trStockDetailsStream: stockDetailsService.stream$,
-                          productInfo: widget.productInfo,
-                          isStock: isStock,
-                        ),
-                        // margin: const EdgeInsets.only(left: 25, right: 25, top: 10),
-                        isStock: isStock,
-                        onlyShowIfProductIsStock: false,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        "In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: colors.lessSoftForeground, fontSize: 13),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: bottomBarHeight,
-                width: constraints.maxWidth,
-                color: colors.navigationBackground,
-                child: STStreamBuilder<Portfolio>(
-                  stream: portfolioService.stream$,
-                  builder: (context, portfolio) {
-                    final bool ownsPosition = TrUtil.userOwnsPosition(portfolio, widget.productInfo.isin);
-                    final buttonWidth = (ownsPosition ? constraints.maxWidth / 2 : constraints.maxWidth) - 20;
-
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
+            height: constraints.maxHeight,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: constraints.maxHeight - bottomBarHeight,
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        ownsPosition
-                            ? Container(
-                                width: buttonWidth,
-                                margin: const EdgeInsets.all(5),
-                                child: TextButton(
-                                  onPressed: () => _pushToCreateOrder(BuyOrSell.sell),
-                                  child: const Text("Sell", style: TextStyle(color: Colors.white)),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(colors.stockRed),
-                                    foregroundColor: MaterialStateProperty.all(colors.foreground),
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        Container(
-                          width: buttonWidth,
-                          margin: const EdgeInsets.all(5),
-                          child: TextButton(
-                            onPressed: () => _pushToCreateOrder(BuyOrSell.buy),
-                            child: const Text("Buy", style: TextStyle(color: Colors.white)),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(colors.stockGreen),
-                              foregroundColor: MaterialStateProperty.all(colors.foreground),
-                            ),
+                        VisibilityDetector(
+                          key: const Key("VisibilityDetectorKey"),
+                          onVisibilityChanged: (VisibilityInfo info) {
+                            if (widgetWasDisposed) {
+                              return;
+                            }
+
+                            if (info.visibleFraction == 0 && showProductInAppbar == false) {
+                              setState(() {
+                                showProductInAppbar = true;
+                              });
+                            } else if (showProductInAppbar) {
+                              setState(() {
+                                showProductInAppbar = false;
+                              });
+                            }
+                          },
+                          child: SizedBox(
+                            width: constraints.maxWidth,
+                            height: 50,
+                            child: !showProductInAppbar ? productAppBar : const SizedBox.shrink(),
                           ),
                         ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: chartHeight,
+                          child: FutureBuilder<bool>(
+                            future: _trContinuousPricesServiceIsInitialized.future,
+                            builder: (context, snap) {
+                              if (!snap.hasData || !snap.data!) {
+                                return showLoadingSkeleton(BoxShape.rectangle);
+                              }
+                              return Chart(
+                                dateTimeXAxis: primaryXChartAxis,
+                                primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
+                                secondaryStreamData: trContinuousPricesService.secondaryStream$,
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 30,
+                          child: ProductChartDateRangeSelection(
+                            chartDateRangeStream: chartDateRangeStream,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        ...section(
+                          context,
+                          "📈 Statistics",
+                          ProductMetrics(
+                            trProductPriceStream: widget.trProductPriceStream,
+                            trStockDetailsStream: stockDetailsService.stream$,
+                            isStock: isStock,
+                            productInfo: widget.productInfo,
+                          ),
+                          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        ),
+                        ...section(
+                          context,
+                          "🤔 What Analysts Say",
+                          AnalystsRecommendations(
+                            trStockDetailsStream: stockDetailsService.stream$,
+                          ),
+                          isStock: isStock,
+                          onlyShowIfProductIsStock: true,
+                        ),
+                        ...section(
+                          context,
+                          "💎 Derivatives",
+                          DerivativesSelection(
+                            productInfo: widget.productInfo,
+                          ),
+                          isStock: isStock,
+                          onlyShowIfProductIsStock: true,
+                          margin: const EdgeInsets.symmetric(horizontal: 15),
+                          shouldShow: widget.productInfo.derivativeProductCount.knockOutProduct != null || widget.productInfo.derivativeProductCount.vanillaWarrant != null,
+                        ),
+                        ...section(
+                          context,
+                          "ℹ️ About ${widget.productInfo.shortName}",
+                          ProductInformation(
+                            trStockDetailsStream: stockDetailsService.stream$,
+                          ),
+                          isStock: isStock,
+                          onlyShowIfProductIsStock: true,
+                        ),
+                        ...section(
+                          context,
+                          "ℹ️ Details",
+                          ProductDetails(
+                            trStockDetailsStream: stockDetailsService.stream$,
+                            productInfo: widget.productInfo,
+                            isStock: isStock,
+                          ),
+                          // margin: const EdgeInsets.only(left: 25, right: 25, top: 10),
+                          isStock: isStock,
+                          onlyShowIfProductIsStock: false,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: colors.lessSoftForeground, fontSize: 13),
+                        ),
+                        const SizedBox(height: 10),
                       ],
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              )
-            ],
+                Container(
+                  height: bottomBarHeight,
+                  width: constraints.maxWidth,
+                  color: colors.navigationBackground,
+                  child: STStreamBuilder<Portfolio>(
+                    stream: portfolioService.stream$,
+                    builder: (context, portfolio) {
+                      final bool ownsPosition = TrUtil.userOwnsPosition(portfolio, widget.productInfo.isin);
+                      final buttonWidth = (ownsPosition ? constraints.maxWidth / 2 : constraints.maxWidth) - 20;
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ownsPosition
+                              ? Container(
+                                  width: buttonWidth,
+                                  margin: const EdgeInsets.all(5),
+                                  child: TextButton(
+                                    onPressed: () => _pushToCreateOrder(BuyOrSell.sell),
+                                    child: const Text("Sell", style: TextStyle(color: Colors.white)),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(colors.stockRed),
+                                      foregroundColor: MaterialStateProperty.all(colors.foreground),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          Container(
+                            width: buttonWidth,
+                            margin: const EdgeInsets.all(5),
+                            child: TextButton(
+                              onPressed: () => _pushToCreateOrder(BuyOrSell.buy),
+                              child: const Text("Buy", style: TextStyle(color: Colors.white)),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(colors.stockGreen),
+                                foregroundColor: MaterialStateProperty.all(colors.foreground),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

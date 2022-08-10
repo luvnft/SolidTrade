@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/signup_and_signin/login_home_page.dart';
 import 'package:solidtrade/pages/signup_and_signin/signin/login_signin_page.dart';
@@ -28,73 +29,54 @@ class _LoginPageState extends State<LoginPage> with STWidget, SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final shouldAdjust = screenWidth * 0.70 > screenHeight;
-    double horizontalMargin = 0;
-
-    if (shouldAdjust) {
-      horizontalMargin = 0.15 * screenWidth;
-    }
-
-    return StreamBuilder(
-      stream: uiUpdate.stream$,
-      builder: (context, snapshot) => Container(
-        color: colors.softBackground,
-        child: SafeArea(
-          child: Container(
-            margin: shouldAdjust ? EdgeInsets.symmetric(horizontal: horizontalMargin) : const EdgeInsets.all(0),
-            child: Scaffold(
-              body: Container(
-                color: colors.softBackground,
-                child: Column(
+    return STPage(
+      page: () => Scaffold(
+        body: Container(
+          color: colors.softBackground,
+          child: Column(
+            children: [
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
                   children: [
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          Container(margin: const EdgeInsets.all(8.0), child: const LoginSignUp()),
-                          Container(margin: const EdgeInsets.all(8.0), child: LoginHome(tabController: _tabController)),
-                          Container(margin: const EdgeInsets.all(8.0), child: LoginSignIn()),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: colors.background,
-                        borderRadius: BorderRadius.circular(
-                          10.0,
-                        ),
-                      ),
-                      child: TabBar(
-                        controller: _tabController,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: colors.softForeground,
-                        ),
-                        labelColor: colors.foreground,
-                        unselectedLabelColor: colors.foreground,
-                        tabs: const [
-                          Tab(
-                            text: 'Register',
-                          ),
-                          Tab(
-                            icon: Icon(Icons.home),
-                          ),
-                          Tab(
-                            text: 'Sign In',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10)
+                    Container(margin: const EdgeInsets.all(8.0), child: const LoginSignUp()),
+                    Container(margin: const EdgeInsets.all(8.0), child: LoginHome(tabController: _tabController)),
+                    Container(margin: const EdgeInsets.all(8.0), child: LoginSignIn()),
                   ],
                 ),
               ),
-            ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: colors.background,
+                  borderRadius: BorderRadius.circular(
+                    10.0,
+                  ),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: colors.softForeground,
+                  ),
+                  labelColor: colors.foreground,
+                  unselectedLabelColor: colors.foreground,
+                  tabs: const [
+                    Tab(
+                      text: 'Register',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.home),
+                    ),
+                    Tab(
+                      text: 'Sign In',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10)
+            ],
           ),
         ),
       ),

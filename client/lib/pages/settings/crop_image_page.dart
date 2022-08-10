@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:image/image.dart' as im;
+import 'package:solidtrade/components/base/st_page.dart';
 import 'dart:math';
 
 import 'package:solidtrade/services/util/util.dart';
@@ -81,136 +82,137 @@ class _CropperState extends State<Cropper> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crop Photo'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: _cropImage,
-          tooltip: 'Crop',
-          icon: const Icon(Icons.crop),
+    return STPage(
+      page: () => Scaffold(
+        appBar: AppBar(
+          title: const Text('Crop Photo'),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: _cropImage,
+            tooltip: 'Crop',
+            icon: const Icon(Icons.crop),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, null),
+              child: const Text('Cancel'),
+            )
+          ],
         ),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: const Text('Cancel'),
-          )
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: FutureBuilder(
-              future: _decoded.future,
-              builder: (ctx, snap) {
-                if (!snap.hasData) {
-                  return const Center(
-                    child: Text('Loading...'),
-                  );
-                }
-                return LayoutBuilder(
-                  builder: (ctx, cstr) {
-                    if (init) {
-                      cropPad = cstr.maxHeight * 0.05;
-                      double tmpWidth = cstr.maxWidth - 2 * cropPad;
-                      double tmpHeight = cstr.maxHeight - 2 * cropPad;
-                      cropArea = (tmpWidth / cropRatio > tmpHeight) ? Size(tmpHeight * cropRatio, tmpHeight) : Size(tmpWidth, tmpWidth / cropRatio);
-                      zeroScale = cropArea.height / imgHeight;
-                      computeRelativeDim(scale);
-                      init = false;
-                    }
-                    return GestureDetector(
-                      onPanUpdate: (pan) {
-                        double dy;
-                        double dx;
-                        if (pan.delta.dy > 0) {
-                          dy = min(pan.delta.dy, pYa - offset.dy);
-                        } else {
-                          dy = max(pan.delta.dy, -pYa - offset.dy);
-                        }
-                        if (pan.delta.dx > 0) {
-                          dx = min(pan.delta.dx, pXa - offset.dx);
-                        } else {
-                          dx = max(pan.delta.dx, -pXa - offset.dx);
-                        }
-                        setState(() => offset += Offset(dx, dy));
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            color: Colors.black.withOpacity(0.5),
-                            height: cstr.maxHeight,
-                            width: cstr.maxWidth,
-                            child: ClipRect(
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: cropArea.height,
-                                width: cropArea.width,
-                                child: Transform.translate(
-                                  offset: offset,
-                                  child: Transform.scale(
-                                    scale: scale * zeroScale,
-                                    child: OverflowBox(
-                                      maxWidth: imgWidth,
-                                      maxHeight: imgHeight,
-                                      child: Image.memory(
-                                        widget.image,
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: FutureBuilder(
+                future: _decoded.future,
+                builder: (ctx, snap) {
+                  if (!snap.hasData) {
+                    return const Center(
+                      child: Text('Loading...'),
+                    );
+                  }
+                  return LayoutBuilder(
+                    builder: (ctx, cstr) {
+                      if (init) {
+                        cropPad = cstr.maxHeight * 0.05;
+                        double tmpWidth = cstr.maxWidth - 2 * cropPad;
+                        double tmpHeight = cstr.maxHeight - 2 * cropPad;
+                        cropArea = (tmpWidth / cropRatio > tmpHeight) ? Size(tmpHeight * cropRatio, tmpHeight) : Size(tmpWidth, tmpWidth / cropRatio);
+                        zeroScale = cropArea.height / imgHeight;
+                        computeRelativeDim(scale);
+                        init = false;
+                      }
+                      return GestureDetector(
+                        onPanUpdate: (pan) {
+                          double dy;
+                          double dx;
+                          if (pan.delta.dy > 0) {
+                            dy = min(pan.delta.dy, pYa - offset.dy);
+                          } else {
+                            dy = max(pan.delta.dy, -pYa - offset.dy);
+                          }
+                          if (pan.delta.dx > 0) {
+                            dx = min(pan.delta.dx, pXa - offset.dx);
+                          } else {
+                            dx = max(pan.delta.dx, -pXa - offset.dx);
+                          }
+                          setState(() => offset += Offset(dx, dy));
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              color: Colors.black.withOpacity(0.5),
+                              height: cstr.maxHeight,
+                              width: cstr.maxWidth,
+                              child: ClipRect(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: cropArea.height,
+                                  width: cropArea.width,
+                                  child: Transform.translate(
+                                    offset: offset,
+                                    child: Transform.scale(
+                                      scale: scale * zeroScale,
+                                      child: OverflowBox(
+                                        maxWidth: imgWidth,
+                                        maxHeight: imgHeight,
+                                        child: Image.memory(
+                                          widget.image,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          IgnorePointer(
-                            child: Center(
-                              child: Container(
-                                height: cropArea.height,
-                                width: cropArea.width,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white, width: 2),
+                            IgnorePointer(
+                              child: Center(
+                                child: Container(
+                                  height: cropArea.height,
+                                  width: cropArea.width,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white, width: 2),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              const Text('Scale:'),
-              Expanded(
-                child: SliderTheme(
-                  data: theme.sliderTheme,
-                  child: Slider(
-                    divisions: 50,
-                    value: scale,
-                    min: 1,
-                    max: 2,
-                    label: '$scale',
-                    onChanged: (n) {
-                      double dy;
-                      double dx;
-                      computeRelativeDim(n);
-                      dy = (offset.dy > 0) ? min(offset.dy, pYa) : max(offset.dy, -pYa);
-                      dx = (offset.dx > 0) ? min(offset.dx, pXa) : max(offset.dx, -pXa);
-                      setState(() {
-                        offset = Offset(dx, dy);
-                        scale = n;
-                      });
+                          ],
+                        ),
+                      );
                     },
+                  );
+                },
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                const Text('Scale:'),
+                Expanded(
+                  child: SliderTheme(
+                    data: Theme.of(context).sliderTheme,
+                    child: Slider(
+                      divisions: 50,
+                      value: scale,
+                      min: 1,
+                      max: 2,
+                      label: '$scale',
+                      onChanged: (n) {
+                        double dy;
+                        double dx;
+                        computeRelativeDim(n);
+                        dy = (offset.dy > 0) ? min(offset.dy, pYa) : max(offset.dy, -pYa);
+                        dx = (offset.dx > 0) ? min(offset.dx, pXa) : max(offset.dx, -pXa);
+                        setState(() {
+                          offset = Offset(dx, dy);
+                          scale = n;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

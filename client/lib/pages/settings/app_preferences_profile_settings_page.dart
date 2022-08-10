@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -96,44 +97,46 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close, size: 25, color: Colors.red[300]),
-          onPressed: _handleClickDiscard,
-        ),
-        title: const Text("Customize your Profile"),
-        elevation: 5,
-        centerTitle: true,
-        backgroundColor: colors.background,
-        foregroundColor: colors.foreground,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.done, size: 25, color: Colors.blue[300]),
-            onPressed: () => Navigator.of(context).pop(_userDto),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 15),
-            // Text(
-            //   "Customize your Profile",
-            //   textAlign: TextAlign.center,
-            //   style: TextStyle(
-            //     color: alertColor,
-            //     fontSize: 22.5,
-            //   ),
-            // ),
-            const SizedBox(height: 15),
-            _niceInputField(title: 'Bio', controller: bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: bioController.text),
-            _niceInputField(title: 'Email', controller: emailController, callback: (content) => _emailChanged(content), hintText: emailController.text),
-            _niceInputField(title: 'Name', controller: displayNameController, callback: (content) => _displayNameChanged(content), hintText: displayNameController.text),
-            _niceInputField(title: 'Username', controller: usernameController, callback: (content) => _usernameChanged(content), hintText: '@' + usernameController.text),
-            SwitchListTile(title: const Text("Public portfolio"), value: _hasPublicPortfolio, onChanged: _hasPublicPortfolioChanged),
-            const SizedBox(height: 15),
+    return STPage(
+      page: () => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.close, size: 25, color: Colors.red[300]),
+            onPressed: _handleClickDiscard,
+          ),
+          title: const Text("Customize your Profile"),
+          elevation: 5,
+          centerTitle: true,
+          backgroundColor: colors.background,
+          foregroundColor: colors.foreground,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.done, size: 25, color: Colors.blue[300]),
+              onPressed: () => Navigator.of(context).pop(_userDto),
+            )
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 15),
+              // Text(
+              //   "Customize your Profile",
+              //   textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //     color: alertColor,
+              //     fontSize: 22.5,
+              //   ),
+              // ),
+              const SizedBox(height: 15),
+              _niceInputField(title: 'Bio', controller: bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: bioController.text),
+              _niceInputField(title: 'Email', controller: emailController, callback: (content) => _emailChanged(content), hintText: emailController.text),
+              _niceInputField(title: 'Name', controller: displayNameController, callback: (content) => _displayNameChanged(content), hintText: displayNameController.text),
+              _niceInputField(title: 'Username', controller: usernameController, callback: (content) => _usernameChanged(content), hintText: '@' + usernameController.text),
+              SwitchListTile(title: const Text("Public portfolio"), value: _hasPublicPortfolio, onChanged: _hasPublicPortfolioChanged),
+              const SizedBox(height: 15),
+            ],
+          ),
         ),
       ),
     );

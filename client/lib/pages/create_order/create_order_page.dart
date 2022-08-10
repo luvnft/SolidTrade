@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/prevent_render_flex_overflow_wrapper.dart';
@@ -105,8 +106,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   Widget build(BuildContext context) {
     return STStreamBuilder<Portfolio>(
       stream: _portfolioService.stream$,
-      builder: (_, portfolio) {
-        return Scaffold(
+      builder: (_, portfolio) => STPage(
+        page: () => Scaffold(
           appBar: AppBar(
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,8 +243,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
               },
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

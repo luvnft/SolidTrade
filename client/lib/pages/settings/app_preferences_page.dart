@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solidtrade/app/main_common.dart';
+import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/custom/timer_button.dart';
@@ -317,121 +318,118 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: uiUpdate.stream$,
-      builder: (_, __) => STStreamBuilder<User>(
+    return STPage(
+      page: () => STStreamBuilder<User>(
         stream: _userService.stream$,
-        builder: (context, user) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: colors.background,
-              foregroundColor: colors.foreground,
-              leading: IconButton(icon: Icon(Icons.close, size: 25, color: Colors.red[300]), onPressed: _handleDiscardProfileUpdate),
-              title: const Text(
-                "Preferences",
-              ),
-              elevation: 5,
-              centerTitle: true,
-              actions: <Widget>[
-                IconButton(icon: Icon(Icons.done, size: 25, color: Colors.blue[300]), onPressed: _handleUpdateProfile)
-              ],
+        builder: (context, user) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: colors.background,
+            foregroundColor: colors.foreground,
+            leading: IconButton(icon: Icon(Icons.close, size: 25, color: Colors.red[300]), onPressed: _handleDiscardProfileUpdate),
+            title: const Text(
+              "Preferences",
             ),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Text(
-                  _updateUserDto.displayName,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 40),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Material(
-                    elevation: 5,
-                    color: colors.background,
-                    child: GestureDetector(
-                      onTap: _handleClickChangeProfilePicture,
-                      child: Container(
-                        child: _imageAsBytes != null
-                            ? Util.loadImageFromMemory(
-                                _imageAsBytes!,
-                                150.0,
-                                borderRadius: BorderRadius.circular(20),
-                                boxFit: BoxFit.cover,
-                                loadingBoxShape: BoxShape.rectangle,
-                              )
-                            : Util.loadImage(
-                                user.profilePictureUrl,
-                                150.0,
-                                borderRadius: BorderRadius.circular(20),
-                                boxFit: BoxFit.cover,
-                                loadingBoxShape: BoxShape.rectangle,
-                              ),
-                      ),
+            elevation: 5,
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(icon: Icon(Icons.done, size: 25, color: Colors.blue[300]), onPressed: _handleUpdateProfile)
+            ],
+          ),
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 20),
+              Text(
+                _updateUserDto.displayName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 40),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Material(
+                  elevation: 5,
+                  color: colors.background,
+                  child: GestureDetector(
+                    onTap: _handleClickChangeProfilePicture,
+                    child: Container(
+                      child: _imageAsBytes != null
+                          ? Util.loadImageFromMemory(
+                              _imageAsBytes!,
+                              150.0,
+                              borderRadius: BorderRadius.circular(20),
+                              boxFit: BoxFit.cover,
+                              loadingBoxShape: BoxShape.rectangle,
+                            )
+                          : Util.loadImage(
+                              user.profilePictureUrl,
+                              150.0,
+                              borderRadius: BorderRadius.circular(20),
+                              boxFit: BoxFit.cover,
+                              loadingBoxShape: BoxShape.rectangle,
+                            ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                TextButton(
-                  onPressed: _handleClickChangeProfilePicture,
-                  child: const Text(
-                    'Change Profile Picture',
-                    style: TextStyle(fontWeight: FontWeight.normal),
-                  ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: _handleClickChangeProfilePicture,
+                child: const Text(
+                  'Change Profile Picture',
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
-                const Spacer(flex: 1000),
-                _settingsButton(
-                  callback: _handleEditProfileClick,
-                  text: 'Edit profile',
+              ),
+              const Spacer(flex: 1000),
+              _settingsButton(
+                callback: _handleEditProfileClick,
+                text: 'Edit profile',
+              ),
+              _settingsButton(
+                callback: () => UtilCupertino.showCupertinoDialog(
+                  context,
+                  title: 'Language',
+                  message: 'Choose a language',
+                  widgets: UtilCupertino.languageActionSheets(context, configurationProvider.languageProvider),
                 ),
-                _settingsButton(
-                  callback: () => UtilCupertino.showCupertinoDialog(
-                    context,
-                    title: 'Language',
-                    message: 'Choose a language',
-                    widgets: UtilCupertino.languageActionSheets(context, configurationProvider.languageProvider),
-                  ),
-                  text: translations.settings.changeLanguage,
+                text: translations.settings.changeLanguage,
+              ),
+              _settingsButton(
+                callback: () => UtilCupertino.showCupertinoDialog(
+                  context,
+                  title: 'Change Theme',
+                  message: 'Choose a color theme',
+                  widgets: UtilCupertino.colorThemeActionSheets(context, configurationProvider.themeProvider),
                 ),
-                _settingsButton(
-                  callback: () => UtilCupertino.showCupertinoDialog(
-                    context,
-                    title: 'Change Theme',
-                    message: 'Choose a color theme',
-                    widgets: UtilCupertino.colorThemeActionSheets(context, configurationProvider.themeProvider),
-                  ),
-                  text: translations.settings.changeTheme,
+                text: translations.settings.changeTheme,
+              ),
+              const SizedBox(height: 10),
+              Divider(thickness: 5, color: colors.softBackground),
+              LayoutBuilder(
+                builder: (context, constrains) => Row(
+                  children: [
+                    _settingsButton(
+                      callback: _handleClickSignOut,
+                      text: "Sign out",
+                      textColor: Colors.red,
+                      width: constrains.maxWidth / 2,
+                    ),
+                    _settingsButton(
+                      callback: _handleClickDeleteAccount,
+                      text: "Delete Account",
+                      textColor: Colors.red,
+                      width: constrains.maxWidth / 2,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
-                Divider(thickness: 5, color: colors.softBackground),
-                LayoutBuilder(
-                  builder: (context, constrains) => Row(
-                    children: [
-                      _settingsButton(
-                        callback: _handleClickSignOut,
-                        text: "Sign out",
-                        textColor: Colors.red,
-                        width: constrains.maxWidth / 2,
-                      ),
-                      _settingsButton(
-                        callback: _handleClickDeleteAccount,
-                        text: "Delete Account",
-                        textColor: Colors.red,
-                        width: constrains.maxWidth / 2,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Spacer(flex: 1),
-              ],
-            ),
-          );
-        },
+              ),
+              const SizedBox(height: 5),
+              const Spacer(flex: 1),
+            ],
+          ),
+        ),
       ),
     );
   }
