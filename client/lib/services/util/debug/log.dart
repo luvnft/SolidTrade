@@ -1,29 +1,37 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class Log {
-  static final logger = Logger(printer: SimpleLogPrinter(), filter: ProductionFilter());
+  static final _logger = Logger(printer: SimpleLogPrinter(), filter: ProductionFilter());
+  static bool get _shouldLog => environment != Environment.production;
 
-  static bool get shouldLog => environment != Environment.production;
+  static Object? _tryToConvertToJson(Object? object) {
+    try {
+      return JsonMapper.serializeToMap(object);
+    } catch (e) {
+      return object;
+    }
+  }
 
   static void d(Object? value) {
-    if (shouldLog) logger.d(value);
+    if (_shouldLog) _logger.d(_tryToConvertToJson(value));
   }
 
   static void i(Object? value) {
-    if (shouldLog) logger.i(value);
+    if (_shouldLog) _logger.i(_tryToConvertToJson(value));
   }
 
   static void w(Object? value) {
-    if (shouldLog) logger.w(value);
+    if (_shouldLog) _logger.w(_tryToConvertToJson(value));
   }
 
   static void f(Object? value) {
-    if (shouldLog) logger.e(value);
+    if (_shouldLog) _logger.e(_tryToConvertToJson(value));
   }
 }
 
