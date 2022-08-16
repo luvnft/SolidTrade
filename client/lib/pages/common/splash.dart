@@ -9,7 +9,6 @@ import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class Splash extends StatefulWidget {

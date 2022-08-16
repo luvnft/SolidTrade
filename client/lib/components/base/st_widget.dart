@@ -4,6 +4,8 @@ import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 
+export 'package:solidtrade/services/util/debug/log.dart';
+
 class STWidget {
   final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
 
