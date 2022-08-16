@@ -22,6 +22,7 @@ class Constants {
   static const billion = 1000000000;
   static const trillion = 1000000000000;
 
+  static String getTrProductSearchRequestString(String search, String searchType) => "{\"type\":\"neonSearch\",\"data\":{\"q\":\"$search\",\"page\":1,\"pageSize\":3,\"filter\":[{\"key\":\"type\",\"value\":\"$searchType\"},{\"key\":\"jurisdiction\",\"value\":\"DE\"}]}}";
   static String getTrStockDetailsRequestString(String isin) => "{\"type\":\"stockDetails\",\"id\":\"$isin\"}";
   static String getTrProductInfoRequestString(String isin) => "{\"type\":\"instrument\",\"id\":\"$isin\"}";
   static String getTrProductPriceRequestString(String isin) => "{\"type\":\"ticker\",\"id\":\"$isin\"}";

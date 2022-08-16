@@ -11,6 +11,7 @@ class SearchInputField extends StatelessWidget with STWidget {
     this.leftPadding,
     this.onGestureTap,
     this.onInputChanged,
+    this.textEditingController,
   }) : super(key: key);
   final bool autofocus;
   final bool enableField;
@@ -19,6 +20,7 @@ class SearchInputField extends StatelessWidget with STWidget {
   final SizedBox? leftPadding;
   final void Function()? onGestureTap;
   final void Function(String)? onInputChanged;
+  final TextEditingController? textEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class SearchInputField extends StatelessWidget with STWidget {
           child: GestureDetector(
             onTap: onGestureTap,
             child: TextFormField(
+              controller: textEditingController,
               autofocus: autofocus,
               enabled: enableField,
               onChanged: onInputChanged,
