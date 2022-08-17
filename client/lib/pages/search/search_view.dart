@@ -67,8 +67,7 @@ class _SearchViewState extends State<SearchView> with STWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 200,
+              Expanded(
                 child: _SearchResults(
                   textEditingController: _textEditingController,
                 ),
@@ -161,6 +160,7 @@ class _SearchResultsState extends State<_SearchResults> {
       _animatedListKey.currentState?.removeItem(
         targetIndex,
         (context, animation) => _buildItem(item, animation),
+        duration: Duration.zero,
       );
     }
 
@@ -182,50 +182,6 @@ class _SearchResultsState extends State<_SearchResults> {
       removeItem(i--);
     }
   }
-  // void _updateResults(TrProductSearch searchResult) {
-  //   void insertItem(int destIndex, TrProductSearchResult item) {
-  //     _productSearchResults.insert(destIndex, item);
-  //     _animatedListKey.currentState?.insertItem(destIndex);
-  //   }
-
-  //   void removeItem(int targetIndex) {
-  //     var item = _productSearchResults.removeAt(targetIndex);
-  //     _animatedListKey.currentState?.removeItem(
-  //       targetIndex,
-  //       (context, animation) => _buildItem(item, animation),
-  //     );
-  //   }
-
-  //   void replace(int targetIndex, int destIndex, TrProductSearchResult item) {
-  //     removeItem(targetIndex);
-  //     insertItem(destIndex, item);
-  //   }
-
-  //   var length = max(_productSearchResults.length, searchResult.resultCount);
-
-  //   for (int index = 0; index < length; index++) {
-
-  //   }
-  // }
-  // void _updateResults(TrProductSearch searchResult) {
-  //   var numberOfItemsToRemove = _productSearchResults.length;
-
-  //   // Remove all
-  //   for (int removeIndex = 0; removeIndex < _productSearchResults.length;) {
-  //     var item = _productSearchResults.removeAt(removeIndex);
-  //     _animatedListKey.currentState?.removeItem(
-  //       removeIndex,
-  //       (context, animation) => _buildItem(item, animation),
-  //     );
-  //   }
-
-  //   _productSearchResults.addAll(searchResult.results);
-
-  //   // Add all
-  //   for (var offset = 0; offset < _productSearchResults.length; offset++) {
-  //     _animatedListKey.currentState?.insertItem(offset);
-  //   }
-  // }
 }
 
 class SingleSearchResult extends StatelessWidget {
