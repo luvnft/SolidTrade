@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/models/trade_republic/tr_product_search.dart';
 import 'package:solidtrade/pages/search/components/search_input_field.dart';
 import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/util/extensions/build_context_extensions.dart';
@@ -66,7 +67,12 @@ class _SearchViewState extends State<SearchView> with STWidget {
                   ),
                 ),
               ),
-              _SearchResults(textEditingController: _textEditingController)
+              SizedBox(
+                height: 200,
+                child: _SearchResults(
+                  textEditingController: _textEditingController,
+                ),
+              )
             ],
           ),
         ),
@@ -79,7 +85,6 @@ class _SearchViewState extends State<SearchView> with STWidget {
   }
 }
 
-// https://www.youtube.com/watch?v=ZtfItHwFlZ8
 class _SearchResults extends StatefulWidget {
   const _SearchResults({Key? key, required this.textEditingController}) : super(key: key);
   final TextEditingController textEditingController;
@@ -89,13 +94,41 @@ class _SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<_SearchResults> {
-  final TrProductSearchService _trProductSearchService = GetIt.instance.get<TrProductSearchService>();
-  String _previousSearch = "";
+  final _trProductSearchService = GetIt.instance.get<TrProductSearchService>();
+  final List<TrProductSearchResult> _productSearchResults = [];
+  final _animatedListKey = GlobalKey<AnimatedListState>();
+
+  String _previousSearch = "_";
 
   @override
   void initState() {
     super.initState();
     widget.textEditingController.addListener(_onSearchChanged);
+  }
+
+  Widget _buildItem(TrProductSearchResult result, Animation<double> animation) {
+    // var tween = Tween(begin: const Offset(0.0, 1.0), end: Offset.zero).chain(
+    //   CurveTween(curve: Curves.ease),
+    // );
+    var tween = Tween(begin: 0.0, end: 1.0).chain(
+      CurveTween(curve: Curves.ease),
+    );
+
+    return FadeTransition(
+      opacity: animation.drive(tween),
+      child: SingleSearchResult(result: result),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: AnimatedList(
+        key: _animatedListKey,
+        initialItemCount: _productSearchResults.length,
+        itemBuilder: (context, index, animation) => _buildItem(_productSearchResults[index], animation),
+      ),
+    );
   }
 
   Future<void> _onSearchChanged() async {
@@ -104,25 +137,109 @@ class _SearchResultsState extends State<_SearchResults> {
 
     _previousSearch = search;
 
-    var result = await _trProductSearchService.requestTrProductSearch("Tesla");
-    print(result);
+    var searchResult = await _fetchSearchResults(search);
+    _updateResults(searchResult);
   }
+
+  Future<TrProductSearch> _fetchSearchResults(String search) async {
+    var result = await _trProductSearchService.requestTrProductSearch(search);
+    if (result.isSuccessful) {
+      return result.result!;
+    }
+
+    throw UnimplementedError();
+  }
+
+  void _updateResults(TrProductSearch searchResult) {
+    void insertItem(int destIndex, TrProductSearchResult item) {
+      _productSearchResults.insert(destIndex, item);
+      _animatedListKey.currentState?.insertItem(destIndex);
+    }
+
+    void removeItem(int targetIndex) {
+      var item = _productSearchResults.removeAt(targetIndex);
+      _animatedListKey.currentState?.removeItem(
+        targetIndex,
+        (context, animation) => _buildItem(item, animation),
+      );
+    }
+
+    void replace(int targetIndex, TrProductSearchResult item) {
+      removeItem(targetIndex);
+      insertItem(targetIndex, item);
+    }
+
+    for (int index = 0; index < searchResult.results.length; index++) {
+      if (_productSearchResults.length != index && searchResult.results[index].name != _productSearchResults[index].name) {
+        replace(index, searchResult.results[index]);
+        continue;
+      }
+
+      insertItem(index, searchResult.results[index]);
+    }
+
+    for (var i = searchResult.results.length; i < _productSearchResults.length; i++) {
+      removeItem(i--);
+    }
+  }
+  // void _updateResults(TrProductSearch searchResult) {
+  //   void insertItem(int destIndex, TrProductSearchResult item) {
+  //     _productSearchResults.insert(destIndex, item);
+  //     _animatedListKey.currentState?.insertItem(destIndex);
+  //   }
+
+  //   void removeItem(int targetIndex) {
+  //     var item = _productSearchResults.removeAt(targetIndex);
+  //     _animatedListKey.currentState?.removeItem(
+  //       targetIndex,
+  //       (context, animation) => _buildItem(item, animation),
+  //     );
+  //   }
+
+  //   void replace(int targetIndex, int destIndex, TrProductSearchResult item) {
+  //     removeItem(targetIndex);
+  //     insertItem(destIndex, item);
+  //   }
+
+  //   var length = max(_productSearchResults.length, searchResult.resultCount);
+
+  //   for (int index = 0; index < length; index++) {
+
+  //   }
+  // }
+  // void _updateResults(TrProductSearch searchResult) {
+  //   var numberOfItemsToRemove = _productSearchResults.length;
+
+  //   // Remove all
+  //   for (int removeIndex = 0; removeIndex < _productSearchResults.length;) {
+  //     var item = _productSearchResults.removeAt(removeIndex);
+  //     _animatedListKey.currentState?.removeItem(
+  //       removeIndex,
+  //       (context, animation) => _buildItem(item, animation),
+  //     );
+  //   }
+
+  //   _productSearchResults.addAll(searchResult.results);
+
+  //   // Add all
+  //   for (var offset = 0; offset < _productSearchResults.length; offset++) {
+  //     _animatedListKey.currentState?.insertItem(offset);
+  //   }
+  // }
+}
+
+class SingleSearchResult extends StatelessWidget {
+  const SingleSearchResult({Key? key, required this.result}) : super(key: key);
+  final TrProductSearchResult result;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // child: Text("Search: " + _searchInput),
-      child: Text("Search: "),
+      height: 30,
+      child: Center(
+        child: Text(result.name),
+      ),
     );
-  }
-}
-
-class SingleSearchResult extends StatelessWidget {
-  const SingleSearchResult({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 
