@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/data/models/request_response/error_response.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
@@ -6,6 +7,8 @@ class RequestResponse<T> {
   final ErrorModel? error;
   final T? result;
   final bool isSuccessful;
+
+  String get _toJson => error != null ? '{"error": "${error!.userFriendlyMessage}"}' : JsonMapper.serialize(result!)!;
 
   const RequestResponse({
     required this.error,
@@ -43,5 +46,14 @@ class RequestResponse<T> {
       isSuccessful: false,
       result: null,
     );
+  }
+
+  @override
+  String toString() {
+    try {
+      return _toJson;
+    } catch (_) {
+      return super.toString();
+    }
   }
 }

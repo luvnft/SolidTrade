@@ -12,7 +12,7 @@ class Log {
 
   static Object? _tryToConvertToJson(Object? object) {
     try {
-      return JsonMapper.serializeToMap(object);
+      return JsonMapper.serialize(object);
     } catch (e) {
       return object;
     }
