@@ -26,6 +26,11 @@ services:
     image: "mcr.microsoft.com/mssql/server"
     ports:
       - ${DB_PORT}:1433
+    volumes:
+      - solidtrade:/var/opt/mssql/data
     environment:
       SA_PASSWORD: ${DB_SA_PASSWORD}
       ACCEPT_EULA: "Y"
+
+volumes:
+  solidtrade: 
