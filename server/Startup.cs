@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Firestore;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.Dashboard.Resources;
@@ -217,9 +216,6 @@ namespace SolidTradeServer
             {
                 Credential = GoogleCredential.FromFile(Configuration["FirebaseCredentials"]),
             });
-            
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", Configuration["FirebaseCredentials"]);
-            OngoingProductsService.Firestore = FirestoreDb.Create(Configuration["FirebaseProjectId"]);
         }
     }
 }

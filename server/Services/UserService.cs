@@ -107,9 +107,6 @@ namespace SolidTradeServer.Services
                 
                 user.ProfilePictureUrl = updatedProfilePicture;
 
-                await OngoingProductsService.Firestore.Document($"users/{uid}")
-                    .SetAsync(new { Update = "None" });
-                
                 var newUser = await _database.Users.AddAsync(user);
                 
                 _logger.Information("Trying to save new User with uid {@Uid}", uid);
@@ -330,10 +327,6 @@ namespace SolidTradeServer.Services
                 return error;
             }
             
-            await OngoingProductsService.Firestore
-                .Document($"users/{uid}")
-                .DeleteAsync();
-
             try
             {
                 _database.Users.Remove(user);
