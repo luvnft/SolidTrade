@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
 using Serilog.Events;
+using SolidTradeServer.Common.Extensions;
 using SolidTradeServer.Serilog;
 
 namespace SolidTradeServer
@@ -18,8 +19,7 @@ namespace SolidTradeServer
             Host.CreateDefaultBuilder(args)
                 .ConfigureHostConfiguration(hostConfig =>
                 {
-                    hostConfig.AddJsonFile("appsettings.json");
-                    hostConfig.AddJsonFile("appsettings.credentials.json");
+                    hostConfig.AddAndParseDotEnv();
                     hostConfig.AddEnvironmentVariables();
                 })
                 .UseSerilog((context, configuration) =>

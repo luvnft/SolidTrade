@@ -19,6 +19,8 @@ services:
     build: server
     ports:
       - ${API_PORT}:80
+    env_file:
+      - api.env
     depends_on:
       - db
   

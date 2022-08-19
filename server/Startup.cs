@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using System.Net;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
-using Hangfire.Dashboard.Resources;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -25,7 +23,6 @@ using SolidTradeServer.Common;
 using SolidTradeServer.Data.Common;
 using SolidTradeServer.Data.Models.Converters;
 using SolidTradeServer.Data.Models.Errors;
-using SolidTradeServer.Data.Models.Errors.Common;
 using SolidTradeServer.Filters;
 using SolidTradeServer.Services;
 using SolidTradeServer.Services.Cache;
@@ -212,10 +209,35 @@ namespace SolidTradeServer
             // Insures the trade republic service is being instantiated at the beginning of the application.
             app.ApplicationServices.GetService<TradeRepublicApiService>();
             
+            ConfigureFirebase();
+        }
+
+        private void ConfigureFirebase()
+        {
+            var credentials = ParseFirebaseCredentials();
+            
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile(Configuration["FirebaseCredentials"]),
+                Credential = GoogleCredential.FromJson(credentials),
             });
+  
+            string ParseFirebaseCredentials()
+            {
+                return JsonConvert.SerializeObject(
+                    new Dictionary<string, object>
+                    {
+                        {"type", Configuration["Firebase:type"]},
+                        {"project_id", Configuration["Firebase:projectId"]},
+                        {"private_key_id", Configuration["Firebase:privateKeyId"]},
+                        {"private_key", Configuration["Firebase:privateKey"] },
+                        {"client_email", Configuration["Firebase:clientEmail"]},
+                        {"client_id", Configuration["Firebase:clientId"]},
+                        {"auth_uri", Configuration["Firebase:authUri"]},
+                        {"token_uri", Configuration["Firebase:tokenUri"]},
+                        {"auth_provider_x509_cert_url", Configuration["Firebase:authProviderX509CertUrl"]},
+                        {"client_x509_cert_url", Configuration["Firebase:clientX509CertUrl"]},
+                    });
+            }
         }
     }
 }
