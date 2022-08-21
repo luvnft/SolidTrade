@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SolidTradeServer.Common.Extensions;
 using SolidTradeServer.Data.Entities;
 using SolidTradeServer.Data.Entities.Common;
 
@@ -35,7 +34,7 @@ namespace SolidTradeServer.Data.Common
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddAndParseDotEnv()
+                .AddJsonFile("appsettings.credentials.json")
                 .Build();
             
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"));
