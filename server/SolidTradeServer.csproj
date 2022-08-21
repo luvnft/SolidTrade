@@ -38,10 +38,11 @@
         <NoWarn>NU1701</NoWarn>
       </PackageReference>
     </ItemGroup>
+
+<!--Solidtrade should only run with Docker therefore we don't copy the config as the docker compose will mount to the same folder.-->
     <ItemGroup>
-      <None Include="C:\Users\Jesse\Dev\Projects\SolidTrade\server\.editorconfig" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="Filters\ExceptionHandlerFilter.cs" />
+      <Content Update="Configuration\**">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>

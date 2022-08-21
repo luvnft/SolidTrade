@@ -34,7 +34,7 @@ namespace SolidTradeServer.Data.Common
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.credentials.json")
+                .AddJsonFile("config/appsettings.credentials.json")
                 .Build();
             
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"));

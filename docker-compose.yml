@@ -21,6 +21,8 @@ services:
       - ${API_PORT}:80
     depends_on:
       - db
+    volumes:
+      - ./server/Configuration:/app/config
   
   db:
     image: "mcr.microsoft.com/mssql/server"
