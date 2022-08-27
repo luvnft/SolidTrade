@@ -1,6 +1,7 @@
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_position.dart';
 
-class StockPosition implements IBaseEntity {
+class StockPosition implements IBaseEntity, IPosition {
   @override
   final int id;
   @override
@@ -8,8 +9,11 @@ class StockPosition implements IBaseEntity {
   @override
   final DateTime updatedAt;
 
+  @override
   final String isin;
+  @override
   final double buyInPrice;
+  @override
   final double numberOfShares;
 
   const StockPosition({

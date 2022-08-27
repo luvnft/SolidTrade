@@ -58,7 +58,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
     rows.add(
       Row(
         children: [
-          _Metric(name: "Strike", value: di.properties.strike.toPrice(di.properties.currency)),
+          _Metric(name: "Strike", value: di.properties.strike.toDefaultPrice(currencyCode: di.properties.currency)),
           productInfo.positionType == PositionType.warrant
               ? _Metric(
                   name: "Delta",
@@ -79,7 +79,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
           children: [
             _Metric(
               name: "Barrier",
-              value: di.properties.barrier?.toPrice(di.properties.currency),
+              value: di.properties.barrier?.toDefaultPrice(currencyCode: di.properties.currency),
             ),
             _Metric.empty(),
           ],

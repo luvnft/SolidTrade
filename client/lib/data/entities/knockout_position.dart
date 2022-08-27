@@ -1,6 +1,7 @@
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_position.dart';
 
-class KnockoutPosition implements IBaseEntity {
+class KnockoutPosition implements IBaseEntity, IPosition {
   @override
   final int id;
   @override

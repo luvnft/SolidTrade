@@ -16,17 +16,18 @@ String _currencyCodeToSymbol(String currencyCode) {
 }
 
 extension StringExtension on double {
-  String toDefaultPrice({int maxFractionDigits = 5}) {
+  String toDefaultPrice({int maxFractionDigits = 5, String currencyCode = "EUR"}) {
     final _format = NumberFormat("###,##0.00", "en_US");
     _format.maximumFractionDigits = maxFractionDigits;
 
-    return _format.format(this) + _currencyCodeToSymbol("EUR");
+    return _format.format(this) + _currencyCodeToSymbol(currencyCode);
   }
 
-  String toPrice(String currencyCode, {int maximumFractionDigits = 5}) {
+  String toDefaultNumber({int maxFractionDigits = 5, String? suffix}) {
     final _format = NumberFormat("###,##0.00", "en_US");
-    _format.maximumFractionDigits = maximumFractionDigits;
+    _format.maximumFractionDigits = maxFractionDigits;
 
-    return _format.format(this) + _currencyCodeToSymbol(currencyCode);
+    final formattedNumber = _format.format(this);
+    return suffix == null ? formattedNumber : formattedNumber + suffix;
   }
 }

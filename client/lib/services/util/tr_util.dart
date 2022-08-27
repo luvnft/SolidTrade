@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/config/config_reader.dart';
+import 'package:solidtrade/data/entities/base/base_position.dart';
 import 'package:solidtrade/data/entities/portfolio.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/common/tuple.dart';
@@ -13,6 +14,7 @@ import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
+import 'package:solidtrade/services/util/extensions/iterable_extensions.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class TrUtil {
@@ -88,17 +90,17 @@ class TrUtil {
     return recommendations.buy + recommendations.hold + recommendations.outperform + recommendations.sell + recommendations.underperform;
   }
 
-  static bool userOwnsPosition(Portfolio portfolio, String isin) {
-    bool ownsPosition = portfolio.stockPositions.any((position) => position.isin == isin);
-    if (ownsPosition) return true;
+  static IPosition? getPositionOrDefault(Portfolio portfolio, String isin) {
+    var stockPosition = portfolio.stockPositions.firstWhereOrDefault((position) => position.isin == isin);
+    if (stockPosition != null) return stockPosition;
 
-    ownsPosition = portfolio.knockOutPositions.any((position) => position.isin == isin);
-    if (ownsPosition) return true;
+    var knockOutPosition = portfolio.knockOutPositions.firstWhereOrDefault((position) => position.isin == isin);
+    if (knockOutPosition != null) return knockOutPosition;
 
-    ownsPosition = portfolio.warrantPositions.any((position) => position.isin == isin);
-    if (ownsPosition) return true;
+    var warrantPosition = portfolio.warrantPositions.firstWhereOrDefault((position) => position.isin == isin);
+    if (warrantPosition != null) return warrantPosition;
 
-    return false;
+    return null;
   }
 }
 

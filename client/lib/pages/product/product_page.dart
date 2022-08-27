@@ -13,13 +13,14 @@ import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/pages/create_order/create_order_page.dart';
+import 'package:solidtrade/pages/product/components/product_metrics.dart';
 import 'package:solidtrade/pages/product/components/product_analysts_recommendations.dart';
 import 'package:solidtrade/pages/product/components/product_app_bar.dart';
 import 'package:solidtrade/pages/product/components/product_chart_date_range_selection.dart';
 import 'package:solidtrade/pages/product/components/product_derivatives_selection.dart';
 import 'package:solidtrade/pages/product/components/product_details.dart';
 import 'package:solidtrade/pages/product/components/product_information.dart';
-import 'package:solidtrade/pages/product/components/product_metrics.dart';
+import 'package:solidtrade/pages/product/components/position_metrics.dart';
 import 'package:solidtrade/services/stream/abstract/tr_continuous_product_prices_service.dart';
 import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
@@ -246,6 +247,29 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           ),
                         ),
                         const SizedBox(height: 15),
+                        STStreamBuilder<Portfolio>(
+                          stream: portfolioService.stream$,
+                          builder: (context, portfolio) {
+                            var position = TrUtil.getPositionOrDefault(portfolio, widget.productInfo.isin);
+                            if (position == null) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              children: [
+                                ...section(
+                                  context,
+                                  "📈 Position",
+                                  PositionMetrics(
+                                    trProductPriceStream: widget.trProductPriceStream,
+                                    trStockDetailsStream: stockDetailsService.stream$,
+                                    position: position,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                         ...section(
                           context,
                           "📈 Statistics",
@@ -316,7 +340,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                   child: STStreamBuilder<Portfolio>(
                     stream: portfolioService.stream$,
                     builder: (context, portfolio) {
-                      final bool ownsPosition = TrUtil.userOwnsPosition(portfolio, widget.productInfo.isin);
+                      final bool ownsPosition = TrUtil.getPositionOrDefault(portfolio, widget.productInfo.isin) != null;
                       final buttonWidth = (ownsPosition ? constraints.maxWidth / 2 : constraints.maxWidth) - 20;
 
                       return Row(
