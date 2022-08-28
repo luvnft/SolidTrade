@@ -31,15 +31,17 @@ jobs:
 
       - name: Run applications
         uses: appleboy/ssh-action@master
-        env:
-          BRANCH: ${{ steps.extract_branch.outputs.branch }}
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          envs: BRANCH
           script: |
+            echo "$GITHUB_HEAD_REF"
+            echo "$GITHUB_REF"
+            echo "$GITHUB_REF_NAME"
+            echo "$GITHUB_ACTION_REF"
+            exit 0
             cd /root/projects/SolidTrade-$BRANCH/
             chmod +x ./run.sh
             ./run.sh $BRANCH
