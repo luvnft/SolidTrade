@@ -23,11 +23,11 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Log branch name
+      - name: Log target path
         shell: bash
         env:
-          GIT_BRANCH: ${{ steps.extract_branch.outputs.branch }}
-        run: echo "$GIT_BRANCH"
+          TARGET_PATH: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
+        run: echo "$TARGET_PATH"
         
       - uses: actions/checkout@v1
       - name: Copy repository contents via scp
