@@ -17,6 +17,7 @@ services:
   
   api:
     build: server
+    restart: always
     environment:
       ENVIRONMENT: ${API_ENVIRONMENT}
     ports:
