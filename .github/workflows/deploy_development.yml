@@ -1,0 +1,45 @@
+name: Deploy Development
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!stable'
+      - '!staging'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+        id: extract_branch
+        
+      - uses: actions/checkout@v1
+      - name: Copy repository contents via scp
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+        with:
+          rm: true
+          source: "."
+          targets: /root/projects/SolidTrade-${{ steps.extract_branch.outputs.branch }}/
+
+      - name: Executing remote command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          script: |
+            echo ${{ steps.extract_branch.outputs.branch }}
+            cd /root/projects/SolidTrade-${{ steps.extract_branch.outputs.branch }}/
+            chmod +x ./run.sh
+            ./run.sh ${{ steps.extract_branch.outputs.branch }}
