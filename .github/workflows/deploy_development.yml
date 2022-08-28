@@ -40,7 +40,7 @@ jobs:
         with:
           rm: true
           source: "."
-          targets: /root/projects/SolidTrade-${{ steps.extract_branch.outputs.branch }}/
+          targets: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master
