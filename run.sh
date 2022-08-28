@@ -15,4 +15,4 @@ cp "/root/projects/Rose-Linode/env/${credentials_folder}/server/appsettings.cred
 cp "/root/projects/Rose-Linode/env/${credentials_folder}/server/solid-trade-firebase-credentials.json" './server/Configuration'
 
 # We do not require ngrok for production. This is why we scale down to 0.
-docker-compose --project-name $environment_name up --scale ngrok=0
+docker-compose --project-name $environment_name up -d --scale ngrok=0
