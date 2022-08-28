@@ -37,7 +37,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-            #!/bin/bash
+            #!/bin/sh
             echo "test"
             for var in "$@"
             do
