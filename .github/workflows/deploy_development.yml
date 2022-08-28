@@ -37,11 +37,14 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
+            echo "test"
             echo "$GITHUB_HEAD_REF"
             echo "$GITHUB_REF"
             echo "$GITHUB_REF_NAME"
             echo "$GITHUB_ACTION_REF"
+            echo "exit"
             exit 0
+            echo "__"
             cd /root/projects/SolidTrade-$BRANCH/
             chmod +x ./run.sh
             ./run.sh $BRANCH
