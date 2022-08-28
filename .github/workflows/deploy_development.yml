@@ -7,8 +7,6 @@ on:
       - '!stable'
       - '!staging'
 
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,17 +15,6 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
         id: extract_branch
-
-      - name: Log github actions context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Log target path
-        shell: bash
-        env:
-          TARGET_PATH: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
-        run: echo "$TARGET_PATH"
         
       - uses: actions/checkout@v1
       - name: Copy repository contents via scp
@@ -40,9 +27,9 @@ jobs:
         with:
           rm: true
           source: "."
-          targets: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
+          target: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
 
-      - name: Executing remote command
+      - name: Run applications
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -50,7 +37,6 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-            echo ${{ steps.extract_branch.outputs.branch }}
             cd /root/projects/SolidTrade-${{ steps.extract_branch.outputs.branch }}/
             chmod +x ./run.sh
             ./run.sh ${{ steps.extract_branch.outputs.branch }}
