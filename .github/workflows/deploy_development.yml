@@ -27,25 +27,19 @@ jobs:
         with:
           rm: true
           source: "."
-          target: ${{ format('{0}-{1}/', '/root/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
+          target: ${{ format('{0}-{1}/', '~/projects/SolidTrade', steps.extract_branch.outputs.branch) }}
 
       - name: Run applications
         uses: appleboy/ssh-action@master
+        env:
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
+          envs: BRANCH
           script: |
-            #!/bin/sh
-            echo "test"
-            for var in "$@"
-            do
-              echo "$var"
-            done
-            echo "exit"
-            exit 0
-            echo "__"
-            cd /root/projects/SolidTrade-$BRANCH/
+            cd ~/projects/SolidTrade-$BRANCH/
             chmod +x ./run.sh
             ./run.sh $BRANCH
