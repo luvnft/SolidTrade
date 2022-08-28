@@ -31,12 +31,15 @@ jobs:
 
       - name: Run applications
         uses: appleboy/ssh-action@master
+        env:
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
+          envs: BRANCH
           script: |
-            cd /root/projects/SolidTrade-${{ steps.extract_branch.outputs.branch }}/
+            cd /root/projects/SolidTrade-$BRANCH/
             chmod +x ./run.sh
-            ./run.sh ${{ steps.extract_branch.outputs.branch }}
+            ./run.sh $BRANCH
