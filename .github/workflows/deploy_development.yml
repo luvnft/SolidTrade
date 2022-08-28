@@ -17,6 +17,17 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
         id: extract_branch
+
+      - name: Log github actions context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Log branch name
+        shell: bash
+        env:
+          GIT_BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        run: echo "GIT_BRANCH"
         
       - uses: actions/checkout@v1
       - name: Copy repository contents via scp
