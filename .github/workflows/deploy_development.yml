@@ -38,10 +38,10 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             echo "test"
-            echo "$GITHUB_HEAD_REF"
-            echo "$GITHUB_REF"
-            echo "$GITHUB_REF_NAME"
-            echo "$GITHUB_ACTION_REF"
+            for var in "$@"
+            do
+              echo "$var"
+            done
             echo "exit"
             exit 0
             echo "__"
