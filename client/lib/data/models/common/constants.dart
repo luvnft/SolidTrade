@@ -1,4 +1,6 @@
+import 'package:solidtrade/data/models/enums/client_enums/derivatives_query_options.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
+import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 
 class Constants {
   static const forgotOrLostAccountFormLink = "https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/";
@@ -27,6 +29,15 @@ class Constants {
   static String getTrProductInfoRequestString(String isin) => "{\"type\":\"instrument\",\"id\":\"$isin\"}";
   static String getTrProductPriceRequestString(String isin) => "{\"type\":\"ticker\",\"id\":\"$isin\"}";
   static String getTrAggregateHistoryRequestString(String isin, String range) => "{\"type\":\"aggregateHistoryLight\",\"range\":\"$range\",\"id\":\"$isin\"}";
+  static String getTrDerivativesRequestString({
+    required String isin,
+    required PositionType derivativeType,
+    required DerivativesSortOptions sortBy,
+    required DerivativesOptionType filterByType,
+    required int numberOfAvailableProducts,
+    DerivativesSortDirectionOptions sortDirection = DerivativesSortDirectionOptions.asc,
+  }) =>
+      "{\"type\":\"derivatives\",\"lang\":\"en\",\"underlying\":\"$isin\",\"productCategory\":\"${derivativeType.trName}\",\"leverage\":0,\"sortBy\":\"${sortBy.name}\",\"sortDirection\":\"${sortDirection.name}\",\"optionType\":\"${filterByType.name}\",\"pageSize\":$numberOfAvailableProducts,\"after\":\"0\"}";
 }
 
 class Quotes {

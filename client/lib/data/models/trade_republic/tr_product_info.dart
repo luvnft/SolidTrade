@@ -23,10 +23,11 @@ class TrProductInfo {
   bool get isCrypto => typeId == "crypto";
   bool get isStock => typeId == "stock";
   bool get isDerivative => typeId == "derivative";
+  bool get isFund => typeId == "fund";
   String get isinWithExchangeExtension => "$isin.${exchangeIds.first}";
 
   PositionType get positionType {
-    if (isStock || isCrypto) {
+    if (isStock || isCrypto || isFund) {
       return PositionType.stock;
     }
 

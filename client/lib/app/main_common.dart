@@ -20,6 +20,7 @@ import 'package:solidtrade/services/stream/ongoing_knockout_service.dart';
 import 'package:solidtrade/services/stream/ongoing_warrant_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/stock_service.dart';
+import 'package:solidtrade/services/stream/tr_derivatives_search_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 import 'package:solidtrade/services/stream/tr_product_price_service.dart';
 import 'package:solidtrade/services/stream/tr_product_search_service.dart';
@@ -125,6 +126,7 @@ class Startup {
     getItService.registerSingleton<MessagingService>(MessagingService());
     getItService.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
     getItService.registerSingleton<TrProductSearchService>(TrProductSearchService());
+    getItService.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());
     getItService.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
     getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
 
