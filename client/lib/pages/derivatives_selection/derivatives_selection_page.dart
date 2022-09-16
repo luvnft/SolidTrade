@@ -214,7 +214,6 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
   }
 
   Future<void> _loadDerivatives() async {
-    Log.w("starting");
     var results = await _fetchDerivatives();
     _setResults(results);
     _fadeToNewResults();

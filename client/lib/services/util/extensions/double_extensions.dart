@@ -15,7 +15,7 @@ String _currencyCodeToSymbol(String currencyCode) {
   return hasSymbol ? _currencyTranslations[currencyCode]! : currencyCode.toUpperCase();
 }
 
-extension StringExtension on double {
+extension DoubleExtension on double {
   String toDefaultPrice({int maxFractionDigits = 5, String currencyCode = "EUR"}) {
     final _format = NumberFormat("###,##0.00", "en_US");
     _format.maximumFractionDigits = maxFractionDigits;

@@ -23,6 +23,10 @@ class Portfolio implements IBaseEntity {
   final List<OngoingKnockoutPosition> ongoingKnockOutPositions;
   final List<OngoingWarrantPosition> ongoingWarrantPositions;
 
+  bool get hasAnyPositions {
+    return knockOutPositions.isNotEmpty || ongoingKnockOutPositions.isNotEmpty || ongoingWarrantPositions.isNotEmpty || stockPositions.isNotEmpty || warrantPositions.isNotEmpty;
+  }
+
   const Portfolio({
     required this.id,
     required this.createdAt,

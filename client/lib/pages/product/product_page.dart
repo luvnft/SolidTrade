@@ -49,35 +49,35 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> with STWidget {
-  final TrStockDetailsService stockDetailsService = GetIt.instance.get<TrStockDetailsService>();
-  final PortfolioService portfolioService = GetIt.instance.get<PortfolioService>();
-  final chartDateRangeStream = ChartDateRangeService();
-  final Completer<bool> _trContinuousPricesServiceIsInitialized = Completer();
+  final _stockDetailsService = GetIt.instance.get<TrStockDetailsService>();
+  final _portfolioService = GetIt.instance.get<PortfolioService>();
+  final _chartDateRangeStream = ChartDateRangeService();
+  final _trContinuousPricesServiceIsInitialized = Completer<bool>();
 
-  late ChartAxis primaryXChartAxis;
-  late StreamSubscription<ChartDateRangeView> chartDateRangeStreamSubscription;
-  late TrContinuousProductPricesService trContinuousPricesService;
+  late ChartAxis _primaryXChartAxis;
+  late StreamSubscription<ChartDateRangeView> _chartDateRangeStreamSubscription;
+  late TrContinuousProductPricesService _trContinuousPricesService;
 
-  bool showProductInAppbar = false;
-  bool widgetWasDisposed = false;
+  bool _showProductInAppbar = false;
+  bool _widgetWasDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    trContinuousPricesService = TrContinuousProductPricesService(
-      chartDateRangeStream.stream$,
+    _trContinuousPricesService = TrContinuousProductPricesService(
+      _chartDateRangeStream.stream$,
       widget.trProductPriceStream,
       "${widget.productInfo.isin}.${widget.productInfo.exchangeIds.first}",
     );
 
-    chartDateRangeStreamSubscription = chartDateRangeStream.stream$.listen(onChartRangeChange);
-    onChartRangeChange(chartDateRangeStream.current);
+    _chartDateRangeStreamSubscription = _chartDateRangeStream.stream$.listen(onChartRangeChange);
+    onChartRangeChange(_chartDateRangeStream.current);
     _trContinuousPricesServiceIsInitialized.complete(true);
   }
 
   void onChartRangeChange(ChartDateRangeView range) {
     setState(() {
-      primaryXChartAxis = range == ChartDateRangeView.oneDay
+      _primaryXChartAxis = range == ChartDateRangeView.oneDay
           ? DateTimeAxis(
               majorGridLines: const MajorGridLines(width: 0),
               axisLine: const AxisLine(width: 0),
@@ -140,9 +140,9 @@ class _ProductPageState extends State<ProductPage> with STWidget {
 
   @override
   void dispose() {
-    chartDateRangeStreamSubscription.cancel();
-    trContinuousPricesService.onDispose();
-    widgetWasDisposed = true;
+    _chartDateRangeStreamSubscription.cancel();
+    _trContinuousPricesService.onDispose();
+    _widgetWasDisposed = true;
     super.dispose();
   }
 
@@ -151,7 +151,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
     // We only fetch details if the product is a stock and not crypto because anything else does not have kpis
     final isStock = widget.positionType == PositionType.stock && !widget.productInfo.isin.startsWith("XF");
     if (isStock) {
-      stockDetailsService.requestTrProductInfo(widget.productInfo.isin);
+      _stockDetailsService.requestTrProductInfo(widget.productInfo.isin);
     }
 
     final chartHeight = MediaQuery.of(context).size.height * .5;
@@ -161,7 +161,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
       positionType: widget.positionType,
       productInfo: widget.productInfo,
       trProductPriceStream: widget.trProductPriceStream,
-      chartDateRangeViewStream: chartDateRangeStream.stream$,
+      chartDateRangeViewStream: _chartDateRangeStream.stream$,
     );
 
     return STPage(
@@ -179,7 +179,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
           leadingWidth: 40,
           title: LayoutBuilder(
             builder: (context, constraints) {
-              return showProductInAppbar
+              return _showProductInAppbar
                   ? SizedBox(
                       width: constraints.maxWidth,
                       child: productAppBar,
@@ -201,24 +201,24 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         VisibilityDetector(
                           key: const Key("VisibilityDetectorKey"),
                           onVisibilityChanged: (VisibilityInfo info) {
-                            if (widgetWasDisposed) {
+                            if (_widgetWasDisposed) {
                               return;
                             }
 
-                            if (info.visibleFraction == 0 && showProductInAppbar == false) {
+                            if (info.visibleFraction == 0 && _showProductInAppbar == false) {
                               setState(() {
-                                showProductInAppbar = true;
+                                _showProductInAppbar = true;
                               });
-                            } else if (showProductInAppbar) {
+                            } else if (_showProductInAppbar) {
                               setState(() {
-                                showProductInAppbar = false;
+                                _showProductInAppbar = false;
                               });
                             }
                           },
                           child: SizedBox(
                             width: constraints.maxWidth,
                             height: 50,
-                            child: !showProductInAppbar ? productAppBar : const SizedBox.shrink(),
+                            child: !_showProductInAppbar ? productAppBar : const SizedBox.shrink(),
                           ),
                         ),
                         SizedBox(
@@ -231,9 +231,9 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                                 return showLoadingSkeleton(BoxShape.rectangle);
                               }
                               return Chart(
-                                dateTimeXAxis: primaryXChartAxis,
-                                primaryStreamData: trContinuousPricesService.primaryProductPricesStream$,
-                                secondaryStreamData: trContinuousPricesService.secondaryStream$,
+                                dateTimeXAxis: _primaryXChartAxis,
+                                primaryStreamData: _trContinuousPricesService.primaryProductPricesStream$,
+                                secondaryStreamData: _trContinuousPricesService.secondaryStream$,
                               );
                             },
                           ),
@@ -243,12 +243,12 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           height: 30,
                           child: ProductChartDateRangeSelection(
-                            chartDateRangeStream: chartDateRangeStream,
+                            chartDateRangeStream: _chartDateRangeStream,
                           ),
                         ),
                         const SizedBox(height: 15),
                         STStreamBuilder<Portfolio>(
-                          stream: portfolioService.stream$,
+                          stream: _portfolioService.stream$,
                           builder: (context, portfolio) {
                             var position = TrUtil.getPositionOrDefault(portfolio, widget.productInfo.isin);
                             if (position == null) {
@@ -261,7 +261,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                                   "📈 Position",
                                   PositionMetrics(
                                     trProductPriceStream: widget.trProductPriceStream,
-                                    trStockDetailsStream: stockDetailsService.stream$,
+                                    trStockDetailsStream: _stockDetailsService.stream$,
                                     position: position,
                                   ),
                                   margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -275,7 +275,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           "📈 Statistics",
                           ProductMetrics(
                             trProductPriceStream: widget.trProductPriceStream,
-                            trStockDetailsStream: stockDetailsService.stream$,
+                            trStockDetailsStream: _stockDetailsService.stream$,
                             isStock: isStock,
                             productInfo: widget.productInfo,
                           ),
@@ -285,7 +285,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           context,
                           "🤔 What Analysts Say",
                           AnalystsRecommendations(
-                            trStockDetailsStream: stockDetailsService.stream$,
+                            trStockDetailsStream: _stockDetailsService.stream$,
                           ),
                           isStock: isStock,
                           onlyShowIfProductIsStock: true,
@@ -305,7 +305,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           context,
                           "ℹ️ About ${widget.productInfo.shortName}",
                           ProductInformation(
-                            trStockDetailsStream: stockDetailsService.stream$,
+                            trStockDetailsStream: _stockDetailsService.stream$,
                           ),
                           isStock: isStock,
                           onlyShowIfProductIsStock: true,
@@ -314,7 +314,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                           context,
                           "ℹ️ Details",
                           ProductDetails(
-                            trStockDetailsStream: stockDetailsService.stream$,
+                            trStockDetailsStream: _stockDetailsService.stream$,
                             productInfo: widget.productInfo,
                             isStock: isStock,
                           ),
@@ -338,7 +338,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                   width: constraints.maxWidth,
                   color: colors.navigationBackground,
                   child: STStreamBuilder<Portfolio>(
-                    stream: portfolioService.stream$,
+                    stream: _portfolioService.stream$,
                     builder: (context, portfolio) {
                       final bool ownsPosition = TrUtil.getPositionOrDefault(portfolio, widget.productInfo.isin) != null;
                       final buttonWidth = (ownsPosition ? constraints.maxWidth / 2 : constraints.maxWidth) - 20;

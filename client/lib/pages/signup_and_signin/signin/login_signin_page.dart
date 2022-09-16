@@ -15,9 +15,9 @@ import 'package:url_launcher/url_launcher.dart';
 class LoginSignIn extends StatelessWidget with STWidget {
   LoginSignIn({Key? key}) : super(key: key);
 
-  final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-  final portfolioService = GetIt.instance.get<PortfolioService>();
-  final userService = GetIt.instance.get<UserService>();
+  final _historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final _portfolioService = GetIt.instance.get<PortfolioService>();
+  final _userService = GetIt.instance.get<UserService>();
 
   Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
     var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
@@ -35,12 +35,12 @@ class LoginSignIn extends StatelessWidget with STWidget {
 
     var closeDialog = Util.showLoadingDialog(context);
 
-    var response = await userService.fetchUser(user.uid);
+    var response = await _userService.fetchUser(user.uid);
 
     if (response.isSuccessful) {
       final userId = response.result!.id;
-      await historicalPositionService.fetchHistoricalPositions(userId);
-      await portfolioService.fetchPortfolioByUserId(userId);
+      await _historicalPositionService.fetchHistoricalPositions(userId);
+      await _portfolioService.fetchPortfolioByUserId(userId);
 
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
@@ -58,16 +58,13 @@ class LoginSignIn extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     return LoginScreen(
-      imageUrl: "https://c.tenor.com/wQ5IslyynbkAAAAC/elon-musk-smoke.gif",
+      imageUrl: Constants.smokingGif,
       title: "Hello Again!",
       subTitle: "Welcome back you've been missed!",
       additionalWidgets: [
         Util.roundedButton(
           [
-            Util.loadImage(
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png",
-              20,
-            ),
+            Util.loadImage(Constants.googleLogoUrl, 20),
             const SizedBox(width: 10),
             const Text("Login with Google"),
           ],

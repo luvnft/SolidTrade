@@ -52,7 +52,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
     ));
   }
 
-  Iterable<AnimatedText> getWelcomeMessages(BuildContext context) {
+  Iterable<AnimatedText> _getWelcomeMessages(BuildContext context) {
     return SharedTranslations.welcomeMessages.map((message) => FadeAnimatedText(
           message,
           textStyle: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40),
@@ -60,7 +60,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
         ));
   }
 
-  TyperAnimatedText getSolidtradeText(BuildContext context) {
+  TyperAnimatedText _getSolidtradeText(BuildContext context) {
     return TyperAnimatedText("Solidtrade™", textStyle: Theme.of(context).textTheme.headline5, speed: const Duration(milliseconds: 100));
   }
 
@@ -83,7 +83,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 repeatForever: true,
                 pause: const Duration(seconds: 0),
                 animatedTexts: [
-                  ...getWelcomeMessages(context),
+                  ..._getWelcomeMessages(context),
                 ],
               ),
             ),
@@ -91,7 +91,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
               key: UniqueKey(),
               totalRepeatCount: 1,
               animatedTexts: [
-                getSolidtradeText(context)
+                _getSolidtradeText(context)
               ],
             ),
             const Spacer(),

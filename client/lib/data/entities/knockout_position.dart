@@ -8,9 +8,11 @@ class KnockoutPosition implements IBaseEntity, IPosition {
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
-
+  @override
   final String isin;
+  @override
   final double buyInPrice;
+  @override
   final double numberOfShares;
 
   const KnockoutPosition({

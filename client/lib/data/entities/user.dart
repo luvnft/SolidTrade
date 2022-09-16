@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/entities/historicalposition.dart';
+import 'package:solidtrade/data/entities/historical_position.dart';
 import 'package:solidtrade/data/entities/portfolio.dart';
 
 import '../entities/base/base_entity.dart';

@@ -1,20 +1,24 @@
+import 'package:solidtrade/data/entities/base/base_position.dart';
 import 'package:solidtrade/data/entities/ongoing_knockout_position.dart';
 import 'package:solidtrade/data/entities/ongoing_warrant_position.dart';
 import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
 
 import '../entities/base/base_entity.dart';
 
-class OutstandingOrderModel implements IBaseEntity {
+class OutstandingOrderModel implements IBaseEntity, IPosition {
   @override
   final int id;
   @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
-
+  @override
   final String isin;
-  final double price;
+  @override
+  final double buyInPrice;
+  @override
   final double numberOfShares;
+
   final DateTime goodUntil;
   final EnterOrExitPositionType type;
 
@@ -23,7 +27,7 @@ class OutstandingOrderModel implements IBaseEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.isin,
-    required this.price,
+    required this.buyInPrice,
     required this.numberOfShares,
     required this.goodUntil,
     required this.type,
@@ -37,7 +41,7 @@ class OutstandingOrderModel implements IBaseEntity {
       goodUntil: position.goodUntil,
       type: position.type,
       isin: position.isin,
-      price: position.price,
+      buyInPrice: position.buyInPrice,
       numberOfShares: position.numberOfShares,
     );
   }
@@ -50,7 +54,7 @@ class OutstandingOrderModel implements IBaseEntity {
       goodUntil: position.goodUntil,
       type: position.type,
       isin: position.isin,
-      price: position.price,
+      buyInPrice: position.buyInPrice,
       numberOfShares: position.numberOfShares,
     );
   }

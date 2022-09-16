@@ -60,11 +60,7 @@ class _STLogoState extends State<STLogo> {
     super.dispose();
   }
 
-  AssetImage getImage() {
-    image ??= AssetImage(widget.gifAsset);
-
-    return image!;
-  }
+  AssetImage getImage() => image ??= AssetImage(widget.gifAsset);
 
   @override
   Widget build(BuildContext context) {

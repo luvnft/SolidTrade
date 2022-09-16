@@ -100,7 +100,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
     Util.openDialog(
       context,
       "Updating user failed",
-      message: response.error!.userFriendlyMessage!,
+      message: response.error!.userFriendlyMessage,
     );
   }
 
@@ -157,7 +157,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
     );
 
     if (response.isSuccessful) {
-      myAppState.restart();
+      Globals.appState.restart();
     }
   }
 
@@ -200,7 +200,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       closeText: "Okay",
     );
 
-    myAppState.restart();
+    Globals.appState.restart();
   }
 
   Future<void> _handleEditProfileClick() async {

@@ -15,7 +15,10 @@ class PortfolioListTile extends StatelessWidget with STWidget {
         ? const SizedBox.shrink()
         : Column(
             children: [
-              PortfolioOverviewTitle(title: title + " (${products.length})", textStyle: Theme.of(context).textTheme.subtitle1),
+              PortfolioOverviewTitle(
+                title: title + " (${products.length})",
+                textStyle: Theme.of(context).textTheme.subtitle1,
+              ),
               const SizedBox(height: 5),
               ListView.builder(
                 shrinkWrap: true,

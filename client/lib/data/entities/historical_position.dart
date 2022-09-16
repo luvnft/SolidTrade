@@ -1,20 +1,24 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_position.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 
-class HistoricalPosition implements IBaseEntity {
+class HistoricalPosition implements IBaseEntity, IPosition {
   @override
   final int id;
   @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
-
+  @override
   final String isin;
+  @override
   final double buyInPrice;
-  final double performance;
+  @override
   final double numberOfShares;
+
+  final double performance;
   final BuyOrSell buyOrSell;
   final PositionType positionType;
 

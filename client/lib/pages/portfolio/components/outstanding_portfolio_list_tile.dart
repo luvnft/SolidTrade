@@ -6,7 +6,12 @@ import 'package:solidtrade/pages/portfolio/components/ongoing_product_tile.dart'
 import 'package:solidtrade/pages/portfolio/components/portfolio_overview_title.dart';
 
 class OutstandingOrdersPortfolioListTile extends StatelessWidget with STWidget {
-  OutstandingOrdersPortfolioListTile({Key? key, required this.title, required this.products, required this.positionType}) : super(key: key);
+  OutstandingOrdersPortfolioListTile({
+    Key? key,
+    required this.title,
+    required this.products,
+    required this.positionType,
+  }) : super(key: key);
   final List<OutstandingOrderModel> products;
   final PositionType positionType;
   final String title;

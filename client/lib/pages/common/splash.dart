@@ -19,30 +19,47 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with STWidget {
-  final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-  final portfolioService = GetIt.instance.get<PortfolioService>();
-  final userService = GetIt.instance.get<UserService>();
+  final _historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final _portfolioService = GetIt.instance.get<PortfolioService>();
+  final _userService = GetIt.instance.get<UserService>();
 
   late Future _fadeAnimationFuture;
-  bool _visible = false;
+  bool _subTitleVisible = false;
 
   @override
   void initState() {
     super.initState();
 
-    _fadeContent();
-    _preFetchUser();
+    _initializeAppConfiguration();
+    _fadeSubTitle();
+    _fetchAndLoadUser();
   }
 
-  void _fadeContent() {
+  void _initializeAppConfiguration() {
+    if (Startup.colorThemeHasToBeInitialized) {
+      final theme = Util.currentDeviceColorTheme(context);
+      configurationProvider.themeProvider.updateTheme(theme, savePermanently: false);
+
+      Startup.colorThemeHasToBeInitialized = false;
+    }
+
+    if (Startup.languageHasToBeInitialized) {
+      final ticker = Util.currentDeviceLanguage(context);
+      configurationProvider.languageProvider.updateLanguage(LanguageProvider.tickerToTranslation(ticker));
+
+      Startup.languageHasToBeInitialized = false;
+    }
+  }
+
+  void _fadeSubTitle() {
     _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 600), () {
       setState(() {
-        _visible = !_visible;
+        _subTitleVisible = !_subTitleVisible;
       });
     });
   }
 
-  Future<void> _preFetchUser() async {
+  Future<void> _fetchAndLoadUser() async {
     var delay = Future.delayed(const Duration(milliseconds: 2500));
 
     await Firebase.initializeApp();
@@ -55,10 +72,10 @@ class _SplashState extends State<Splash> with STWidget {
       await Future.delayed(const Duration(seconds: 1));
     }
 
-    var userRequest = await userService.fetchUserCurrentUser();
+    var userRequest = await _userService.fetchUserCurrentUser();
     if (userRequest.isSuccessful) {
-      await historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
-      await portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
+      await _historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
+      await _portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
 
       Log.d("Fetched user info successfully");
 
@@ -78,20 +95,6 @@ class _SplashState extends State<Splash> with STWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Startup.colorThemeHasToBeInitialized) {
-      final theme = Util.currentDeviceColorTheme(context);
-      configurationProvider.themeProvider.updateTheme(theme, savePermanently: false);
-
-      Startup.colorThemeHasToBeInitialized = false;
-    }
-
-    if (Startup.languageHasToBeInitialized) {
-      final ticker = Util.currentDeviceLanguage(context);
-      configurationProvider.languageProvider.updateLanguage(LanguageProvider.tickerToTranslation(ticker));
-
-      Startup.languageHasToBeInitialized = false;
-    }
-
     return Scaffold(
       backgroundColor: colors.splashScreenColor,
       body: Center(
@@ -104,7 +107,7 @@ class _SplashState extends State<Splash> with STWidget {
             STLogo(colors.logoAsGif, key: UniqueKey()),
             const Spacer(),
             AnimatedOpacity(
-              opacity: _visible ? 1.0 : 0.0,
+              opacity: _subTitleVisible ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 800),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

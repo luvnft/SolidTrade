@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/pages/signup_and_signin/components/login_screen.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -31,10 +32,7 @@ class LoginHome extends StatelessWidget with STWidget {
       additionalWidgets: [
         Util.roundedButton(
           [
-            Util.loadImage(
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png",
-              20,
-            ),
+            Util.loadImage(Constants.googleLogoUrl, 20),
             const SizedBox(width: 10),
             const Text("Create new account with Google"),
           ],

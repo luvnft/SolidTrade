@@ -17,10 +17,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
   late UpdateUserDto _userDto;
 
   // Controllers
-  TextEditingController bioController = TextEditingController();
-  TextEditingController displayNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
+  final _bioController = TextEditingController();
+  final _displayNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
 
   bool get _hasUpdatedProfile => _userDto.hasUpdatedProfileByDto(widget.updateUserDto);
 
@@ -32,10 +32,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
 
     _hasPublicPortfolio = _userDto.publicPortfolio;
 
-    bioController.text = _userDto.bio;
-    displayNameController.text = _userDto.displayName;
-    emailController.text = _userDto.email;
-    usernameController.text = _userDto.username;
+    _bioController.text = _userDto.bio;
+    _displayNameController.text = _userDto.displayName;
+    _emailController.text = _userDto.email;
+    _usernameController.text = _userDto.username;
   }
 
   void _bioChanged(String bio) => _userDto.bio = bio;
@@ -57,7 +57,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
   //     decoration: getInputDecoration("Name"),
   //   ),
 
-  Widget _niceInputField({
+  Widget _inputField({
     required String title,
     required TextEditingController controller,
     required Function(String) callback,
@@ -129,10 +129,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
               //   ),
               // ),
               const SizedBox(height: 15),
-              _niceInputField(title: 'Bio', controller: bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: bioController.text),
-              _niceInputField(title: 'Email', controller: emailController, callback: (content) => _emailChanged(content), hintText: emailController.text),
-              _niceInputField(title: 'Name', controller: displayNameController, callback: (content) => _displayNameChanged(content), hintText: displayNameController.text),
-              _niceInputField(title: 'Username', controller: usernameController, callback: (content) => _usernameChanged(content), hintText: '@' + usernameController.text),
+              _inputField(title: 'Bio', controller: _bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: _bioController.text),
+              _inputField(title: 'Email', controller: _emailController, callback: (content) => _emailChanged(content), hintText: _emailController.text),
+              _inputField(title: 'Name', controller: _displayNameController, callback: (content) => _displayNameChanged(content), hintText: _displayNameController.text),
+              _inputField(title: 'Username', controller: _usernameController, callback: (content) => _usernameChanged(content), hintText: '@' + _usernameController.text),
               SwitchListTile(title: const Text("Public portfolio"), value: _hasPublicPortfolio, onChanged: _hasPublicPortfolioChanged),
               const SizedBox(height: 15),
             ],

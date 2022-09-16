@@ -1,18 +1,22 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:solidtrade/data/entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_position.dart';
 import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
 
-class OngoingKnockoutPosition implements IBaseEntity {
+class OngoingKnockoutPosition implements IBaseEntity, IPosition {
   @override
   final int id;
   @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
-
+  @override
   final String isin;
-  final double price;
+  @override
+  final double buyInPrice;
+  @override
   final double numberOfShares;
+
   final DateTime goodUntil;
   final EnterOrExitPositionType type;
 
@@ -21,7 +25,7 @@ class OngoingKnockoutPosition implements IBaseEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.isin,
-    required this.price,
+    required this.buyInPrice,
     required this.numberOfShares,
     required this.goodUntil,
     required this.type,
@@ -35,7 +39,7 @@ class OngoingKnockoutPosition implements IBaseEntity {
       goodUntil: DateTime.parse(json["goodUntil"]),
       type: EnumToString.fromString(EnterOrExitPositionType.values, json["type"])!,
       isin: json["isin"],
-      price: json["price"],
+      buyInPrice: json["price"],
       numberOfShares: json["numberOfShares"],
     );
   }

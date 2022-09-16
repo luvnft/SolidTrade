@@ -1,4 +1,4 @@
-import 'package:solidtrade/data/entities/historicalposition.dart';
+import 'package:solidtrade/data/entities/historical_position.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/base/base_request_service.dart';

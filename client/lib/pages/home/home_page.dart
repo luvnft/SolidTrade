@@ -16,9 +16,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with STWidget {
-  var floatingActionButtonUpdateService = GetIt.instance.get<FloatingActionButtonUpdateService>();
+  final _floatingActionButtonUpdateService = GetIt.instance.get<FloatingActionButtonUpdateService>();
 
-  int _selectedIndex = 0;
+  int _selectedTabIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
     const PortfolioPage(),
@@ -29,16 +29,16 @@ class _HomePageState extends State<HomePage> with STWidget {
 
   void _handleItemIndexClick(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedTabIndex = index;
     });
   }
 
   void _handleFloatingActionButtonClick() {
-    floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
+    _floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
   }
 
   Color _getItemColor(int itemIndex) {
-    return itemIndex == _selectedIndex ? colors.selectedItem : colors.unselectedItem;
+    return itemIndex == _selectedTabIndex ? colors.selectedItem : colors.unselectedItem;
   }
 
   @override
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> with STWidget {
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
                   height: constraints.maxHeight,
-                  child: _widgetOptions[_selectedIndex],
+                  child: _widgetOptions[_selectedTabIndex],
                 ),
               ),
             )
@@ -69,11 +69,11 @@ class _HomePageState extends State<HomePage> with STWidget {
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          currentIndex: _selectedIndex,
+          currentIndex: _selectedTabIndex,
           onTap: _handleItemIndexClick,
         ),
         floatingActionButton: StreamBuilder<bool>(
-          stream: floatingActionButtonUpdateService.stream$,
+          stream: _floatingActionButtonUpdateService.stream$,
           builder: (context, snap) {
             if (snap.hasData && !snap.data!) {
               return const SizedBox.shrink();

@@ -30,18 +30,14 @@ import 'package:solidtrade/services/stream/warrant_service.dart';
 
 import '../mapper.g.dart' as mapper;
 
-var navigatorKey = GlobalKey<NavigatorState>();
-late Environment environment;
-late MyAppState myAppState;
-
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
-  registerFlutterErrorHandler(env);
+  _registerFlutterErrorHandler(env);
 
-  runApp(MyApp(navigatorKey: navigatorKey));
+  runApp(SolidtradeApp(navigatorKey: Globals.navigatorKey));
 }
 
-void registerFlutterErrorHandler(Environment environment) {
+void _registerFlutterErrorHandler(Environment environment) {
   var isShowingErrorSnackBar = false;
 
   FlutterError.onError = (details) {
@@ -63,7 +59,7 @@ void registerFlutterErrorHandler(Environment environment) {
 
       isShowingErrorSnackBar = true;
       Future.delayed(const Duration(seconds: 1), () {
-        final context = navigatorKey.currentState!.context;
+        final context = Globals.navigatorKey.currentState!.context;
         final snackBar = SnackBar(
           duration: const Duration(seconds: 15),
           content: Row(children: [
@@ -72,7 +68,7 @@ void registerFlutterErrorHandler(Environment environment) {
             ),
             SnackBarAction(
               label: 'Reload',
-              onPressed: () async => await myAppState.restart(),
+              onPressed: () async => await Globals.appState.restart(),
               textColor: Colors.red,
             ),
             SnackBarAction(
@@ -89,12 +85,18 @@ void registerFlutterErrorHandler(Environment environment) {
   };
 }
 
+class Globals {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static late SolidtradeAppState appState;
+  static late Environment environment;
+}
+
 class Startup {
   static bool languageHasToBeInitialized = false;
   static bool colorThemeHasToBeInitialized = false;
 
   static Future<void> initializeApp(Environment env) async {
-    environment = env;
+    Globals.environment = env;
     colorThemeHasToBeInitialized = false;
     languageHasToBeInitialized = false;
 

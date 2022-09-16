@@ -27,16 +27,16 @@ class _ChartState extends State<Chart> with STWidget {
 
   StreamSubscription? _dataSecondarySubscription;
   StreamSubscription? _dataSubscription;
-  bool isHoldingDownOnChart = false;
+  bool _isHoldingDownOnChart = false;
 
   @override
   void initState() {
     super.initState();
-    _dataSubscription = widget.primaryStreamData.listen(onDataStreamUpdate);
-    _dataSecondarySubscription = widget.secondaryStreamData?.listen(onSecondaryDataStreamUpdate);
+    _dataSubscription = widget.primaryStreamData.listen(_onDataStreamUpdate);
+    _dataSecondarySubscription = widget.secondaryStreamData?.listen(_onSecondaryDataStreamUpdate);
   }
 
-  void onDataStreamUpdate(TrContinuousProductPricesEvent event) {
+  void _onDataStreamUpdate(TrContinuousProductPricesEvent event) {
     switch (event.type) {
       case TrContinuousProductPricesEventType.fullUpdate:
         _data.clear();
@@ -52,7 +52,7 @@ class _ChartState extends State<Chart> with STWidget {
         break;
     }
 
-    if (isHoldingDownOnChart) {
+    if (_isHoldingDownOnChart) {
       return;
     }
 
@@ -61,7 +61,7 @@ class _ChartState extends State<Chart> with STWidget {
     });
   }
 
-  void onSecondaryDataStreamUpdate(TrContinuousProductPricesEvent event) {
+  void _onSecondaryDataStreamUpdate(TrContinuousProductPricesEvent event) {
     switch (event.type) {
       case TrContinuousProductPricesEventType.fullUpdate:
         _secondaryData.clear();
@@ -77,7 +77,7 @@ class _ChartState extends State<Chart> with STWidget {
         break;
     }
 
-    if (isHoldingDownOnChart) {
+    if (_isHoldingDownOnChart) {
       return;
     }
 
@@ -152,8 +152,8 @@ class _ChartState extends State<Chart> with STWidget {
         lineColor: colors.lessSoftForeground,
       ),
       onTrackballPositionChanging: onTrackballPositionChanging,
-      onChartTouchInteractionDown: (_) => isHoldingDownOnChart = true,
-      onChartTouchInteractionUp: (_) => isHoldingDownOnChart = false,
+      onChartTouchInteractionDown: (_) => _isHoldingDownOnChart = true,
+      onChartTouchInteractionUp: (_) => _isHoldingDownOnChart = false,
       series: <ChartSeries<MapEntry<DateTime, double>, DateTime>>[
         LineSeries<MapEntry<DateTime, double>, DateTime>(
           name: translations.common.changeAsTextLiteral,

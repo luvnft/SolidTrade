@@ -8,7 +8,7 @@ import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class Log {
   static final _logger = Logger(printer: SimpleLogPrinter(), filter: ProductionFilter());
-  static bool get _shouldLog => environment != Environment.production;
+  static bool get _shouldLog => Globals.environment != Environment.production;
 
   static Object? _tryToConvertToJson(Object? object) {
     try {

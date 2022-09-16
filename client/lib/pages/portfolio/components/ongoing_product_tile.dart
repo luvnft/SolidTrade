@@ -25,16 +25,15 @@ class OngoingProductTile extends StatefulWidget {
 }
 
 class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
-  final trProductPriceService = GetIt.instance.get<TrProductPriceService>();
-  late final bool isBuy = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.buyStopOrder;
-  late final bool isLimit = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.sellLimitOrder;
+  final _trProductPriceService = GetIt.instance.get<TrProductPriceService>();
+  late final bool _isBuy = widget.info.type == EnterOrExitPositionType.buyLimitOrder || widget.info.type == EnterOrExitPositionType.buyStopOrder;
 
-  late Future<RequestResponse<TrProductInfo>> trProductInfoFuture;
+  late final Future<RequestResponse<TrProductInfo>> _trProductInfoFuture;
 
   @override
   void initState() {
     super.initState();
-    trProductInfoFuture = trProductPriceService.requestTrProductPriceByIsinWithoutExtension(widget.info.isin);
+    _trProductInfoFuture = _trProductPriceService.requestTrProductPriceByIsinWithoutExtension(widget.info.isin);
   }
 
   Widget _ongoingProductTile(TrProductInfo productInfo, double percentMissingToFill, double currentPrice, TrUiProductDetails details) {
@@ -46,7 +45,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
       percentMissingToFill: percentMissingToFill,
       percentMissingToFillString: (percentMissingToFill * 100).toStringAsFixed(2) + "%",
       currentPriceText: currentPrice.toDefaultPrice(),
-      targetPriceText: widget.info.price.toDefaultPrice(),
+      targetPriceText: widget.info.buyInPrice.toDefaultPrice(),
     );
   }
 
@@ -139,7 +138,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
       ProductPage(
         positionType: widget.positionType,
         productInfo: info,
-        trProductPriceStream: trProductPriceService.stream$,
+        trProductPriceStream: _trProductPriceService.stream$,
         productDetails: details,
       ),
     );
@@ -151,7 +150,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
       stream: uiUpdate.stream$,
       builder: (context, _) {
         return FutureBuilder<RequestResponse<TrProductInfo>>(
-          future: trProductInfoFuture,
+          future: _trProductInfoFuture,
           builder: (context, trProductInfoSnap) {
             if (!trProductInfoSnap.hasData) {
               return showLoadingSkeleton(BoxShape.rectangle);
@@ -165,7 +164,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
             TrProductInfo productInfo = trProductInfoSnap.data!.result!;
 
             return STStreamBuilder<TrProductPrice>(
-              stream: trProductPriceService.stream$,
+              stream: _trProductPriceService.stream$,
               builder: (context, priceInfo) {
                 TrUiProductDetails details = TrUtil.getTrUiProductDetails(
                   priceInfo,
@@ -189,18 +188,18 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                   );
                 }
 
-                final currentPrice = priceInfo.getPriceDependingOfBuyOrSell(isBuy ? BuyOrSell.buy : BuyOrSell.sell);
+                final currentPrice = priceInfo.getPriceDependingOfBuyOrSell(_isBuy ? BuyOrSell.buy : BuyOrSell.sell);
 
                 double percentMissingToFill;
 
                 switch (widget.info.type) {
                   case EnterOrExitPositionType.sellLimitOrder:
                   case EnterOrExitPositionType.buyStopOrder:
-                    percentMissingToFill = currentPrice / widget.info.price;
+                    percentMissingToFill = currentPrice / widget.info.buyInPrice;
                     break;
                   case EnterOrExitPositionType.buyLimitOrder:
                   case EnterOrExitPositionType.sellStopOrder:
-                    percentMissingToFill = widget.info.price / currentPrice;
+                    percentMissingToFill = widget.info.buyInPrice / currentPrice;
                     break;
                 }
 

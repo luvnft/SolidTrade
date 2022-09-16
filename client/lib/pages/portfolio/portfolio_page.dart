@@ -3,7 +3,6 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/portfolio/components/portfolio_positions.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_overview_page.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
-import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,26 +14,25 @@ class PortfolioPage extends StatefulWidget {
 }
 
 class _PortfolioPageState extends State<PortfolioPage> with STWidget {
-  var floatingActionButtonUpdateService = GetIt.instance.get<FloatingActionButtonUpdateService>();
-  final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
+  final _floatingActionButtonUpdateService = GetIt.instance.get<FloatingActionButtonUpdateService>();
+  final _scrollController = ScrollController();
 
-  final scrollController = ScrollController();
+  int _selectedTabIndex = 0;
 
-  var pages = [
+  final _pages = [
     PortfolioOverviewPage(),
-    Container(margin: const EdgeInsets.symmetric(horizontal: 20), child: const PortfolioPositions(isViewingOutstandingOrders: true)),
+    Container(margin: const EdgeInsets.symmetric(horizontal: 20), child: PortfolioPositions(isViewingOutstandingOrders: true)),
     PortfolioOverviewPage(),
   ];
-  int selectedIndex = 0;
 
   void _changeIndex(int index) {
     setState(() {
-      selectedIndex = index;
+      _selectedTabIndex = index;
     });
   }
 
   ButtonStyle buttonStyle(int index) {
-    var isMatch = selectedIndex == index;
+    var isMatch = _selectedTabIndex == index;
     return ButtonStyle(
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -49,25 +47,25 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: floatingActionButtonUpdateService.stream$,
+      stream: _floatingActionButtonUpdateService.stream$,
       builder: (context, snap) {
-        if (snap.hasData && !snap.data! && scrollController.offset > 100) {
-          scrollController.animateTo(0, duration: const Duration(milliseconds: 150), curve: Curves.ease);
-          floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
+        if (snap.hasData && !snap.data! && _scrollController.offset > 100) {
+          _scrollController.animateTo(0, duration: const Duration(milliseconds: 150), curve: Curves.ease);
+          _floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
         }
 
         return NotificationListener<UserScrollNotification>(
           onNotification: (notification) {
-            if (scrollController.offset > 100) {
-              floatingActionButtonUpdateService.onScrollDownFarEnough();
-            } else if (scrollController.offset < 100 && notification.direction != ScrollDirection.reverse) {
-              floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
+            if (_scrollController.offset > 100) {
+              _floatingActionButtonUpdateService.onScrollDownFarEnough();
+            } else if (_scrollController.offset < 100 && notification.direction != ScrollDirection.reverse) {
+              _floatingActionButtonUpdateService.onClickFloatingActionButtonOrScrollUpFarEnough();
             }
 
             return true;
           },
           child: SingleChildScrollView(
-            controller: scrollController,
+            controller: _scrollController,
             child: StreamBuilder(
               stream: uiUpdate.stream$,
               builder: (context, snapshot) => Column(
@@ -94,7 +92,7 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  pages[selectedIndex],
+                  _pages[_selectedTabIndex],
                   Divider(thickness: 5, color: colors.softBackground),
                   Container(
                     margin: const EdgeInsets.all(10),

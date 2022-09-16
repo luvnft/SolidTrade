@@ -14,7 +14,7 @@ import 'package:solidtrade/services/util/util.dart';
 class DerivativesSelection extends StatelessWidget with STWidget {
   DerivativesSelection({Key? key, required this.productInfo}) : super(key: key);
   final TrProductInfo productInfo;
-  final formatter = NumberFormat("###,###", "tr_TR");
+  final _formatter = NumberFormat("###,###", "tr_TR");
 
   Widget _derivativesWidget(
     BuildContext context,
@@ -49,7 +49,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
               padding: const EdgeInsets.all(2.5),
               color: colors.blueBackground,
               child: Text(
-                formatter.format(
+                _formatter.format(
                   derivativesCount > 10000 ? 1000 : derivativesCount,
                 ),
                 overflow: TextOverflow.clip,

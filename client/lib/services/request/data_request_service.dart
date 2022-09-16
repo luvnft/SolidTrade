@@ -1,4 +1,4 @@
-import 'package:solidtrade/services/request/historicalpositions_data_request_service.dart';
+import 'package:solidtrade/services/request/historical_positions_data_request_service.dart';
 import 'package:solidtrade/services/request/knockout_data_request_service.dart';
 import 'package:solidtrade/services/request/ongoing_knockout_data_request_service.dart';
 import 'package:solidtrade/services/request/ongoing_warrant_data_request_service.dart';

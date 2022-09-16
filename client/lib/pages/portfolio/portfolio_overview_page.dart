@@ -5,34 +5,32 @@ import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/data/entities/portfolio.dart';
 import 'package:solidtrade/data/entities/user.dart';
 import 'package:solidtrade/pages/portfolio/components/portfolio_positions.dart';
-import 'package:solidtrade/services/stream/chart_date_range_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/extensions/build_context_extensions.dart';
 
 class PortfolioOverviewPage extends StatelessWidget with STWidget {
   PortfolioOverviewPage({Key? key, this.isViewingOutstandingOrders = false}) : super(key: key);
   final bool isViewingOutstandingOrders;
 
-  final userService = GetIt.instance.get<UserService>();
-  final portfolioService = GetIt.instance.get<PortfolioService>();
-
-  final chartDateRangeStream = ChartDateRangeService();
+  final _portfolioService = GetIt.instance.get<PortfolioService>();
+  final _userService = GetIt.instance.get<UserService>();
 
   @override
   Widget build(BuildContext context) {
-    final chartHeight = MediaQuery.of(context).size.height * .25;
+    final chartHeight = context.screenHeight * .25;
 
     return STStreamBuilder<Portfolio>(
-      stream: portfolioService.stream$,
+      stream: _portfolioService.stream$,
       builder: (context, portfolio) {
         return Column(
           children: [
             SizedBox(
               height: chartHeight,
-              // child: Chart(chartDateRangeStream: chartDateRangeStream, chartData: []),
+              // TODO: Add chart
             ),
             STStreamBuilder<User>(
-              stream: userService.stream$,
+              stream: _userService.stream$,
               builder: (context, user) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 5),
                 child: Column(
