@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 
 class UtilLocalAuth {
-  static final LocalAuthentication _auth = LocalAuthentication();
+  static final _logger = GetIt.instance.get<Logger>();
+  static final _auth = LocalAuthentication();
 
   static Future<bool> authenticate() async {
     if (kIsWeb || !await _auth.isDeviceSupported()) {
@@ -20,8 +22,8 @@ class UtilLocalAuth {
         ),
       );
     } on PlatformException catch (e) {
-      Log.w("Error occurred when trying to authenticate user. See following Exception for more info");
-      Log.w(e);
+      _logger.w("Error occurred when trying to authenticate user. See following Exception for more info");
+      _logger.w(e);
       return false;
     }
   }

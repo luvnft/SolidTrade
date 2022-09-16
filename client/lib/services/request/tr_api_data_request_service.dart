@@ -1,16 +1,19 @@
 import 'dart:async';
 
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_request_model.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_request_response.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TrApiDataRequestService {
+  final _logger = GetIt.instance.get<Logger>();
+
   final Map<int, String> _requestMessageStrings = {};
   final List<TrRequestModel> _runningRequests = [];
 
@@ -30,10 +33,10 @@ class TrApiDataRequestService {
 
   void _initializeConnection() {
     void reconnect() {
-      Log.w("Lost connection to api");
+      _logger.w("Lost connection to api");
 
       if (_shouldReconnect) {
-        Log.d("Trying to reconnect");
+        _logger.d("Trying to reconnect");
 
         _initializeConnection();
       }
@@ -52,7 +55,7 @@ class TrApiDataRequestService {
 
   void _onMessageReceived(String message) {
     if (!message.contains("{\"bid\":{\"time\":")) {
-      Log.d(message);
+      _logger.d(message);
     }
 
     if (!_initialConnect && message == "connected") {
@@ -109,7 +112,7 @@ class TrApiDataRequestService {
   }
 
   void _sendMessage(String message) {
-    Log.d("Send websocket message: " + message);
+    _logger.d("Send websocket message: " + message);
     _socketChannel.sink.add(message);
   }
 

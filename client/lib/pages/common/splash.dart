@@ -77,7 +77,7 @@ class _SplashState extends State<Splash> with STWidget {
       await _historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
       await _portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
 
-      Log.d("Fetched user info successfully");
+      logger.d("Fetched user info successfully");
 
       await _fadeAnimationFuture;
       await delay;
@@ -88,7 +88,7 @@ class _SplashState extends State<Splash> with STWidget {
 
     delay.ignore();
     _fadeAnimationFuture.ignore();
-    Log.w("User login failed. Proceeding to login");
+    logger.w("User login failed. Proceeding to login");
 
     Navigator.pop(context, false);
   }

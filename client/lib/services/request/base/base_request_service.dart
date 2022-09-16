@@ -7,11 +7,12 @@ import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/base/base_http_response_handler.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 
 import 'package:http_parser/http_parser.dart' as parser;
+import 'package:solidtrade/services/util/debug/logger.dart';
 
 abstract class IBaseRequestService {
+  final _logger = GetIt.instance.get<Logger>();
   final UserService _userService = GetIt.instance.get<UserService>();
   static final String _baseUrl = ConfigReader.getBaseUrl();
 
@@ -45,7 +46,7 @@ abstract class IBaseRequestService {
   }) async {
     final uri = Uri.https(_baseUrl, endpoint, queryParameters);
 
-    Log.d(uri);
+    _logger.d(uri);
 
     var auth = await _userService.getUserAuthenticationHeader();
 
@@ -81,8 +82,8 @@ abstract class IBaseRequestService {
         break;
     }
 
-    Log.d("Response status code: ${response.statusCode}");
-    Log.d("Response body: ${response.body}");
+    _logger.d("Response status code: ${response.statusCode}");
+    _logger.d("Response body: ${response.body}");
 
     var responseBody = jsonDecode(response.body);
 
@@ -134,7 +135,7 @@ abstract class IBaseRequestService {
   }) async {
     final uri = Uri.https(_baseUrl, endpoint, queryParameters);
 
-    Log.d(uri);
+    _logger.d(uri);
 
     var auth = await _userService.getUserAuthenticationHeader();
 
@@ -175,8 +176,8 @@ abstract class IBaseRequestService {
 
     response = await http.Response.fromStream(responseStream);
 
-    Log.d("Response status code: ${response.statusCode}");
-    Log.d("Response body: ${response.body}");
+    _logger.d("Response status code: ${response.statusCode}");
+    _logger.d("Response body: ${response.body}");
 
     var responseBody = jsonDecode(response.body);
 

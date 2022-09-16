@@ -33,7 +33,7 @@ class DerivativesSelectionPage extends StatefulWidget {
   State<DerivativesSelectionPage> createState() => _DerivativesSelectionPageState();
 }
 
-class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> with SingleTickerProviderStateMixin {
+class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> with SingleTickerProviderStateMixin, STWidget {
   bool get _isKnockout => widget.derivativesPositionType == PositionType.knockout;
 
   String get _longOptionTypeName => _isKnockout ? DerivativesOptionType.long.name : DerivativesOptionType.call.name;
@@ -155,9 +155,9 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
     var convertedSortOption = _sortByProperty.toSortByPropertyOptions;
 
     var isAlreadySelected = convertedSortOption == sortOption;
-    Log.i(isAlreadySelected);
-    Log.i(convertedSortOption);
-    Log.i(sortOption);
+    logger.i(isAlreadySelected);
+    logger.i(convertedSortOption);
+    logger.i(sortOption);
     if (isAlreadySelected) {
       _toggleSortingDirection();
     } else {

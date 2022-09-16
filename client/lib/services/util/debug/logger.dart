@@ -1,16 +1,25 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/logger.dart' as l;
 import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
-class Log {
-  static final _logger = Logger(printer: SimpleLogPrinter(), filter: ProductionFilter());
-  static bool get _shouldLog => Globals.environment != Environment.production;
+class Logger {
+  static Logger? _instance;
 
-  static Object? _tryToConvertToJson(Object? object) {
+  Logger._();
+
+  factory Logger.create() {
+    _instance ??= Logger._();
+    return _instance!;
+  }
+
+  final _logger = l.Logger(printer: _SimpleLogPrinter());
+  final bool _shouldLog = Globals.environment != Environment.production;
+
+  Object? _tryToConvertToJson(Object? object) {
     try {
       return JsonMapper.serialize(object);
     } catch (e) {
@@ -18,28 +27,28 @@ class Log {
     }
   }
 
-  static void d(Object? value) {
+  void d(Object? value) {
     if (_shouldLog) _logger.d(_tryToConvertToJson(value));
   }
 
-  static void i(Object? value) {
+  void i(Object? value) {
     if (_shouldLog) _logger.i(_tryToConvertToJson(value));
   }
 
-  static void w(Object? value) {
+  void w(Object? value) {
     if (_shouldLog) _logger.w(_tryToConvertToJson(value));
   }
 
-  static void f(Object? value) {
+  void f(Object? value) {
     if (_shouldLog) _logger.e(_tryToConvertToJson(value));
   }
 }
 
-class SimpleLogPrinter extends LogPrinter {
+class _SimpleLogPrinter extends l.LogPrinter {
   @override
-  List<String> log(LogEvent event) {
-    var color = PrettyPrinter.levelColors[event.level];
-    var emoji = PrettyPrinter.levelEmojis[event.level];
+  List<String> log(l.LogEvent event) {
+    var color = l.PrettyPrinter.levelColors[event.level];
+    var emoji = l.PrettyPrinter.levelEmojis[event.level];
 
     var c = StackTrace.current.toString();
 

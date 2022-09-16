@@ -3,13 +3,15 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/enums/client_enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_continuous_product_prices_event.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/services/stream/aggregate_history_service.dart';
-import 'package:solidtrade/services/util/debug/log.dart';
 
 class TrContinuousProductPricesService implements Disposable {
+  final _logger = GetIt.instance.get<Logger>();
+
   final BehaviorSubject<TrContinuousProductPricesEvent> _secondaryBehaviorSubject = BehaviorSubject.seeded(TrContinuousProductPricesEvent.empty());
   final BehaviorSubject<TrContinuousProductPricesEvent> _behaviorSubject = BehaviorSubject.seeded(TrContinuousProductPricesEvent.empty());
   ValueStream<TrContinuousProductPricesEvent> get primaryProductPricesStream$ => _behaviorSubject.stream;
@@ -49,7 +51,7 @@ class TrContinuousProductPricesService implements Disposable {
 
     if (!response.isSuccessful) {
       // TODO: Handle...
-      Log.f("Failed to fetch aggregateHistory successfully");
+      _logger.f("Failed to fetch aggregateHistory successfully");
       return null;
     }
 

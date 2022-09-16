@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
@@ -117,6 +118,7 @@ class Startup {
 
     GetIt getItService = GetIt.instance;
     getItService.allowReassignment = true;
+    getItService.registerSingleton<Logger>(Logger.create());
     getItService.registerSingleton<SharedPreferences>(prefs);
     getItService.registerSingleton<UserService>(UserService());
     getItService.registerSingleton<StockService>(StockService());
