@@ -32,7 +32,7 @@ namespace SolidTradeServer
                         .MinimumLevel.Verbose()
                         .Enrich.With(new SerilogMessageEnricher())
                         .WriteTo.Console(
-                            outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}",
+                            outputTemplate: "{Timestamp:yyyy'-'MM'-'dd'T'HH':'mm':'ss.ffffffzzz} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}",
                             restrictedToMinimumLevel: LogEventLevel.Information)
                         .WriteTo.Elasticsearch(
                             new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
