@@ -1,8 +1,10 @@
+import 'package:solidtrade/data/models/common/quotes/quote_category.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
 import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
 import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
+import 'package:solidtrade/providers/language/shared/shared_quotes_translations.dart';
 import 'package:solidtrade/providers/language/shared/shared_translations.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
@@ -45,6 +47,20 @@ class EnTranslation implements ITranslation {
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => EnEditOrderSettingsTranslation();
+
+  @override
+  IQuotesTranslation get quotes => EnQuotesTranslation();
+}
+
+class EnQuotesTranslation implements IQuotesTranslation {
+  @override
+  String get randomKnockoutQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.en, QuoteCategory.knockout);
+
+  @override
+  String get randomSplashScreenQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.en, QuoteCategory.splashScreen);
+
+  @override
+  String get randomWarrantQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.en, QuoteCategory.warrant);
 }
 
 class EnEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {

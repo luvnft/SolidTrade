@@ -74,10 +74,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
                 context,
                 "💥",
                 "Knockouts",
-                // TODO: Create a list of quotes appropriate for knockouts and warrants. One quote will be randomly selected and displayed.
-                // This should also be done for the splash screen. Although on the splash screen we may only support english quotes, for knockouts and warrants
-                // we support multiple languages.
-                "10x to the moon 🚀🌑 or lose it all.",
+                translations.quotes.randomKnockoutQuote,
                 productInfo.derivativeProductCount.knockOutProduct!,
                 PositionType.knockout,
               )
@@ -87,7 +84,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
                 context,
                 "⏳",
                 "Warrants",
-                "🧐 Analysts recommend warrants with 5 DTE.",
+                translations.quotes.randomWarrantQuote,
                 productInfo.derivativeProductCount.vanillaWarrant!,
                 PositionType.warrant,
               )

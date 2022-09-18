@@ -7,6 +7,8 @@ import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
 abstract class ITranslation {
   LanguageTicker get langTicker;
 
+  IQuotesTranslation get quotes;
+
   IProductPageTranslation get productPage;
   ICreateOrderPageTranslation get createOrderPage;
   IEditOrderSettingsTranslation get editOrderSettingsView;
@@ -18,6 +20,12 @@ abstract class ITranslation {
   IChartTranslation get chart;
   ICommonTranslation get common;
   IWelcomeTranslation get welcome;
+}
+
+abstract class IQuotesTranslation {
+  String get randomSplashScreenQuote;
+  String get randomWarrantQuote;
+  String get randomKnockoutQuote;
 }
 
 abstract class IChartTranslation {

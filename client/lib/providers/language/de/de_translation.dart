@@ -1,3 +1,4 @@
+import 'package:solidtrade/data/models/common/quotes/quote_category.dart';
 import 'package:solidtrade/data/models/enums/client_enums/name_for_large_number.dart';
 import 'package:solidtrade/data/models/enums/client_enums/order_type.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
@@ -7,6 +8,7 @@ import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
 import '../../../data/models/enums/client_enums/lang_ticker.dart';
+import '../shared/shared_quotes_translations.dart';
 import '../translation.dart';
 
 class DeTranslation implements ITranslation {
@@ -45,6 +47,20 @@ class DeTranslation implements ITranslation {
 
   @override
   IEditOrderSettingsTranslation get editOrderSettingsView => DeEditOrderSettingsTranslation();
+
+  @override
+  IQuotesTranslation get quotes => DeQuotesTranslation();
+}
+
+class DeQuotesTranslation implements IQuotesTranslation {
+  @override
+  String get randomKnockoutQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.de, QuoteCategory.knockout);
+
+  @override
+  String get randomSplashScreenQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.de, QuoteCategory.splashScreen);
+
+  @override
+  String get randomWarrantQuote => SharedQuotesTranslations.getRandomQuote(LanguageTicker.de, QuoteCategory.warrant);
 }
 
 class DeEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
