@@ -4,7 +4,7 @@ import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/st_logo.dart';
 import 'package:solidtrade/pages/signup_and_signin/base/login_page.dart';
-import 'package:solidtrade/providers/language/translation.dart';
+import 'package:solidtrade/providers/language/shared/shared_welcome_messages.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -53,7 +53,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
   }
 
   Iterable<AnimatedText> _getWelcomeMessages(BuildContext context) {
-    return SharedTranslations.welcomeMessages.map((message) => FadeAnimatedText(
+    return SharedWelcomeMessages.welcomeMessages.map((message) => FadeAnimatedText(
           message,
           textStyle: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40),
           textAlign: TextAlign.center,

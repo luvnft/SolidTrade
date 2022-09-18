@@ -20,21 +20,6 @@ abstract class ITranslation {
   IWelcomeTranslation get welcome;
 }
 
-class SharedTranslations {
-  static const String navigationBarPortfolio = "Portfolio";
-  static const String navigationBarChat = "Leaderboard";
-
-  static const List<String> welcomeMessages = [
-    "Welcome to",
-    "Willkommen zu",
-    "Velkommen til",
-    "Bienvenue à",
-    "ようこそ",
-    "Bienvenido a",
-    "欢迎来到",
-  ];
-}
-
 abstract class IChartTranslation {
   IChartDateRangeViewTranslation get chartDateRangeView;
 }
