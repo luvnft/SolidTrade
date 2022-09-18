@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -76,18 +77,12 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
     ),
   );
 
-  // TODO: Use "productInfo.positionType" instead?
-  String _getProductTicker() {
-    switch (widget.productInfo.typeId) {
-      case "stock":
-        return widget.productInfo.name;
-      case "crypto":
-        return widget.productInfo.homeSymbol!;
-      case "fund":
-      case "derivative":
-      default:
-        return widget.productInfo.issuerDisplayName!;
+  String get _getProductTicker {
+    if (widget.productInfo.isCrypto) {
+      return widget.productInfo.homeSymbol!;
     }
+
+    return widget.productInfo.isStock ? widget.productInfo.name : widget.productInfo.issuerDisplayName!;
   }
 
   @override
@@ -138,7 +133,7 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis),
-                                    Text(widget.productInfo.intlSymbol ?? _getProductTicker(), style: _subtitleTextStyle),
+                                    Text(widget.productInfo.intlSymbol ?? _getProductTicker, style: _subtitleTextStyle),
                                   ],
                                 ),
                               ),
