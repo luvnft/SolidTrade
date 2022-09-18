@@ -5,8 +5,6 @@ import 'package:solidtrade/pages/common/pre_splash.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 
-// TODO: Try nato font
-// TODO: Maybe try stock preview to a product tile
 // ignore: must_be_immutable
 class SolidtradeApp extends StatefulWidget {
   SolidtradeApp({Key? key, required this.navigatorKey}) : super(key: key);

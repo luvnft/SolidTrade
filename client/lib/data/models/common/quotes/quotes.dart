@@ -18,7 +18,6 @@ class Quotes {
     Quote(lang: LanguageTicker.en, quote: "Ever heard of technical analysis? It's pretty much astrology for men. Try it!"),
   ];
 
-  // TODO: Add more quotes...
   // The max length is 42.s
   static List<Quote> knockoutsQuotes = [
     Quote(lang: LanguageTicker.en, quote: "10x to the moon 🚀🌑 or lose it all."),
