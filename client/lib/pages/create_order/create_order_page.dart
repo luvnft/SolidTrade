@@ -364,7 +364,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   void _validateInput() {
-    if (_totalPrice > _portfolioService.current!.cash && _isMarketOrder) {
+    if (widget.buyOrSell == BuyOrSell.buy && _isMarketOrder && _totalPrice > _portfolioService.current!.cash) {
       setState(() {
         _inputValidation = UserInputValidationResult.insufficientFunds();
       });
