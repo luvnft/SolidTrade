@@ -73,7 +73,7 @@ class _SimpleLogPrinter extends l.LogPrinter {
   }
 
   String _getClassNameFromMobile(String stackTrace) {
-    final s1 = stackTrace.substring(stackTrace.indexOf("Log.") + 1);
+    final s1 = stackTrace.substring(stackTrace.indexOf("#4") + 1);
     final s2 = s1.substring(s1.indexOf("#") + 2).trim();
     return s2.substring(0, s2.indexOf("(") - 1).trim();
   }
