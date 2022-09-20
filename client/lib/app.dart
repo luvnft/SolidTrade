@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:flutter/material.dart';
 import 'package:solidtrade/pages/common/pre_splash.dart';
@@ -46,10 +47,10 @@ class SolidtradeAppState extends State<SolidtradeApp> {
           theme: ThemeData(
             backgroundColor: colors.background,
             scaffoldBackgroundColor: colors.background,
-            textTheme: Theme.of(context).textTheme.apply(
-                  bodyColor: colors.foreground,
-                  displayColor: colors.foreground,
-                ),
+            textTheme: GoogleFonts.poppinsTextTheme().apply(
+              bodyColor: colors.foreground,
+              displayColor: colors.foreground,
+            ),
           ),
           home: const PreSplash(),
         );

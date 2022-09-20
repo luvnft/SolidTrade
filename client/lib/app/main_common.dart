@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
@@ -102,45 +105,13 @@ class Startup {
     languageHasToBeInitialized = false;
 
     WidgetsFlutterBinding.ensureInitialized();
-
     mapper.init();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await ConfigReader.initialize();
 
-    final languageTickerIndex = prefs.getInt(SharedPreferencesKeys.langTicker.toString()) ?? _initialLanguage().index;
-    final languageProvider = LanguageProvider.byTicker(LanguageTicker.values[languageTickerIndex]);
-
-    final colorThemeIndex = prefs.getInt(SharedPreferencesKeys.colorTheme.toString()) ?? _initialColorTheme().index;
-    final themeProvider = ThemeProvider.byThemeType(ColorThemeType.values[colorThemeIndex]);
-
-    final updateProvider = UIUpdateStreamProvider();
-
-    GetIt getItService = GetIt.instance;
-    getItService.allowReassignment = true;
-    getItService.registerSingleton<Logger>(Logger.create());
-    getItService.registerSingleton<SharedPreferences>(prefs);
-    getItService.registerSingleton<UserService>(UserService());
-    getItService.registerSingleton<StockService>(StockService());
-    getItService.registerSingleton<WarrantService>(WarrantService());
-    getItService.registerSingleton<KnockoutService>(KnockoutService());
-    getItService.registerSingleton<OngoingWarrantService>(OngoingWarrantService());
-    getItService.registerSingleton<OngoingKnockoutService>(OngoingKnockoutService());
-    getItService.registerSingleton<PortfolioService>(PortfolioService());
-    getItService.registerSingleton<MessagingService>(MessagingService());
-    getItService.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
-    getItService.registerSingleton<TrProductSearchService>(TrProductSearchService());
-    getItService.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());
-    getItService.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
-    getItService.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
-
-    getItService.registerFactory<TrProductInfoService>(() => TrProductInfoService());
-    getItService.registerFactory<TrProductPriceService>(() => TrProductPriceService());
-
-    // Component services.
-    getItService.registerSingleton<FloatingActionButtonUpdateService>(FloatingActionButtonUpdateService());
-
-    getItService.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
+    _initializeServices(prefs);
+    _initializeGoogleFonts();
 
     DataRequestService.initialize();
   }
@@ -157,5 +128,52 @@ class Startup {
     Startup.colorThemeHasToBeInitialized = true;
 
     return defaultTheme;
+  }
+
+  static void _initializeServices(SharedPreferences prefs) {
+    final languageTickerIndex = prefs.getInt(SharedPreferencesKeys.langTicker.toString()) ?? _initialLanguage().index;
+    final languageProvider = LanguageProvider.byTicker(LanguageTicker.values[languageTickerIndex]);
+
+    final colorThemeIndex = prefs.getInt(SharedPreferencesKeys.colorTheme.toString()) ?? _initialColorTheme().index;
+    final themeProvider = ThemeProvider.byThemeType(ColorThemeType.values[colorThemeIndex]);
+
+    final updateProvider = UIUpdateStreamProvider();
+
+    GetIt services = GetIt.instance;
+    services.allowReassignment = true;
+    services.registerSingleton<Logger>(Logger.create());
+    services.registerSingleton<SharedPreferences>(prefs);
+    services.registerSingleton<UserService>(UserService());
+    services.registerSingleton<StockService>(StockService());
+    services.registerSingleton<WarrantService>(WarrantService());
+    services.registerSingleton<KnockoutService>(KnockoutService());
+    services.registerSingleton<OngoingWarrantService>(OngoingWarrantService());
+    services.registerSingleton<OngoingKnockoutService>(OngoingKnockoutService());
+    services.registerSingleton<PortfolioService>(PortfolioService());
+    services.registerSingleton<MessagingService>(MessagingService());
+    services.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
+    services.registerSingleton<TrProductSearchService>(TrProductSearchService());
+    services.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());
+    services.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
+    services.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+
+    services.registerFactory<TrProductInfoService>(() => TrProductInfoService());
+    services.registerFactory<TrProductPriceService>(() => TrProductPriceService());
+
+    // Component services.
+    services.registerSingleton<FloatingActionButtonUpdateService>(FloatingActionButtonUpdateService());
+
+    services.registerSingleton<ConfigurationProvider>(ConfigurationProvider(languageProvider, themeProvider, updateProvider));
+  }
+
+  static void _initializeGoogleFonts() {
+    GoogleFonts.config.allowRuntimeFetching = false;
+
+    LicenseRegistry.addLicense(() async* {
+      final license = await rootBundle.loadString('assets/fonts/OFL.txt');
+      yield LicenseEntryWithLineBreaks([
+        'google_fonts'
+      ], license);
+    });
   }
 }
