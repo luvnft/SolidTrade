@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using OneOf;
 using Serilog;
+using Serilog.Events;
 using SolidTradeServer.Common;
 using SolidTradeServer.Data.Dtos.TradeRepublic;
 using SolidTradeServer.Data.Models.Common.Log;
@@ -36,12 +37,18 @@ namespace SolidTradeServer.Services.TradeRepublic
         protected TradeRepublicApi(IConfiguration configuration, OngoingProductsService ongoingProductsService)
         {
             _ongoingProductsService = ongoingProductsService;
-            _webSocket = new WebSocket(configuration["TradeRepublic:ApiEndpoint"]);
+            
+            /*
+            This turns off web socket logs. This is done as the trade republic api closes all connections periodically and
+            would result in logging fatal logs even though these are expected.
+            Since there is customizable way to fix this logging issue we turn off logging completely.
+            */
+            _webSocket = new WebSocket(configuration["TradeRepublic:ApiEndpoint"]) { Log = { Output = (_, _) => {} } };
             
             _webSocket.OnMessage += OnTradeRepublicMessage;
             _webSocket.OnOpen += (_, _) =>
             {
-                _logger.Information("Connected to Trade republic api");
+                _logger.Debug("Connected to trade republic api");
                 _webSocket.Send(configuration["TradeRepublic:InitialConnectString"]);
 
                 if (!_isReconnect)
@@ -50,8 +57,8 @@ namespace SolidTradeServer.Services.TradeRepublic
 
             _webSocket.OnClose += (_, _) =>
             {
-                _logger.Warning("Trade republic api connection closed unexpectedly");
-                _logger.Information("Trying to reconnect");
+                _logger.Debug("Trade republic api connection closed unexpectedly");
+                _logger.Debug("Trying to reconnect");
 
                 _isReconnect = true;
                 _webSocket.Connect();
@@ -94,16 +101,13 @@ namespace SolidTradeServer.Services.TradeRepublic
 
         private void OnTradeRepublicMessage(object sender, MessageEventArgs e)
         {
-            _logger.Information("{@TradeRepublicMessage}", new TradeRepublicMessage
-            {
-                Title = "Trade Republic api message",
-                Content = e.Data,
-            });
+            LogReceivedTradeRepublicMessage(e.Data);
 
             if (_isReconnect && e.Data == "connected")
             {
-                var runningRequestBodies = new Dictionary<int, string>(_requestBodies);
+                _isReconnect = false;
                 
+                var runningRequestBodies = new Dictionary<int, string>(_requestBodies);
                 foreach ((int requestId, string requestBody) in runningRequestBodies)
                 {
                     if (_runningRequestsAsync.ContainsKey(requestId))
@@ -111,8 +115,6 @@ namespace SolidTradeServer.Services.TradeRepublic
                     else
                         _requestBodies.Remove(requestId);
                 }
-
-                _isReconnect = false;
             }
             
             if (e.Data == "connected" || e.Data.StartsWith("echo"))
@@ -144,6 +146,17 @@ namespace SolidTradeServer.Services.TradeRepublic
             }
         }
 
+        private void LogReceivedTradeRepublicMessage(string message)
+        {
+            var logLevelForReceivedMessage = _isReconnect && message == "connected" ? LogEventLevel.Debug : LogEventLevel.Information;
+            
+            _logger.Write(logLevelForReceivedMessage, "{@TradeRepublicMessage}", new TradeRepublicMessage
+            {
+                Title = "Trade Republic api message",
+                Content = message,
+            });
+        }
+        
         private static string GetMessageResponse(string messageInput)
         {
             int index = messageInput.IndexOf('{') - 1;
