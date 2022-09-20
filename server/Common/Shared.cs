@@ -19,7 +19,7 @@ namespace SolidTradeServer.Common
 {
     public static class Shared
     {
-        private static readonly ILogger _logger = Log.Logger;
+        private static readonly ILogger _logger = Log.ForContext(typeof(Shared));
         
         public const string LogMessageTemplate = "{@LogParameters}";
 

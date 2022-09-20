@@ -19,7 +19,7 @@ namespace SolidTradeServer.Services
 {
     public class OngoingProductsService
     {
-        private static readonly ILogger _logger = Log.Logger;
+        private static readonly ILogger _logger = Log.ForContext<OngoingProductsService>();
         private readonly NotificationService _notificationService;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ICacheService _cache;
@@ -263,7 +263,7 @@ namespace SolidTradeServer.Services
                     Exception = e,
                     AdditionalData = new
                     {
-                        TradeRepubmucMessage = trMessage,
+                        TradeRepublicMessage = trMessage,
                         OngoingProductId = ongoingProductId,
                         Type = type,
                     },
@@ -498,7 +498,7 @@ namespace SolidTradeServer.Services
                     Exception = e,
                     AdditionalData = new
                     {
-                        TradeRepubmucMessage = trMessage,
+                        TradeRepublicMessage = trMessage,
                         OngoingProductId = ongoingProductId,
                         Type = type,
                     },
