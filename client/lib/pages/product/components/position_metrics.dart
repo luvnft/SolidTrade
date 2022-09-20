@@ -29,10 +29,12 @@ class _PositionMetricsState extends State<PositionMetrics> with STWidget {
 
   String _getPerformance(TrProductPrice prices, bool inPercent) {
     if (!inPercent) {
-      return (_getTotal(prices) - widget.position.buyInPrice * widget.position.numberOfShares).toDefaultPrice();
+      return ((prices.bid.price - widget.position.buyInPrice) * widget.position.numberOfShares).toDefaultPrice();
     }
 
-    return (_getTotal(prices) / widget.position.buyInPrice * widget.position.numberOfShares).toDefaultNumber(suffix: "%", maxFractionDigits: 3);
+    var difference = prices.bid.price / widget.position.buyInPrice;
+    var changeInPercent = (difference - 1) * 100;
+    return changeInPercent.toDefaultNumber(suffix: "%", maxFractionDigits: 3);
   }
 
   void _onClickOnPerformance(_) {
