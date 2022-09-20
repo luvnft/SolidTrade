@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -84,13 +85,33 @@ namespace SolidTradeServer
             try
             {
                 var db = services.GetRequiredService<T>();
+                var pendingMigrations = db.Database.GetPendingMigrations().ToList();
+
+                _logger.Information("Checking for pending migrations.");
+                if (!pendingMigrations.Any())
+                {
+                    _logger.Information("Found no pending migrations.");
+                    return host;
+                }
+                
+                _logger.Information("Detected pending migrations. {@PendingMigrations}.", string.Join(", ", pendingMigrations));
+
+                var backupFileName = $"{DateTimeOffset.Now:dd-MM-yyyy hh-mm-ss zz} - {pendingMigrations.Last()}.bak";
+                var backupFilePath = $"./database_backups/{backupFileName}";
+                
+                _logger.Information("Trying to create backup file with name {@BackupFileName}.", backupFileName);
+                db.Database.ExecuteSqlRaw($"Backup database master to disk='{backupFilePath}'");
+                _logger.Information("Created backup successfully in directory: {@BackupFilePath}.", backupFilePath);
+                
+                _logger.Information("Trying to apply pending migrations.");
                 db.Database.Migrate();
+                _logger.Information("Applied migrations successfully.");
             }
             catch (Exception e)
             {
                 _logger.Fatal(Shared.LogMessageTemplate, new UnexpectedError
                 {
-                    Title = "Failed to migrating the database",
+                    Title = "Failed to migrating database",
                     Message = "An error occurred while migrating the database. Stopping application.",
                     Exception = e,
                 });
