@@ -13,8 +13,8 @@ services:
       DOMAIN: ${NGROK_DOMAIN}
       PORT: 80
     depends_on:
-        - api
-  
+      - api
+
   api:
     build: server
     restart: always
@@ -26,7 +26,8 @@ services:
       - db
     volumes:
       - ./server/Configuration:/app/config
-  
+      - solidtrade:/var/log/solidtrade/api
+
   db:
     image: mcr.microsoft.com/mssql/server
     ports:
@@ -38,4 +39,4 @@ services:
       ACCEPT_EULA: "Y"
 
 volumes:
-  solidtrade: 
+  solidtrade:

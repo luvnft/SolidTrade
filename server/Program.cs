@@ -1,11 +1,10 @@
 using System;
-using System.IO;
-using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
+using Serilog.Debugging;
 using Serilog.Events;
 using SolidTradeServer.Serilog;
 
@@ -13,8 +12,18 @@ namespace SolidTradeServer
 {
     public static class Program
     {
+        private const string SerilogOutputTemplate =
+            "{Timestamp:yyyy'-'MM'-'dd'T'HH':'mm':'ss.ffffff zzz} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}";
+
         public static void Main(string[] args)
-           => CreateHostBuilder(args).Build().Run();
+        {
+            var host = CreateHostBuilder(args).Build();
+
+            var logger = Log.ForContext(typeof(Program));
+            SelfLog.Enable(logger.Error);
+            
+            host.Run();
+        }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -27,12 +36,20 @@ namespace SolidTradeServer
                 .UseSerilog((context, configuration) =>
                 {
                     configuration
+                        .MinimumLevel.Debug()
                         .Enrich.FromLogContext()
                         .Enrich.WithMachineName()
-                        .MinimumLevel.Verbose()
+                        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                         .Enrich.With(new SerilogMessageEnricher())
+                        .WriteTo.Map(_ => DateTimeOffset.Now,
+                            (v, wt) =>
+                                wt.File($"/var/log/solidtrade/api/{v:MM-yyyy}/log-{v:dd-MM-yyyy ddd zz} - .log",
+                                    outputTemplate: SerilogOutputTemplate,
+                                    fileSizeLimitBytes: 2000000,
+                                    rollingInterval: RollingInterval.Day,
+                                    rollOnFileSizeLimit: true))
                         .WriteTo.Console(
-                            outputTemplate: "{Timestamp:yyyy'-'MM'-'dd'T'HH':'mm':'ss.ffffffzzz} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}",
+                            outputTemplate: SerilogOutputTemplate,
                             restrictedToMinimumLevel: LogEventLevel.Information)
                         .WriteTo.Elasticsearch(
                             new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
@@ -45,9 +62,8 @@ namespace SolidTradeServer
                                 AutoRegisterTemplate = true,
                                 NumberOfShards = 2,
                                 NumberOfReplicas = 1,
-                                MinimumLogEventLevel = LogEventLevel.Debug,
+                                MinimumLogEventLevel = LogEventLevel.Information,
                             })
-                        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                         .ReadFrom.Configuration(context.Configuration);
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
