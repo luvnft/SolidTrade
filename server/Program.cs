@@ -1,11 +1,16 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
+using SolidTradeServer.Common;
+using SolidTradeServer.Data.Common;
+using SolidTradeServer.Data.Models.Errors;
 using SolidTradeServer.Serilog;
 
 namespace SolidTradeServer
@@ -14,13 +19,15 @@ namespace SolidTradeServer
     {
         private const string SerilogOutputTemplate =
             "{Timestamp:yyyy'-'MM'-'dd'T'HH':'mm':'ss.ffffff zzz} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}";
-
+        private static readonly ILogger _logger = Log.ForContext(typeof(Program));
+        
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args)
+                .Build()
+                .MigrateDatabase<DbSolidTrade>();
 
-            var logger = Log.ForContext(typeof(Program));
-            SelfLog.Enable(logger.Error);
+            SelfLog.Enable(_logger.Error);
             
             host.Run();
         }
@@ -69,5 +76,28 @@ namespace SolidTradeServer
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
         public static void ExitApplication() => Environment.Exit(-1);
+        
+        private static IHost MigrateDatabase<T>(this IHost host) where T : DbContext
+        {
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            try
+            {
+                var db = services.GetRequiredService<T>();
+                db.Database.Migrate();
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(Shared.LogMessageTemplate, new UnexpectedError
+                {
+                    Title = "Failed to migrating the database",
+                    Message = "An error occurred while migrating the database. Stopping application.",
+                    Exception = e,
+                });
+                ExitApplication();
+            }
+
+            return host;
+        }
     }
 }
