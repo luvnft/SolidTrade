@@ -51,7 +51,7 @@ namespace SolidTradeServer
                         .WriteTo.Console(
                             outputTemplate: SerilogOutputTemplate,
                             restrictedToMinimumLevel: LogEventLevel.Information)
-                        .WriteTo.Elasticsearch(
+                        .WriteTo.Conditional(_ => context.Configuration.GetValue<bool>("ElasticConfiguration:Enable"), c => c.Elasticsearch(
                             new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
                             {
                                 ModifyConnectionSettings = x =>
@@ -63,7 +63,7 @@ namespace SolidTradeServer
                                 NumberOfShards = 2,
                                 NumberOfReplicas = 1,
                                 MinimumLogEventLevel = LogEventLevel.Information,
-                            })
+                            }))
                         .ReadFrom.Configuration(context.Configuration);
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
