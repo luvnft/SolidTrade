@@ -22,9 +22,6 @@ namespace SolidTradeServer.Data.Entities
         public EnterOrExitPositionType Type { get; set; }
         
         [Required]
-        public KnockoutPosition CurrentKnockoutPosition { get; set; }
-        
-        [Required]
         [Range(0.00010, int.MaxValue)]
         public decimal Price { get; set; }
         

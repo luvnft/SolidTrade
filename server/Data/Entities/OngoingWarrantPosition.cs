@@ -13,10 +13,7 @@ namespace SolidTradeServer.Data.Entities
         
         [Required]
         public Portfolio Portfolio { get; set; }
-        
-        [Required]
-        public WarrantPosition CurrentWarrantPosition { get; set; }
-        
+
         [Required]
         [MaxLength(12)]
         public string Isin { get; set; }

@@ -111,7 +111,8 @@ namespace SolidTradeServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider, ILogger logger, DbSolidTrade context)
         {
-            context.Database.EnsureCreated();
+            // context.Database.EnsureCreated();
+            // context.Database.Migrate();
             
             if (env.IsDevelopment())
             {

@@ -103,9 +103,6 @@ namespace SolidTradeServer.Services
             var user = await _database.Users
                 .Include(u => u.Portfolio)
                 .FirstOrDefaultAsync(u => u.Uid == uid);
-
-            var existingWarrant = await _database.WarrantPositions.AsQueryable()
-                .FirstOrDefaultAsync(w => w.Isin == isinWithoutExchangeExtension && w.Portfolio.Id == user.Id);
             
             var ongoingWarrant = new OngoingWarrantPosition
             {
@@ -113,7 +110,6 @@ namespace SolidTradeServer.Services
                 Portfolio = user.Portfolio,
                 Type = dto.Type!.Value,
                 GoodUntil = dto.GoodUntil!.Value,                                                                                                                                                                  
-                CurrentWarrantPosition = existingWarrant,
                 NumberOfShares = dto.NumberOfShares,
                 Price = dto.PriceThreshold,
             };

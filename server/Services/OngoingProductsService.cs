@@ -152,14 +152,14 @@ namespace SolidTradeServer.Services
                         return OngoingTradeResponse.Failed;
                     }
                     
-                    ongoingProduct.CurrentWarrantPosition ??= database.WarrantPositions
+                    var existingWarrantPosition = database.WarrantPositions
                         .AsQueryable()
                         .FirstOrDefault(w => w.Isin == ongoingProduct.Isin && w.Portfolio.Id == ongoingProduct.Portfolio.Id);
 
-                    WarrantPosition warrantPosition = ongoingProduct.CurrentWarrantPosition;
-                    if (warrantPosition is not null)
+                    var warrantPosition = existingWarrantPosition;
+                    if (existingWarrantPosition is not null)
                     {
-                        var position = CalculateNewPosition(ongoingProduct.CurrentWarrantPosition, new WarrantPosition
+                        var position = CalculateNewPosition(existingWarrantPosition, new WarrantPosition
                         {
                             NumberOfShares = ongoingProduct.NumberOfShares, BuyInPrice = price,
                         });
@@ -195,12 +195,11 @@ namespace SolidTradeServer.Services
                 }
                 else
                 {
-                    ongoingProduct.CurrentWarrantPosition ??= database.WarrantPositions
+                    var existingWarrantPosition = database.WarrantPositions
                         .AsQueryable()
                         .FirstOrDefault(w => w.Isin == ongoingProduct.Isin && w.Portfolio.Id == ongoingProduct.Portfolio.Id);
 
-                    WarrantPosition warrantPosition = ongoingProduct.CurrentWarrantPosition;
-
+                    var warrantPosition = existingWarrantPosition;
                     if (warrantPosition is null || warrantPosition.NumberOfShares < ongoingProduct.NumberOfShares)
                     {
                         var orderName = $"{GetOrderName(ongoingProduct.Type)} order";
@@ -387,14 +386,14 @@ namespace SolidTradeServer.Services
                         return OngoingTradeResponse.Failed;
                     }
                     
-                    ongoingProduct.CurrentKnockoutPosition ??= database.KnockoutPositions
+                    var existingKnockoutPosition = database.KnockoutPositions
                         .AsQueryable()
                         .FirstOrDefault(w => w.Isin == ongoingProduct.Isin && w.Portfolio.Id == ongoingProduct.Portfolio.Id);
 
-                    KnockoutPosition knockoutPosition = ongoingProduct.CurrentKnockoutPosition;
+                    var knockoutPosition = existingKnockoutPosition;
                     if (knockoutPosition is not null)
                     {
-                        var position = CalculateNewPosition(ongoingProduct.CurrentKnockoutPosition, new KnockoutPosition
+                        var position = CalculateNewPosition(existingKnockoutPosition, new KnockoutPosition
                         {
                             NumberOfShares = ongoingProduct.NumberOfShares, BuyInPrice = price,
                         });
@@ -430,12 +429,11 @@ namespace SolidTradeServer.Services
                 }
                 else
                 {
-                    ongoingProduct.CurrentKnockoutPosition ??= database.KnockoutPositions
+                    var existingKnockoutPosition = database.KnockoutPositions
                         .AsQueryable()
                         .FirstOrDefault(w => w.Isin == ongoingProduct.Isin && w.Portfolio.Id == ongoingProduct.Portfolio.Id);
 
-                    KnockoutPosition knockoutPosition = ongoingProduct.CurrentKnockoutPosition;
-
+                    var knockoutPosition = existingKnockoutPosition;
                     if (knockoutPosition is null || knockoutPosition.NumberOfShares < ongoingProduct.NumberOfShares)
                     {
                         var orderName = $"{GetOrderName(ongoingProduct.Type)} order";
