@@ -56,13 +56,11 @@ class Logger {
 class _SimpleLogPrinter extends l.LogPrinter {
   @override
   List<String> log(l.LogEvent event) {
-    var color = l.PrettyPrinter.levelColors[event.level];
+    var color = l.PrettyPrinter.levelColors[event.level]!;
     var emoji = l.PrettyPrinter.levelEmojis[event.level];
 
-    var c = StackTrace.current.toString();
-
     return [
-      color!('$emoji[${EnumToString.convertToString(event.level).capitalize()}] ${_getClassName(c)} - ${event.message}')
+      color('$emoji[${EnumToString.convertToString(event.level).capitalize()}] - ${event.message}')
     ];
   }
 
