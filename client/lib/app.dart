@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:flutter/material.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/common/pre_splash.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
@@ -19,6 +20,7 @@ class SolidtradeAppState extends State<SolidtradeApp> {
   @override
   void initState() {
     print("test");
+    Logger.create().i("test v2");
     Globals.appState = this;
     super.initState();
   }
