@@ -24,6 +24,8 @@ class LoginSignIn extends StatelessWidget with STWidget {
     try {
       await _loginWithGoogle(context);
     } catch (e) {
+      print("caught google login err");
+      print(e);
       _logger.f(e);
     }
   }
