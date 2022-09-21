@@ -23,7 +23,7 @@ class Logger {
 
   final _logger = l.Logger(
     filter: l.ProductionFilter(),
-    printer: _SimpleLogPrinter(),
+    // printer: _SimpleLogPrinter(),
     output: _STLoggingOutput(),
   );
   final bool _shouldLog = Globals.environment != Environment.production;
