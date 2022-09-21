@@ -21,7 +21,11 @@ class Logger {
     return _instance!;
   }
 
-  final _logger = l.Logger(printer: _SimpleLogPrinter(), output: _STLoggingOutput());
+  final _logger = l.Logger(
+    filter: l.ProductionFilter(),
+    printer: _SimpleLogPrinter(),
+    output: _STLoggingOutput(),
+  );
   final bool _shouldLog = Globals.environment != Environment.production;
 
   Object? _tryToConvertToJson(Object? object) {
