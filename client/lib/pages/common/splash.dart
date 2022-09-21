@@ -23,16 +23,18 @@ class _SplashState extends State<Splash> with STWidget {
   final _portfolioService = GetIt.instance.get<PortfolioService>();
   final _userService = GetIt.instance.get<UserService>();
 
-  late Future _fadeAnimationFuture;
+  final Future _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 600));
   bool _subTitleVisible = false;
 
   @override
   void initState() {
     super.initState();
 
-    _initializeAppConfiguration();
-    _fadeSubTitle();
-    _fetchAndLoadUser();
+    Future.delayed(Duration.zero, () {
+      _initializeAppConfiguration();
+      _fadeSubTitle();
+      _fetchAndLoadUser();
+    });
   }
 
   void _initializeAppConfiguration() {
@@ -52,7 +54,7 @@ class _SplashState extends State<Splash> with STWidget {
   }
 
   void _fadeSubTitle() {
-    _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 600), () {
+    _fadeAnimationFuture.then((_) {
       setState(() {
         _subTitleVisible = !_subTitleVisible;
       });

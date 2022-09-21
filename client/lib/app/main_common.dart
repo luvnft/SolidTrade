@@ -36,51 +36,21 @@ import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
-import 'package:http/http.dart' as http;
 
 import '../mapper.g.dart' as mapper;
-
-String generateRandomString(int len) {
-  var r = Random();
-  return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
-}
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
 
-  var _logsUri = Uri.https(ConfigReader.getBaseUrl(), "/logs");
-  var id = generateRandomString(10);
-
   runZoned(() {
     _registerFlutterErrorHandler(env);
-
     runApp(SolidtradeApp(navigatorKey: Globals.navigatorKey));
-  },
-      // ignore: unnecessary_new
-      zoneSpecification: new ZoneSpecification(
-        print: (Zone self, ZoneDelegate parent, Zone zone, String line) => _makeRequest(_logsUri, id, "log", line),
-        errorCallback: (Zone self, ZoneDelegate parent, Zone zone, Object object, StackTrace? stacktrace) {
-          _makeRequest(_logsUri, id, "error - $object", stacktrace.toString());
-        },
-      ));
-}
-
-void _makeRequest(Uri uri, String id, String title, String? message) {
-  Map<String, dynamic> map = {};
-  map["SenderId"] = id;
-  map["Title"] = title;
-  map["Message"] = message;
-
-  var data = json.encode(map);
-
-  dev.log("json: $data");
-  http.post(
-    uri,
-    headers: {
-      "Content-Type": "application/json"
+  }, zoneSpecification: ZoneSpecification(
+    // print: (Zone self, ZoneDelegate parent, Zone zone, String line) => ,
+    errorCallback: (Zone self, ZoneDelegate parent, Zone zone, Object object, StackTrace? stacktrace) {
+      GetIt.instance.get<Logger>().f("$object - $stacktrace");
     },
-    body: data,
-  );
+  ));
 }
 
 void _registerFlutterErrorHandler(Environment environment) {
