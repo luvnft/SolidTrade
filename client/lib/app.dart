@@ -18,6 +18,7 @@ class SolidtradeApp extends StatefulWidget {
 class SolidtradeAppState extends State<SolidtradeApp> {
   @override
   void initState() {
+    print("test");
     Globals.appState = this;
     super.initState();
   }
