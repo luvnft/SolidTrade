@@ -18,7 +18,6 @@ class LoginSignIn extends StatelessWidget with STWidget {
   final _historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
   final _portfolioService = GetIt.instance.get<PortfolioService>();
   final _userService = GetIt.instance.get<UserService>();
-  final _logger = GetIt.instance.get<Logger>();
 
   Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
     try {
@@ -26,15 +25,21 @@ class LoginSignIn extends StatelessWidget with STWidget {
     } catch (e) {
       print("caught google login err");
       print(e);
-      _logger.f(e);
+      logger.f(e);
     }
   }
 
   Future<void> _loginWithGoogle(BuildContext context) async {
-    var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
+    logger.f("start");
+    try {
+      var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
+      logger.f(successful);
 
-    if (!successful) {
-      return;
+      if (!successful) {
+        return;
+      }
+    } catch (e) {
+      logger.f("Failed to request notification $e");
     }
 
     var user = await UtilUserService.signInWithGoogle();

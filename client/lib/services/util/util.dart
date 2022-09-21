@@ -8,7 +8,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/enums/client_enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -82,8 +84,12 @@ class Util {
   }
 
   static Future<bool> requestNotificationPermissionsWithUserFriendlyPopup(BuildContext context) async {
+    var _logger = GetIt.instance.get<Logger>();
+    _logger.f("before fcm");
     var currentSettings = await FirebaseMessaging.instance.getNotificationSettings();
+    _logger.f("after fcm");
 
+    _logger.f("is authorized: ${currentSettings.authorizationStatus == AuthorizationStatus.authorized}");
     if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
       return true;
     }
