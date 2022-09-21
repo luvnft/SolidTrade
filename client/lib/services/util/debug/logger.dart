@@ -60,7 +60,7 @@ class _SimpleLogPrinter extends l.LogPrinter {
     var emoji = l.PrettyPrinter.levelEmojis[event.level];
 
     return [
-      color('$emoji[${EnumToString.convertToString(event.level).capitalize()}] - ${event.message}')
+      color('$emoji[${EnumToString.convertToString(event.level).capitalize()}] - ${event.message} - ${event.error} - ${event.stackTrace}')
     ];
   }
 
