@@ -29,6 +29,8 @@ class Logger {
   final bool _shouldLog = Globals.environment != Environment.production;
 
   Object? _tryToConvertToJson(Object? object) {
+    print("message null: ${object == null}");
+    return object;
     try {
       return JsonMapper.serialize(object);
     } catch (e) {
