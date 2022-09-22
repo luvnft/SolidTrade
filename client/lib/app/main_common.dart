@@ -1,8 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer' as dev;
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,16 +36,9 @@ import '../mapper.g.dart' as mapper;
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
+  _registerFlutterErrorHandler(env);
 
-  runZoned(() {
-    _registerFlutterErrorHandler(env);
-    runApp(SolidtradeApp(navigatorKey: Globals.navigatorKey));
-  }, zoneSpecification: ZoneSpecification(
-    // print: (Zone self, ZoneDelegate parent, Zone zone, String line) => ,
-    errorCallback: (Zone self, ZoneDelegate parent, Zone zone, Object object, StackTrace? stacktrace) {
-      GetIt.instance.get<Logger>().f("$object - $stacktrace");
-    },
-  ));
+  runApp(SolidtradeApp(navigatorKey: Globals.navigatorKey));
 }
 
 void _registerFlutterErrorHandler(Environment environment) {

@@ -56,14 +56,6 @@ namespace SolidTradeServer
                                     fileSizeLimitBytes: 2000000,
                                     rollingInterval: RollingInterval.Day,
                                     rollOnFileSizeLimit: true))
-                        .WriteTo.Map(_ => DateTimeOffset.Now,
-                            (v, wt) =>
-                                wt.File($"/var/log/solidtrade/api/{v:MM-yyyy}/ftl-log-{v:dd-MM-yyyy ddd zz} - .log",
-                                    outputTemplate: SerilogOutputTemplate,
-                                    fileSizeLimitBytes: 2000000,
-                                    rollingInterval: RollingInterval.Day,
-                                    restrictedToMinimumLevel: LogEventLevel.Fatal,
-                                    rollOnFileSizeLimit: true))
                         .WriteTo.Console(
                             outputTemplate: SerilogOutputTemplate,
                             restrictedToMinimumLevel: LogEventLevel.Information)
