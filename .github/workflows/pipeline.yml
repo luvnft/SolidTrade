@@ -1,12 +1,33 @@
-name: Deploy
+name: Test and Deploy
 
 on:
   push:
-    branches:
       - '*'
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup dotnet
+      - uses: actions/checkout@v3
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '5.0.x'
+      
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: server
+      
+      - name: Build
+        run: dotnet build
+        working-directory: server
+      
+      - name: Test
+        run: dotnet test
+        working-directory: server
+
   deploy:
+    if: github.ref_name == 'stable' || github.ref_name == 'staging'
     runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
