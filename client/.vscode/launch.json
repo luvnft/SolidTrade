@@ -9,14 +9,16 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/app/main_dev.dart",
-      "args": ["--web-port=49983"]
+      "args": ["--web-port=49983"],
+      "toolArgs": ["--dart-define", "USE_FIREBASE_EMULATOR=true"]
     },
     {
       "name": "Flutter development release mode",
       "request": "launch",
       "type": "dart",
       "program": "lib/app/main_dev.dart",
-      "args": ["--web-port=49983", "--release"]
+      "args": ["--web-port=49983", "--release"],
+      "toolArgs": ["--dart-define", "USE_FIREBASE_EMU=true"]
     }
   ]
 }

@@ -14,5 +14,5 @@ cp ~/projects/Rose-Linode/env/${credentials_folder}/.env '.'
 cp ~/projects/Rose-Linode/env/${credentials_folder}/server/appsettings.credentials.json './server/Configuration'
 cp ~/projects/Rose-Linode/env/${credentials_folder}/server/solid-trade-firebase-credentials.json './server/Configuration'
 
-# We do not require ngrok for production. This is why we scale down to 0.
-docker compose --project-name $environment_name up -d --build --force-recreate --scale ngrok=0
+# We do not require ngrok nor the firebase emulator for production. This is why we scale down to 0.
+docker compose --project-name $environment_name up -d --build --force-recreate --scale ngrok=0 --scale firebase=0

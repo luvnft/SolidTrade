@@ -211,6 +211,11 @@ namespace SolidTradeServer
             
             // Insures the trade republic service is being instantiated at the beginning of the application.
             app.ApplicationServices.GetService<TradeRepublicApiService>();
+
+            // For local development environments we use the firebase emulator for authentication.
+            var firebaseAuthEmulatorHost = Configuration.GetValue<string>("FIREBASE_AUTH_EMULATOR_HOST");
+            if (firebaseAuthEmulatorHost != null)
+                Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", firebaseAuthEmulatorHost);
             
             FirebaseApp.Create(new AppOptions
             {

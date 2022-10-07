@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +35,7 @@ import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
+import 'package:solidtrade/services/util/user_util.dart';
 
 import '../mapper.g.dart' as mapper;
 
@@ -110,10 +115,32 @@ class Startup {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await ConfigReader.initialize();
 
+    await Firebase.initializeApp();
+
+    if (const bool.fromEnvironment("USE_FIREBASE_EMULATOR")) {
+      await _configureFirebaseAuth();
+    }
+
     _initializeServices(prefs);
     _initializeGoogleFonts();
 
     DataRequestService.initialize();
+  }
+
+  static Future<void> _configureFirebaseAuth() async {
+    String configuredHost = const String.fromEnvironment("FIREBASE_EMULATOR_URL");
+    int configuredPort = const int.fromEnvironment("AUTH_EMULATOR_PORT");
+    const int defaultPort = 9099;
+
+    // Android emulator must be pointed to 10.0.2.2
+    var defaultHost = !kIsWeb && Platform.isAndroid ? '10.0.2.2' : 'localhost';
+
+    var host = configuredHost.isNotEmpty ? configuredHost : defaultHost;
+    var port = configuredPort != 0 ? configuredPort : defaultPort;
+
+    await FirebaseAuth.instance.useAuthEmulator(host, port);
+
+    debugPrint('Using Firebase Auth emulator on: $host:$port');
   }
 
   static LanguageTicker _initialLanguage() {
