@@ -9,8 +9,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup dotnet
       - uses: actions/checkout@v3
+      - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '5.0.x'
