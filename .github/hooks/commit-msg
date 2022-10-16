@@ -1,0 +1,9 @@
+#!/bin/bash
+
+regex='(.*:) (:*:.*:) (.*)'
+commit_message=$(cat "${1}")
+
+if ! [[ $commit_message =~ $regex ]]; then
+   printf "[pre-commit-hook] The commit message '$commit_message' does not follow the conventional commits specification. \nSee here for more info: https://conventionalcommits.org/"
+   exit 1
+fi
