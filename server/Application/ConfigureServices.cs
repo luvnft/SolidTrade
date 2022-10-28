@@ -1,7 +1,9 @@
-﻿using Application.Common.Interfaces.Services;
+﻿using Application.Common.Interfaces.Persistence.Database.Repositories;
+using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Cache;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
+using Application.Persistence.Database.Repositories;
 using Application.Services;
 using Application.Services.Cache;
 using Application.Services.Jobs;
@@ -23,6 +25,8 @@ public static class ConfigureServices
         services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
         services.AddSingleton<ITradeRepublicApiService, TradeRepublicApiService>();
 
+        services.AddTransient<IUserRepository, UserRepository>();
+
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IStockService, StockService>();
         services.AddTransient<IWarrantService, WarrantService>();
@@ -32,7 +36,7 @@ public static class ConfigureServices
         services.AddTransient<IOngoingWarrantService, OngoingWarrantService>();
         services.AddTransient<IOngoingKnockoutService, OngoingKnockoutService>();
         services.AddTransient<IHistoricalPositionsService, HistoricalPositionsService>();
-        
+
         return services;
     }
 }

@@ -1,13 +1,16 @@
 ﻿using Application.Common.Interfaces.Services;
+using Application.Errors.User;
+using Application.Models.Types;
 using FirebaseAdmin.Auth;
 using Microsoft.Extensions.Configuration;
+using Success = OneOf.Types.Success;
 
 namespace Infrastructure.Identity;
 
 internal class IdentityService : IIdentityService
 {
     private readonly IConfiguration _configuration;
-
+    
     public IdentityService(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -38,6 +41,16 @@ internal class IdentityService : IIdentityService
         } 
     }
 
-    public Task DeleteUser(string uid, CancellationToken ct = default) 
-        => FirebaseAuth.DefaultInstance.DeleteUserAsync(uid, ct);
+    public async Task<Result<Success>> DeleteUser(string uid, CancellationToken ct = default)
+    {
+        try
+        {
+            await FirebaseAuth.DefaultInstance.DeleteUserAsync(uid, ct);
+            return new Success();
+        }
+        catch (Exception e)
+        {
+            return IdentityUserDeleteFailed.Default(uid, e);
+        }
+    }
 }

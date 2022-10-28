@@ -14,6 +14,7 @@ public class UpdateUserDto
     [MinLength(3)]
     public string DisplayName { get; init; }
         
+    [MinLength(3)]
     [UsernameValidator]
     public string Username { get; init; }
         

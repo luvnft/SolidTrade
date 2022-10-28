@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -21,7 +22,9 @@ namespace Application.Common.Interfaces.Persistence.Database
 
         // TODO: Should be removed after refactor.
         public void UpdateRange(params object[] entities);
-    
+
+        DbSet<TEntity> DbSet<TEntity>() where TEntity : BaseEntity;
+
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

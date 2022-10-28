@@ -28,6 +28,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; set; }
     public DbSet<ProductImageRelation> ProductImageRelations { get; set; }
 
+    public DbSet<TEntity> DbSet<TEntity>() where TEntity : BaseEntity => Set<TEntity>();
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var configuration = new ConfigurationBuilder()
