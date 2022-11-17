@@ -20,7 +20,7 @@ services:
     ports:
       - ${DB_PORT}:1433
     volumes:
-      - db:/var/opt/mssql/data
+      - db:/var/opt/mssql
     environment:
       SA_PASSWORD: ${DB_SA_PASSWORD}
       ACCEPT_EULA: "Y"
