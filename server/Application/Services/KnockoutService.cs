@@ -3,7 +3,6 @@ using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors;
 using Application.Errors.Common;
 using Application.Models.Dtos.Knockout.Response;
 using Application.Models.Dtos.Shared.Common;
@@ -15,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using OneOf;
 using Serilog;
 using static Application.Common.Shared;
+using ErrorResponse = Application.Errors.Common.ErrorResponse;
 
 namespace Application.Services;
 

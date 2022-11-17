@@ -1,4 +1,4 @@
-﻿using Application.Errors;
+﻿using Application.Errors.Common;
 using Domain.Enums;
 using OneOf;
 

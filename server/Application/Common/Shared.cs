@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors;
 using Application.Errors.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Application.Services.TradeRepublic;

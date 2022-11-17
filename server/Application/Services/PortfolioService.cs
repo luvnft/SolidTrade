@@ -2,7 +2,6 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
-using Application.Errors;
 using Application.Errors.Common;
 using Application.Models.Dtos.Portfolio.Request;
 using Application.Models.Dtos.Portfolio.Response;

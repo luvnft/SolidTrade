@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces.Services;
-using Application.Errors.User;
+using Application.Errors.Common.User;
 using Application.Models.Types;
 using FirebaseAdmin.Auth;
 using Microsoft.Extensions.Configuration;

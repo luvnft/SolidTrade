@@ -1,4 +1,5 @@
-﻿using Application.Models.Dtos.HistoricalPosition.Response;
+﻿using Application.Errors.Common;
+using Application.Models.Dtos.HistoricalPosition.Response;
 using OneOf;
 
 namespace Application.Common.Interfaces.Services;

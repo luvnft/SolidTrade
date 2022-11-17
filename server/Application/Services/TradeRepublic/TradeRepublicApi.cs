@@ -2,7 +2,7 @@
 using Application.Common;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors;
+using Application.Errors.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Domain.Enums;
 using Microsoft.Extensions.Configuration;

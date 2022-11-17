@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Application.Errors.Base;
+namespace Application.Errors.Common.Base;
 
 public abstract class BaseError
 {

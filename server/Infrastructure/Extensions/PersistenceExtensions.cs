@@ -1,7 +1,7 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
-using Application.Errors;
+using Application.Errors.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

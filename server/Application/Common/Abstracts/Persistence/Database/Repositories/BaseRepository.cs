@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Database.Repositories;
-using Application.Errors;
+using Application.Errors.Common;
 using Application.Models.Types;
 using Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;

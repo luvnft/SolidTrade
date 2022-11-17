@@ -3,7 +3,6 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Cache;
-using Application.Errors;
 using Application.Errors.Common;
 using Application.Extensions;
 using Application.Models.Dtos.ProductImage.Request;

@@ -1,9 +1,7 @@
 ﻿using System.Net;
-using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors;
 using Application.Errors.Common;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.TradeRepublic;
