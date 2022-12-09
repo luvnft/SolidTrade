@@ -73,7 +73,6 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
                 return new NotFound
                 {
                     Title = "Not found",
-                    // TODO: Maybe log predicate as string?
                     Message = DefaultErrorMessage(),
                     UserFriendlyMessage = ErrorMessages.NotFoundErrorMessage,
                 };
