@@ -9,13 +9,14 @@ namespace Application.Persistence.Database;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly IApplicationDbContext _context;
+    public IStockRepository Stocks { get; }
     public IUserRepository Users { get; }
-
     
-    public UnitOfWork(IUserRepository users, IApplicationDbContext context)
+    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks)
     {
-        Users = users;
         _context = context;
+        Users = users;
+        Stocks = stocks;
     }
 
     public async Task<Result<OneOf.Types.Success>> Commit()

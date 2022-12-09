@@ -29,6 +29,7 @@ public static class ConfigureServices
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IStockRepository, StockRepository>();
 
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IStockService, StockService>();

@@ -1,11 +1,11 @@
 ﻿using Application.Common;
-using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Errors.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Domain.Common.Position;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -111,21 +111,25 @@ namespace Application.Services.Jobs
             return (new List<IPosition>(historicalPositions), new List<IPosition>(stockPositions));
         }
 
-        private async Task PerformStockSplits(IReadOnlyList<(IPosition, TradeRepublicProductInfoDto)> unperformedStockSplits)
+        private async Task PerformStockSplits(IReadOnlyList<(IPosition position, TradeRepublicProductInfoDto dto)> unperformedStockSplits)
         {
-            await using IApplicationDbContext database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
+            var database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IUnitOfWork>();
 
             for (int i = 0; i < unperformedStockSplits.Count; i++)
             {
                 var (position, infoDto) = unperformedStockSplits[i];
                 
                 foreach (var stockSplitInfo in infoDto.Splits)
+                    // TODO: Fix
+                    // This is actually a fatal bug here.
+                    // If a stock split happened two days ago and yesterday we sold one more stock causing the "updatedAt" time to be yesterday.
+                    // The job to perform the stock splits today will miss this stock here because the "updatedAt" is yesterday.
                     if (stockSplitInfo.Date > position.UpdatedAt.ToUnixTimeMilliseconds())
                         position = PerformStockSplit(position, stockSplitInfo);
             }
             
-            database.UpdateRange(unperformedStockSplits.Select(s => s.Item1));
-            await database.SaveChangesAsync();
+            database.Stocks.UpdateRange(unperformedStockSplits.Select(s => (StockPosition) s.position));
+            await database.Commit();
         }
 
         private IPosition PerformStockSplit(IPosition position, StockSplitInfo infoDto)

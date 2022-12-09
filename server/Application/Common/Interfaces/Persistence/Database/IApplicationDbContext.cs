@@ -20,9 +20,6 @@ namespace Application.Common.Interfaces.Persistence.Database
         // TODO: Should be removed after refactor.
         public DatabaseFacade Database { get; }
 
-        // TODO: Should be removed after refactor.
-        public void UpdateRange(params object[] entities);
-
         DbSet<TEntity> DbSet<TEntity>() where TEntity : BaseEntity;
 
         int SaveChanges();
