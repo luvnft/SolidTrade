@@ -49,17 +49,17 @@ public class UserService : IUserService
             HasPublicPortfolio = true,
         };
 
-        if ((await _unitOfWork.Users.IsUsernameAvailable(user.Username)).TryPickError(out var error, out var usernameAvailable))
+        if ((await _unitOfWork.Users.IsUsernameAvailable(user.Username)).TryTakeError(out var error, out var usernameAvailable))
             return error;
         if (!usernameAvailable)
             return UsernameNotAvailable.Default(user.Username);
 
-        if ((await _unitOfWork.Users.IsUidAvailable(user.Uid)).TryPickError(out error, out var uidAvailable))
+        if ((await _unitOfWork.Users.IsUidAvailable(user.Uid)).TryTakeError(out error, out var uidAvailable))
             return error;
         if (!uidAvailable)
             return UidNotAvailable.Default(user.Uid);
             
-        if ((await _unitOfWork.Users.IsEmailAvailable(user.Email)).TryPickError(out error, out var emailAvailable))
+        if ((await _unitOfWork.Users.IsEmailAvailable(user.Email)).TryTakeError(out error, out var emailAvailable))
             return error;
         if (!emailAvailable)
             return EmailNotAvailable.Default(user.Email);
@@ -67,13 +67,13 @@ public class UserService : IUserService
         string profilePictureUri;
         if (dto.ProfilePictureFile is not null)
         {
-            if ((await CreateUserProfilePictureWithFile(dto.ProfilePictureFile, uid)).TryPickError(out error, out var uri))
+            if ((await CreateUserProfilePictureWithFile(dto.ProfilePictureFile, uid)).TryTakeError(out error, out var uri))
                 return error;
             profilePictureUri = uri.AbsoluteUri;
         }
         else
         {
-            if ((await CreateUserProfilePictureWithSeed(dto.ProfilePictureSeed, uid)).TryPickError(out error, out var uri))
+            if ((await CreateUserProfilePictureWithSeed(dto.ProfilePictureSeed, uid)).TryTakeError(out error, out var uri))
                 return error;
             profilePictureUri = uri.AbsoluteUri;
         }
@@ -81,17 +81,16 @@ public class UserService : IUserService
         user.ProfilePictureUrl = profilePictureUri;
 
         _unitOfWork.Users.Add(user);
-        if ((await _unitOfWork.Commit()).TryPickError(out error, out _))
+        if ((await _unitOfWork.Commit()).TryTakeError(out error, out _))
             return error;
 
         _logger.Information("User with uid {@Uid} was created successfully", uid);
-        // TODO: Check if the field if filled with ids and stuff.
         return _mapper.Map<UserResponseDto>(user);
     }
         
     public async Task<Result<UserResponseDto>> GetUserById(int id, string uid)
     {
-        if ((await _unitOfWork.Users.FindByIdAsync(id)).TryPickError(out var error, out var user))
+        if ((await _unitOfWork.Users.FindByIdAsync(id)).TryTakeError(out var error, out var user))
             return error;
             
         var userResponse = _mapper.Map<UserResponseDto>(user);
@@ -106,7 +105,7 @@ public class UserService : IUserService
         
     public async Task<Result<UserResponseDto>> GetUserByUid(string queriedUid, string uid)
     {
-        if ((await _unitOfWork.Users.FindUserByUid(queriedUid)).TryPickError(out var error, out var user))
+        if ((await _unitOfWork.Users.FindUserByUid(queriedUid)).TryTakeError(out var error, out var user))
             return error;
 
         var userResponse = _mapper.Map<UserResponseDto>(user);
@@ -121,7 +120,7 @@ public class UserService : IUserService
         
     public async Task<Result<IEnumerable<UserResponseDto>>> SearchUserByUsername(string username, string uid)
     {
-        if ((await _unitOfWork.Users.FindUsersByUsername(username)).TryPickError(out var error, out var users))
+        if ((await _unitOfWork.Users.FindUsersByUsername(username)).TryTakeError(out var error, out var users))
             return error;
 
         _logger.Information("User with user uid {@Uid} fetched {@NumberOfFoundUsers} users by username {@Username} successfully", uid, users.Count, username);
@@ -136,16 +135,16 @@ public class UserService : IUserService
         
     public async Task<Result<UserResponseDto>> UpdateUser(UpdateUserDto dto, string uid)
     {
-        if ((await _unitOfWork.Users.FindUserByUid(uid)).TryPickError(out var error, out var user))
+        if ((await _unitOfWork.Users.FindUserByUid(uid)).TryTakeError(out var error, out var user))
             return error;
         
-        if ((await _unitOfWork.Users.IsUsernameAvailable(dto.Username)).TryPickError(out error,
+        if ((await _unitOfWork.Users.IsUsernameAvailable(dto.Username)).TryTakeError(out error,
                 out var usernameAvailable))
             return error;
         if (!usernameAvailable)
             return UsernameNotAvailable.Default(dto.Username);
 
-        if ((await _unitOfWork.Users.IsEmailAvailable(dto.Email)).TryPickError(out error, out var emailAvailable))
+        if ((await _unitOfWork.Users.IsEmailAvailable(dto.Email)).TryTakeError(out error, out var emailAvailable))
             return error;
         if (!emailAvailable)
             return EmailNotAvailable.Default(dto.Email);
@@ -179,13 +178,13 @@ public class UserService : IUserService
             user.ProfilePictureUrl = newProfilePicture;
         
         _unitOfWork.Users.Update(user);
-        if ((await _unitOfWork.Commit()).TryPickError(out error, out _))
+        if ((await _unitOfWork.Commit()).TryTakeError(out error, out _))
             return error;
 
         // If the user has updated its profile picture. We delete the old one
         if (newProfilePicture is not null)
         {
-            if ((await DeleteUserProfilePicture(currentProfilePicture)).TryPickError(out error, out _))
+            if ((await DeleteUserProfilePicture(currentProfilePicture)).TryTakeError(out error, out _))
                 _logger.Warning(ApplicationConstants.LogMessageTemplate, error);
         }
                 
@@ -194,14 +193,14 @@ public class UserService : IUserService
 
     public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid)
     {
-        if ((await _unitOfWork.Users.FindUserByUid(uid)).TryPickError(out var error, out var user))
+        if ((await _unitOfWork.Users.FindUserByUid(uid)).TryTakeError(out var error, out var user))
             return error;
 
-        if ((await _identityService.DeleteUser(uid)).TryPickError(out error, out _))
+        if ((await _identityService.DeleteUser(uid)).TryTakeError(out error, out _))
             return error;
 
         _unitOfWork.Users.Remove(user);
-        if ((await _unitOfWork.Commit()).TryPickError(out error, out _))
+        if ((await _unitOfWork.Commit()).TryTakeError(out error, out _))
             return error;
         
         await DeleteUserProfilePicture(user.ProfilePictureUrl);

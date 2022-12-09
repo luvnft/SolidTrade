@@ -20,6 +20,6 @@ public class ProductImageController : Controller
     public async Task<IActionResult> Get([FromQuery] GetProductImageRequestDto dto)
     {
         var value = await _productImageService.GetOrCreateRedirectUrlToImage(dto);
-        return value.Match<IActionResult>(response => RedirectPermanent(response.RedirectUrl), MatchError);
+        return value.Match<IActionResult>(response => RedirectPermanent(response.RedirectUrl), err => MatchError(err.Error));
     }
 }

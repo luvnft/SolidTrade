@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using Application.Errors.Common.Base;
+using Application.Errors.Base;
 
-namespace Application.Errors.Common.User;
+namespace Application.Errors.User;
 
 public class UsernameNotAvailable : BaseError
 {

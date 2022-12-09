@@ -1,6 +1,6 @@
 ﻿using Application.Common;
-using Application.Errors;
 using Application.Errors.Base;
+using Application.Errors.Common;
 using Application.Models.Types;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -15,6 +15,24 @@ public static class MatchOneOfResult
     public static IActionResult MatchResult<T>(Result<T> value)
     {
         return value.Match(response => new ObjectResult(response), MatchError);
+    }
+    
+    public static IActionResult MatchResult<T>(OneOf.OneOf<T, ErrorResponse> value)
+    {
+        return value.Match(
+            response => new ObjectResult(response),
+            err =>
+            {
+                var ex = err.Error.Exception;
+                err.Error.Exception = ex is not null ? new Exception("Exception is defined in the 'exceptions' field.") : null;
+
+                return new ObjectResult(new UnexpectedError
+                {
+                    Title = err.Error.Title,
+                    UserFriendlyMessage = err.Error.UserFriendlyMessage,
+                    Message = err.Error.Message,
+                }) {StatusCode = (int) err.Code};
+            });
     }
 
     public static ObjectResult MatchError(BaseError err)

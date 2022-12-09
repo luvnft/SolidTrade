@@ -1,14 +1,14 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence.Storage;
-using Application.Errors;
+using Application.Errors.Common;
 using Application.Extensions;
+using Application.Models.Types;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using OneOf;
-using OneOf.Types;
 using Serilog;
 
 namespace Infrastructure.Persistence.Storage;
@@ -33,17 +33,17 @@ internal class MediaManagementService : IMediaManagementService
         _cloudinary = new Cloudinary(account) { Api = { Secure = true } };
     }
 
-    public Task<OneOf<Uri, UnexpectedError>> UploadTradeRepublicProductImage(string isin, ProductImageThemeColor themeColor)
+    public Task<Result<Uri>> UploadTradeRepublicProductImage(string isin, ProductImageThemeColor themeColor)
         => UploadTradeRepublicProductImage($"Projects/SolidTrade-{_environment}/ProductImages", isin, themeColor);
         
-    public Task<OneOf<Uri, UnexpectedError>> UploadProfilePicture(string url, string uid)
+    public Task<Result<Uri>> UploadProfilePicture(string url, string uid)
         => UploadProfileImage(new FileDescription(url), 75, uid, $"Projects/SolidTrade-{_environment}/");
 
-    public Task<OneOf<Uri, UnexpectedError>> UploadProfilePicture(IFormFile file, string uid)
+    public Task<Result<Uri>> UploadProfilePicture(IFormFile file, string uid)
         => UploadProfileImage(new FileDescription(file.Name, file.OpenReadStream()),
             GetAdjustedQualityCompressionRatio(file.Length), uid, $"Projects/SolidTrade-{_environment}/");
 
-    public async Task<OneOf<Success, UnexpectedError>> DeleteImage(string url)
+    public async Task<Result<OneOf.Types.Success>> DeleteImage(string url)
     {
         var httpOrHttps = url.StartsWith("https") ? "https" : "http";
 
@@ -68,7 +68,7 @@ internal class MediaManagementService : IMediaManagementService
             }
                 
             _logger.Information("Deletion image with url {@ImageUrl} and public id {@PublicId} was successful", url, publicId);
-            return new Success();
+            return new OneOf.Types.Success();
         }
         catch (Exception e)
         {
@@ -85,7 +85,7 @@ internal class MediaManagementService : IMediaManagementService
         }
     }
         
-    private async Task<OneOf<Uri, UnexpectedError>> UploadProfileImage(FileDescription description, int quality, string uid, string folder)
+    private async Task<Result<Uri>> UploadProfileImage(FileDescription description, int quality, string uid, string folder)
     {
         try
         {
@@ -118,7 +118,7 @@ internal class MediaManagementService : IMediaManagementService
         }
     }
         
-    private async Task<OneOf<Uri, UnexpectedError>> UploadTradeRepublicProductImage(string folder,
+    private async Task<Result<Uri>> UploadTradeRepublicProductImage(string folder,
         string isin, ProductImageThemeColor themeColor, bool isRetry = false, FileDescription description = null)
     {
         var identifier = themeColor.CreateIdentifier(isin);

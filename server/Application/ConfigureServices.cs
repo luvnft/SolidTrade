@@ -1,8 +1,10 @@
-﻿using Application.Common.Interfaces.Persistence.Database.Repositories;
+﻿using Application.Common.Interfaces.Persistence.Database;
+using Application.Common.Interfaces.Persistence.Database.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Cache;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
+using Application.Persistence.Database;
 using Application.Persistence.Database.Repositories;
 using Application.Services;
 using Application.Services.Cache;
@@ -25,6 +27,7 @@ public static class ConfigureServices
         services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
         services.AddSingleton<ITradeRepublicApiService, TradeRepublicApiService>();
 
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IUserRepository, UserRepository>();
 
         services.AddTransient<IUserService, UserService>();
