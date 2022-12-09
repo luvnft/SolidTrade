@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application;
-using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
@@ -10,7 +9,6 @@ using Application.Models.MappingProfiles;
 using Application.Services.Jobs;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
-using Hangfire.MemoryStorage;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +60,7 @@ public class Startup
             config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseDefaultTypeSerializer()
-                .UseMemoryStorage()); // Todo: Maybe use a database storage instead of InMemory?
+                .UseSqlServerStorage(Configuration.GetConnectionString("SqlServerConnection")));
 
         services.AddHangfireServer();
     }
