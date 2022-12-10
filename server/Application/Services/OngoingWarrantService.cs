@@ -3,10 +3,11 @@ using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.OngoingWarrant.Response;
 using Application.Models.Dtos.Shared.OngoingPosition.Request;
 using Application.Models.Dtos.TradeRepublic;
+using Application.Models.Dtos.Warrant.Response;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -32,38 +33,38 @@ public class OngoingWarrantService : IOngoingWarrantService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<OngoingWarrantPositionResponseDto, ErrorResponse>> GetOngoingWarrant(int id, string uid)
+    public async Task<Result<OngoingWarrantPositionResponseDto>> GetOngoingWarrant(int id, string uid)
     {
         var user = await _database.Users.AsQueryable()
             .FirstOrDefaultAsync(u => u.Portfolio.OngoingWarrantPositions.Any(ow => ow.Id == id));
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"User with uid: {uid} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && uid != user.Uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var warrant = await _database.OngoingWarrantPositions.FindAsync(id);
 
         if (warrant is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Ongoing warrant not found",
                 Message = $"Ongoing warrant with id: {id} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         _logger.Information("User with user uid {@Uid} fetched ongoing warrant with ongoing warrant id {@OngoingWarrantId} successfully", uid, id);
@@ -71,7 +72,7 @@ public class OngoingWarrantService : IOngoingWarrantService
         return _mapper.Map<OngoingWarrantPositionResponseDto>(warrant);
     }
         
-    public async Task<OneOf<OngoingWarrantPositionResponseDto, ErrorResponse>> OpenOngoingWarrant(OngoingPositionRequestDto dto, string uid)
+    public async Task<Result<OngoingWarrantPositionResponseDto>> OpenOngoingWarrant(OngoingPositionRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -88,13 +89,13 @@ public class OngoingWarrantService : IOngoingWarrantService
 
         if (isFulfilled)
         {
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Invalid trade",
                 Message = "Order price is not appropriate for this order type.",
                 UserFriendlyMessage = "Order price is not appropriate for this order type. Please try again.",
                 AdditionalData = new { Dto = dto, trResponse },
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var user = await _database.Users
@@ -127,30 +128,30 @@ public class OngoingWarrantService : IOngoingWarrantService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not save ongoing warrant",
                 Message = "Failed to save or process ongoing warrant trade",
                 Exception = e,
                 AdditionalData = new { Dto = dto, OngoingWarrant = ongoingWarrant },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 
-    public async Task<OneOf<OngoingWarrantPositionResponseDto, ErrorResponse>> CloseOngoingWarrant(CloseOngoingPositionRequestDto dto, string uid)
+    public async Task<Result<OngoingWarrantPositionResponseDto>> CloseOngoingWarrant(CloseOngoingPositionRequestDto dto, string uid)
     {
         var warrant = await _database.OngoingWarrantPositions.AsQueryable()
             .FirstOrDefaultAsync(w => w.Id == dto.Id && w.Portfolio.User.Uid == uid);
 
         if (warrant is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Unable to delete ongoing trade",
                 Message = $"The warrant with id: {dto.Id} could not be found or the user does not own this ongoing warrant.",
                 UserFriendlyMessage = "Could not remove warrant. The warrant might already been filled.",
                 AdditionalData = new { dto, uid }
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         try
@@ -165,14 +166,14 @@ public class OngoingWarrantService : IOngoingWarrantService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could remove ongoing warrant",
                 Message = "Failed to close position.",
                 Exception = e,
                 UserFriendlyMessage = "Something went very wrong. Please try again later.",
                 AdditionalData = new { dto, uid, warrant },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 }

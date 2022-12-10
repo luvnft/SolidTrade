@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services;
-using Application.Errors.User;
+using Application.Errors.Types;
 using Application.Models.Dtos.User.Request;
 using Application.Models.Dtos.User.Response;
 using Application.Models.Types;

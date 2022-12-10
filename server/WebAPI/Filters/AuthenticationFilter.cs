@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces.Services;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

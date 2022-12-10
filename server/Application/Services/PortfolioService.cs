@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.Portfolio.Request;
 using Application.Models.Dtos.Portfolio.Response;
 using AutoMapper;
@@ -27,7 +27,7 @@ public class PortfolioService : IPortfolioService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<PortfolioResponseDto, ErrorResponse>> GetPortfolio(GetPortfolioRequestDto dto, string uid)
+    public async Task<Result<PortfolioResponseDto>> GetPortfolio(GetPortfolioRequestDto dto, string uid)
     {
         var query = _database.Portfolios
             .Include(p => p.User)
@@ -43,20 +43,20 @@ public class PortfolioService : IPortfolioService
 
             if (portfolio is null)
             {
-                return new ErrorResponse(new NotFound
+                return new EntityNotFound
                 {
                     Title = "Portfolio not found",
                     Message = $"The portfolio with portfolioId: {dto.PortfolioId} could not be found.",
-                }, HttpStatusCode.NotFound);
+                };
             }
                 
             if (!portfolio.User.HasPublicPortfolio && portfolio.User.Uid != uid)
             {
-                return new ErrorResponse(new NotAuthorized
+                return new NotAuthorized
                 {
                     Title = "Portfolio is private",
                     Message = "Tried to access other user's portfolio",
-                }, HttpStatusCode.Unauthorized);
+                };
             }
                 
             _logger.Information("User with user uid {@Uid} fetched portfolio with portfolio id {@PortfolioId} successfully", uid, dto.PortfolioId);
@@ -68,20 +68,20 @@ public class PortfolioService : IPortfolioService
 
         if (portfolioByUserId is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Portfolio not found",
                 Message = $"The portfolio with userId: {dto.UserId} could not be found.",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!portfolioByUserId.User.HasPublicPortfolio && portfolioByUserId.User.Uid != uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
             
         _logger.Information("User with user uid {@Uid} fetched portfolio by user id {@UserId} successfully", uid, dto.UserId);

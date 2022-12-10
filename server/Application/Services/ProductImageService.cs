@@ -3,7 +3,7 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Cache;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Extensions;
 using Application.Models.Dtos.ProductImage.Request;
 using Application.Models.Dtos.ProductImage.Response;
@@ -32,7 +32,7 @@ public class ProductImageService : IProductImageService
         _mediaManagementService = mediaManagementService;
     }
 
-    public async Task<OneOf<GetProductImageResponseDto, ErrorResponse>> GetOrCreateRedirectUrlToImage(GetProductImageRequestDto dto)
+    public async Task<Result<GetProductImageResponseDto>> GetOrCreateRedirectUrlToImage(GetProductImageRequestDto dto)
     {
         var identifier = dto.ThemeColor!.Value.CreateIdentifier(dto.Isin);
         var cachedValue = _cacheService.GetCachedValue<GetProductImageResponseDto>(identifier);
@@ -83,18 +83,18 @@ public class ProductImageService : IProductImageService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Failed to add new product image relation",
                 Message = "Failed to add new product image relation.",
                 UserFriendlyMessage = "Something went wrong. Please try again later.",
                 Exception = e,
                 AdditionalData = new { dto },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 
-    private async Task<OneOf<(ProductImageRelation, ProductImageRelation), ErrorResponse>> CreateProductImage(string isin)
+    private async Task<Result<(ProductImageRelation, ProductImageRelation)>> CreateProductImage(string isin)
     {
         var lightImage = _mediaManagementService.UploadTradeRepublicProductImage(isin, ProductImageThemeColor.Light);
         var darkImage = _mediaManagementService.UploadTradeRepublicProductImage(isin, ProductImageThemeColor.Dark);
@@ -102,7 +102,7 @@ public class ProductImageService : IProductImageService
         var results = await Task.WhenAll(lightImage, darkImage);
 
         if (results.Any(r => r.IsT1))
-            return new ErrorResponse(results.First(r => r.IsT1).AsT1, HttpStatusCode.InternalServerError);
+            return results.First(r => r.IsT1).AsT1;
 
         var lightProductImageUri = (await lightImage).AsT0.AbsoluteUri;
         if (lightProductImageUri.EndsWith(".svg"))

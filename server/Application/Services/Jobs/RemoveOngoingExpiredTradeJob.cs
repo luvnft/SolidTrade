@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

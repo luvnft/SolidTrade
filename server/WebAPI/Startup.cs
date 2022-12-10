@@ -4,7 +4,7 @@ using Application;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.MappingProfiles;
 using Application.Services.Jobs;
 using Hangfire;
@@ -49,7 +49,7 @@ public class Startup
             
         services.Configure<ApiBehaviorOptions>(apiBehaviorOptions =>
             apiBehaviorOptions.InvalidModelStateResponseFactory = 
-                actionContext => new BadRequestObjectResult(new InvalidState
+                actionContext => new BadRequestObjectResult(new InvalidRequestDto
                 {
                     Title = "Validation error",
                     Message = "Something went wrong validating request.",

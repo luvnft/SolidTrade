@@ -3,7 +3,7 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services.Cache;
 using Application.Common.Interfaces.Services.Jobs;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.ProductImage.Request;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;

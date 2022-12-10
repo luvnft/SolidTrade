@@ -1,7 +1,7 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,7 +45,7 @@ public static class PersistenceExtensions
         }
         catch (Exception e)
         {
-            Logger.Fatal(ApplicationConstants.LogMessageTemplate, new UnexpectedError
+            Logger.Fatal(ApplicationConstants.LogMessageTemplate, new UnexpectedDatabaseError
             {
                 Title = "Failed to migrating database",
                 Message = "An error occurred while migrating the database. Stopping application.",

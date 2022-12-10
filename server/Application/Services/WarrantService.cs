@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Application.Models.Dtos.Warrant.Response;
@@ -31,38 +31,38 @@ public class WarrantService : IWarrantService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<WarrantPositionResponseDto, ErrorResponse>> GetWarrant(int id, string uid)
+    public async Task<Result<WarrantPositionResponseDto>> GetWarrant(int id, string uid)
     {
         var user = await _database.Users.AsQueryable()
             .FirstOrDefaultAsync(u => u.Portfolio.WarrantPositions.Any(w => w.Id == id));
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"User with uid: {uid} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && uid != user.Uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var warrant = await _database.WarrantPositions.FindAsync(id);
 
         if (warrant is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Warrant not found",
                 Message = $"Warrant with id: {id} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         _logger.Information("User with user uid {@Uid} fetched warrant with warrant id {@WarrantId} successfully", uid, id);
@@ -70,7 +70,7 @@ public class WarrantService : IWarrantService
         return _mapper.Map<WarrantPositionResponseDto>(warrant);
     }
 
-    public async Task<OneOf<WarrantPositionResponseDto, ErrorResponse>> BuyWarrant(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<WarrantPositionResponseDto>> BuyWarrant(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -89,7 +89,7 @@ public class WarrantService : IWarrantService
 
         if (totalPrice > user.Portfolio.Cash)
         {
-            return new ErrorResponse(new InsufficientFounds
+            return new InsufficientFunds
             {
                 Title = "Insufficient funds",
                 Message = "User founds not sufficient for purchase.",
@@ -99,7 +99,7 @@ public class WarrantService : IWarrantService
                 {
                     TotalPrice = totalPrice, UserBalance = user.Portfolio.Cash, Dto = dto,
                 },
-            }, HttpStatusCode.PaymentRequired);
+            };
         }
             
         var warrant = new WarrantPosition
@@ -140,18 +140,18 @@ public class WarrantService : IWarrantService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not buy position",
                 Message = "Failed to buy position.",
                 Exception = e,
                 UserFriendlyMessage = "Something went very wrong. Please try again later.",
                 AdditionalData = new { IsNew = isNew, Dto = dto, UserUid = uid, Message = "Maybe there was a problem with the isin?" },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
         
-    public async Task<OneOf<WarrantPositionResponseDto, ErrorResponse>> SellWarrant(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<WarrantPositionResponseDto>> SellWarrant(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -167,13 +167,13 @@ public class WarrantService : IWarrantService
         if (!isActiveResponse.Active!.Value)
         {
             const string message = "Product can not be bought or sold. This might happen if the product is expired or is knocked out.";
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Product can not be traded",
                 Message = message,
                 UserFriendlyMessage = message,
                 AdditionalData = new { Dto = dto }
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var user = await _database.Users
@@ -183,7 +183,7 @@ public class WarrantService : IWarrantService
         return await SellWarrantInternal(_database, dto, user);
     }
 
-    public async Task<OneOf<WarrantPositionResponseDto, ErrorResponse>> SellWarrantInternal(IApplicationDbContext db, BuyOrSellRequestDto dto, User userWithPortfolio)
+    public async Task<Result<WarrantPositionResponseDto>> SellWarrantInternal(IApplicationDbContext db, BuyOrSellRequestDto dto, User userWithPortfolio)
     {
         var isinWithoutExchangeExtension = ToIsinWithoutExchangeExtension(dto.Isin);
             
@@ -199,23 +199,23 @@ public class WarrantService : IWarrantService
             
         if (warrantPosition is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Warrant not found",
                 Message = $"Warrant with isin: {isinWithoutExchangeExtension} could not be found.",
                 AdditionalData = new {Dto = dto}
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (warrantPosition.NumberOfShares < dto.NumberOfShares)
         {
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Sell failed",
                 Message = "Can't sell more shares than existent",
                 UserFriendlyMessage = "You can't sell more shares than you have.",
                 AdditionalData = new {Dto = dto, Warrant = _mapper.Map<WarrantPositionResponseDto>(warrantPosition)}
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var performance = trResponse.Bid.Price / warrantPosition.BuyInPrice;
@@ -254,7 +254,7 @@ public class WarrantService : IWarrantService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not sell position",
                 Message = "Failed to sell position.",
@@ -267,7 +267,7 @@ public class WarrantService : IWarrantService
                     UserUid = userWithPortfolio.Uid,
                     Message = "Maybe there was a problem with the isin?"
                 },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 

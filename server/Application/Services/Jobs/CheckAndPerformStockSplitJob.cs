@@ -2,7 +2,6 @@
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Domain.Common.Position;
 using Domain.Entities;

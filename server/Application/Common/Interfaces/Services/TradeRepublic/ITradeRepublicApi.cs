@@ -1,4 +1,5 @@
-﻿using Application.Errors.Common;
+﻿using Application.Errors.Types;
+using Application.Models.Types;
 using Domain.Enums;
 using OneOf;
 
@@ -8,5 +9,5 @@ public interface ITradeRepublicApi
 {
     public void AddOngoingRequest(string isin, PositionType positionType, int entityId);
 
-    public Task<OneOf<T, UnexpectedError>> AddRequest<T>(string content, CancellationToken token);
+    public Task<Result<T>> AddRequest<T>(string content, CancellationToken token);
 }

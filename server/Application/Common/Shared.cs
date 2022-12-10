@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.TradeRepublic;
 using Application.Services.TradeRepublic;
 using Domain.Common.Position;
@@ -80,7 +80,7 @@ public static class Shared
         };
     }
         
-    public static async Task<OneOf<T, ErrorResponse>> MakeTrRequestWithService<T>(ITradeRepublicApi trService, string requestString)
+    public static async Task<Result<T>> MakeTrRequestWithService<T>(ITradeRepublicApi trService, string requestString)
     {
         var cts = new CancellationTokenSource();
         T trResponse;
@@ -92,17 +92,11 @@ public static class Shared
                 await trService.AddRequest<T>(requestString, cts.Token);
 
             if (oneOfResult.TryPickT1(out var error, out trResponse))
-                return new ErrorResponse(error, HttpStatusCode.InternalServerError);
+                return error;
         }
         catch (OperationCanceledException e)
         {
-            return new ErrorResponse(new UnexpectedError
-            {
-                Title = "Task timeout",
-                Message = "Fetching product using trade republic api took too long.",
-                AdditionalData = new { requestString },
-                Exception = e,
-            }, HttpStatusCode.InternalServerError);
+            return TradeRepublicRequestTimeout.Default(requestString, e);
         }
         finally { cts.Dispose(); }
 

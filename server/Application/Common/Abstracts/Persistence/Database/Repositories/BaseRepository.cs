@@ -1,8 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Database.Repositories;
-using Application.Errors.Common;
-using Application.Models.Types;
 using Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +38,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
 
             if (entity == null)
             {
-                return new NotFound
+                return new EntityNotFound
                 {
                     Title = "Not found",
                     Message = DefaultErrorMessageWithId(entityId),
@@ -70,7 +68,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
             
             if (entity == null)
             {
-                return new NotFound
+                return new EntityNotFound
                 {
                     Title = "Not found",
                     Message = DefaultErrorMessage(),

@@ -1,9 +1,6 @@
-﻿using System.Net;
-using Application.Common.Interfaces.Persistence;
-using Application.Common.Interfaces.Persistence.Database;
+﻿using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
 using Application.Models.Dtos.OngoingKnockout.Response;
 using Application.Models.Dtos.Shared.OngoingPosition.Request;
 using Application.Models.Dtos.TradeRepublic;
@@ -11,7 +8,6 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using OneOf;
 using Serilog;
 using static Application.Common.Shared;
 
@@ -32,38 +28,38 @@ public class OngoingKnockoutService : IOngoingKnockoutService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<OngoingKnockoutPositionResponseDto, ErrorResponse>> GetOngoingKnockout(int id, string uid)
+    public async Task<Result<OngoingKnockoutPositionResponseDto>> GetOngoingKnockout(int id, string uid)
     {
         var user = await _database.Users.AsQueryable()
             .FirstOrDefaultAsync(u => u.Portfolio.OngoingKnockOutPositions.Any(ow => ow.Id == id));
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"User with uid: {uid} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && uid != user.Uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var knockout = await _database.OngoingKnockoutPositions.FindAsync(id);
 
         if (knockout is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Ongoing knockout not found",
                 Message = $"Ongoing knockout with id: {id} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
 
         _logger.Information("User with user uid {@Uid} fetched ongoing knockout with ongoing knockout id {@OngoingKnockoutId} successfully", uid, id);
@@ -71,7 +67,7 @@ public class OngoingKnockoutService : IOngoingKnockoutService
         return _mapper.Map<OngoingKnockoutPositionResponseDto>(knockout);
     }
         
-    public async Task<OneOf<OngoingKnockoutPositionResponseDto, ErrorResponse>> OpenOngoingKnockout(OngoingPositionRequestDto dto, string uid)
+    public async Task<Result<OngoingKnockoutPositionResponseDto>> OpenOngoingKnockout(OngoingPositionRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -81,13 +77,13 @@ public class OngoingKnockoutService : IOngoingKnockoutService
         if (productInfo.DerivativeInfo.ProductCategoryName is ProductCategory.Turbo)
         {
             const string message = "Product is not Open End Turbo. Only Open End Turbo knockouts can be traded.";
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Product is not Open End Turbo",
                 Message = message,
                 UserFriendlyMessage = message,
                 AdditionalData = new {Dto = dto}
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var isinWithoutExchangeExtension = ToIsinWithoutExchangeExtension(dto.Isin);
@@ -100,13 +96,13 @@ public class OngoingKnockoutService : IOngoingKnockoutService
 
         if (isFulfilled)
         {
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Invalid trade",
                 Message = "Order price is not appropriate for this order type.",
                 UserFriendlyMessage = "Order price is not appropriate for this order type. Please try again.",
                 AdditionalData = new { Dto = dto, trResponse },
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var user = await _database.Users
@@ -138,30 +134,30 @@ public class OngoingKnockoutService : IOngoingKnockoutService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not save ongoing knockout",
                 Message = "Failed to save or process ongoing knockout trade",
                 Exception = e,
                 AdditionalData = new { Dto = dto, OngoingKnockout = ongoingKnockout },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 
-    public async Task<OneOf<OngoingKnockoutPositionResponseDto, ErrorResponse>> CloseOngoingKnockout(CloseOngoingPositionRequestDto dto, string uid)
+    public async Task<Result<OngoingKnockoutPositionResponseDto>> CloseOngoingKnockout(CloseOngoingPositionRequestDto dto, string uid)
     {
         var knockout = await _database.OngoingKnockoutPositions.AsQueryable()
             .FirstOrDefaultAsync(w => w.Id == dto.Id && w.Portfolio.User.Uid == uid);
 
         if (knockout is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Unable to delete ongoing trade",
                 Message = $"The knockout with id: {dto.Id} could not be found or the user does not own this ongoing knockout.",
                 UserFriendlyMessage = "Could not remove knockout. The knockout might already been filled.",
                 AdditionalData = new { dto, uid }
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         try
@@ -176,14 +172,14 @@ public class OngoingKnockoutService : IOngoingKnockoutService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could remove ongoing knockout",
                 Message = "Failed to close position.",
                 Exception = e,
                 UserFriendlyMessage = "Something went very wrong. Please try again later.",
                 AdditionalData = new { dto, uid, Knockout = knockout },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 }

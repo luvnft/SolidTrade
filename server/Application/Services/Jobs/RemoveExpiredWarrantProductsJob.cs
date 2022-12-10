@@ -5,7 +5,7 @@ using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Errors;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.TradeRepublic;
 using Application.Models.Dtos.Warrant.Response;
@@ -57,7 +57,7 @@ public class RemoveExpiredWarrantProductsJob : IBackgroundJob<RemoveExpiredWarra
         var warrantPositions = await database.WarrantPositions
             .Include(w => w.Portfolio).ThenInclude(p => p.User).AsQueryable().ToListAsync();
             
-        var tasks = new List<Task<OneOf<TradeRepublicProductInfoDto, ErrorResponse>>>();
+        var tasks = new List<Task<Result<TradeRepublicProductInfoDto>>>();
             
         foreach (var warrantPosition in warrantPositions)
         {
@@ -68,7 +68,7 @@ public class RemoveExpiredWarrantProductsJob : IBackgroundJob<RemoveExpiredWarra
         var results = await Task.WhenAll(tasks);
 
         var trProductInfos = results.Where(oneOfResult => oneOfResult.IsT0).Select(oneOfResult => oneOfResult.AsT0);
-        var errors = results.Where(oneOfResult => oneOfResult.IsT1).Select(oneOfResult => oneOfResult.AsT1);
+        var errors = results.Where(oneOfResult => oneOfResult.IsT1).Select(oneOfResult => oneOfResult.AsT1).ToList();
 
         if (errors.Any())
         {
@@ -77,7 +77,7 @@ public class RemoveExpiredWarrantProductsJob : IBackgroundJob<RemoveExpiredWarra
             return;
         }
 
-        var warrantsTasks = new List<Task<OneOf<WarrantPositionResponseDto, ErrorResponse>>>();
+        var warrantsTasks = new List<Task<Result<WarrantPositionResponseDto>>>();
         foreach (var trProductInfo in trProductInfos)
         {
             var warrantPosition = warrantPositions.Find(k => k.Isin == trProductInfo.Isin);
@@ -100,7 +100,7 @@ public class RemoveExpiredWarrantProductsJob : IBackgroundJob<RemoveExpiredWarra
         var warrantErrors = warrantResults.Where(oneOfResult => oneOfResult.IsT1).Select(oneOfResult => oneOfResult.AsT1);
 
         foreach (var errorResponse in warrantErrors)
-            _logger.Warning(ApplicationConstants.LogMessageTemplate, errorResponse.Error);
+            _logger.Warning(ApplicationConstants.LogMessageTemplate, errorResponse);
             
         _logger.Information("Removed {@RemovedWarrantPositionCount} expired warrants from database.", warrantPositionDtos.Count());
     }

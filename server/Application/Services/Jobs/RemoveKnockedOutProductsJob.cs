@@ -4,7 +4,7 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Errors;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.TradeRepublic;
 using Domain.Entities;
 using Domain.Enums;
@@ -53,7 +53,7 @@ public class RemoveKnockedOutProductsJob : IBackgroundJob<RemoveKnockedOutProduc
         await using var database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
             
         var knockoutPositions = await database.KnockoutPositions.Include(k => k.Portfolio).AsQueryable().ToListAsync();
-        var tasks = new List<Task<OneOf<TradeRepublicProductInfoDto, ErrorResponse>>>();
+        var tasks = new List<Task<Result<TradeRepublicProductInfoDto>>>();
             
         foreach (var knockoutPosition in knockoutPositions)
         {
@@ -64,7 +64,7 @@ public class RemoveKnockedOutProductsJob : IBackgroundJob<RemoveKnockedOutProduc
         var results = await Task.WhenAll(tasks);
 
         var trProductInfos = results.Where(oneOfResult => oneOfResult.IsT0).Select(oneOfResult => oneOfResult.AsT0);
-        var errors = results.Where(oneOfResult => oneOfResult.IsT1).Select(oneOfResult => oneOfResult.AsT1);
+        var errors = results.Where(oneOfResult => oneOfResult.IsT1).Select(oneOfResult => oneOfResult.AsT1).ToList();
 
         if (errors.Any())
         {
@@ -106,7 +106,7 @@ public class RemoveKnockedOutProductsJob : IBackgroundJob<RemoveKnockedOutProduc
         }
         catch (Exception e)
         {
-            var error = new UnexpectedError
+            var error = new UnexpectedDatabaseError
             {
                 Title = "Failed to save removed knockouts",
                 Message = "Failed to save removed knockouts.",

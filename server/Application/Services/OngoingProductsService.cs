@@ -3,7 +3,7 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Cache;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.TradeRepublic;
 using Domain.Entities;
 using Domain.Enums;
@@ -16,6 +16,7 @@ using static Application.Common.ApplicationConstants;
 
 namespace Application.Services;
 
+// TODO: A lot of code duplication here. Refactor?
 public class OngoingProductsService : IOngoingProductsService
 {
     private static readonly ILogger Logger = Log.ForContext<OngoingProductsService>();
@@ -72,7 +73,7 @@ public class OngoingProductsService : IOngoingProductsService
         if (!isFulfilled)
             return OngoingTradeResponse.WaitingForFill;
         
-        OneOf<TradeRepublicProductInfoDto, ErrorResponse> oneOfResult;
+        Result<TradeRepublicProductInfoDto> oneOfResult;
 
         try
         {
@@ -101,7 +102,7 @@ public class OngoingProductsService : IOngoingProductsService
         {
             // Todo: Notify user.
             const string message = "Ongoing product can not be bought or sold. This might happen if the product is expired or is knocked out.";
-            var err = new TradeFailed
+            var err = new InvalidOrder
             {
                 Title = "Product can not be traded",
                 Message = message,
@@ -140,7 +141,7 @@ public class OngoingProductsService : IOngoingProductsService
 
                     database.OngoingWarrantPositions.Remove(ongoingProduct);
                         
-                    Logger.Warning(LogMessageTemplate, new InsufficientFounds
+                    Logger.Warning(LogMessageTemplate, new InsufficientFunds
                     {
                         Title = "Not enough buying power",
                         Message = message,
@@ -319,7 +320,7 @@ public class OngoingProductsService : IOngoingProductsService
                 // Product is already closed by the user.
                 return OngoingTradeResponse.PositionsAlreadyClosed;
 
-            OneOf<TradeRepublicProductInfoDto, ErrorResponse> oneOfResult;
+            Result<TradeRepublicProductInfoDto> oneOfResult;
 
             try
             {
@@ -348,7 +349,7 @@ public class OngoingProductsService : IOngoingProductsService
             {
                 // Todo: Notify user.
                 const string message = "Ongoing product can not be bought or sold. This might happen if the product is expired or is knocked out.";
-                var err = new TradeFailed
+                var err = new InvalidOrder
                 {
                     Title = "Product can not be traded",
                     Message = message,
@@ -374,7 +375,7 @@ public class OngoingProductsService : IOngoingProductsService
 
                     database.OngoingKnockoutPositions.Remove(ongoingProduct);
                         
-                    Logger.Warning(LogMessageTemplate, new InsufficientFounds
+                    Logger.Warning(LogMessageTemplate, new InsufficientFunds
                     {
                         Title = "Not enough buying power",
                         Message = message,

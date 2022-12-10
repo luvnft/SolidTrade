@@ -17,7 +17,6 @@ namespace Application.Common.Interfaces.Persistence.Database
         public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; }
         public DbSet<ProductImageRelation> ProductImageRelations { get; }
     
-        // TODO: Should be removed after refactor.
         public DatabaseFacade Database { get; }
 
         DbSet<TEntity> DbSet<TEntity>() where TEntity : BaseEntity;

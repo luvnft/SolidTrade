@@ -1,4 +1,4 @@
-﻿using Application.Errors.Common;
+﻿using Application.Errors.Types;
 using Application.Models.Dtos.ProductImage.Request;
 using Application.Models.Dtos.ProductImage.Response;
 using Domain.Enums;
@@ -8,6 +8,6 @@ namespace Application.Common.Interfaces.Services;
 
 public interface IProductImageService
 {
-    public Task<OneOf<GetProductImageResponseDto, ErrorResponse>> GetOrCreateRedirectUrlToImage(
+    public Task<Result<GetProductImageResponseDto>> GetOrCreateRedirectUrlToImage(
         GetProductImageRequestDto dto);
 }

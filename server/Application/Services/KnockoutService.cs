@@ -1,9 +1,6 @@
-﻿using System.Net;
-using Application.Common.Interfaces.Persistence;
-using Application.Common.Interfaces.Persistence.Database;
+﻿using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
 using Application.Models.Dtos.Knockout.Response;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.TradeRepublic;
@@ -11,10 +8,8 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using OneOf;
 using Serilog;
 using static Application.Common.Shared;
-using ErrorResponse = Application.Errors.Common.ErrorResponse;
 
 namespace Application.Services;
 
@@ -33,38 +28,38 @@ public class KnockoutService : IKnockoutService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<KnockoutPositionResponseDto, ErrorResponse>> GetKnockout(int id, string uid)
+    public async Task<Result<KnockoutPositionResponseDto>> GetKnockout(int id, string uid)
     {
         var user = await _database.Users.AsQueryable()
             .FirstOrDefaultAsync(u => u.Portfolio.KnockOutPositions.Any(w => w.Id == id));
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"User with uid: {uid} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && uid != user.Uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var knockoutPosition = await _database.KnockoutPositions.FindAsync(id);
 
         if (knockoutPosition is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Knockout not found",
                 Message = $"Knockout with id: {id} could not be found.",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         _logger.Information("User with user uid {@Uid} fetched knockout with knockout id {@KnockoutId} successfully", uid, id);
@@ -72,7 +67,7 @@ public class KnockoutService : IKnockoutService
         return _mapper.Map<KnockoutPositionResponseDto>(knockoutPosition);
     }
 
-    public async Task<OneOf<KnockoutPositionResponseDto, ErrorResponse>> BuyKnockout(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<KnockoutPositionResponseDto>> BuyKnockout(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -82,13 +77,13 @@ public class KnockoutService : IKnockoutService
         if (productInfo.DerivativeInfo.ProductCategoryName is ProductCategory.Turbo)
         {
             const string message = "Product is not Open End Turbo. Only Open End Turbo knockouts can be traded.";
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Product is not Open End Turbo",
                 Message = message,
                 UserFriendlyMessage = message,
                 AdditionalData = new {Dto = dto}
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         if ((await _trApiService.MakeTrRequest<TradeRepublicProductPriceResponseDto>(GetTradeRepublicProductPriceRequestString(dto.Isin))).TryPickT1(
@@ -103,7 +98,7 @@ public class KnockoutService : IKnockoutService
 
         if (totalPrice > user.Portfolio.Cash)
         {
-            return new ErrorResponse(new InsufficientFounds
+            return new InsufficientFunds
             {
                 Title = "Insufficient funds",
                 Message = "User founds not sufficient for purchase.",
@@ -113,7 +108,7 @@ public class KnockoutService : IKnockoutService
                 {
                     TotalPrice = totalPrice, UserBalance = user.Portfolio.Cash, Dto = dto,
                 },
-            }, HttpStatusCode.PaymentRequired);
+            };
         }
             
         var knockout = new KnockoutPosition
@@ -156,18 +151,18 @@ public class KnockoutService : IKnockoutService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not buy position",
                 Message = "Failed to buy position.",
                 Exception = e,
                 UserFriendlyMessage = "Something went very wrong. Please try again later.",
                 AdditionalData = new { IsNew = isNew, Dto = dto, UserUid = uid, Message = "Maybe there was a problem with the isin?" },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
         
-    public async Task<OneOf<KnockoutPositionResponseDto, ErrorResponse>> SellKnockout(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<KnockoutPositionResponseDto>> SellKnockout(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -192,23 +187,23 @@ public class KnockoutService : IKnockoutService
             
         if (knockoutPosition is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Knockout not found",
                 Message = $"Knockout with isin: {isinWithoutExchangeExtension} could not be found.",
                 AdditionalData = new { Dto = dto }
-            }, HttpStatusCode.NotFound);
+            };
         }
 
         if (knockoutPosition.NumberOfShares < dto.NumberOfShares)
         {
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Sell failed",
                 Message = "Can't sell more shares than existent",
                 UserFriendlyMessage = "You can't sell more shares than you have.",
                 AdditionalData = new { Dto = dto, Knockout = _mapper.Map<KnockoutPositionResponseDto>(knockoutPosition) }
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var performance = trResponse.Bid.Price / knockoutPosition.BuyInPrice;
@@ -246,7 +241,7 @@ public class KnockoutService : IKnockoutService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not sell position",
                 Message = "Failed to sell position.",
@@ -257,7 +252,7 @@ public class KnockoutService : IKnockoutService
                     SoldAll = knockoutPosition.NumberOfShares == dto.NumberOfShares, Dto = dto, UserUid = uid,
                     Message = "Maybe there was a problem with the isin?"
                 },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence.Storage;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Extensions;
 using Application.Models.Types;
 using CloudinaryDotNet;

@@ -2,8 +2,9 @@
 using Application.Common;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.TradeRepublic;
+using Application.Models.Types;
 using Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -85,9 +86,9 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         _requestBodies.Add(id, content);
     }
         
-    public async Task<OneOf<T, UnexpectedError>> AddRequest<T>(string content, CancellationToken token)
+    public async Task<Result<T>> AddRequest<T>(string content, CancellationToken token)
     {
-        var tcs = new TaskCompletionSource<OneOf<T, UnexpectedError>>();
+        var tcs = new TaskCompletionSource<Result<T>>();
         var id = GetNewId();
             
         _runningRequests.Add(id, response =>
@@ -178,7 +179,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         }
         catch (Exception e)
         {
-            _logger.Error(ApplicationConstants.LogMessageTemplate, new UnexpectedError
+            _logger.Error(ApplicationConstants.LogMessageTemplate, new InvalidFormat
             {
                 Title  = "Failed to parse id",
                 Message = "Failed to parse id from trade republic message.",
@@ -197,7 +198,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         {
             var (ongoingWarrantPositions, ongoingKnockoutPositions) = _ongoingProductsService.GetAllOngoingPositions();
 
-            var oneOfExchangeResults = new ConcurrentBag<Task<OneOf<TradeRepublicProductInfoDto, UnexpectedError>>>();
+            var oneOfExchangeResults = new ConcurrentBag<Task<Result<TradeRepublicProductInfoDto>>>();
                 
             string requestStr;
             foreach (var warrantPosition in ongoingWarrantPositions)
@@ -255,7 +256,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         }
         catch (Exception e)
         {
-            _logger.Fatal(ApplicationConstants.LogMessageTemplate, new UnexpectedError
+            _logger.Fatal(ApplicationConstants.LogMessageTemplate, new UnexpectedTradeRepublicRequestError
             {
                 Title = "Failed register ongoing positions",
                 Message = "Unexpected fatal error while trying to register ongoing positions",
@@ -290,7 +291,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
             }
             catch (Exception e)
             {
-                _logger.Error(ApplicationConstants.LogMessageTemplate, new UnexpectedError
+                _logger.Error(ApplicationConstants.LogMessageTemplate, new UnexpectedTradeRepublicRequestError
                 {
                     Title = "Processing ongoing trade failed",
                     Exception = e,
@@ -319,7 +320,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         };
     }
     
-    private OneOf<T, UnexpectedError> ConvertToObject<T>(string content, JsonSerializerSettings jsonSerializerOptions = null)
+    private Result<T> ConvertToObject<T>(string content, JsonSerializerSettings jsonSerializerOptions = null)
     {
         jsonSerializerOptions ??= _jsonSerializerOptions;
             
@@ -337,7 +338,7 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         }
         catch (Exception e)
         {
-            return new UnexpectedError
+            return new InvalidFormat
             {
                 Title = "Json parsing error",
                 Message = "Parsing Trade Republic message response failed.",

@@ -1,8 +1,6 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Database.Repositories;
-using Application.Errors.Common;
-using Application.Models.Types;
 
 namespace Application.Persistence.Database;
 

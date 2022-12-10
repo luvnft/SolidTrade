@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.HistoricalPosition.Response;
 using AutoMapper;
 using Domain.Entities;
@@ -24,26 +24,26 @@ public class HistoricalPositionsService : IHistoricalPositionsService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<IEnumerable<HistoricalPositionResponseDto>, ErrorResponse>> GetHistoricalPositions(int userId, string uid)
+    public async Task<Result<IEnumerable<HistoricalPositionResponseDto>>> GetHistoricalPositions(int userId, string uid)
     {
         var user = await _database.Users.FindAsync(userId);
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"Could not find user with id: {userId}",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && user.Uid != uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var historicalPositions = await _database.HistoricalPositions

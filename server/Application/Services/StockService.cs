@@ -3,7 +3,7 @@ using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Common;
+using Application.Errors.Types;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.Stock.Response;
 using Application.Models.Dtos.TradeRepublic;
@@ -32,38 +32,38 @@ public class StockService : IStockService
         _mapper = mapper;
     }
 
-    public async Task<OneOf<StockPositionResponseDto, ErrorResponse>> GetStock(int id, string uid)
+    public async Task<Result<StockPositionResponseDto>> GetStock(int id, string uid)
     {
         var user = await _database.Users.AsQueryable()
             .FirstOrDefaultAsync(u => u.Portfolio.StockPositions.Any(sp => sp.Id == id));
 
         if (user is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "User not found",
                 Message = $"User with uid: {uid} could not be found or does not own stock with id: {id}.",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         if (!user.HasPublicPortfolio && uid != user.Uid)
         {
-            return new ErrorResponse(new NotAuthorized
+            return new NotAuthorized
             {
                 Title = "Portfolio is private",
                 Message = "Tried to access other user's portfolio",
-            }, HttpStatusCode.Unauthorized);
+            };
         }
 
         var stock = await _database.StockPositions.FindAsync(id);
 
         if (stock is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Stock not found",
                 Message = $"Stock with id: {id} could not be found",
-            }, HttpStatusCode.NotFound);
+            };
         }
             
         _logger.Information("User with user uid {@Uid} fetched stock with stock id {@StockId} successfully", uid, id);
@@ -71,7 +71,7 @@ public class StockService : IStockService
         return _mapper.Map<StockPositionResponseDto>(stock);
     }
 
-    public async Task<OneOf<StockPositionResponseDto, ErrorResponse>> BuyStock(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<StockPositionResponseDto>> BuyStock(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -90,7 +90,7 @@ public class StockService : IStockService
 
         if (totalPrice > user.Portfolio.Cash)
         {
-            return new ErrorResponse(new InsufficientFounds
+            return new InsufficientFunds
             {
                 Title = "Insufficient funds",
                 Message = "User founds not sufficient for purchase.",
@@ -99,7 +99,7 @@ public class StockService : IStockService
                 {
                     TotalPrice = totalPrice, UserBalance = user.Portfolio.Cash, Dto = dto,
                 },
-            }, HttpStatusCode.PaymentRequired);
+            };
         }
             
         var stock = new StockPosition
@@ -142,18 +142,18 @@ public class StockService : IStockService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not buy position",
                 Message = "Failed to buy position.",
                 Exception = e,
                 UserFriendlyMessage = "Something went very wrong. Please try again later.",
                 AdditionalData = new { IsNew = isNew, Dto = dto, UserUid = uid, Message = "Maybe there was a problem with the isin?" },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
         
-    public async Task<OneOf<StockPositionResponseDto, ErrorResponse>> SellStock(BuyOrSellRequestDto dto, string uid)
+    public async Task<Result<StockPositionResponseDto>> SellStock(BuyOrSellRequestDto dto, string uid)
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
@@ -178,23 +178,23 @@ public class StockService : IStockService
             
         if (stockPosition is null)
         {
-            return new ErrorResponse(new NotFound
+            return new EntityNotFound
             {
                 Title = "Stock not found",
                 Message = $"Stock with isin: {ToIsinWithoutExchangeExtension(dto.Isin)} could not be found.",
                 AdditionalData = new { Dto = dto }
-            }, HttpStatusCode.NotFound);
+            };
         }
 
         if (stockPosition.NumberOfShares < dto.NumberOfShares)
         {
-            return new ErrorResponse(new TradeFailed
+            return new InvalidOrder
             {
                 Title = "Sell failed",
                 Message = "Can't sell more shares than existent",
                 UserFriendlyMessage = "You can't sell more shares than you have.",
                 AdditionalData = new { Dto = dto, Stock = _mapper.Map<StockPositionResponseDto>(stockPosition) }
-            }, HttpStatusCode.BadRequest);
+            };
         }
             
         var performance = trResponse.Bid.Price / stockPosition.BuyInPrice;
@@ -232,7 +232,7 @@ public class StockService : IStockService
         }
         catch (Exception e)
         {
-            return new ErrorResponse(new UnexpectedError
+            return new UnexpectedError
             {
                 Title = "Could not sell position",
                 Message = "Failed to sell position.",
@@ -243,7 +243,7 @@ public class StockService : IStockService
                     SoldAll = stockPosition.NumberOfShares == dto.NumberOfShares, Dto = dto, UserUid = uid,
                     Message = "Maybe there was a problem with the isin?"
                 },
-            }, HttpStatusCode.InternalServerError);
+            };
         }
     }
 
