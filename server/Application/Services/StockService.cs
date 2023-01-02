@@ -1,9 +1,6 @@
-﻿using System.Net;
-using Application.Common.Interfaces.Persistence;
-using Application.Common.Interfaces.Persistence.Database;
+﻿using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.TradeRepublic;
-using Application.Errors.Types;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.Stock.Response;
 using Application.Models.Dtos.TradeRepublic;
@@ -11,7 +8,6 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using OneOf;
 using Serilog;
 using static Application.Common.Shared;
 
@@ -22,50 +18,32 @@ public class StockService : IStockService
     private readonly ILogger _logger = Log.ForContext<StockService>();
         
     private readonly ITradeRepublicApiService _trApiService;
-    private readonly IApplicationDbContext _database;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public StockService(IApplicationDbContext database, IMapper mapper, ITradeRepublicApiService trApiService)
+    public StockService(IUnitOfWork unitOfWork, IMapper mapper, ITradeRepublicApiService trApiService)
     {
         _trApiService = trApiService;
-        _database = database;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<Result<StockPositionResponseDto>> GetStock(int id, string uid)
     {
-        var user = await _database.Users.AsQueryable()
-            .FirstOrDefaultAsync(u => u.Portfolio.StockPositions.Any(sp => sp.Id == id));
+        var userResult = await _unitOfWork.Users
+            .FirstAsync(u => u.Portfolio.StockPositions.Any(sp => sp.Id == id));
 
-        if (user is null)
-        {
-            return new EntityNotFound
-            {
-                Title = "User not found",
-                Message = $"User with uid: {uid} could not be found or does not own stock with id: {id}.",
-            };
-        }
-            
+        if (userResult.TryTakeError(out var error, out var user))
+            return error;
+
         if (!user.HasPublicPortfolio && uid != user.Uid)
-        {
-            return new NotAuthorized
-            {
-                Title = "Portfolio is private",
-                Message = "Tried to access other user's portfolio",
-            };
-        }
+            return NotAuthorized.PrivatePortfolio();
 
-        var stock = await _database.StockPositions.FindAsync(id);
+        var stockResult = await _unitOfWork.Stocks.FindByIdAsync(id);
 
-        if (stock is null)
-        {
-            return new EntityNotFound
-            {
-                Title = "Stock not found",
-                Message = $"Stock with id: {id} could not be found",
-            };
-        }
-            
+        if (stockResult.TryTakeError(out error, out var stock))
+            return error;
+
         _logger.Information("User with user uid {@Uid} fetched stock with stock id {@StockId} successfully", uid, id);
 
         return _mapper.Map<StockPositionResponseDto>(stock);
@@ -75,17 +53,19 @@ public class StockService : IStockService
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
-        if (result.TryPickT1(out var errorResponse, out _))
-            return errorResponse;
+        if (result.TryPickT1(out var error, out _))
+            return error;
 
         if ((await _trApiService.MakeTrRequest<TradeRepublicProductPriceResponseDto>(GetTradeRepublicProductPriceRequestString(dto.Isin))).TryPickT1(
-                out errorResponse, out var trResponse))
-            return errorResponse;
+                out error, out var trResponse))
+            return error;
 
-        var user = await _database.Users
-            .Include(u => u.Portfolio)
-            .FirstOrDefaultAsync(u => u.Uid == uid);
-            
+        var userResult = await _unitOfWork.Users
+            .FirstAsync(u => u.Uid == uid, u => u.Portfolio);
+
+        if (userResult.TryTakeError(out error, out var user))
+            return error;
+        
         var totalPrice = trResponse.Ask.Price * dto.NumberOfShares;
 
         if (totalPrice > user.Portfolio.Cash)
@@ -126,17 +106,17 @@ public class StockService : IStockService
         try
         {
             if (isNew)
-                newStock = _database.StockPositions.Add(newStock).Entity;
+                newStock = _unitOfWork.Stocks.Add(newStock).Entity;
             else
-                newStock = _database.StockPositions.Update(newStock).Entity;
+                newStock = _unitOfWork.Stocks.Update(newStock).Entity;
 
             user.Portfolio.Cash -= totalPrice;
 
-            _database.Portfolios.Update(user.Portfolio);
-            _database.HistoricalPositions.Add(historicalPositions);
+            _unitOfWork.Portfolios.Update(user.Portfolio);
+            _unitOfWork.HistoricalPositions.Add(historicalPositions);
                 
             _logger.Information("Trying to save buy stock with isin {@Isin} for User with uid {@Uid}", dto.Isin, uid);
-            await _database.SaveChangesAsync();
+            await _unitOfWork.Commit();
             _logger.Information("Save buy stock with isin {@Isin} for User with uid {@Uid} was successful", dto.Isin, uid);
             return _mapper.Map<StockPositionResponseDto>(newStock);
         }
@@ -157,35 +137,26 @@ public class StockService : IStockService
     {
         var result = await _trApiService.ValidateRequest(dto.Isin);
 
-        if (result.TryPickT1(out var errorResponse, out _))
-            return errorResponse;
+        if (result.TryPickT1(out var error, out _))
+            return error;
 
         var isinWithoutExchangeExtension = ToIsinWithoutExchangeExtension(dto.Isin);
 
         if ((await _trApiService.MakeTrRequest<TradeRepublicProductPriceResponseDto>(GetTradeRepublicProductPriceRequestString(dto.Isin))).TryPickT1(
-                out errorResponse, out var trResponse))
-            return errorResponse;
-
-        var user = await _database.Users
-            .Include(u => u.Portfolio)
-            .FirstOrDefaultAsync(u => u.Uid == uid);
+                out error, out var trResponse))
+            return error;
 
         var totalGain = trResponse.Bid.Price * dto.NumberOfShares;
 
-        var stockPosition = await _database.StockPositions.AsQueryable()
-            .FirstOrDefaultAsync(w =>
-                EF.Functions.Like(w.Isin, $"%{isinWithoutExchangeExtension}%") && user.Portfolio.Id == w.Portfolio.Id);
-            
-        if (stockPosition is null)
-        {
-            return new EntityNotFound
-            {
-                Title = "Stock not found",
-                Message = $"Stock with isin: {ToIsinWithoutExchangeExtension(dto.Isin)} could not be found.",
-                AdditionalData = new { Dto = dto }
-            };
-        }
+        var stockPositionResult = await _unitOfWork.Stocks
+            .FirstAsync(s =>
+                EF.Functions.Like(s.Isin, $"%{isinWithoutExchangeExtension}%")
+                && s.Portfolio.User.Uid == uid, 
+                s => s.Portfolio);
 
+        if (stockPositionResult.TryTakeError(out error, out var stockPosition))
+            return error;
+        
         if (stockPosition.NumberOfShares < dto.NumberOfShares)
         {
             return new InvalidOrder
@@ -205,28 +176,30 @@ public class StockService : IStockService
             Isin = isinWithoutExchangeExtension,
             Performance = performance,
             PositionType = PositionType.Stock,
-            UserId = user.Id,
+            UserId = stockPosition.Portfolio.UserId,
             BuyInPrice = trResponse.Bid.Price,
             NumberOfShares = dto.NumberOfShares,
         };
 
         try
         {
-            user.Portfolio.Cash += totalGain;
-                
+            stockPosition.Portfolio.Cash += totalGain;
+
             if (stockPosition.NumberOfShares == dto.NumberOfShares)
-                _database.StockPositions.Remove(stockPosition);
+            {
+                _unitOfWork.Stocks.Remove(stockPosition);
+            }
             else
             {
                 stockPosition.NumberOfShares -= dto.NumberOfShares;
-                _database.StockPositions.Update(stockPosition);
+                _unitOfWork.Stocks.Update(stockPosition);
             }
 
-            _database.Portfolios.Update(user.Portfolio);
-            _database.HistoricalPositions.Add(historicalPositions);
+            _unitOfWork.Portfolios.Update(stockPosition.Portfolio);
+            _unitOfWork.HistoricalPositions.Add(historicalPositions);
                 
             _logger.Information("Trying to save sell stock with isin {@Isin} for User with uid {@Uid}", dto.Isin, uid);
-            await _database.SaveChangesAsync();
+            await _unitOfWork.Commit();
             _logger.Information("Save sell stock with isin {@Isin} for User with uid {@Uid} was successful", dto.Isin, uid);
             return _mapper.Map<StockPositionResponseDto>(stockPosition);
         }
@@ -249,11 +222,11 @@ public class StockService : IStockService
 
     private async Task<(bool, StockPosition)> AddOrUpdate(StockPosition stockPosition, int portfolioId)
     {
-        var stock = await _database.StockPositions.AsQueryable()
-            .FirstOrDefaultAsync(w =>
-                EF.Functions.Like(w.Isin, $"%{stockPosition.Isin}%") && portfolioId == w.Portfolio.Id);
+        var stockResult = await _unitOfWork.Stocks
+            .FirstAsync(s =>
+                EF.Functions.Like(s.Isin, $"%{stockPosition.Isin}%") && portfolioId == s.Portfolio.Id);
 
-        if (stock is null)
+        if (stockResult.TryTakeError(out _, out var stock))
             return (true, stockPosition);
 
         var position = CalculateNewPosition(stockPosition, stock);

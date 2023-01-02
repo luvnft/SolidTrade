@@ -3,6 +3,7 @@ using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Database.Repositories;
 using Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Application.Common.Abstracts.Persistence.Database.Repositories;
 
@@ -73,6 +74,11 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
                     Title = "Not found",
                     Message = DefaultErrorMessage(),
                     UserFriendlyMessage = ErrorMessages.NotFoundErrorMessage,
+                    // TODO: Check if this works
+                    AdditionalData = new
+                    {
+                        Expression = predicate.ToString()
+                    }
                 };
             }
 
@@ -103,13 +109,13 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         }
     }
 
-    public void Add(TEntity entity)
+    public EntityEntry<TEntity> Add(TEntity entity)
         => Set.Add(entity);
 
     public void AddRange(IEnumerable<TEntity> entities)
         => Set.AddRange(entities);
 
-    public void Update(TEntity entity)
+    public EntityEntry<TEntity> Update(TEntity entity)
         => Set.Update(entity);
 
     public void UpdateRange(IEnumerable<TEntity> entities)

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Application.Models.Types;
 using Domain.Entities.Base;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Application.Common.Interfaces.Persistence.Database.Repositories;
 
@@ -12,10 +12,10 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     Task<Result<TEntity>> FirstAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationPropertyPaths);
     Task<Result<List<TEntity>>> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationPropertyPaths);
     
-    void Add(TEntity entity);
+    EntityEntry<TEntity> Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entities);
     
-    void Update(TEntity entity);
+    EntityEntry<TEntity> Update(TEntity entity);
     void UpdateRange(IEnumerable<TEntity> entities);
     
     void Remove(TEntity entity);
