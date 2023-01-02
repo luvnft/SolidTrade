@@ -8,5 +8,6 @@ public interface IUnitOfWork
 {
     IStockRepository Stocks { get; }
     IUserRepository Users { get; }
+    IPortfolioRepository Portfolios { get; }
     Task<Result<Success>> Commit();
 }
