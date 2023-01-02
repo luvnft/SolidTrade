@@ -9,12 +9,16 @@ public class UnitOfWork : IUnitOfWork
     private readonly IApplicationDbContext _context;
     public IStockRepository Stocks { get; }
     public IUserRepository Users { get; }
-    
-    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks)
+    public IPortfolioRepository Portfolios { get; }
+    public IHistoricalPositionRepository HistoricalPositions { get; }
+
+    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions)
     {
         _context = context;
         Users = users;
         Stocks = stocks;
+        Portfolios = portfolios;
+        HistoricalPositions = historicalPositions;
     }
 
     public async Task<Result<OneOf.Types.Success>> Commit()
