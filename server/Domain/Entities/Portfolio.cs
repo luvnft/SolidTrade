@@ -14,9 +14,7 @@ public class Portfolio : BaseEntity
     [Required]
     public decimal InitialCash { get; set; }
         
-    public ICollection<StockPosition> StockPositions { get; set; }
-    public ICollection<WarrantPosition> WarrantPositions { get; set; }
-    public ICollection<KnockoutPosition> KnockOutPositions { get; set; }
+    public ICollection<Position> Positions { get; set; }
     public ICollection<OngoingWarrantPosition> OngoingWarrantPositions { get; set; }
     public ICollection<OngoingKnockoutPosition> OngoingKnockOutPositions { get; set; }
 }

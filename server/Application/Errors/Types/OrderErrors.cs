@@ -11,6 +11,16 @@ public class InvalidOrder : BaseError
 public class InsufficientFunds : BaseError
 {
     public override HttpStatusCode Code => HttpStatusCode.PaymentRequired;
+    public static InsufficientFunds Default(decimal totalPrice, decimal userBalance)
+    {
+        return new InsufficientFunds
+        {
+            Title = "Insufficient funds",
+            Message = "User founds not sufficient for purchase.",
+            UserFriendlyMessage =
+                $"Balance insufficient. The total price is {totalPrice} but you have a balance of {userBalance}.",
+        };
+    }
 }
 
 public class StockMarketClosed : BaseError

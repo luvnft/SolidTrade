@@ -27,9 +27,7 @@ public class PortfolioRepository : BaseRepository<Portfolio>, IPortfolioReposito
     private static Expression<Func<Portfolio, object>>[] AllPortfolioNavigationProperties => new Expression<Func<Portfolio, object>>[]
     {
         p => p.User,
-        p => p.WarrantPositions,
-        p => p.StockPositions,
-        p => p.KnockOutPositions,
+        p => p.Positions,
         p => p.OngoingWarrantPositions,
         p => p.OngoingKnockOutPositions
     };

@@ -10,15 +10,17 @@ public class UnitOfWork : IUnitOfWork
     public IStockRepository Stocks { get; }
     public IUserRepository Users { get; }
     public IPortfolioRepository Portfolios { get; }
+    public IPositionRepository Positions { get; }
     public IHistoricalPositionRepository HistoricalPositions { get; }
 
-    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions)
+    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions, IPositionRepository positions)
     {
         _context = context;
         Users = users;
         Stocks = stocks;
         Portfolios = portfolios;
         HistoricalPositions = historicalPositions;
+        Positions = positions;
     }
 
     public async Task<Result<OneOf.Types.Success>> Commit()

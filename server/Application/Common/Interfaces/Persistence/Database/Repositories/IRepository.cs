@@ -15,7 +15,12 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     EntityEntry<TEntity> Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entities);
     
-    EntityEntry<TEntity> Update(TEntity entity);
+    /// <summary>
+    /// Add or update an entity. If the entity id is 0, it will be added. Otherwise, it will be updated.
+    /// </summary>
+    /// <param name="entity">The entity that should be add or updated.</param>
+    /// <returns>Provides access to change tracking information and operations for a given entity.</returns>
+    EntityEntry<TEntity> AddOrUpdate(TEntity entity);
     void UpdateRange(IEnumerable<TEntity> entities);
     
     void Remove(TEntity entity);

@@ -115,7 +115,8 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
     public void AddRange(IEnumerable<TEntity> entities)
         => Set.AddRange(entities);
 
-    public EntityEntry<TEntity> Update(TEntity entity)
+    /// <inheritdoc />
+    public EntityEntry<TEntity> AddOrUpdate(TEntity entity)
         => Set.Update(entity);
 
     public void UpdateRange(IEnumerable<TEntity> entities)

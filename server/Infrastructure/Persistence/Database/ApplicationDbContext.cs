@@ -21,9 +21,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<HistoricalPosition> HistoricalPositions { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
-    public DbSet<StockPosition> StockPositions { get; set; }
-    public DbSet<WarrantPosition> WarrantPositions { get; set; }
-    public DbSet<KnockoutPosition> KnockoutPositions { get; set; }
+    public DbSet<Position> Positions { get; set; }
     public DbSet<OngoingWarrantPosition> OngoingWarrantPositions { get; set; }
     public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; set; }
     public DbSet<ProductImageRelation> ProductImageRelations { get; set; }

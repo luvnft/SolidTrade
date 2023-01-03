@@ -8,6 +8,7 @@ public interface IUnitOfWork
     IStockRepository Stocks { get; }
     IUserRepository Users { get; }
     IPortfolioRepository Portfolios { get; }
+    IPositionRepository Positions { get; }
     IHistoricalPositionRepository HistoricalPositions { get; }
     Task<Result<Success>> Commit();
 }

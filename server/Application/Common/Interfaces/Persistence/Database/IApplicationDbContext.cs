@@ -10,9 +10,7 @@ namespace Application.Common.Interfaces.Persistence.Database
         public DbSet<HistoricalPosition> HistoricalPositions { get; }
         public DbSet<User> Users { get; }
         public DbSet<Portfolio> Portfolios { get; }
-        public DbSet<StockPosition> StockPositions { get; }
-        public DbSet<WarrantPosition> WarrantPositions { get; }
-        public DbSet<KnockoutPosition> KnockoutPositions { get; }
+        public DbSet<Position> Positions { get; }
         public DbSet<OngoingWarrantPosition> OngoingWarrantPositions { get; }
         public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; }
         public DbSet<ProductImageRelation> ProductImageRelations { get; }
