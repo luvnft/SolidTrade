@@ -34,9 +34,6 @@ public static class ConfigureServices
         services.AddTransient<IHistoricalPositionRepository, HistoricalPositionRepository>();
         
         services.AddTransient<IUserService, UserService>();
-        services.AddTransient<IStockService, StockService>();
-        services.AddTransient<IWarrantService, WarrantService>();
-        services.AddTransient<IKnockoutService, KnockoutService>();
         services.AddTransient<IPortfolioService, PortfolioService>();
         services.AddTransient<IProductImageService, ProductImageService>();
         services.AddTransient<IOngoingWarrantService, OngoingWarrantService>();
