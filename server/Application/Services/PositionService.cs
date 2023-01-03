@@ -48,8 +48,20 @@ public class PositionService : IPositionService
     public async Task<Result<PositionResponseDto>> BuyPositionAsync(BuyOrSellRequestDto dto, string uid, PositionType type)
     {
         var productCanBeTradedQuery = await _trApiService.ValidateRequest(dto.Isin);
-        if (productCanBeTradedQuery.TryTakeError(out var error, out _))
+        if (productCanBeTradedQuery.TryTakeError(out var error, out var productInfo))
             return error;
+
+        if (type is PositionType.Knockout && productInfo.DerivativeInfo.ProductCategoryName is ProductCategory.Turbo)
+        {
+            const string message = "Product is not Open End Turbo. Only Open End Turbo knockouts can be traded.";
+            return new InvalidOrder
+            {
+                Title = "Product is not Open End Turbo",
+                Message = message,
+                UserFriendlyMessage = message,
+                AdditionalData = new { Dto = dto }
+            };
+        }
 
         var productPriceQuery = await _trApiService
             .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductInfo());
