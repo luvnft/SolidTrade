@@ -177,7 +177,7 @@ public class UserService : IUserService
         if (newProfilePicture is not null)
             user.ProfilePictureUrl = newProfilePicture;
         
-        _unitOfWork.Users.Update(user);
+        _unitOfWork.Users.AddOrUpdate(user);
         if ((await _unitOfWork.Commit()).TryTakeError(out error, out _))
             return error;
 

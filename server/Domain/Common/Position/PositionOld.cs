@@ -1,6 +1,6 @@
 ﻿namespace Domain.Common.Position;
 
-public class Position : IPosition
+public class PositionOld : IPosition
 {
     public int Id { get; set; }
     public string Isin { get; set; }
