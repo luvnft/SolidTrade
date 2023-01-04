@@ -46,9 +46,9 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         };
             
         /*
-        This turns off web socket logs. This is done as the trade republic api closes all connections periodically and
-        would result in logging fatal logs even though these are expected.
-        Since there is customizable way to fix this logging issue we turn off logging completely.
+            This turns off web socket logs. This is done as the trade republic api closes all connections periodically and
+            would result in logging fatal logs even though these are expected.
+            Since there is no customizable way to fix this logging issue we turn off logging completely.
         */
         _webSocket = new WebSocket(configuration["TradeRepublic:ApiEndpoint"]) { Log = { Output = (_, _) => {} } };
             
