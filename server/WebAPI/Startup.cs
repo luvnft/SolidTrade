@@ -6,7 +6,7 @@ using Application.Common.Interfaces.Services.Jobs;
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Errors.Types;
 using Application.Models.MappingProfiles;
-using Application.Services.Jobs;
+// using Application.Services.Jobs;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Infrastructure;
@@ -139,17 +139,18 @@ public class Startup
             });
         }
 
-        var removeKnockedOutProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveKnockedOutProductsJob>>();
-        var removeOngoingExpiredTradeJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveOngoingExpiredTradeJob>>();
-        var checkAndPerformStockSplitJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<CheckAndPerformStockSplitJob>>();
-        var removeExpiredWarrantProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveExpiredWarrantProductsJob>>();
-        var removeUnusedProductImageRelationsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveUnusedProductImageRelationsJob>>();
+        // TODO: Use GetRequiredService instead of GetServiceOrThrow 
+        // var removeKnockedOutProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveKnockedOutProductsJob>>();
+        // var removeOngoingExpiredTradeJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveOngoingExpiredTradeJob>>();
+        // var checkAndPerformStockSplitJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<CheckAndPerformStockSplitJob>>();
+        // var removeExpiredWarrantProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveExpiredWarrantProductsJob>>();
+        // var removeUnusedProductImageRelationsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveUnusedProductImageRelationsJob>>();
             
-        recurringJobManager.AddOrUpdate(removeOngoingExpiredTradeJob.JobTitle, () => removeOngoingExpiredTradeJob.StartAsync(), Cron.Daily);
-        recurringJobManager.AddOrUpdate(removeExpiredWarrantProductsJob.JobTitle, () => removeExpiredWarrantProductsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
-        recurringJobManager.AddOrUpdate(removeKnockedOutProductsJob.JobTitle, () => removeKnockedOutProductsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
-        recurringJobManager.AddOrUpdate(checkAndPerformStockSplitJob.JobTitle, () => checkAndPerformStockSplitJob.StartAsync(), Cron.Daily);
-        recurringJobManager.AddOrUpdate(removeUnusedProductImageRelationsJob.JobTitle, () => removeUnusedProductImageRelationsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
+        // recurringJobManager.AddOrUpdate(removeOngoingExpiredTradeJob.JobTitle, () => removeOngoingExpiredTradeJob.StartAsync(), Cron.Daily);
+        // recurringJobManager.AddOrUpdate(removeExpiredWarrantProductsJob.JobTitle, () => removeExpiredWarrantProductsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
+        // recurringJobManager.AddOrUpdate(removeKnockedOutProductsJob.JobTitle, () => removeKnockedOutProductsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
+        // recurringJobManager.AddOrUpdate(checkAndPerformStockSplitJob.JobTitle, () => checkAndPerformStockSplitJob.StartAsync(), Cron.Daily);
+        // recurringJobManager.AddOrUpdate(removeUnusedProductImageRelationsJob.JobTitle, () => removeUnusedProductImageRelationsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));
   
         // Ensures the trade republic service is being instantiated at the beginning of the application.
         app.ApplicationServices.GetService<ITradeRepublicApiService>();
