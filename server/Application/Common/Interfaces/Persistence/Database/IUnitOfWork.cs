@@ -5,7 +5,6 @@ namespace Application.Common.Interfaces.Persistence.Database;
 
 public interface IUnitOfWork : IDisposable
 {
-    IStockRepository Stocks { get; }
     IUserRepository Users { get; }
     IPortfolioRepository Portfolios { get; }
     IPositionRepository Positions { get; }

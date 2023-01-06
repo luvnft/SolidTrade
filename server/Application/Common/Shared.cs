@@ -29,20 +29,6 @@ public static class Shared
         return i == -1 ? isin.Trim().ToUpper() : isin[..i].Trim().ToUpper();
     }
         
-    public static IPosition CalculateNewPosition(IPosition p1, IPosition p2)
-    {
-        PositionOld positionOld = new PositionOld
-        {
-            NumberOfShares = p1.NumberOfShares + p2.NumberOfShares,
-        };
-
-        positionOld.BuyInPrice =
-            (p1.BuyInPrice * p1.NumberOfShares +
-             p2.BuyInPrice * p2.NumberOfShares) / positionOld.NumberOfShares;
-
-        return positionOld;
-    }
-                
     public static bool GetOngoingProductHandler(OrderType type, TradeRepublicProductPriceResponseDto value, decimal price)
     {
         return type switch

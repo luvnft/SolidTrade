@@ -7,18 +7,16 @@ namespace Application.Persistence.Database;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly IApplicationDbContext _context;
-    public IStockRepository Stocks { get; }
     public IUserRepository Users { get; }
     public IPortfolioRepository Portfolios { get; }
     public IPositionRepository Positions { get; }
     public IHistoricalPositionRepository HistoricalPositions { get; }
     public IStandingOrderRepository StandingOrders { get; }
 
-    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions, IPositionRepository positions, IStandingOrderRepository standingOrders)
+    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions, IPositionRepository positions, IStandingOrderRepository standingOrders)
     {
         _context = context;
         Users = users;
-        Stocks = stocks;
         Portfolios = portfolios;
         HistoricalPositions = historicalPositions;
         Positions = positions;
