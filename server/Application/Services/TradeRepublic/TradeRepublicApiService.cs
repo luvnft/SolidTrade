@@ -2,6 +2,7 @@
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Models.Dtos.TradeRepublic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using static Application.Common.Shared;
 using Success = OneOf.Types.Success;
 
@@ -9,7 +10,7 @@ namespace Application.Services.TradeRepublic;
 
 public class TradeRepublicApiService : TradeRepublicApi, ITradeRepublicApiService
 {
-    public TradeRepublicApiService(IConfiguration configuration, IStandingOrderHandlerService standingOrderService) : base(configuration, standingOrderService)
+    public TradeRepublicApiService(IConfiguration configuration, IServiceScopeFactory scopeFactory) : base(configuration, scopeFactory)
     {
     }
 
