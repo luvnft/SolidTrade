@@ -9,7 +9,7 @@ namespace Application.Services.TradeRepublic;
 
 public class TradeRepublicApiService : TradeRepublicApi, ITradeRepublicApiService
 {
-    public TradeRepublicApiService(IConfiguration configuration, IOngoingProductsService ongoingProductsService) : base(configuration, ongoingProductsService)
+    public TradeRepublicApiService(IConfiguration configuration, IStandingOrderHandlerService standingOrderService) : base(configuration, standingOrderService)
     {
     }
 

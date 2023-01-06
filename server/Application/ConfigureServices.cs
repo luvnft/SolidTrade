@@ -18,7 +18,6 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IOngoingProductsService, OngoingProductsService>();
         services.AddSingleton<ICacheService, CacheService>();
         services.AddSingleton<IBackgroundJob<RemoveKnockedOutProductsJob>, RemoveKnockedOutProductsJob>();
         services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
@@ -31,13 +30,12 @@ public static class ConfigureServices
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IStockRepository, StockRepository>();
         services.AddTransient<IPortfolioRepository, PortfolioRepository>();
+        services.AddTransient<IStandingOrderHandlerService, StandingOrderHandlerService>();
         services.AddTransient<IHistoricalPositionRepository, HistoricalPositionRepository>();
         
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IPortfolioService, PortfolioService>();
         services.AddTransient<IProductImageService, ProductImageService>();
-        services.AddTransient<IOngoingWarrantService, OngoingWarrantService>();
-        services.AddTransient<IOngoingKnockoutService, OngoingKnockoutService>();
         services.AddTransient<IHistoricalPositionsService, HistoricalPositionsService>();
 
         return services;

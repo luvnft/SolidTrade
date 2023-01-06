@@ -12,8 +12,9 @@ public class UnitOfWork : IUnitOfWork
     public IPortfolioRepository Portfolios { get; }
     public IPositionRepository Positions { get; }
     public IHistoricalPositionRepository HistoricalPositions { get; }
+    public IStandingOrderRepository StandingOrders { get; }
 
-    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions, IPositionRepository positions)
+    public UnitOfWork(IApplicationDbContext context, IUserRepository users, IStockRepository stocks, IPortfolioRepository portfolios, IHistoricalPositionRepository historicalPositions, IPositionRepository positions, IStandingOrderRepository standingOrders)
     {
         _context = context;
         Users = users;
@@ -21,6 +22,7 @@ public class UnitOfWork : IUnitOfWork
         Portfolios = portfolios;
         HistoricalPositions = historicalPositions;
         Positions = positions;
+        StandingOrders = standingOrders;
     }
 
     public async Task<Result<OneOf.Types.Success>> Commit()
@@ -41,4 +43,7 @@ public class UnitOfWork : IUnitOfWork
             };
         }
     }
+
+    // TODO: Verify that this is the correct way to dispose of the context.
+    public void Dispose() => _context?.Dispose();
 }

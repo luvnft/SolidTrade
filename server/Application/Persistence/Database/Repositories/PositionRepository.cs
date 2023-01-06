@@ -11,9 +11,9 @@ public class PositionRepository : BaseRepository<Position>, IPositionRepository
     {
     }
 
-    public async Task<Result<(bool PositionAlreadyExists, Position ExisingPosition)>> ShouldAddOrUpdatePositionAsync(Position position, int portfolioId)
+    public async Task<Result<(bool PositionAlreadyExists, Position ExisingPosition)>> ShouldAddOrUpdatePositionAsync(string positionIsin, int portfolioId)
     {
-        var existingPositionQuery = await FindPositionAsync(position.Isin, portfolioId);
+        var existingPositionQuery = await FindPositionAsync(positionIsin, portfolioId);
         if (existingPositionQuery.TryTakeResult(out var existingPosition, out var error))
             return (true, existingPosition);
 

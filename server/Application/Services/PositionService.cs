@@ -96,7 +96,7 @@ public class PositionService : IPositionService
             NumberOfShares = dto.NumberOfShares,
         };
 
-        var positionExistQuery = await _unitOfWork.Positions.ShouldAddOrUpdatePositionAsync(position, user.Portfolio.Id);
+        var positionExistQuery = await _unitOfWork.Positions.ShouldAddOrUpdatePositionAsync(position.Isin, user.Portfolio.Id);
         if (positionExistQuery.TryTakeError(out error, out var result))
             return error;
 

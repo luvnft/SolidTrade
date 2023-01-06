@@ -7,7 +7,7 @@
 public struct CacheEntry<T>
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the the cache is Expired or not.
+    /// Gets or sets a value indicating whether the the cache is expired or not. Even if there was never a cache entry, this value will be true.
     /// </summary>
     public bool Expired { get; set; }
 

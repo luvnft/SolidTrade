@@ -31,52 +31,30 @@ public static class Shared
         
     public static IPosition CalculateNewPosition(IPosition p1, IPosition p2)
     {
-        Position position = new Position
+        PositionOld positionOld = new PositionOld
         {
             NumberOfShares = p1.NumberOfShares + p2.NumberOfShares,
         };
 
-        position.BuyInPrice =
+        positionOld.BuyInPrice =
             (p1.BuyInPrice * p1.NumberOfShares +
-             p2.BuyInPrice * p2.NumberOfShares) / position.NumberOfShares;
+             p2.BuyInPrice * p2.NumberOfShares) / positionOld.NumberOfShares;
 
-        return position;
+        return positionOld;
     }
                 
-    public static string GetOrderName(EnterOrExitPositionType type)
-    {
-        return type switch
-        {
-            EnterOrExitPositionType.BuyLimitOrder => "buy limit",
-            EnterOrExitPositionType.BuyStopOrder => "buy stop",
-            EnterOrExitPositionType.SellLimitOrder => "take profit",
-            EnterOrExitPositionType.SellStopOrder => "stop loss",
-        };
-    }
-
-    public static BuyOrSell IsBuyOrSell(EnterOrExitPositionType type)
-    {
-        return type switch
-        {
-            EnterOrExitPositionType.BuyLimitOrder => BuyOrSell.Buy,
-            EnterOrExitPositionType.BuyStopOrder => BuyOrSell.Buy,
-            EnterOrExitPositionType.SellLimitOrder => BuyOrSell.Sell,
-            EnterOrExitPositionType.SellStopOrder => BuyOrSell.Sell,
-        };
-    }
-        
-    public static bool GetOngoingProductHandler(EnterOrExitPositionType type, TradeRepublicProductPriceResponseDto value, decimal price)
+    public static bool GetOngoingProductHandler(OrderType type, TradeRepublicProductPriceResponseDto value, decimal price)
     {
         return type switch
         {
             // Current has to be below
-            EnterOrExitPositionType.BuyLimitOrder => price >= value.Ask.Price,
+            OrderType.BuyLimitOrder => price >= value.Ask.Price,
             // Current has to be above
-            EnterOrExitPositionType.BuyStopOrder => value.Ask.Price >= price,
+            OrderType.BuyStopOrder => value.Ask.Price >= price,
             // Current has to be above (take profit)
-            EnterOrExitPositionType.SellLimitOrder => price <= value.Bid.Price,
+            OrderType.SellLimitOrder => price <= value.Bid.Price,
             // Current has to be below (stop loss)
-            EnterOrExitPositionType.SellStopOrder => value.Bid.Price <= price,
+            OrderType.SellStopOrder => value.Bid.Price <= price,
         };
     }
         

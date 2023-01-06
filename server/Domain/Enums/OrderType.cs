@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums;
 
-public enum EnterOrExitPositionType
+public enum OrderType
 {
     BuyLimitOrder = 0,
     BuyStopOrder = 1,

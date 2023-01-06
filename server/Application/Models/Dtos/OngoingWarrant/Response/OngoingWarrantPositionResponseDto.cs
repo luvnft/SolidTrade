@@ -10,7 +10,7 @@ public class OngoingWarrantPositionResponseDto : BaseEntity
         
     public string Isin { get; set; }
         
-    public EnterOrExitPositionType Type { get; set; }
+    public OrderType Type { get; set; }
         
     public WarrantPositionResponseDto CurrentWarrantPosition { get; set; }
     public decimal Price { get; set; }

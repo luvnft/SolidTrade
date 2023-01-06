@@ -18,7 +18,7 @@ public class OngoingWarrantPosition : BaseEntity
     public string Isin { get; set; }
         
     [Required]
-    public EnterOrExitPositionType Type { get; set; }
+    public OrderType Type { get; set; }
         
     [Required]
     [Range(0.00010, int.MaxValue)]

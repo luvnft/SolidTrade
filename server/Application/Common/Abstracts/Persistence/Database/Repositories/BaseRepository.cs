@@ -109,6 +109,18 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         }
     }
 
+    public async Task<Result<List<TEntity>>> FindAllAsync()
+    {
+        try
+        {
+            return await Set.ToListAsync();
+        }
+        catch (Exception e)
+        {
+            return OnUnexpectedError(DefaultErrorMessage(), e);
+        } 
+    }
+
     public EntityEntry<TEntity> Add(TEntity entity)
         => Set.Add(entity);
 

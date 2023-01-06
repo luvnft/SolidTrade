@@ -1,12 +1,16 @@
 ﻿using System.Collections.Concurrent;
 using Application.Common;
+using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Services.Cache;
 using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Errors.Types;
 using Application.Models.Dtos.TradeRepublic;
 using Application.Models.Types;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OneOf;
@@ -19,24 +23,24 @@ namespace Application.Services.TradeRepublic;
 
 public abstract class TradeRepublicApi : ITradeRepublicApi
 {
-    private readonly Dictionary<int, (PositionType, int)> _runningRequestsAsync = new();
+    private readonly Dictionary<int, int> _runningRequestsAsync = new();
     private readonly Dictionary<int, Action<string>> _runningRequests = new();
     private readonly Dictionary<int, string> _requestBodies = new();
 
     private readonly JsonSerializerSettings _jsonSerializerOptions;
 
+    private readonly IServiceScopeFactory _scopeFactory;
+    
     private readonly ILogger _logger = Log.ForContext<TradeRepublicApi>();
-    private readonly IOngoingProductsService _ongoingProductsService;
     private readonly WebSocket _webSocket;
     private bool _isReconnect;
         
     private DateTime _lastMessageReceived = DateTime.Now;
     private int _latestId;
         
-    protected TradeRepublicApi(IConfiguration configuration, IOngoingProductsService ongoingProductsService)
+    protected TradeRepublicApi(IConfiguration configuration, IServiceScopeFactory scopeFactory)
     {
-        _ongoingProductsService = ongoingProductsService;
-        
+        _scopeFactory = scopeFactory;
         _jsonSerializerOptions = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver
@@ -75,13 +79,15 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
         _webSocket.Connect();
     }
         
-    public void AddOngoingRequest(string isin, PositionType positionType, int entityId)
+    public void AddStandingOrder(string isin, int entityId)
     {
         var id = GetNewId();
-        _runningRequestsAsync.Add(id, (positionType, entityId));
+        _runningRequestsAsync.Add(id, entityId);
 
-        string content = "{\"type\":\"ticker\",\"id\":\"" + isin + "\"}";
+        var content = "{\"type\":\"ticker\",\"id\":\"" + isin + "\"}";
             
+        _logger.Information("Add standing order with isin {@Isin} to trade republic API and wait for fill", isin);
+        
         _webSocket.Send($"sub {id} {content}");
         _requestBodies.Add(id, content);
     }
@@ -148,8 +154,8 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
             _runningRequests.Remove(id);
         } else if (_runningRequestsAsync.ContainsKey(id))
         {
-            var (type, productId) = _runningRequestsAsync[id];
-            Task.Run(() => HandleRequestMessage(id, productId, type, message));
+            var productId = _runningRequestsAsync[id];
+            Task.Run(() => HandleRequestMessage(id, productId, message));
         }
     }
 
@@ -196,92 +202,96 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
     {
         try
         {
-            var (ongoingWarrantPositions, ongoingKnockoutPositions) = _ongoingProductsService.GetAllOngoingPositions();
+            Result<List<StandingOrder>> standingOrdersQuery; 
+            using (var unitOfWork = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IUnitOfWork>())
+                standingOrdersQuery = await unitOfWork.StandingOrders.FindAllAsync();
 
-            var oneOfExchangeResults = new ConcurrentBag<Task<Result<TradeRepublicProductInfoDto>>>();
-                
-            string requestStr;
-            foreach (var warrantPosition in ongoingWarrantPositions)
+            if (standingOrdersQuery.TryTakeError(out var error, out var standingOrders))
             {
-                requestStr = "{\"type\":\"instrument\", \"id\":\"" + warrantPosition.Isin + "\"}";
-                oneOfExchangeResults.Add(AddRequest<TradeRepublicProductInfoDto>(requestStr, CancellationToken.None));
+                _logger.Error(ApplicationConstants.LogMessageTemplate, new UnexpectedError
+                {
+                    Title = "Failed to register all ongoing positions",
+                    Message = "Unexpected fatal error while trying to register standing orders",
+                    AdditionalData = new
+                    {
+                        Error = error
+                    }
+                });
+                ExitDueToCriticalError();
+                return;
             }
-                
-            foreach (var knockoutPosition in ongoingKnockoutPositions)
-            {
-                requestStr = "{\"type\":\"instrument\", \"id\":\"" + knockoutPosition.Isin + "\"}";
-                oneOfExchangeResults.Add(AddRequest<TradeRepublicProductInfoDto>(requestStr, CancellationToken.None));
-            }
 
-            var results = await Task.WhenAll(oneOfExchangeResults);
+            var exchangeResults = new ConcurrentBag<Task<Result<TradeRepublicProductInfoDto>>>();
 
-            if (results.Any(r => r.IsT1))
+            var trRequestStrings =
+                standingOrders.Select(order => "{\"type\":\"instrument\", \"id\":\"" + order.Isin + "\"}");
+            foreach (var requestStr in trRequestStrings)
+                // TODO: There should be a timeout for this request. We should not set the cancellation token to none.
+                exchangeResults.Add(AddRequest<TradeRepublicProductInfoDto>(requestStr, CancellationToken.None));
+
+            var results = await Task.WhenAll(exchangeResults);
+            if (results.Any(r => r.IsFailure))
             {
-                _logger.Fatal(ApplicationConstants.LogMessageTemplate, results.First(r => r.IsT1).AsT1);
+                _logger.Fatal(ApplicationConstants.LogMessageTemplate, results.First(r => r.IsFailure).ErrorUnsafe);
                 Thread.Sleep(1000);
                 Environment.Exit(-1);
             }
 
-            var ids = results.Select(o => o.AsT0).ToList();
+            var ids = results.Select(r => r.ResultUnsafe).ToList();
 
-            foreach (var ongoingWarrantPosition in ongoingWarrantPositions)
+            foreach (var order in standingOrders)
             {
-                var productInfo = ids.First(p => p.Isin == ongoingWarrantPosition.Isin);
-                    
+                var productInfo = ids.First(p => p.Isin == order.Isin);
                 if (productInfo.Active.HasValue && !productInfo.Active.Value)
                 {
                     _logger.Information(
-                        "Ongoing warrant with id {@Id} and isin {@Isin} is not active anymore and wont be added to ongoing requests",
-                        ongoingWarrantPosition.Id, ongoingWarrantPosition.Isin);
-                    continue;
-                }
-                    
-                AddOngoingRequest(ongoingWarrantPosition.Isin + "." + productInfo.ExchangeIds.First(), PositionType.Warrant, ongoingWarrantPosition.Id);
-            }
-
-            foreach (var ongoingKnockoutPosition in ongoingKnockoutPositions)
-            {
-                var productInfo = ids.First(p => p.Isin == ongoingKnockoutPosition.Isin);
-                    
-                if (productInfo.Active.HasValue && !productInfo.Active.Value)
-                {
-                    _logger.Information(
-                        "Ongoing knockout with id {@Id} and isin {@Isin} is not active anymore and wont be added to ongoing requests",
-                        ongoingKnockoutPosition.Id, ongoingKnockoutPosition.Isin);
+                        "Standing order with id {@Id} and isin {@Isin} is not active anymore and wont be added to ongoing requests",
+                        order.Id, order.Isin);
                     continue;
                 }
 
-                AddOngoingRequest(ongoingKnockoutPosition.Isin + "." + productInfo.ExchangeIds.First(), PositionType.Knockout, ongoingKnockoutPosition.Id);
+                var isinWithExchange = order.Isin + "." + productInfo.ExchangeIds.First();
+                AddStandingOrder(isinWithExchange, order.Id);
             }
         }
         catch (Exception e)
         {
             _logger.Fatal(ApplicationConstants.LogMessageTemplate, new UnexpectedTradeRepublicRequestError
             {
-                Title = "Failed register ongoing positions",
-                Message = "Unexpected fatal error while trying to register ongoing positions",
+                Title = "Failed to register standing orders",
+                Message = "Unexpected fatal error while trying to register standing orders",
                 Exception = e,
             });
+            ExitDueToCriticalError();
+        }
+        
+        void ExitDueToCriticalError()
+        {
             Thread.Sleep(1000);
             Environment.Exit(-1);
         }
     }
         
-    private void HandleRequestMessage(int id, int productId, PositionType positionType, string message)
+    private async Task HandleRequestMessage(int id, int productId, string message)
     {
         if (ConvertToObject<TradeRepublicProductPriceResponseDto>(message).TryPickT0(out var value, out var err))
         {
             try
             {
-                var result = GetOngoingTradeResponse(this, value, positionType, productId);
-
-                switch (result)
+                var standingOrderResponseResult = await HandleStandingOrderTradeMessage(value, productId);
+                if (standingOrderResponseResult.TryTakeError(out var error, out var standingOrderStatus))
                 {
-                    case OngoingTradeResponse.WaitingForFill:
+                    _logger.Error("Something went wrong when trying to handle a standing order. {@Error}", error);
+                    return;
+                }
+                
+                switch (standingOrderStatus)
+                {
+                    case StandingOrderState.WaitingForFill:
                         break;
-                    case OngoingTradeResponse.Complete:
-                    case OngoingTradeResponse.PositionsAlreadyClosed:
-                    case OngoingTradeResponse.Failed:
+                    case StandingOrderState.Filled:
+                    case StandingOrderState.Closed:
+                    case StandingOrderState.Failed:
                         _webSocket.Send($"unsub {id}");
                         _runningRequestsAsync.Remove(id);
                         break;
@@ -309,17 +319,15 @@ public abstract class TradeRepublicApi : ITradeRepublicApi
             _runningRequestsAsync.Remove(id);
         }
     }
-        
-    private OngoingTradeResponse GetOngoingTradeResponse(ITradeRepublicApi trService, TradeRepublicProductPriceResponseDto value, PositionType positionType, int productId)
+
+    private async Task<Result<StandingOrderState>> HandleStandingOrderTradeMessage(TradeRepublicProductPriceResponseDto value,
+        int standingOrderId)
     {
-        return positionType switch
-        {
-            PositionType.Warrant => _ongoingProductsService.HandleOngoingWarrantTradeMessage(trService, value, positionType, productId),
-            PositionType.Knockout => _ongoingProductsService.HandleOngoingKnockoutTradeMessage(trService, value, positionType, productId),
-            PositionType.Stock => OngoingTradeResponse.Failed,
-        };
+        var standingOrderService = _scopeFactory.CreateScope().ServiceProvider
+            .GetRequiredService<IStandingOrderHandlerService>();
+        return await standingOrderService.HandleStandingOrderTradeMessage(value, standingOrderId);
     }
-    
+
     private Result<T> ConvertToObject<T>(string content, JsonSerializerSettings jsonSerializerOptions = null)
     {
         jsonSerializerOptions ??= _jsonSerializerOptions;

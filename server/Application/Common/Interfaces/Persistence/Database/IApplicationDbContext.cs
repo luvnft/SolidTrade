@@ -11,8 +11,7 @@ namespace Application.Common.Interfaces.Persistence.Database
         public DbSet<User> Users { get; }
         public DbSet<Portfolio> Portfolios { get; }
         public DbSet<Position> Positions { get; }
-        public DbSet<OngoingWarrantPosition> OngoingWarrantPositions { get; }
-        public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; }
+        public DbSet<StandingOrder> StandingOrders { get; }
         public DbSet<ProductImageRelation> ProductImageRelations { get; }
     
         public DatabaseFacade Database { get; }

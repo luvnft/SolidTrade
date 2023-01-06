@@ -22,8 +22,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Position> Positions { get; set; }
-    public DbSet<OngoingWarrantPosition> OngoingWarrantPositions { get; set; }
-    public DbSet<OngoingKnockoutPosition> OngoingKnockoutPositions { get; set; }
+    public DbSet<StandingOrder> StandingOrders { get; set; }
     public DbSet<ProductImageRelation> ProductImageRelations { get; set; }
 
     public DbSet<TEntity> DbSet<TEntity>() where TEntity : BaseEntity => Set<TEntity>();

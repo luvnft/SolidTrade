@@ -5,6 +5,7 @@ using Application.Models.Dtos.OngoingWarrant.Response;
 using Application.Models.Dtos.Portfolio.Response;
 using Application.Models.Dtos.Position.Response;
 using Application.Models.Dtos.ProductImage.Response;
+using Application.Models.Dtos.StandingOrder.Response;
 using Application.Models.Dtos.Stock.Response;
 using Application.Models.Dtos.User.Response;
 using Application.Models.Dtos.Warrant.Response;
@@ -17,18 +18,11 @@ public class EntityToResponseDtoProfile : Profile
 {
     public EntityToResponseDtoProfile()
     {
-        CreateMap<HistoricalPosition, HistoricalPositionResponseDto>();
-
-        CreateMap<Position, PositionResponseDto>();
-        CreateMap<KnockoutPosition, KnockoutPositionResponseDto>();
-        CreateMap<WarrantPosition, WarrantPositionResponseDto>();
-        CreateMap<StockPosition, StockPositionResponseDto>();
-            
-        CreateMap<OngoingKnockoutPosition, OngoingKnockoutPositionResponseDto>();
-        CreateMap<OngoingWarrantPosition, OngoingWarrantPositionResponseDto>();
-            
-        CreateMap<Portfolio, PortfolioResponseDto>();
         CreateMap<User, UserResponseDto>();
+        CreateMap<Portfolio, PortfolioResponseDto>();
+        CreateMap<Position, PositionResponseDto>();
+        CreateMap<StandingOrder, StandingOrderResponseDto>();
+        CreateMap<HistoricalPosition, HistoricalPositionResponseDto>();
 
         CreateMap<ProductImageRelation, GetProductImageResponseDto>()
             .ForMember(dest => dest.RedirectUrl,

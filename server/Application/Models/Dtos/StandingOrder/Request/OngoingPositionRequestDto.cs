@@ -4,9 +4,9 @@ using Application.Models.Annotations;
 using Domain.Common;
 using Domain.Enums;
 
-namespace Application.Models.Dtos.Shared.OngoingPosition.Request;
+namespace Application.Models.Dtos.StandingOrder.Request;
 
-public class OngoingPositionRequestDto
+public class CreateStandingOrderRequestDto
 {
     [Required] 
     public string Isin { get; set; }
@@ -16,7 +16,10 @@ public class OngoingPositionRequestDto
     public decimal PriceThreshold { get; set; }
 
     [Required]
-    public OrderType? Type { get; set; }
+    public PositionType PositionType { get; set; }
+
+    [Required]
+    public OrderType OrderType { get; set; }
         
     [Required]
     [IsFutureDate(ErrorMessage = ErrorMessages.GoodUntilErrorMessage)]

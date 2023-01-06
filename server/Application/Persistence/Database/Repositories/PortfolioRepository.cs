@@ -28,7 +28,6 @@ public class PortfolioRepository : BaseRepository<Portfolio>, IPortfolioReposito
     {
         p => p.User,
         p => p.Positions,
-        p => p.OngoingWarrantPositions,
-        p => p.OngoingKnockOutPositions
+        p => p.StandingOrders,
     };
 }

@@ -11,6 +11,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     Task<Result<TEntity>> FindByIdAsync(int entityId);
     Task<Result<TEntity>> FirstAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationPropertyPaths);
     Task<Result<List<TEntity>>> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationPropertyPaths);
+    Task<Result<List<TEntity>>> FindAllAsync();
     
     EntityEntry<TEntity> Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entities);

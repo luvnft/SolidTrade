@@ -15,6 +15,5 @@ public class Portfolio : BaseEntity
     public decimal InitialCash { get; set; }
         
     public ICollection<Position> Positions { get; set; }
-    public ICollection<OngoingWarrantPosition> OngoingWarrantPositions { get; set; }
-    public ICollection<OngoingKnockoutPosition> OngoingKnockOutPositions { get; set; }
+    public ICollection<StandingOrder> StandingOrders { get; set; }
 }

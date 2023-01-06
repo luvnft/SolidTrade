@@ -17,7 +17,7 @@ public class TradeRepublicStringConverter
     public string ProductInfo()
         => "{\"type\":\"instrument\",\"id\":\"" + _value + "\"}";
     
-    public string GetTradeRepublicProductPriceRequestString()
+    public string ProductPrice()
         => "{\"type\":\"ticker\",\"id\":\"" + _value + "\"}";
     
     public string IsinWithoutExchangeExtension()
