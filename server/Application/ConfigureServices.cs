@@ -28,7 +28,9 @@ public static class ConfigureServices
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IPositionRepository, PositionRepository>();
         services.AddTransient<IPortfolioRepository, PortfolioRepository>();
+        services.AddTransient<IStandingOrderRepository, StandingOrderRepository>();
         services.AddTransient<IStandingOrderHandlerService, StandingOrderHandlerService>();
         services.AddTransient<IHistoricalPositionRepository, HistoricalPositionRepository>();
         
