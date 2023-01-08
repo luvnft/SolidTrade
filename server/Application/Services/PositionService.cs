@@ -1,24 +1,26 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Extensions;
 using Application.Models.Dtos.Position.Response;
 using Application.Models.Dtos.Shared.Common;
 using Application.Models.Dtos.TradeRepublic;
-using Application.Services.TradeRepublic;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.Extensions.Logging;
 
+namespace Application.Services;
+
 public class PositionService : IPositionService
 {
     private readonly ILogger<PositionService> _logger;
-    private readonly TradeRepublicApiService _trApiService;
+    private readonly ITradeRepublicApiService _trApiService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public PositionService(IUnitOfWork unitOfWork, ILogger<PositionService> logger, IMapper mapper, TradeRepublicApiService trApiService)
+    public PositionService(IUnitOfWork unitOfWork, ILogger<PositionService> logger, IMapper mapper, ITradeRepublicApiService trApiService)
     {
         _unitOfWork = unitOfWork;
         _trApiService = trApiService;
@@ -64,7 +66,7 @@ public class PositionService : IPositionService
         }
 
         var productPriceQuery = await _trApiService
-            .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductInfo());
+            .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductPrice());
         if (productPriceQuery.TryTakeError(out error, out var trResponse))
             return error;
 
@@ -83,6 +85,7 @@ public class PositionService : IPositionService
             BuyInPrice = trResponse.Ask.Price,
             Portfolio = user.Portfolio,
             NumberOfShares = dto.NumberOfShares,
+            Type = type,
         };
             
         var historicalPositions = new HistoricalPosition
@@ -135,7 +138,7 @@ public class PositionService : IPositionService
             return error;
 
         var productPriceQuery = await _trApiService
-            .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductInfo());
+            .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductPrice());
         if (productPriceQuery.TryTakeError(out error, out var trResponse))
             return error;
 

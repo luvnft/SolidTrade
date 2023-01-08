@@ -34,7 +34,7 @@ public class PortfolioService : IPortfolioService
 
             _logger.Information("User with user uid {@Uid} fetched portfolio with portfolio id {@PortfolioId} successfully", uid, dto.PortfolioId);
 
-            return _mapper.Map<PortfolioResponseDto>(portfolioResult);
+            return _mapper.Map<PortfolioResponseDto>(portfolio);
         }
         else
         {

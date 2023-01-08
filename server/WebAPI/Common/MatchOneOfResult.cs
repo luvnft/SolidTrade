@@ -21,7 +21,7 @@ public static class MatchOneOfResult
         err.Exception = ex is not null ? new Exception("Exception is defined in the 'exceptions' field.") : null;
         Logger.Error(ex, ApplicationConstants.LogMessageTemplate, err);
 
-        return new ObjectResult(new UnexpectedError
+        return new ObjectResult(new
         {
             Title = err.Title,
             UserFriendlyMessage = err.UserFriendlyMessage,
