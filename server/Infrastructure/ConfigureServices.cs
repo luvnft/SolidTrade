@@ -34,7 +34,7 @@ public static class ConfigureServices
     public static IApplicationBuilder ConfigureInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
     {
         // For local development environments we use the firebase emulator for authentication.
-        var firebaseAuthEmulatorHost = configuration.GetValue<string>("FIREBASE_AUTH_EMULATOR_HOST");
+        var firebaseAuthEmulatorHost = configuration.GetValue<string>("FirebaseAuthEmulatorHost");
         if (firebaseAuthEmulatorHost != null)
             Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", firebaseAuthEmulatorHost);
 

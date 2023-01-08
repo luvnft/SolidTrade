@@ -36,6 +36,9 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
+# Logs
+**/Logs/**
+
 # Credentials
-Configuration/appsettings.credentials.json
-Configuration/solid-trade-firebase-credentials.json
+WebAPI/Configuration/appsettings.credentials.json
+WebAPI/Configuration/solid-trade-firebase-credentials.json

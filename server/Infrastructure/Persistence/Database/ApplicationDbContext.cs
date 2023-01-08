@@ -1,7 +1,7 @@
-﻿using Application.Common.Interfaces.Persistence;
-using Application.Common.Interfaces.Persistence.Database;
+﻿using Application.Common.Interfaces.Persistence.Database;
 using Domain.Entities;
 using Domain.Entities.Base;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -31,7 +31,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("config/appsettings.credentials.json")
+            .AddJsonConfigurationFiles("./Configuration/")
             .Build();
         
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"));

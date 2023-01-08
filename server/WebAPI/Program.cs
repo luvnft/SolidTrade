@@ -1,12 +1,10 @@
-using Application.Common.Interfaces.Persistence;
+using System.Runtime.InteropServices;
 using Application.Common.Interfaces.Persistence.Database;
 using Infrastructure.Extensions;
 using Serilog;
-using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 using WebAPI.Serilog;
-using ILogger = Serilog.ILogger;
 
 namespace WebAPI;
 
@@ -15,16 +13,12 @@ public static class Program
     private const string SerilogOutputTemplate =
         "{Timestamp:yyyy'-'MM'-'dd'T'HH':'mm':'ss.ffffff zzz} [{Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}";
 
-    private static readonly ILogger Logger = Log.ForContext(typeof(Program));
-
     [STAThread]
     public static void Main(string[] args)
     {
         var host = CreateHostBuilder(args)
             .Build()
             .MigrateDatabase<IApplicationDbContext>();
-
-        SelfLog.Enable(Logger.Error);
 
         host.Run();
     }
@@ -33,8 +27,7 @@ public static class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureHostConfiguration(hostConfig =>
             {
-                hostConfig.AddJsonFile("config/appsettings.json");
-                hostConfig.AddJsonFile("config/appsettings.credentials.json");
+                hostConfig.AddJsonConfigurationFiles("./Configuration/");
                 hostConfig.AddEnvironmentVariables();
             })
             .UseSerilog((context, configuration) =>
@@ -46,8 +39,10 @@ public static class Program
                     .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                     .Enrich.With(new SerilogMessageEnricher())
                     .WriteTo.Map(_ => DateTimeOffset.Now,
-                        (v, wt) =>
-                            wt.File($"/var/log/solidtrade/api/{v:MM-yyyy}/log-{v:dd-MM-yyyy ddd zz} - .log",
+                        (date, wt) =>
+                            wt.File(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                                    ? $"./Logs/{date:MM-yyyy}/log-{date:dd-MM-yyyy ddd zz} - .log"
+                                    : $"/var/log/solidtrade/api/{date:MM-yyyy}/log-{date:dd-MM-yyyy ddd zz} - .log",
                                 outputTemplate: SerilogOutputTemplate,
                                 fileSizeLimitBytes: 2000000,
                                 rollingInterval: RollingInterval.Day,
