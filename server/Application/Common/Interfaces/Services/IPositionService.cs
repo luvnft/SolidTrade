@@ -8,5 +8,5 @@ public interface IPositionService
 {
     public Task<Result<PositionResponseDto>> GetPositionAsync(int id, string uid);
     public Task<Result<PositionResponseDto>> BuyPositionAsync(BuyOrSellRequestDto dto, string uid, PositionType type);
-    public Task<Result<PositionResponseDto>> SellPositionAsync(BuyOrSellRequestDto dto, string uid, PositionType type);
+    public Task<Result<PositionResponseDto>> SellPositionAsync(BuyOrSellRequestDto dto, string uid, PositionType type, bool skipValidation = false);
 }

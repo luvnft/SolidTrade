@@ -139,11 +139,11 @@ public class Startup
             });
         }
 
-        var removeKnockedOutProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveKnockedOutProductsJob>>();
-        var removeOngoingExpiredTradeJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveOngoingExpiredTradeJob>>();
-        var checkAndPerformStockSplitJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<CheckAndPerformStockSplitJob>>();
-        var removeExpiredWarrantProductsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveExpiredWarrantProductsJob>>();
-        var removeUnusedProductImageRelationsJob = serviceProvider.GetServiceOrThrow<IBackgroundJob<RemoveUnusedProductImageRelationsJob>>();
+        var removeKnockedOutProductsJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveKnockedOutProductsJob>>();
+        var removeOngoingExpiredTradeJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveOngoingExpiredTradeJob>>();
+        var checkAndPerformStockSplitJob = serviceProvider.GetRequiredService<IBackgroundJob<CheckAndPerformStockSplitJob>>();
+        var removeExpiredWarrantProductsJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveExpiredPositionsJob>>();
+        var removeUnusedProductImageRelationsJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveUnusedProductImageRelationsJob>>();
             
         recurringJobManager.AddOrUpdate(removeOngoingExpiredTradeJob.JobTitle, () => removeOngoingExpiredTradeJob.StartAsync(), Cron.Daily);
         recurringJobManager.AddOrUpdate(removeExpiredWarrantProductsJob.JobTitle, () => removeExpiredWarrantProductsJob.StartAsync(), Cron.Weekly(DayOfWeek.Sunday));

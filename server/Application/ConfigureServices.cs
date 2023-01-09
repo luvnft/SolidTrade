@@ -22,7 +22,7 @@ public static class ConfigureServices
         services.AddSingleton<IBackgroundJob<RemoveKnockedOutProductsJob>, RemoveKnockedOutProductsJob>();
         services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
         services.AddSingleton<IBackgroundJob<CheckAndPerformStockSplitJob>, CheckAndPerformStockSplitJob>();
-        services.AddSingleton<IBackgroundJob<RemoveExpiredWarrantProductsJob>, RemoveExpiredWarrantProductsJob>();
+        services.AddSingleton<IBackgroundJob<RemoveExpiredPositionsJob>, RemoveExpiredPositionsJob>();
         services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
         services.AddSingleton<ITradeRepublicApiService, TradeRepublicApiService>();
 

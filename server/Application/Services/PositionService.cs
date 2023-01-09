@@ -131,15 +131,18 @@ public class PositionService : IPositionService
     }
 
     public async Task<Result<PositionResponseDto>> SellPositionAsync(BuyOrSellRequestDto dto, string uid,
-        PositionType type)
+        PositionType type, bool skipValidation = false)
     {
-        var productCanBeTradedQuery = await _trApiService.ValidateRequest(dto.Isin);
-        if (productCanBeTradedQuery.TryTakeError(out var error, out _))
-            return error;
+        if (!skipValidation)
+        {
+            var productCanBeTradedQuery = await _trApiService.ValidateRequest(dto.Isin);
+            if (productCanBeTradedQuery.TryTakeError(out var err, out _))
+                return err;
+        }
 
         var productPriceQuery = await _trApiService
             .MakeTrRequest<TradeRepublicProductPriceResponseDto>(dto.Isin.ToTradeRepublic().ProductPrice());
-        if (productPriceQuery.TryTakeError(out error, out var trResponse))
+        if (productPriceQuery.TryTakeError(out var error, out var trResponse))
             return error;
 
         var userResult = await _unitOfWork.Users
