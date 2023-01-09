@@ -38,15 +38,11 @@ public static class Program
                     .Enrich.WithMachineName()
                     .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                     .Enrich.With(new SerilogMessageEnricher())
-                    .WriteTo.Map(_ => DateTimeOffset.Now,
-                        (date, wt) =>
-                            wt.File(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                                    ? $"./Logs/{date:MM-yyyy}/log-{date:dd-MM-yyyy ddd zz} - .log"
-                                    : $"/var/log/solidtrade/api/{date:MM-yyyy}/log-{date:dd-MM-yyyy ddd zz} - .log",
-                                outputTemplate: SerilogOutputTemplate,
-                                fileSizeLimitBytes: 2000000,
-                                rollingInterval: RollingInterval.Day,
-                                rollOnFileSizeLimit: true))
+                    .WriteTo.File(CreateLogFilePathName(),
+                        outputTemplate: SerilogOutputTemplate,
+                        fileSizeLimitBytes: 2000000,
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true)
                     .WriteTo.Console(
                         outputTemplate: SerilogOutputTemplate,
                         restrictedToMinimumLevel: LogEventLevel.Information)
@@ -67,4 +63,13 @@ public static class Program
                     .ReadFrom.Configuration(context.Configuration);
             })
             .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+    
+    private static string CreateLogFilePathName()
+    {
+        var now = DateTime.Now;
+        return (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? $"./Logs/{now:MM-yyyy}/log-{now:O} - .log"
+            : $"/var/log/solidtrade/api/{now:MM-yyyy}/log-{now:O} - .log")
+            .Replace(':', '-');
+    }
 }
