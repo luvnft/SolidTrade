@@ -8,7 +8,7 @@ using Application.Persistence.Database;
 using Application.Persistence.Database.Repositories;
 using Application.Services;
 using Application.Services.Cache;
-// using Application.Services.Jobs;
+using Application.Services.Jobs;
 using Application.Services.TradeRepublic;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,11 +19,11 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddSingleton<ICacheService, CacheService>();
-        // services.AddSingleton<IBackgroundJob<RemoveKnockedOutProductsJob>, RemoveKnockedOutProductsJob>();
-        // services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
-        // services.AddSingleton<IBackgroundJob<CheckAndPerformStockSplitJob>, CheckAndPerformStockSplitJob>();
-        // services.AddSingleton<IBackgroundJob<RemoveExpiredWarrantProductsJob>, RemoveExpiredWarrantProductsJob>();
-        // services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
+        services.AddSingleton<IBackgroundJob<RemoveKnockedOutProductsJob>, RemoveKnockedOutProductsJob>();
+        services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
+        services.AddSingleton<IBackgroundJob<CheckAndPerformStockSplitJob>, CheckAndPerformStockSplitJob>();
+        services.AddSingleton<IBackgroundJob<RemoveExpiredWarrantProductsJob>, RemoveExpiredWarrantProductsJob>();
+        services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
         services.AddSingleton<ITradeRepublicApiService, TradeRepublicApiService>();
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
