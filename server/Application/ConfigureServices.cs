@@ -19,7 +19,6 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddSingleton<ICacheService, CacheService>();
-        services.AddSingleton<IBackgroundJob<RemoveKnockedOutProductsJob>, RemoveKnockedOutProductsJob>();
         services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
         services.AddSingleton<IBackgroundJob<CheckAndPerformStockSplitJob>, CheckAndPerformStockSplitJob>();
         services.AddSingleton<IBackgroundJob<RemoveExpiredPositionsJob>, RemoveExpiredPositionsJob>();

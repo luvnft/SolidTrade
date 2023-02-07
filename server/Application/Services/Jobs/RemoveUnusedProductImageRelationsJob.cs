@@ -72,7 +72,7 @@ public class RemoveUnusedProductImageRelationsJob : IBackgroundJob<RemoveUnusedP
             }
         }
             
-        // Because the cache service might still have references to images that have been deleted, we remove all cached GetProductImageRequestDto to insure that the cache does not return
+        // Because the cache service might still have references to images that have been deleted, we remove all cached GetProductImageRequestDto to ensure that the cache does not return
         // image urls who's image does not exist anymore.
         // The type GetProductImageRequestDto is the type being cached. This is why we use GetProductImageRequestDto instead of ProductImageRelation.
         cache.Clear<GetProductImageRequestDto>();
@@ -82,18 +82,6 @@ public class RemoveUnusedProductImageRelationsJob : IBackgroundJob<RemoveUnusedP
             countOfUnusedProductImageRelations, countOfSuccessfulDeletions);
     }
 
-    private async Task<bool> CheckIfImageRelationsIsUnused(IApplicationDbContext db, ProductImageRelation relation)
-    {
-        if (
-            await db.KnockoutPositions.AsQueryable().AnyAsync(k => k.Isin == relation.Isin)
-            || await db.OngoingKnockoutPositions.AsQueryable().AnyAsync(k => k.Isin == relation.Isin)
-            || await db.OngoingWarrantPositions.AsQueryable().AnyAsync(k => k.Isin == relation.Isin)
-            || await db.StockPositions.AsQueryable().AnyAsync(k => k.Isin == relation.Isin)
-            || await db.WarrantPositions.AsQueryable().AnyAsync(k => k.Isin == relation.Isin))
-        {
-            return false;
-        }
-
-        return true;
-    }
+    private static async Task<bool> CheckIfImageRelationsIsUnused(IApplicationDbContext db, ProductImageRelation relation)
+        => !await db.Positions.AnyAsync(k => k.Isin == relation.Isin);
 }

@@ -11,7 +11,7 @@ namespace Application.Services.Jobs;
 
 public class RemoveOngoingExpiredTradeJob : IBackgroundJob<RemoveOngoingExpiredTradeJob>
 {
-    public string JobTitle => "Remove Ongoing expired orders";
+    public string JobTitle => "Remove expired standing orders";
     
     private readonly ILogger _logger = Log.ForContext<RemoveOngoingExpiredTradeJob>();
     private readonly IServiceScopeFactory _scopeFactory;
@@ -25,15 +25,15 @@ public class RemoveOngoingExpiredTradeJob : IBackgroundJob<RemoveOngoingExpiredT
     {
         try
         {
-            _logger.Information("Removing expired ongoing trades from database.");
+            _logger.Information("Removing expired standing order from database.");
             return RemoveExpiredTradesAsync();
         }
         catch (Exception e)
         {
             _logger.Error(ApplicationConstants.LogMessageTemplate, new UnexpectedError
             {
-                Title = "Could not remove expired trades",
-                Message = "Something went wrong trying to remove expired trades. See exception for more.",
+                Title = "Could not remove expired standing orders.",
+                Message = "Something went wrong trying to remove all standing orders. See exception for more.",
                 Exception = e,
             });
             return Task.CompletedTask;
@@ -42,18 +42,13 @@ public class RemoveOngoingExpiredTradeJob : IBackgroundJob<RemoveOngoingExpiredT
 
     private async Task RemoveExpiredTradesAsync()
     {
-        await using IApplicationDbContext database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
+        await using var database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        var expiredKnockouts = database.OngoingKnockoutPositions.AsQueryable().Where(p => DateTimeOffset.Now > p.GoodUntil);
-        var expiredWarrants = database.OngoingWarrantPositions.AsQueryable().Where(p => DateTimeOffset.Now > p.GoodUntil);
-
-        var expiredKnockoutsCount = await expiredKnockouts.CountAsync();
-        var expiredWarrantsCount = await expiredWarrants.CountAsync();
+        var expiredPositions = database.StandingOrders.AsQueryable().Where(p => DateTimeOffset.Now > p.GoodUntil);
+        var expiredPositionsCount = await expiredPositions.CountAsync();
             
-        database.OngoingKnockoutPositions.RemoveRange(expiredKnockouts);
-        database.OngoingWarrantPositions.RemoveRange(expiredWarrants);
-
+        database.StandingOrders.RemoveRange(expiredPositions);
         await database.SaveChangesAsync();
-        _logger.Information("Removed {@expiredKnockoutsCount} expired ongoing knockouts and {@expiredWarrantsCount} expired ongoing warrants from database.", expiredKnockoutsCount, expiredWarrantsCount);
+        _logger.Information("Removed {@expiredPositionsCount} expired standing orders from database.", expiredPositionsCount);
     }
 }
