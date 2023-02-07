@@ -98,14 +98,16 @@ namespace Application.Services.Jobs
 
         private async Task<(List<IPosition>, List<IPosition>)> GetStockPositions()
         {
-            await using IApplicationDbContext database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
+            await using var database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
             var historicalPositions = await database.HistoricalPositions
                 .AsQueryable()
                 .Where(p => p.PositionType == PositionType.Stock)
                 .ToListAsync();
 
-            var stockPositions = await database.StockPositions.AsQueryable().ToListAsync();
+            var stockPositions = await database.Positions
+                .Where(p => p.Type == PositionType.Stock)
+                .ToListAsync();
 
             return (new List<IPosition>(historicalPositions), new List<IPosition>(stockPositions));
         }
@@ -113,7 +115,7 @@ namespace Application.Services.Jobs
         private async Task PerformStockSplits(IReadOnlyList<(IPosition position, TradeRepublicProductInfoDto dto)> unperformedStockSplits)
         {
             var database = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IUnitOfWork>();
-
+            
             for (int i = 0; i < unperformedStockSplits.Count; i++)
             {
                 var (position, infoDto) = unperformedStockSplits[i];
@@ -126,8 +128,23 @@ namespace Application.Services.Jobs
                     if (stockSplitInfo.Date > position.UpdatedAt.ToUnixTimeMilliseconds())
                         position = PerformStockSplit(position, stockSplitInfo);
             }
+
+            if (!unperformedStockSplits.Any())
+                return;
+
+            switch (unperformedStockSplits[0].position)
+            {
+                case HistoricalPosition:
+                    database.HistoricalPositions.UpdateRange(unperformedStockSplits.Select(s => (HistoricalPosition) s.position));
+                    break;
+                case Position:
+                    database.Positions.UpdateRange(unperformedStockSplits.Select(s => (Position) s.position));
+                    break;
+                default:
+                    throw new Exception(
+                        $"Position is not of type HistoricalPosition or Position. Instead it is of type {unperformedStockSplits[0].position.GetType()}");
+            }
             
-            database.Stocks.UpdateRange(unperformedStockSplits.Select(s => (StockPosition) s.position));
             await database.Commit();
         }
 
