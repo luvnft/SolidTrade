@@ -2,7 +2,7 @@
 mkdir ./flutter-sdk && cd ./flutter-sdk
 
 # Add Flutter
-git clone -b stable https://github.com/flutter/flutter.git
+git clone -b 2.10.5 https://github.com/flutter/flutter/
 
 # Add flutter to path
 export PATH="$PATH:`pwd`/flutter/bin"

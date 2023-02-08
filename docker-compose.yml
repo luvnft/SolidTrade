@@ -3,7 +3,10 @@ version: "3.9"
 services:
   api:
     build: server
-    restart: always
+    restart: on-failure:3
+    # For development no api containers are required since debugging should happen using the IDE
+    deploy:
+        replicas: 0
     environment:
       ENVIRONMENT: ${API_ENVIRONMENT}
       FIREBASE_AUTH_EMULATOR_HOST: ${API_FIREBASE_AUTH_EMULATOR_HOST}
@@ -12,7 +15,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./server/Configuration:/app/config
+      - ./server/WebAPI/Configuration:/app/Configuration
       - api:/var/log/solidtrade/api
 
   db:
