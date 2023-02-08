@@ -139,7 +139,7 @@ public class Startup
             });
         }
 
-        var removeOngoingExpiredTradeJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveOngoingExpiredTradeJob>>();
+        var removeOngoingExpiredTradeJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveOutDatesStandingOrdersJob>>();
         var checkAndPerformStockSplitJob = serviceProvider.GetRequiredService<IBackgroundJob<CheckAndPerformStockSplitJob>>();
         var removeExpiredWarrantProductsJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveExpiredPositionsJob>>();
         var removeUnusedProductImageRelationsJob = serviceProvider.GetRequiredService<IBackgroundJob<RemoveUnusedProductImageRelationsJob>>();

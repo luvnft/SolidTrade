@@ -9,14 +9,14 @@ using Serilog;
 
 namespace Application.Services.Jobs;
 
-public class RemoveOngoingExpiredTradeJob : IBackgroundJob<RemoveOngoingExpiredTradeJob>
+public class RemoveOutDatesStandingOrdersJob : IBackgroundJob<RemoveOutDatesStandingOrdersJob>
 {
     public string JobTitle => "Remove expired standing orders";
     
-    private readonly ILogger _logger = Log.ForContext<RemoveOngoingExpiredTradeJob>();
+    private readonly ILogger _logger = Log.ForContext<RemoveOutDatesStandingOrdersJob>();
     private readonly IServiceScopeFactory _scopeFactory;
         
-    public RemoveOngoingExpiredTradeJob(IServiceScopeFactory scopeFactory)
+    public RemoveOutDatesStandingOrdersJob(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
     }

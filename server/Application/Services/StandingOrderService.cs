@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Services.TradeRepublic;
 using Application.Extensions;
 using Application.Models.Dtos.StandingOrder.Request;
 using Application.Models.Dtos.StandingOrder.Response;
 using Application.Models.Dtos.TradeRepublic;
-using Application.Services.TradeRepublic;
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -14,11 +14,11 @@ namespace Application.Services;
 public class StandingOrderService : IStandingOrderService
 {
     private readonly ILogger<StandingOrderService> _logger;
-    private readonly TradeRepublicApiService _trApiService;
+    private readonly ITradeRepublicApiService _trApiService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public StandingOrderService(TradeRepublicApiService trApiService, ILogger<StandingOrderService> logger, IUnitOfWork unitOfWork, IMapper mapper)
+    public StandingOrderService(ITradeRepublicApiService trApiService, ILogger<StandingOrderService> logger, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _trApiService = trApiService;
         _unitOfWork = unitOfWork;

@@ -19,7 +19,7 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddSingleton<ICacheService, CacheService>();
-        services.AddSingleton<IBackgroundJob<RemoveOngoingExpiredTradeJob>, RemoveOngoingExpiredTradeJob>();
+        services.AddSingleton<IBackgroundJob<RemoveOutDatesStandingOrdersJob>, RemoveOutDatesStandingOrdersJob>();
         services.AddSingleton<IBackgroundJob<CheckAndPerformStockSplitJob>, CheckAndPerformStockSplitJob>();
         services.AddSingleton<IBackgroundJob<RemoveExpiredPositionsJob>, RemoveExpiredPositionsJob>();
         services.AddSingleton<IBackgroundJob<RemoveUnusedProductImageRelationsJob>, RemoveUnusedProductImageRelationsJob>();
@@ -30,14 +30,15 @@ public static class ConfigureServices
         services.AddTransient<IPositionRepository, PositionRepository>();
         services.AddTransient<IPortfolioRepository, PortfolioRepository>();
         services.AddTransient<IStandingOrderRepository, StandingOrderRepository>();
-        services.AddTransient<IStandingOrderHandlerService, StandingOrderHandlerService>();
         services.AddTransient<IHistoricalPositionRepository, HistoricalPositionRepository>();
         
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IPositionService, PositionService>();
         services.AddTransient<IPortfolioService, PortfolioService>();
         services.AddTransient<IProductImageService, ProductImageService>();
+        services.AddTransient<IStandingOrderService, StandingOrderService>();
         services.AddTransient<IHistoricalPositionsService, HistoricalPositionsService>();
+        services.AddTransient<IStandingOrderHandlerService, StandingOrderHandlerService>();
 
         return services;
     }
