@@ -30,11 +30,12 @@ internal class IdentityService : IIdentityService
         } 
     }
 
-    public async Task<Result<Success>> DeleteUser(string uid, string token, CancellationToken ct = default)
+    public async Task<Result<Success>> DeleteUser(string uid, CancellationToken ct = default)
     {
         try
         {
-            await _client.Auth.DeleteUser(uid, token);
+            var adminAccessToken = _client.Auth.CurrentSession!.AccessToken!;
+            await _client.Auth.DeleteUser(uid, adminAccessToken);
             return new Success();
         }
         catch (Exception e)

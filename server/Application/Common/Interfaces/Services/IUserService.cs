@@ -16,5 +16,5 @@ public interface IUserService
 
     public Task<Result<UserResponseDto>> UpdateUser(UpdateUserDto dto, string uid);
 
-    public Task<Result<DeleteUserResponseDto>> DeleteUser(string uid, string token);
+    public Task<Result<DeleteUserResponseDto>> DeleteUser(string uid);
 }

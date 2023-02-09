@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces.Services;
-using Application.Errors.Types;
+﻿using Application.Common;
+using Application.Common.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -48,8 +48,9 @@ public class AuthenticationFilter : IAsyncActionFilter
             });
             return;
         }
-            
-        var (successful, uid) = await _identityService.VerifyUserToken(token.ToString()[7..]);
+        
+        var jtw = token.ToString()[7..];
+        var (successful, uid) = await _identityService.VerifyUserToken(jtw);
 
         if (!successful)
         {
@@ -63,7 +64,7 @@ public class AuthenticationFilter : IAsyncActionFilter
         }
 
         // Set the uid header so that it can be picked up by controller 
-        request.Headers["_Uid"] = uid;
+        request.Headers[ApplicationConstants.UidHeader] = uid;
             
         await next();
     }

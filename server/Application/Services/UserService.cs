@@ -2,10 +2,8 @@
 using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services;
-using Application.Errors.Types;
 using Application.Models.Dtos.User.Request;
 using Application.Models.Dtos.User.Response;
-using Application.Models.Types;
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -191,12 +189,12 @@ public class UserService : IUserService
         return _mapper.Map<UserResponseDto>(user);
     }
 
-    public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid, string token)
+    public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid)
     {
         if ((await _unitOfWork.Users.FindUserByUid(uid)).TryTakeError(out var error, out var user))
             return error;
 
-        if ((await _identityService.DeleteUser(uid, token)).TryTakeError(out error, out _))
+        if ((await _identityService.DeleteUser(uid)).TryTakeError(out error, out _))
             return error;
 
         _unitOfWork.Users.Remove(user);

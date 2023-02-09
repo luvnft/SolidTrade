@@ -30,6 +30,8 @@ public static class ConfigureServices
         var client = new Supabase.Client(url, key);
         // Since we cant await while configuring services we have to call the wait method for the client to initialize.
         client.InitializeAsync().Wait();
+        // The admin client when initialized will not have the auth token set so we have to set it manually.
+        client.Auth.SetAuth(key);
         
         services.AddSingleton(client);
         
