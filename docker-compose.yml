@@ -27,20 +27,7 @@ services:
     environment:
       SA_PASSWORD: ${DB_SA_PASSWORD}
       ACCEPT_EULA: "Y"
-
-  firebase:
-    image: andreysenov/firebase-tools:11.14.1-node-16
-    entrypoint:
-      /bin/bash -c 'cd /app/firebase/config && firebase emulators:start --import
-      /home/firebase/data --export-on-exit --token
-      ${FIREBASE_EMULATOR_USER_TOKEN}'
-    ports:
-      - ${FIREBASE_EMULATOR_AUTH_PORT}:9099
-      - ${FIREBASE_EMULATOR_UI_PORT}:3000
-    volumes:
-      - firebase:/app/firebase/data
-      - ./config/firebase:/app/firebase/config
-
+ 
   ngrok:
     image: shkoliar/ngrok:latest
     ports:
