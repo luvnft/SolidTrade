@@ -191,12 +191,12 @@ public class UserService : IUserService
         return _mapper.Map<UserResponseDto>(user);
     }
 
-    public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid)
+    public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid, string token)
     {
         if ((await _unitOfWork.Users.FindUserByUid(uid)).TryTakeError(out var error, out var user))
             return error;
 
-        if ((await _identityService.DeleteUser(uid)).TryTakeError(out error, out _))
+        if ((await _identityService.DeleteUser(uid, token)).TryTakeError(out error, out _))
             return error;
 
         _unitOfWork.Users.Remove(user);

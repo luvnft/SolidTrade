@@ -39,5 +39,5 @@ public class UserController : Controller
 
     [HttpDelete]
     public async Task<IActionResult> DeleteUser()
-        => MatchResult(await _userService.DeleteUser(Request.Headers[UidHeader]));
+        => MatchResult(await _userService.DeleteUser(Request.Headers[UidHeader], Request.Headers["Authorization"]));
 }

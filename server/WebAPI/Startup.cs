@@ -151,7 +151,5 @@ public class Startup
   
         // Ensures the trade republic service is being instantiated at the beginning of the application.
         app.ApplicationServices.GetService<ITradeRepublicApiService>();
-
-        app.ConfigureInfrastructure(Configuration);
     }
 }
