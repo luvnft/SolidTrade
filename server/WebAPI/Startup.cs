@@ -33,7 +33,7 @@ public class Startup
         services.AddLogging();
         services.AddAutoMapper(typeof(EntityToResponseDtoProfile));
 
-        services.AddInfrastructureServices();
+        services.AddInfrastructureServices(Configuration);
         services.AddApplicationServices();
 
         services.AddControllers(options =>

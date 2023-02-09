@@ -25,6 +25,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="supabase-csharp" Version="0.8.1" />
         
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>

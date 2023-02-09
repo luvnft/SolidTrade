@@ -2,41 +2,31 @@
 using Application.Errors.Types;
 using Application.Models.Types;
 using FirebaseAdmin.Auth;
-using Microsoft.Extensions.Configuration;
+using Supabase;
 using Success = OneOf.Types.Success;
 
 namespace Infrastructure.Identity;
 
 internal class IdentityService : IIdentityService
 {
-    private readonly IConfiguration _configuration;
+    private readonly Client _client;
     
-    public IdentityService(IConfiguration configuration)
+    public IdentityService(Client client)
     {
-        _configuration = configuration;
+        _client = client;
     }
 
     public async Task<(bool, string)> VerifyUserToken(string token, CancellationToken ct = default)
     {
-        // When we are testing the api we just provide the uid in the Authorization header to authenticate.
-        if (_configuration.GetValue<bool>("IsLocalDevelopment"))
-        {
-            try
-            {
-                await FirebaseAuth.DefaultInstance.GetUserAsync(token, ct);
-                return (true, token);
-            }
-            catch { }
-        }
-            
         try
         {
-            var decodedToken = await FirebaseAuth.DefaultInstance
-                .VerifyIdTokenAsync(token, ct);
-            return (true, decodedToken.Uid);
+            var x = await _client.Auth.GetUser(token);
+            var x = await _client.Auth.
+            return (true, "");
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             return (false, null);
         } 
     }

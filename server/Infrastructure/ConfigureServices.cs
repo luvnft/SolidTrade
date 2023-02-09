@@ -17,7 +17,7 @@ namespace Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
         {
@@ -28,20 +28,29 @@ public static class ConfigureServices
         services.AddTransient<INotificationService, NotificationService>();
         services.AddSingleton<IMediaManagementService, MediaManagementService>();
         
+        var url = configuration.GetValue<string>("Supabase:Url");
+        var key = configuration.GetValue<string>("Supabase:Key");
+
+        var client = new Supabase.Client(url, key);
+        // Since we cant await while configuring services we have to call the wait method for the client to initialize.
+        client.InitializeAsync().Wait();
+        
+        services.AddSingleton(client);
+        
         return services;
     }
 
     public static IApplicationBuilder ConfigureInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
     {
         // For local development environments we use the firebase emulator for authentication.
-        var firebaseAuthEmulatorHost = configuration.GetValue<string>("FirebaseAuthEmulatorHost");
-        if (firebaseAuthEmulatorHost != null)
-            Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", firebaseAuthEmulatorHost);
-
-        FirebaseApp.Create(new AppOptions
-        {
-            Credential = GoogleCredential.FromFile(configuration["FirebaseCredentials"]),
-        });
+        // var firebaseAuthEmulatorHost = configuration.GetValue<string>("FirebaseAuthEmulatorHost");
+        // if (firebaseAuthEmulatorHost != null)
+        //     Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", firebaseAuthEmulatorHost);
+        //
+        // FirebaseApp.Create(new AppOptions
+        // {
+        //     Credential = GoogleCredential.FromFile(configuration["FirebaseCredentials"]),
+        // });
 
         return app;
     }
