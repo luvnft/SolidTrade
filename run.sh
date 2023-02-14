@@ -16,4 +16,4 @@ cp ~/projects/Rose-Linode/env/${credentials_folder}/server/solid-trade-firebase-
 
 # We do not require ngrok for production. This is why we scale down to 0.
 # We also scale the api up to one, because its scaled to 0 by default for development.
-docker compose --project-name $environment_name up -d --build --force-recreate --scale ngrok=0 --scale --scale api=1
+docker compose --project-name $environment_name up -d --build --force-recreate --scale ngrok=0 --scale api=1
