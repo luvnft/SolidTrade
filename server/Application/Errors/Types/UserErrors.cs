@@ -49,18 +49,17 @@ public class EmailNotAvailable : BaseError
     }
 }
 
-public class IdentityUserDeleteFailed : BaseError
+public class LoginTokenExpired : BaseError
 {
-    public override HttpStatusCode Code => HttpStatusCode.InternalServerError;
+    public override HttpStatusCode Code => HttpStatusCode.Unauthorized;
 
-    public static IdentityUserDeleteFailed Default(string uid, Exception e)
+    public static LoginTokenExpired Default()
     {
-        return new IdentityUserDeleteFailed
+        return new LoginTokenExpired
         {
-            Title = "Could not delete user",
-            Message = $"Delete user with uid: {uid} failed.",
-            UserFriendlyMessage = "Something went wrong when deleting your account. Try again later. If this issue persists please contact us.",
-            Exception = e,
+            Title = "User token expired",
+            Message = $"User tired to make a request with an expired token.",
+            UserFriendlyMessage = "Hi there! It seems like you have been inactive for a while. Please login again.",
         };
     }
 }

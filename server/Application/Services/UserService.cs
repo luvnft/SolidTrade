@@ -17,14 +17,12 @@ public class UserService : IUserService
     private readonly ILogger _logger = Log.ForContext<UserService>();
         
     private readonly IMediaManagementService _mediaManagementService;
-    private readonly IIdentityService _identityService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
         
-    public UserService(IMapper mapper, IMediaManagementService mediaManagementService, IIdentityService identityService, IUnitOfWork unitOfWork)
+    public UserService(IMapper mapper, IMediaManagementService mediaManagementService, IUnitOfWork unitOfWork)
     {
         _mediaManagementService = mediaManagementService;
-        _identityService = identityService;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -192,9 +190,6 @@ public class UserService : IUserService
     public async Task<Result<DeleteUserResponseDto>> DeleteUser(string uid)
     {
         if ((await _unitOfWork.Users.FindUserByUid(uid)).TryTakeError(out var error, out var user))
-            return error;
-
-        if ((await _identityService.DeleteUser(uid)).TryTakeError(out error, out _))
             return error;
 
         _unitOfWork.Users.Remove(user);

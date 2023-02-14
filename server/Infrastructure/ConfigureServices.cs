@@ -1,13 +1,16 @@
-﻿using Application.Common.Interfaces.Persistence.Database;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Application.Common.Interfaces.Persistence.Database;
 using Application.Common.Interfaces.Persistence.Storage;
 using Application.Common.Interfaces.Services;
-using Infrastructure.Identity;
+using Infrastructure.Authentication;
+using Infrastructure.Configurations;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Storage;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure;
 
@@ -20,20 +23,19 @@ public static class ConfigureServices
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         
-        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<INotificationService, NotificationService>();
+        services.AddSingleton(configuration.GetSection("Email").Get<EmailConfiguration>());
         services.AddSingleton<IMediaManagementService, MediaManagementService>();
         
-        var url = configuration.GetValue<string>("Supabase:Url");
-        var key = configuration.GetValue<string>("Supabase:Key");
-
-        var client = new Supabase.Client(url, key);
-        // Since we cant await while configuring services we have to call the wait method for the client to initialize.
-        client.InitializeAsync().Wait();
-        // The admin client when initialized will not have the auth token set so we have to set it manually.
-        client.Auth.SetAuth(key);
+        var secretKey = configuration.GetValue<string>("Jwt:Key");
         
-        services.AddSingleton(client);
+        var securityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey));
+        var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+        var jwtHeader = new JwtHeader(signingCredentials);
+
+        services.AddSingleton(securityKey);
+        services.AddSingleton(jwtHeader);
         
         return services;
     }

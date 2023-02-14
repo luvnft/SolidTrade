@@ -21,6 +21,10 @@ public class UserController : Controller
     public async Task<IActionResult> CreateUser([FromForm] CreateUserRequestDto dto)
         => MatchResult(await _userService.CreateUser(dto, Request.Headers[UidHeader]));
         
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMe()
+        => MatchResult(await _userService.GetUserByUid(Request.Headers[UidHeader], Request.Headers[UidHeader]));
+        
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
         => MatchResult(await _userService.GetUserById(id, Request.Headers[UidHeader]));
