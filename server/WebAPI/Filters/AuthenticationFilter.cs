@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces.Services;
-using Application.Errors.Types;
+﻿using Application.Common;
+using Application.Common.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -7,19 +7,28 @@ namespace WebAPI.Filters;
 
 public class AuthenticationFilter : IAsyncActionFilter
 {
-    private readonly IIdentityService _identityService;
-
-    public AuthenticationFilter(IIdentityService identityService)
+    private readonly IAuthenticationService _authenticationService;
+    private readonly IReadOnlyCollection<string> _publicPaths = new List<string>
     {
-        _identityService = identityService;
+        "/",
+        "/healthcheck",
+        "/image",
+        "/auth",
+        "/auth/status",
+    };
+
+    public AuthenticationFilter(IAuthenticationService authenticationService)
+    {
+        _authenticationService = authenticationService;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var request = context.HttpContext.Request;
         var path = request.Path.Value?.ToLower();
+        path = !path.EndsWith('/') ? path : path[..^1]; 
 
-        if (path is "/" or "/healthcheck" or "/image" or null)
+        if (_publicPaths.Contains(path))
         {
             await next();
             return;
@@ -48,8 +57,9 @@ public class AuthenticationFilter : IAsyncActionFilter
             });
             return;
         }
-            
-        var (successful, uid) = await _identityService.VerifyUserToken(token.ToString()[7..]);
+        
+        var jtw = token.ToString()[7..];
+        var (successful, uid) = _authenticationService.VerifyUserToken(jtw);
 
         if (!successful)
         {
@@ -63,7 +73,7 @@ public class AuthenticationFilter : IAsyncActionFilter
         }
 
         // Set the uid header so that it can be picked up by controller 
-        request.Headers["_Uid"] = uid;
+        request.Headers[ApplicationConstants.UidHeader] = uid;
             
         await next();
     }

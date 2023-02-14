@@ -41,4 +41,3 @@ msbuild.wrn
 
 # Credentials
 WebAPI/Configuration/appsettings.credentials.json
-WebAPI/Configuration/solid-trade-firebase-credentials.json

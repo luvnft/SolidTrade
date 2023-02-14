@@ -33,7 +33,7 @@ public class Startup
         services.AddLogging();
         services.AddAutoMapper(typeof(EntityToResponseDtoProfile));
 
-        services.AddInfrastructureServices();
+        services.AddInfrastructureServices(Configuration);
         services.AddApplicationServices();
 
         services.AddControllers(options =>
@@ -151,7 +151,5 @@ public class Startup
   
         // Ensures the trade republic service is being instantiated at the beginning of the application.
         app.ApplicationServices.GetService<ITradeRepublicApiService>();
-
-        app.ConfigureInfrastructure(Configuration);
     }
 }
