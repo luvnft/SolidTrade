@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/providers/localization.provider.dart';
+import 'package:solidtrade/providers/theme.provider.dart';
 import 'package:solidtrade/screens/home/home_screen.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var locale = ref.watch(localizationProvider);
+    final locale = ref.watch(localizationProvider);
+    final themeMode = ref.watch(themeProvider);
 
     return MaterialApp(
       title: 'Solidtrade™',
@@ -32,13 +34,16 @@ class MyApp extends ConsumerWidget {
         Locale('en'),
         Locale('de'),
       ],
-      theme: ThemeData(
-        // backgroundColor: colors.background,
-        // scaffoldBackgroundColor: colors.background,
-        textTheme: GoogleFonts.poppinsTextTheme().apply(
-            // bodyColor: colors.foreground,
-            // displayColor: colors.foreground,
-            ),
+      themeMode: themeMode,
+      theme: ThemeData.light().copyWith(
+        useMaterial3: true,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
       ),
       home: const HomeScreen(),
     );

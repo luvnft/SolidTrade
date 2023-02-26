@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:solidtrade/providers/localization.provider.dart';
+import 'package:solidtrade/providers/theme.provider.dart';
 import 'package:solidtrade/utils/translations.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -9,6 +9,9 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Solidtrade™'),
+      ),
       body: Center(
         child: Text(
           Translations.of(context).helloWorld,
@@ -18,13 +21,13 @@ class HomeScreen extends ConsumerWidget {
         children: [
           FloatingActionButton(
             onPressed: () {
-              ref.read(localizationProvider.notifier).changeLanguageToEnglish();
+              ref.read(themeProvider.notifier).changeToLightTheme();
             },
             child: const Icon(Icons.add),
           ),
           FloatingActionButton(
             onPressed: () {
-              ref.read(localizationProvider.notifier).changeLanguageToGerman();
+              ref.read(themeProvider.notifier).changeToDarkTheme();
             },
             child: const Icon(Icons.ice_skating),
           )
@@ -87,12 +90,11 @@ class HomeScreen extends ConsumerWidget {
 //       ),
 //       bottomNavigationBar: BottomNavigationBar(
 //         items: [
-//           BottomNavigationBarItem(label: translations.navigationBar.portfolio, icon: Icon(Icons.insights, color: _getItemColor(0))),
-//           BottomNavigationBarItem(label: translations.navigationBar.search, icon: Icon(Icons.search, color: _getItemColor(1))),
-//           BottomNavigationBarItem(label: translations.navigationBar.leaderboard, icon: Icon(Icons.leaderboard, color: _getItemColor(2))),
-//           BottomNavigationBarItem(label: translations.navigationBar.profile, icon: Icon(Icons.person, color: _getItemColor(3))),
+//           BottomNavigationBarItem(label: 'Portfolio', icon: Icon(Icons.insights, color: _getItemColor(0))),
+//           BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search, color: _getItemColor(1))),
+//           BottomNavigationBarItem(label: 'Leaderboard', icon: Icon(Icons.leaderboard, color: _getItemColor(2))),
+//           BottomNavigationBarItem(label: 'Profile', icon: Icon(Icons.person, color: _getItemColor(3))),
 //         ],
-//         backgroundColor: colors.navigationBackground,
 //         type: BottomNavigationBarType.fixed,
 //         showSelectedLabels: false,
 //         showUnselectedLabels: false,
