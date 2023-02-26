@@ -5,13 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/providers/localization.provider.dart';
 import 'package:solidtrade/providers/theme.provider.dart';
-import 'package:solidtrade/screens/home/home_screen.dart';
+import 'package:solidtrade/screens/startup/startup_screen.dart';
 
-void main() {
-  runApp(
-    const ProviderScope(child: MyApp()),
-  );
-}
+void main() => runApp(
+      const ProviderScope(child: MyApp()),
+    );
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -45,7 +43,7 @@ class MyApp extends ConsumerWidget {
           ThemeData(brightness: Brightness.dark).textTheme,
         ),
       ),
-      home: const HomeScreen(),
+      home: const StartupScreen(),
     );
   }
 }
