@@ -21,8 +21,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         => AnyAsync(u => u.Uid == uid).InvertBoolResult();
 
     public Task<Result<bool>> IsEmailAvailable(string email)
-        => AnyAsync(u => EF.Functions.Like(u.Username, $"{email}")).InvertBoolResult();
-        
+        => AnyAsync(u => EF.Functions.Like(u.Email, $"{email}")).InvertBoolResult();
+
     public Task<Result<List<User>>> FindUsersByUsername(string username)
         => FindAsync(u => EF.Functions.Like(u.Username, $"{username}%"));
 
