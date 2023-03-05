@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
 import 'package:solidtrade/data/entities/user.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
+import 'package:solidtrade/services/util/get_it.dart';
 
 class UserService extends IService<User?> {
   UserService() : super(BehaviorSubject.seeded(null)) {
@@ -60,14 +63,7 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<User>> fetchUserCurrentUser() async {
-    var uid = auth.FirebaseAuth.instance.currentUser?.uid;
-
-    RequestResponse<User> result;
-    if (uid != null) {
-      result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
-    } else {
-      result = RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
-    }
+    final result = await DataRequestService.userDataRequestService.fetchCurrentUser();
 
     if (result.isSuccessful) {
       behaviorSubject.add(result.result);
@@ -76,14 +72,14 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {
-    final token = await getFirebaseUserAuthToken();
+    final token = await getUserToken();
 
     if (token == null) {
       return RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
     }
 
     return RequestResponse.successful({
-      'Authorization': 'Bearer ${token.token!}',
+      'Authorization': 'Bearer $token',
     });
   }
 
@@ -114,4 +110,5 @@ class UserService extends IService<User?> {
   }
 
   Future<auth.IdTokenResult>? getFirebaseUserAuthToken() => auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
+  Future<String?> getUserToken() async => get<FlutterSecureStorage>().read(key: SecureStorageKeys.token.name);
 }

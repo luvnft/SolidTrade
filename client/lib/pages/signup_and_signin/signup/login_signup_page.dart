@@ -25,7 +25,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
   Uint8List? imageAsBytes;
   bool showSeedInputField = true;
 
-  String _dicebearSeed = "your-custom-seed";
+  String _dicebearSeed = 'your-custom-seed';
   late String _tempCurrentSeed;
 
   Future<void> _handleChangeSeed(String seed) async {
@@ -52,17 +52,17 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
     if (image == null) return;
 
     if (await image.length() > Constants.fileUploadLimitInBytes) {
-      Util.openDialog(context, "File too large", message: "Sorry, this image is too big.");
+      Util.openDialog(context, 'File too large', message: 'Sorry, this image is too big.');
       return;
     }
 
-    var isGifFile = image.name.endsWith(".gif");
+    var isGifFile = image.name.endsWith('.gif');
 
     if (kIsWeb) {
       var bytes = await image.readAsBytes();
 
       if (!isGifFile) {
-        final closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+        final closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: 'Loading. This might take a while...');
 
         await Future.delayed(const Duration(milliseconds: 400));
 
@@ -158,7 +158,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
         [
           const SizedBox(width: 2),
           const Text(
-            "Upload own picture. GIFs are also supported!",
+            'Upload own picture. GIFs are also supported!',
           ),
           const SizedBox(width: 2),
         ],
@@ -170,7 +170,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
         [
           const Spacer(flex: 8),
           SizedBox(width: IconTheme.of(context).size),
-          const Text("Looks good? Continue here"),
+          const Text('Looks good? Continue here'),
           const Spacer(flex: 7),
           const Icon(Icons.keyboard_arrow_right_rounded),
           const Spacer(flex: 1),
@@ -185,11 +185,11 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
       builder: (_, isKeyboardVisible) => LoginScreen(
-        imageUrl: "https://avatars.dicebear.com/api/micah/$_dicebearSeed.svg",
+        imageUrl: 'https://avatars.dicebear.com/api/micah/$_dicebearSeed.svg',
         imageAsBytes: imageAsBytes,
-        title: "Welcome to Solidtrade!",
+        title: 'Welcome to Solidtrade!',
         subTitle: "Ready to create your solidtrade profile? Let's start with your profile picture!\nType a custom seed to generate a picture or upload your own custom image.",
-        alternativeTitle: "Type a custom seed to generate a picture!",
+        alternativeTitle: 'Type a custom seed to generate a picture!',
         useAlternativeTitleContent: isKeyboardVisible,
         additionalWidgets: [
           showSeedInputField

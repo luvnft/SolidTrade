@@ -4,16 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/app.dart';
-import 'package:solidtrade/app/main_common.mapper.g.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
-import 'package:solidtrade/data/models/enums/client_enums/shared_preferences_keys.dart';
+import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -106,7 +106,7 @@ class Startup {
     languageHasToBeInitialized = false;
 
     WidgetsFlutterBinding.ensureInitialized();
-    initializeJsonMapper();
+    // initializeJsonMapper();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await ConfigReader.initialize();
@@ -178,6 +178,8 @@ class Startup {
     services.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());
     services.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
     services.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+
+    services.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
 
     services.registerFactory<TrProductInfoService>(() => TrProductInfoService());
     services.registerFactory<TrProductPriceService>(() => TrProductPriceService());

@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart' as parser;
 import 'package:mime/mime.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/base/base_http_response_handler.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-
-import 'package:http_parser/http_parser.dart' as parser;
 import 'package:solidtrade/services/util/debug/logger.dart';
 
 abstract class IBaseRequestService {
@@ -20,10 +19,12 @@ abstract class IBaseRequestService {
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     Object? body,
     Map<String, String>? queryParameters,
+    bool selfHandleErrorCode = true,
+    bool mustBeAuthenticated = true,
   }) {
     return HttpResponseHandler<T>(_makeRequest(
       method,
@@ -31,6 +32,8 @@ abstract class IBaseRequestService {
       headers: headers,
       body: body,
       queryParameters: queryParameters,
+      selfHandleErrorCode: selfHandleErrorCode,
+      mustBeAuthenticated: mustBeAuthenticated,
     ));
   }
 
@@ -38,11 +41,12 @@ abstract class IBaseRequestService {
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     Object? body,
     Map<String, String>? queryParameters,
-    bool selfHandleErrorCode = true,
+    required bool selfHandleErrorCode,
+    required bool mustBeAuthenticated,
   }) async {
     final uri = Uri.https(_baseUrl, endpoint, queryParameters);
 
@@ -50,19 +54,12 @@ abstract class IBaseRequestService {
 
     var auth = await _userService.getUserAuthenticationHeader();
 
-    if (!auth.isSuccessful && auth.result == null) {
+    if (mustBeAuthenticated && !auth.isSuccessful && auth.result == null) {
       return RequestResponse.inheritErrorResponse(auth);
-    }
-
-    var deviceToken = await _userService.getUserDeviceHeader();
-
-    if (!deviceToken.isSuccessful && deviceToken.result == null) {
-      return RequestResponse.inheritErrorResponse(deviceToken);
     }
 
     http.Response response;
     Map<String, String> requestHeaders = {
-      ...?deviceToken.result,
       ...?auth.result,
       ...headers,
     };
@@ -82,16 +79,16 @@ abstract class IBaseRequestService {
         break;
     }
 
-    _logger.d("Response status code: ${response.statusCode}");
-    _logger.d("Response body: ${response.body}");
+    _logger.d('Response status code: ${response.statusCode}');
+    _logger.d('Response body: ${response.body}');
 
-    var responseBody = jsonDecode(response.body);
+    final responseBody = jsonDecode(response.body);
 
     if (selfHandleErrorCode && response.statusCode != 200) {
       if (response.statusCode == 400) {
         return RequestResponse.failedUnexpectedly(responseBody);
       } else if (response.statusCode == 502) {
-        RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
+        RequestResponse.failedWithUserFriendlyMessage('The servers are currently offline. Please try again later.');
       } else {
         return RequestResponse.failed(responseBody);
       }
@@ -104,7 +101,7 @@ abstract class IBaseRequestService {
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     Map<String, String> fields = const {},
     Map<String, List<int>> files = const {},
@@ -126,7 +123,7 @@ abstract class IBaseRequestService {
     HttpMethod method,
     String endpoint, {
     Map<String, String> headers = const {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     Map<String, String> fields = const {},
     Map<String, List<int>> files = const {},
@@ -161,12 +158,12 @@ abstract class IBaseRequestService {
 
     for (var file in files.entries) {
       final mime = lookupMimeType('', headerBytes: file.value);
-      final extension = mime!.split("/")[1];
+      final extension = mime!.split('/')[1];
       request.files.add(http.MultipartFile.fromBytes(
         file.key,
         file.value,
-        filename: "file.$extension",
-        contentType: parser.MediaType("image", extension[1]),
+        filename: 'file.$extension',
+        contentType: parser.MediaType('image', extension[1]),
       ));
     }
 
@@ -176,8 +173,8 @@ abstract class IBaseRequestService {
 
     response = await http.Response.fromStream(responseStream);
 
-    _logger.d("Response status code: ${response.statusCode}");
-    _logger.d("Response body: ${response.body}");
+    _logger.d('Response status code: ${response.statusCode}');
+    _logger.d('Response body: ${response.body}');
 
     var responseBody = jsonDecode(response.body);
 
@@ -189,7 +186,7 @@ abstract class IBaseRequestService {
           return RequestResponse.failedUnexpectedly(responseBody);
         }
       } else if (response.statusCode == 502) {
-        RequestResponse.failedWithUserFriendlyMessage("The servers are currently offline. Please try again later.");
+        RequestResponse.failedWithUserFriendlyMessage('The servers are currently offline. Please try again later.');
       } else {
         return RequestResponse.failed(jsonDecode(response.body));
       }

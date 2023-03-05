@@ -18,16 +18,16 @@ class UserDataRequestService extends IBaseRequestService {
     Uint8List? profilePictureFile,
   }) async {
     Map<String, String> body = {
-      "DisplayName": displayName,
-      "Username": username,
-      "Email": email,
-      "ProfilePictureSeed": profilePictureSeed.toString(),
-      "InitialBalance": initialBalance.toString(),
+      'DisplayName': displayName,
+      'Username': username,
+      'Email': email,
+      'ProfilePictureSeed': profilePictureSeed.toString(),
+      'InitialBalance': initialBalance.toString(),
     };
 
     Map<String, List<int>> files = profilePictureFile != null
         ? {
-            "ProfilePictureFile": profilePictureFile
+            'ProfilePictureFile': profilePictureFile
           }
         : {};
 
@@ -44,7 +44,7 @@ class UserDataRequestService extends IBaseRequestService {
 
     Map<String, List<int>> files = dto.profilePictureFile != null
         ? {
-            "ProfilePictureFile": dto.profilePictureFile!
+            'ProfilePictureFile': dto.profilePictureFile!
           }
         : {};
 
@@ -58,8 +58,15 @@ class UserDataRequestService extends IBaseRequestService {
 
   Future<RequestResponse<User>> fetchUserByUid(String uid) async {
     return await makeRequest<User>(HttpMethod.get, Constants.endpointUser, queryParameters: {
-      "Uid": uid,
+      'Uid': uid,
     }).create((data) => User.fromJson(data));
+  }
+
+  Future<RequestResponse<User>> fetchCurrentUser() async {
+    return await makeRequest<User>(
+      HttpMethod.get,
+      '${Constants.endpointUser}me',
+    ).create((data) => User.fromJson(data));
   }
 
   Future<RequestResponse<DeleteUserResponse>> deleteUser() async {

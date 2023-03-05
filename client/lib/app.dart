@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
-import 'package:solidtrade/pages/common/pre_splash.dart';
+import 'package:solidtrade/pages/common/initial_loading_page.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
@@ -71,7 +71,7 @@ class SolidtradeAppState extends State<SolidtradeApp> {
               ThemeData(brightness: Brightness.dark).textTheme,
             ),
           ),
-          home: const PreSplash(),
+          home: const InitialLoadingPage(),
         );
       },
     );
