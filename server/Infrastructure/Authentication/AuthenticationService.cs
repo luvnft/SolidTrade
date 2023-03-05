@@ -8,6 +8,7 @@ using Application.Common.Interfaces.Services.Cache;
 using Application.Models.Dtos.Authentication.Response;
 using Domain.Enums;
 using Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,7 +22,7 @@ internal class AuthenticationService : IAuthenticationService
     private readonly ICacheService _cacheService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly JwtHeader _jwtHeader;
-    
+
     public AuthenticationService(ILogger<AuthenticationService> logger, IUnitOfWork unitOfWork,
         ICacheService cacheService, JwtHeader jwtHeader, SymmetricSecurityKey jwtSecurityKey,
         EmailConfiguration emailConfiguration)
@@ -36,12 +37,8 @@ internal class AuthenticationService : IAuthenticationService
 
     public async Task<Result<CreateMagicLinkResponseDto>> CreateMagicLink(string host, string userEmail)
     {
-        var isEmailAvailable = await _unitOfWork.Users.IsEmailAvailable(userEmail);
-        if (isEmailAvailable.TryTakeError(out var error, out var emailAvailable))
-            return error;
-
-        if (!emailAvailable)
-            return EmailNotAvailable.Default(userEmail);
+        var userQuery = await _unitOfWork.Users.FirstAsync(u => EF.Functions.Like(u.Email, $"{userEmail}"));
+        var uid = userQuery.IsFailure ? Guid.NewGuid() : Guid.Parse(userQuery.ResultUnsafe.Uid);
 
         var magicLinkCode = Guid.NewGuid();
         var magicLinkConfirmationStatusCode = Guid.NewGuid();
@@ -73,10 +70,9 @@ internal class AuthenticationService : IAuthenticationService
 
         await smtpClient.SendMailAsync(message);
 
-        var uid = Guid.NewGuid();
         var token = GenerateJwt(_jwtHeader, uid);
         var refreshToken = GenerateJwt(_jwtHeader, uid, true);
-       
+
         const int expirationTimeInMinutes = 60;
         var cachedTokenResponse = new CheckMagicLinkStatusResponseDto
         {
@@ -87,10 +83,10 @@ internal class AuthenticationService : IAuthenticationService
                 RefreshToken = refreshToken,
             },
         };
-        
+
         _cacheService.SetCachedValue(magicLinkCode.ToString(), cachedTokenResponse, expirationTimeInMinutes);
         _cacheService.SetCachedValue(magicLinkConfirmationStatusCode.ToString(), cachedTokenResponse, expirationTimeInMinutes);
-        
+
         return new CreateMagicLinkResponseDto
         {
             ConfirmationStatusCode = magicLinkConfirmationStatusCode,
@@ -108,7 +104,7 @@ internal class AuthenticationService : IAuthenticationService
 
         return new CheckMagicLinkStatusResponseDto { Status = MagicLinkStatus.MagicLinkNotClicked };
     }
-    
+
     public Result<string> VerifyMagicLinkCode(Guid code)
     {
         var cache = _cacheService.GetCachedValue<CheckMagicLinkStatusResponseDto>(code.ToString());
@@ -146,7 +142,7 @@ internal class AuthenticationService : IAuthenticationService
                 _logger.LogError("Token does not contain a user id.");
                 return (false, null);
             }
-            
+
             return (true, userId.Value);
         }
         catch (SecurityTokenException ex)
@@ -160,7 +156,7 @@ internal class AuthenticationService : IAuthenticationService
     private static (string, string) ConstructMailMessage(string host, Guid magicLinkCode)
     {
         var magicLink = $"{host}/auth?ConfirmationCode={magicLinkCode}";
-        
+
         const string subject = "Verify your email";
         const string stylesheet = @"
         .container {
@@ -190,7 +186,7 @@ internal class AuthenticationService : IAuthenticationService
             margin-top: 20px;
         }
 ";
-        var body = 
+        var body =
             $""""
     <html>
     <head>
@@ -210,7 +206,7 @@ internal class AuthenticationService : IAuthenticationService
     </body>
     </html>
 """";
-        
+
         return (subject, body);
     }
 
@@ -288,7 +284,7 @@ internal class AuthenticationService : IAuthenticationService
     </body>
     </html>";
     }
-    
+
     private static string ConstructInvalidMagicLinkConfirmationMessage()
     {
         return @"
