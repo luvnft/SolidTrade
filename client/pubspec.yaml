@@ -18,7 +18,7 @@ dependencies:
   enum_to_string: ^2.0.1
   firebase_auth: ^4.2.2
   firebase_core: ^2.7.0
-  firebase_messaging: ^14.2.5
+  # firebase_messaging: ^14.2.5
   flutter:
     sdk: flutter
   flutter_datetime_picker: ^1.5.1
@@ -35,7 +35,6 @@ dependencies:
   local_auth: ^2.1.6
   logger: ^1.2.2
   mime: ^1.0.4
-  modal_bottom_sheet: ^2.1.2
   permission_handler: ^10.2.0
   rxdart: ^0.27.7
   shared_preferences: ^2.0.18
@@ -69,3 +68,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  assets:
+    - assets/fonts/
+    - assets/config/
+    - assets/images/
+    - assets/images/order_types/
+    - assets/images/categories/

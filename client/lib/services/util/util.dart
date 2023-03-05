@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,13 +31,13 @@ class Util {
   }
 
   static Future<void> googleLoginFailedDialog(BuildContext context) {
-    return Util.openDialog(context, "Google login failed", message: "Something went wrong with the login. Please try again.");
+    return Util.openDialog(context, 'Google login failed', message: 'Something went wrong with the login. Please try again.');
   }
 
   static Future<void> openDialog(
     BuildContext context,
     String title, {
-    String closeText = "Okay",
+    String closeText = 'Okay',
     String? message,
     Iterable<String>? messages,
     List<Widget>? widgets,
@@ -60,7 +57,7 @@ class Util {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           title: Text(title),
           content: SingleChildScrollView(
             child: ListBody(
@@ -79,31 +76,6 @@ class Util {
         );
       },
     );
-  }
-
-  static Future<bool> requestNotificationPermissionsWithUserFriendlyPopup(BuildContext context) async {
-    var currentSettings = await FirebaseMessaging.instance.getNotificationSettings();
-
-    if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
-      return true;
-    }
-
-    // TODO: If we plan to add notifications that will appear to the user. This message must be changed.
-    // Because saying "notifications will NOT appear to the user." doesn't apply then anymore and therefor the message must be changed.
-    await openDialog(
-      context,
-      "Allow notifications",
-      message: "A popup will appear and ask permissions to send notifications. This is necessary for the server communication. Don't worry notifications will NOT appear to the user.",
-    );
-
-    var settings = await FirebaseMessaging.instance.requestPermission();
-    final isGranted = settings.authorizationStatus == AuthorizationStatus.authorized;
-
-    if (!isGranted) {
-      await openDialog(context, "Oh snap", message: "Seems like notifications has been denied for solidtrade. Please open your browser notifications settings and allow notifications for solidtrade.");
-    }
-
-    return isGranted;
   }
 
   static Widget loadImage(
@@ -234,7 +206,7 @@ class Util {
 
   static ColorThemeType currentDeviceColorTheme(BuildContext context) {
     if (kIsWeb) {
-      var brightness = SchedulerBinding.instance!.window.platformBrightness;
+      var brightness = SchedulerBinding.instance.window.platformBrightness;
       bool isDarkMode = brightness == Brightness.dark;
 
       return isDarkMode ? ColorThemeType.dark : ColorThemeType.light;
@@ -251,7 +223,7 @@ class Util {
 
     var tickers = LanguageTicker.values.map((e) {
       var s = e.toString();
-      return s.substring(s.indexOf(".") + 1);
+      return s.substring(s.indexOf('.') + 1);
     });
 
     if (!tickers.any((ticker) => ticker == appLocale.languageCode)) {
@@ -261,13 +233,13 @@ class Util {
     return EnumToString.fromString(LanguageTicker.values, tickers.firstWhere((ticker) => ticker == appLocale.languageCode))!;
   }
 
-  static void Function() showLoadingDialog(BuildContext context, {String waitingText = "Loading...", bool showIndicator = true}) {
+  static void Function() showLoadingDialog(BuildContext context, {String waitingText = 'Loading...', bool showIndicator = true}) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           children: [
             Center(
               child: Row(

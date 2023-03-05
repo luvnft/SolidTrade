@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/app.dart';
+import 'package:solidtrade/app/main_common.mapper.g.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
@@ -22,7 +23,6 @@ import 'package:solidtrade/services/stream/aggregate_history_service.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/knockout_service.dart';
-import 'package:solidtrade/services/stream/messaging_service.dart';
 import 'package:solidtrade/services/stream/ongoing_knockout_service.dart';
 import 'package:solidtrade/services/stream/ongoing_warrant_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
@@ -34,8 +34,6 @@ import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
-
-import 'main_common.mapper.g.dart';
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
@@ -49,7 +47,7 @@ void _registerFlutterErrorHandler(Environment environment) {
 
   FlutterError.onError = (details) {
     // We can exclude image errors, because these are already being handled.
-    if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
+    if (details.exception is Exception && (details.exception as Exception).toString().contains('Invalid image data')) {
       return;
     }
 
@@ -126,8 +124,8 @@ class Startup {
   }
 
   static Future<void> _configureFirebaseAuth() async {
-    String configuredHost = const String.fromEnvironment("FIREBASE_EMULATOR_URL");
-    int configuredPort = const int.fromEnvironment("AUTH_EMULATOR_PORT");
+    String configuredHost = const String.fromEnvironment('FIREBASE_EMULATOR_URL');
+    int configuredPort = const int.fromEnvironment('AUTH_EMULATOR_PORT');
     const int defaultPort = 9099;
 
     // Android emulator must be pointed to 10.0.2.2
@@ -175,7 +173,6 @@ class Startup {
     services.registerSingleton<OngoingWarrantService>(OngoingWarrantService());
     services.registerSingleton<OngoingKnockoutService>(OngoingKnockoutService());
     services.registerSingleton<PortfolioService>(PortfolioService());
-    services.registerSingleton<MessagingService>(MessagingService());
     services.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
     services.registerSingleton<TrProductSearchService>(TrProductSearchService());
     services.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());

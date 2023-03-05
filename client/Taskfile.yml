@@ -5,3 +5,8 @@ tasks:
     cmds:
       - "flutter pub run build_runner watch"
     silent: true
+
+  reset:
+    cmds:
+      - "flutter clean && flutter pub get"
+    silent: true

@@ -9,7 +9,6 @@ import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginSignIn extends StatelessWidget with STWidget {
@@ -20,12 +19,6 @@ class LoginSignIn extends StatelessWidget with STWidget {
   final _userService = GetIt.instance.get<UserService>();
 
   Future<void> _handleClickLoginWithGoogle(BuildContext context) async {
-    var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
-
-    if (!successful) {
-      return;
-    }
-
     var user = await UtilUserService.signInWithGoogle();
 
     if (user == null) {
@@ -48,7 +41,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
     }
 
     closeDialog();
-    Util.openDialog(context, "Login failed", message: response.error!.userFriendlyMessage);
+    Util.openDialog(context, 'Login failed', message: response.error!.userFriendlyMessage);
   }
 
   void _handleClickForgotOrLostGoogleAccount() {
@@ -59,14 +52,14 @@ class LoginSignIn extends StatelessWidget with STWidget {
   Widget build(BuildContext context) {
     return LoginScreen(
       imageUrl: Constants.smokingGif,
-      title: "Hello Again!",
+      title: 'Hello Again!',
       subTitle: "Welcome back you've been missed!",
       additionalWidgets: [
         Util.roundedButton(
           [
             Util.loadImage(Constants.googleLogoUrl, 20),
             const SizedBox(width: 10),
-            const Text("Login with Google"),
+            const Text('Login with Google'),
           ],
           colors: colors,
           onPressed: () => _handleClickLoginWithGoogle(context),
@@ -74,7 +67,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
         const SizedBox(height: 10),
         Util.roundedButton(
           [
-            const Text("Forgot or lost your Google Account? Click here!"),
+            const Text('Forgot or lost your Google Account? Click here!'),
           ],
           colors: colors,
           onPressed: _handleClickForgotOrLostGoogleAccount,

@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_messaging/firebase_messaging.dart' as msg;
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
@@ -86,19 +83,21 @@ class UserService extends IService<User?> {
     }
 
     return RequestResponse.successful({
-      "Authorization": "Bearer " + token.token!,
+      'Authorization': 'Bearer ${token.token!}',
     });
   }
 
   Future<RequestResponse<Map<String, String>>> getUserDeviceHeader() async {
-    final token = await getUserMessagingDeviceToken();
+    // TODO: Do we still need this?
+    var token = '';
+    // final token = await getUserMessagingDeviceToken();
 
     if (token == null) {
-      return RequestResponse.failedWithUserFriendlyMessage("Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.");
+      return RequestResponse.failedWithUserFriendlyMessage('Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.');
     }
 
     return RequestResponse.successful({
-      "DeviceToken": token,
+      'DeviceToken': token,
     });
   }
 
@@ -115,5 +114,4 @@ class UserService extends IService<User?> {
   }
 
   Future<auth.IdTokenResult>? getFirebaseUserAuthToken() => auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
-  Future<String?> getUserMessagingDeviceToken() => msg.FirebaseMessaging.instance.getToken();
 }

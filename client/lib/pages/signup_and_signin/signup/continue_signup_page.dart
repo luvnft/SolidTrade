@@ -1,12 +1,11 @@
-import 'dart:typed_data';
-
-import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/st_logo.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
@@ -14,8 +13,6 @@ import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
-
-import 'package:flutter/services.dart';
 
 // ignore: must_be_immutable
 class ContinueSignupScreen extends StatefulWidget {
@@ -72,12 +69,6 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   }
 
   Future<void> _handleClickCreateAccount() async {
-    var successful = await Util.requestNotificationPermissionsWithUserFriendlyPopup(context);
-
-    if (!successful) {
-      return;
-    }
-
     final closeDialog = Util.showLoadingDialog(context);
 
     String name = _nameController.text;
@@ -106,7 +97,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
 
     closeDialog();
 
-    Util.openDialog(context, "Could not create user", message: response.error!.userFriendlyMessage);
+    Util.openDialog(context, 'Could not create user', message: response.error!.userFriendlyMessage);
   }
 
   @override
@@ -126,7 +117,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                     STLogo(colors.logoAsGif, key: UniqueKey(), animationDuration: const Duration(seconds: 0)),
                     const SizedBox(height: 25),
                     const Text(
-                      "Hey friend👋\nOnly a few steps remaining\n\nChoose a name and define how much cash you want to start with!",
+                      'Hey friend👋\nOnly a few steps remaining\n\nChoose a name and define how much cash you want to start with!',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20),
                     ),
@@ -136,21 +127,21 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                       child: TextFormField(
                         controller: _nameController,
                         cursorColor: colors.foreground,
-                        decoration: getInputDecoration("Name"),
+                        decoration: getInputDecoration('Name'),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
                         controller: _usernameController,
-                        decoration: getInputDecoration("Username"),
+                        decoration: getInputDecoration('Username'),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
                         controller: _initialBalanceController,
-                        decoration: getInputDecoration("Starting account balance"),
+                        decoration: getInputDecoration('Starting account balance'),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -160,7 +151,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: Util.roundedButton(
                         [
-                          const Text("Create account!")
+                          const Text('Create account!')
                         ],
                         onPressed: _handleClickCreateAccount,
                         colors: colors,
@@ -182,7 +173,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                           ),
                           const SizedBox(width: 10),
                           const Text(
-                            "Change google account",
+                            'Change google account',
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                             softWrap: false,
@@ -204,7 +195,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
               height: 40,
               child: Center(
                 child: Text(
-                  "Google account: ${widget.user.email}",
+                  'Google account: ${widget.user.email}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: DarkColorTheme().foreground,
