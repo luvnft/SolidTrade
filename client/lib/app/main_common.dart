@@ -103,7 +103,6 @@ class Startup {
     languageHasToBeInitialized = false;
 
     WidgetsFlutterBinding.ensureInitialized();
-    // initializeJsonMapper();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await ConfigReader.initialize();

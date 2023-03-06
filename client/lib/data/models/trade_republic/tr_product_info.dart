@@ -62,18 +62,21 @@ class TrProductInfo {
   });
 }
 
+@jsonSerializable
 class ProductCompanyInfo {
   int? ipoDate;
 
   ProductCompanyInfo({this.ipoDate});
 }
 
+@jsonSerializable
 class Exchange {
   TradingTimes? tradingTimes;
 
   Exchange({this.tradingTimes});
 }
 
+@jsonSerializable
 class TradingTimes {
   final int start;
   final int end;
@@ -81,6 +84,7 @@ class TradingTimes {
   TradingTimes({required this.start, required this.end});
 }
 
+@jsonSerializable
 class ProductTags {
   final String name;
   final String icon;
@@ -88,6 +92,7 @@ class ProductTags {
   ProductTags({required this.name, required this.icon});
 }
 
+@jsonSerializable
 class DerivativeInfo {
   final String productCategoryName;
   final String productGroupType;
@@ -98,6 +103,7 @@ class DerivativeInfo {
   DerivativeInfo({required this.productCategoryName, required this.knocked, required this.underlying, required this.properties, required this.productGroupType});
 }
 
+@jsonSerializable
 class DerivativeInfoProperties {
   final String optionType;
   final double strike;
@@ -126,6 +132,7 @@ class DerivativeInfoProperties {
   });
 }
 
+@jsonSerializable
 class DerivativeUnderlying {
   final String isin;
   final String name;
@@ -133,6 +140,7 @@ class DerivativeUnderlying {
   DerivativeUnderlying({required this.isin, required this.name});
 }
 
+@jsonSerializable
 class DerivativeProductCount {
   int? knockOutProduct;
   int? vanillaWarrant;
