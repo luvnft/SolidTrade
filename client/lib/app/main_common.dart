@@ -9,7 +9,6 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidtrade/app.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
@@ -34,6 +33,7 @@ import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
+import 'package:solidtrade/services/util/debug/logger.dart';
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
