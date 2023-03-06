@@ -43,17 +43,17 @@ class Portfolio implements IBaseEntity {
 
   factory Portfolio.fromJson(Map<String, dynamic> json) {
     return Portfolio(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      cash: json["cash"],
-      initialCash: json["initialCash"],
-      userId: json["userId"],
-      knockOutPositions: (json["knockOutPositions"] as List<dynamic>).map((e) => KnockoutPosition.fromJson(e)).toList(),
-      ongoingKnockOutPositions: (json["ongoingKnockOutPositions"] as List<dynamic>).map((e) => OngoingKnockoutPosition.fromJson(e)).toList(),
-      ongoingWarrantPositions: (json["ongoingWarrantPositions"] as List<dynamic>).map((e) => OngoingWarrantPosition.fromJson(e)).toList(),
-      stockPositions: (json["stockPositions"] as List<dynamic>).map((e) => StockPosition.fromJson(e)).toList(),
-      warrantPositions: (json["warrantPositions"] as List<dynamic>).map((e) => WarrantPosition.fromJson(e)).toList(),
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      cash: json['cash'],
+      initialCash: json['initialCash'],
+      userId: json['userId'],
+      knockOutPositions: (json['knockOutPositions'] as List<dynamic>).map((e) => KnockoutPosition.fromJson(e)).toList(),
+      ongoingKnockOutPositions: (json['ongoingKnockOutPositions'] as List<dynamic>).map((e) => OngoingKnockoutPosition.fromJson(e)).toList(),
+      ongoingWarrantPositions: (json['ongoingWarrantPositions'] as List<dynamic>).map((e) => OngoingWarrantPosition.fromJson(e)).toList(),
+      stockPositions: (json['stockPositions'] as List<dynamic>).map((e) => StockPosition.fromJson(e)).toList(),
+      warrantPositions: (json['warrantPositions'] as List<dynamic>).map((e) => WarrantPosition.fromJson(e)).toList(),
     );
   }
 }

@@ -9,7 +9,7 @@ class AggregateHistoryService {
   final Map<String, TrAggregateHistory> _histories = {};
 
   Future<RequestResponse<TrAggregateHistory>> getTrAggregateHistory(String isinWithExtension, ChartDateRangeView range) async {
-    final key = "$isinWithExtension-$range";
+    final key = '$isinWithExtension-$range';
 
     if (_histories.containsKey(key)) {
       return Future.value(RequestResponse.successful(_histories[key]!));
@@ -19,7 +19,7 @@ class AggregateHistoryService {
     var result = await DataRequestService.trApiDataRequestService.makeRequest<TrAggregateHistory>(requestString);
 
     if (result.isSuccessful) {
-      _histories["$isinWithExtension-$range"] = result.result!;
+      _histories['$isinWithExtension-$range'] = result.result!;
     }
 
     return result;

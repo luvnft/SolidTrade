@@ -54,7 +54,7 @@ class TrApiDataRequestService {
   }
 
   void _onMessageReceived(String message) {
-    if (!message.contains('{\"bid\":{\"time\":')) {
+    if (!message.contains('{"bid":{"time":')) {
       _logger.d(message);
     }
 
@@ -127,7 +127,7 @@ class TrApiDataRequestService {
         id: id,
         onResponseCallback: (response) {
           unsub(id);
-          if (response.startsWith('{\"errors\"')) {
+          if (response.startsWith('{"errors"')) {
             completer.complete(RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
             return;
           }
@@ -153,7 +153,7 @@ class TrApiDataRequestService {
     var model = TrRequestModel(
         id: id,
         onResponseCallback: (response) {
-          if (response.startsWith('{\"errors\"')) {
+          if (response.startsWith('{"errors"')) {
             var errorResult = RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage);
             subject.add(TrRequestResponse(id, errorResult));
             return;

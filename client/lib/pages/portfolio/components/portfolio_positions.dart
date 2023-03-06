@@ -16,7 +16,7 @@ class PortfolioPositions extends StatelessWidget {
 
   final _portfolioService = GetIt.instance.get<PortfolioService>();
   late final _positionTitle = PortfolioOverviewTitle(
-    title: !isViewingOutstandingOrders ? "Positions" : "Outstanding Orders",
+    title: !isViewingOutstandingOrders ? 'Positions' : 'Outstanding Orders',
   );
 
   @override
@@ -28,8 +28,8 @@ class PortfolioPositions extends StatelessWidget {
         stream: _portfolioService.stream$,
         builder: (context, portfolio) {
           if (!portfolio.hasAnyPositions) {
-            const stockViewUserMessage = "Nothing to see here yet 😉\nWhy not start investing and experience how it feels to lose money professionally!";
-            const outstandingOrdersViewUserMessage = "No current outstanding orders 😉";
+            const stockViewUserMessage = 'Nothing to see here yet 😉\nWhy not start investing and experience how it feels to lose money professionally!';
+            const outstandingOrdersViewUserMessage = 'No current outstanding orders 😉';
             final userMessage = isViewingOutstandingOrders ? outstandingOrdersViewUserMessage : stockViewUserMessage;
 
             return Column(
@@ -83,18 +83,18 @@ class PortfolioPositionsContent extends StatelessWidget {
           ? [
               positionTitleWidget,
               const SizedBox(height: spaceBetweenTiles),
-              PortfolioListTile(title: "Stocks", products: stocks),
+              PortfolioListTile(title: 'Stocks', products: stocks),
               const SizedBox(height: spaceBetweenTiles),
-              PortfolioListTile(title: "Knockouts", products: knockouts),
+              PortfolioListTile(title: 'Knockouts', products: knockouts),
               const SizedBox(height: spaceBetweenTiles),
-              PortfolioListTile(title: "Warrants", products: warrants),
+              PortfolioListTile(title: 'Warrants', products: warrants),
               const SizedBox(height: spaceBetweenTiles),
             ]
           : [
               positionTitleWidget,
-              OutstandingOrdersPortfolioListTile(title: "Outstanding knockout orders", products: ongoingKnockouts, positionType: PositionType.knockout),
+              OutstandingOrdersPortfolioListTile(title: 'Outstanding knockout orders', products: ongoingKnockouts, positionType: PositionType.knockout),
               const SizedBox(height: spaceBetweenTiles),
-              OutstandingOrdersPortfolioListTile(title: "Outstanding warrant orders", products: ongoingWarrants, positionType: PositionType.warrant),
+              OutstandingOrdersPortfolioListTile(title: 'Outstanding warrant orders', products: ongoingWarrants, positionType: PositionType.warrant),
               const SizedBox(height: spaceBetweenTiles),
             ],
     );

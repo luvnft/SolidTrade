@@ -71,7 +71,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   double get _totalPrice {
-    double _getPriceOfSingleShare() {
+    double getPriceOfSingleShare() {
       switch (_orderType) {
         case OrderType.market:
           return _currentPrice.getPriceDependingOfBuyOrSell(widget.buyOrSell);
@@ -81,7 +81,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
       }
     }
 
-    return (_getPriceOfSingleShare() * _numberOfShares);
+    return (getPriceOfSingleShare() * _numberOfShares);
   }
 
   double _getNumberOfSharesOwned(Portfolio portfolio) {

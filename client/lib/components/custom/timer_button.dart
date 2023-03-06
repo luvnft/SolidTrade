@@ -22,7 +22,7 @@ class TimerButton extends StatefulWidget {
   final String text;
   final int initialSecondsLeft;
 
-  static String defaultMessage(String text, int secondsLeft) => "$text in $secondsLeft";
+  static String defaultMessage(String text, int secondsLeft) => '$text in $secondsLeft';
 
   @override
   State<TimerButton> createState() => _TimerButtonState();

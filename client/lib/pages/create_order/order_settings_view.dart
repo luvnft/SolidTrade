@@ -35,7 +35,7 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
       case BuyOrSell.buy:
         switch (widget.orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return translations.editOrderSettingsView.buyStopOrderDescription(widget.name, currentPrice);
           case OrderType.limit:
@@ -44,7 +44,7 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
       case BuyOrSell.sell:
         switch (widget.orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return translations.editOrderSettingsView.sellStopOrderDescription(widget.name, currentPrice);
           case OrderType.limit:
@@ -65,8 +65,8 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${widget.orderType.fullName} settings",
-                style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+                '${widget.orderType.fullName} settings',
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w600),
                 textAlign: TextAlign.left,
               ),
               const SizedBox(height: 10),
@@ -94,10 +94,10 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
                       isDense: true,
                       contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 5),
                       border: InputBorder.none,
-                      labelText: "${widget.orderType.name} price",
+                      labelText: '${widget.orderType.name} price',
                       labelStyle: TextStyle(fontSize: 16, color: colors.foreground),
-                      suffixText: "€",
-                      hintText: "0",
+                      suffixText: '€',
+                      hintText: '0',
                       suffixStyle: TextStyle(color: colors.foreground),
                       hintStyle: TextStyle(color: colors.softForeground),
                     ),
@@ -126,7 +126,7 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
                   ),
                   onPressed: !_inputValidation.isValid || _definedStopLimitPrice == null ? null : () => _onContinue(context),
                   child: const Text(
-                    "Continue",
+                    'Continue',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -163,7 +163,7 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
       case BuyOrSell.buy:
         switch (widget.orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return inputPriceIsHigherThanCurrentMarket ? UserInputValidationResult.validInput() : UserInputValidationResult.errorPriceMustBeHigher();
           case OrderType.limit:
@@ -172,7 +172,7 @@ class _OrderSettingsViewState extends State<OrderSettingsView> with STWidget {
       case BuyOrSell.sell:
         switch (widget.orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return inputPriceIsHigherThanCurrentMarket ? UserInputValidationResult.errorPriceMustBeLower() : UserInputValidationResult.validInput();
           case OrderType.limit:

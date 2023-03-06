@@ -20,11 +20,11 @@ class TrProductInfo {
   DerivativeInfo? derivativeInfo;
 
   String get tickerOrShortName => isCrypto ? homeSymbol! : intlSymbol ?? derivativeInfo?.underlying.name ?? shortName;
-  bool get isCrypto => typeId == "crypto";
-  bool get isStock => typeId == "stock";
-  bool get isDerivative => typeId == "derivative";
-  bool get isFund => typeId == "fund";
-  String get isinWithExchangeExtension => "$isin.${exchangeIds.first}";
+  bool get isCrypto => typeId == 'crypto';
+  bool get isStock => typeId == 'stock';
+  bool get isDerivative => typeId == 'derivative';
+  bool get isFund => typeId == 'fund';
+  String get isinWithExchangeExtension => '$isin.${exchangeIds.first}';
 
   PositionType get positionType {
     if (isStock || isCrypto || isFund) {
@@ -33,14 +33,14 @@ class TrProductInfo {
 
     if (isDerivative) {
       switch (derivativeInfo!.productGroupType) {
-        case "knockOutProduct":
+        case 'knockOutProduct':
           return PositionType.knockout;
-        case "vanillaWarrant":
+        case 'vanillaWarrant':
           return PositionType.warrant;
       }
     }
 
-    throw "Undefined product type";
+    throw 'Undefined product type';
   }
 
   TrProductInfo({

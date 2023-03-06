@@ -27,12 +27,12 @@ class StockPosition implements IBaseEntity, IPosition {
 
   factory StockPosition.fromJson(Map<String, dynamic> json) {
     return StockPosition(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      isin: json["isin"],
-      buyInPrice: json["buyInPrice"],
-      numberOfShares: json["numberOfShares"],
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      isin: json['isin'],
+      buyInPrice: json['buyInPrice'],
+      numberOfShares: json['numberOfShares'],
     );
   }
 }

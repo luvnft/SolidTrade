@@ -44,7 +44,7 @@ class TrDerivativeSearchResult {
       knockoutBarrierOrDelta: result.delta!,
       size: result.size,
       currency: result.currency,
-      expiryText: DateFormat("dd.MM.yyyy").format(DateTime.parse(result.expiry!)),
+      expiryText: DateFormat('dd.MM.yyyy').format(DateTime.parse(result.expiry!)),
     );
   }
 }

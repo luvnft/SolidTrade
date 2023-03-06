@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'dart:async' show StreamSubscription;
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:solidtrade/data/models/request_response/request_response_stream_result.dart';
 import 'package:solidtrade/services/util/util.dart';
 
@@ -22,7 +21,7 @@ class STStreamBuilder<T> extends StreamBuilderBase<T, AsyncSnapshotRequestRespon
 
   @override
   Widget build(BuildContext context, AsyncSnapshotRequestResponse<T> currentSummary) {
-    return currentSummary.data == null ? showLoadingSkeleton(BoxShape.rectangle) : builder(context, currentSummary.data!);
+    return currentSummary.data == null ? showLoadingSkeleton(BoxShape.rectangle) : builder(context, currentSummary.data as T);
   }
 
   @override
@@ -79,7 +78,7 @@ class AsyncSnapshotRequestResponse<T> {
   }
 
   @override
-  int get hashCode => hashValues(connectionState, data, error);
+  int get hashCode => Object.hash(connectionState, data, error);
 }
 
 abstract class StreamBuilderBase<T, S> extends StatefulWidget {
@@ -129,7 +128,7 @@ class _StreamBuilderBaseState<T, S> extends State<StreamBuilderBase<T, S>> {
   }
 
   @override
-  Widget build(BuildContext context) => _summary.isProcessing ? _summary.loadingOrErrorWidget! : widget.build(context, _summary.value!);
+  Widget build(BuildContext context) => _summary.isProcessing ? _summary.loadingOrErrorWidget! : widget.build(context, _summary.value as S);
 
   @override
   void dispose() {

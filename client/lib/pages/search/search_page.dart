@@ -18,7 +18,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> with STWidget {
-  final String _inputFieldHeroTag = "HeroTag:SearchInputField";
+  final String _inputFieldHeroTag = 'HeroTag:SearchInputField';
   Text _constructTitle(String title) => Text(
         title,
         style: const TextStyle(
@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> with STWidget {
           children: [
             const SizedBox(height: 25),
             Text(
-              "Browse",
+              'Browse',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -69,11 +69,11 @@ class _SearchPageState extends State<SearchPage> with STWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _constructTitle("Popular categories"),
+                    _constructTitle('Popular categories'),
                     const SizedBox(height: 10),
                     SearchCategories(onPressCategory: _handlePressCategory),
                     const SizedBox(height: 20),
-                    _constructTitle("Learn the basics"),
+                    _constructTitle('Learn the basics'),
                     const SizedBox(height: 10),
                     const LearnTheBasics(),
                   ],
@@ -88,9 +88,9 @@ class _SearchPageState extends State<SearchPage> with STWidget {
 
   bool _hasNavigatedToSearch = false;
 
+  // TODO: Implement...
   void _handlePressCategory(String category) {
-    // TODO: Implement...
-    print(category);
+    logger.d('Pressed on category: $category');
   }
 
   void _onSearchFieldTap() {

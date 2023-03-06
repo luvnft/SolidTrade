@@ -10,7 +10,7 @@ import 'package:solidtrade/data/models/trade_republic/tr_request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/tr_product_info_service.dart';
 
-import 'base/transient_base_service.dart';
+import 'package:solidtrade/services/stream/base/transient_base_service.dart';
 
 class TrProductPriceService extends ITransientService<TrProductPrice> {
   TrProductPriceService() : super(BehaviorSubject.seeded(null));
@@ -32,7 +32,7 @@ class TrProductPriceService extends ITransientService<TrProductPrice> {
       return info;
     }
 
-    var isinWithExtension = "${info.result!.isin}.${info.result!.exchangeIds.first}";
+    var isinWithExtension = '${info.result!.isin}.${info.result!.exchangeIds.first}';
 
     StreamSubscription<TrRequestResponse<TrProductPrice>?>? subscription;
 

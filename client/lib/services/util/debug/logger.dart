@@ -65,15 +65,15 @@ class _SimpleLogPrinter extends l.LogPrinter {
 
   String _getMethodNameFromWeb(String stackTrace) {
     final s1 = stackTrace.substring(2);
-    final s2 = s1.substring(0, s1.indexOf(":/") - 2);
-    final methodName = s2.substring(s2.lastIndexOf(" ") + 1);
+    final s2 = s1.substring(0, s1.indexOf(':/') - 2);
+    final methodName = s2.substring(s2.lastIndexOf(' ') + 1);
 
     return methodName;
   }
 
   String _getClassNameFromMobile(String stackTrace) {
-    final s1 = stackTrace.substring(stackTrace.indexOf("#4") + 1);
-    final s2 = s1.substring(s1.indexOf("#") + 2).trim();
-    return s2.substring(0, s2.indexOf("(") - 1).trim();
+    final s1 = stackTrace.substring(stackTrace.indexOf('#4') + 1);
+    final s2 = s1.substring(s1.indexOf('#') + 2).trim();
+    return s2.substring(0, s2.indexOf('(') - 1).trim();
   }
 }

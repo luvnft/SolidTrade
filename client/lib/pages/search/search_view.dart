@@ -105,7 +105,7 @@ class _SearchResultsState extends State<_SearchResults> with STWidget {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   int _totalNumberOfResults = 0;
 
-  String _previousSearch = "_";
+  String _previousSearch = '_';
 
   @override
   void initState() {
@@ -135,7 +135,7 @@ class _SearchResultsState extends State<_SearchResults> with STWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "$_totalNumberOfResults results",
+                '$_totalNumberOfResults results',
                 style: TextStyle(color: colors.lessSoftForeground),
               ),
               IconButton(onPressed: () {}, icon: Icon(Icons.auto_awesome_mosaic_rounded, color: colors.foreground)),

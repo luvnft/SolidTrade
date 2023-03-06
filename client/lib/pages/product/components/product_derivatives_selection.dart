@@ -14,7 +14,7 @@ import 'package:solidtrade/services/util/util.dart';
 class DerivativesSelection extends StatelessWidget with STWidget {
   DerivativesSelection({Key? key, required this.productInfo}) : super(key: key);
   final TrProductInfo productInfo;
-  final _formatter = NumberFormat("###,###", "tr_TR");
+  final _formatter = NumberFormat('###,###', 'tr_TR');
 
   Widget _derivativesWidget(
     BuildContext context,
@@ -35,7 +35,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 18)),
+                Text(title, style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 18)),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
@@ -72,8 +72,8 @@ class DerivativesSelection extends StatelessWidget with STWidget {
         productInfo.derivativeProductCount.knockOutProduct != null
             ? _derivativesWidget(
                 context,
-                "💥",
-                "Knockouts",
+                '💥',
+                'Knockouts',
                 translations.quotes.randomKnockoutQuote,
                 productInfo.derivativeProductCount.knockOutProduct!,
                 PositionType.knockout,
@@ -82,8 +82,8 @@ class DerivativesSelection extends StatelessWidget with STWidget {
         productInfo.derivativeProductCount.vanillaWarrant != null
             ? _derivativesWidget(
                 context,
-                "⏳",
-                "Warrants",
+                '⏳',
+                'Warrants',
                 translations.quotes.randomWarrantQuote,
                 productInfo.derivativeProductCount.vanillaWarrant!,
                 PositionType.warrant,
@@ -94,7 +94,7 @@ class DerivativesSelection extends StatelessWidget with STWidget {
           margin: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             translations.productPage.derivativesRiskDisclaimer,
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
           ),
         )
       ],

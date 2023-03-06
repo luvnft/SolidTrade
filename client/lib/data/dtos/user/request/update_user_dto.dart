@@ -41,11 +41,11 @@ class UpdateUserDto {
       }
     }
 
-    addIf(user.bio != bio, MapEntry("Bio", bio));
-    addIf(user.displayName != displayName, MapEntry("DisplayName", displayName));
-    addIf(user.email?.toLowerCase() != email.toLowerCase(), MapEntry("Email", email));
-    addIf(user.username.toLowerCase() != username.toLowerCase(), MapEntry("Username", username));
-    addIf(user.hasPublicPortfolio != publicPortfolio, MapEntry("PublicPortfolio", publicPortfolio.toString()));
+    addIf(user.bio != bio, MapEntry('Bio', bio));
+    addIf(user.displayName != displayName, MapEntry('DisplayName', displayName));
+    addIf(user.email?.toLowerCase() != email.toLowerCase(), MapEntry('Email', email));
+    addIf(user.username.toLowerCase() != username.toLowerCase(), MapEntry('Username', username));
+    addIf(user.hasPublicPortfolio != publicPortfolio, MapEntry('PublicPortfolio', publicPortfolio.toString()));
 
     return map;
   }

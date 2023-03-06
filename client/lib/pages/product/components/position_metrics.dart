@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/entities/base/base_position.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_stock_details.dart';
@@ -34,7 +34,7 @@ class _PositionMetricsState extends State<PositionMetrics> with STWidget {
 
     var difference = prices.bid.price / widget.position.buyInPrice;
     var changeInPercent = (difference - 1) * 100;
-    return changeInPercent.toDefaultNumber(suffix: "%", maxFractionDigits: 3);
+    return changeInPercent.toDefaultNumber(suffix: '%', maxFractionDigits: 3);
   }
 
   void _onClickOnPerformance(_) {
@@ -66,16 +66,16 @@ class _PositionMetricsState extends State<PositionMetrics> with STWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _Metric(name: "Total", value: _getTotal(prices).toDefaultPrice()),
-                  _Metric(name: "Shares", value: widget.position.numberOfShares.toDefaultNumber()),
+                  _Metric(name: 'Total', value: _getTotal(prices).toDefaultPrice()),
+                  _Metric(name: 'Shares', value: widget.position.numberOfShares.toDefaultNumber()),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _Metric(name: "Buy in", value: widget.position.buyInPrice.toDefaultPrice()),
+                  _Metric(name: 'Buy in', value: widget.position.buyInPrice.toDefaultPrice()),
                   _Metric(
-                    name: "Performance",
+                    name: 'Performance',
                     value: _getPerformance(prices, _showPerformanceInPercent),
                     onTapDown: _onClickOnPerformance,
                   ),
@@ -95,7 +95,8 @@ class _Metric extends StatelessWidget {
     required this.name,
     required this.value,
     this.onTapDown,
-    this.fallbackValue = "--",
+    // ignore: unused_element
+    this.fallbackValue = '--',
   }) : super(key: key);
   final String fallbackValue;
   final String? value;

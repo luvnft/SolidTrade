@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> with STWidget {
   static final List<Widget> _widgetOptions = <Widget>[
     const PortfolioPage(),
     const SearchPage(),
-    const Text("data"),
-    const Text("data"),
+    const Text('data'),
+    const Text('data'),
   ];
 
   void _handleItemIndexClick(int index) {

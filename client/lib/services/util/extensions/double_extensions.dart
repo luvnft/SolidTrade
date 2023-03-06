@@ -1,11 +1,11 @@
 import 'package:intl/intl.dart';
 
 const Map<String, String> _currencyTranslations = {
-  "USD": "\$",
-  "CAD": "\$",
-  "EUR": "€",
-  "GBP": "£",
-  "JPY": "¥",
+  'USD': '\$',
+  'CAD': '\$',
+  'EUR': '€',
+  'GBP': '£',
+  'JPY': '¥',
 };
 
 String _currencyCodeToSymbol(String currencyCode) {
@@ -16,18 +16,18 @@ String _currencyCodeToSymbol(String currencyCode) {
 }
 
 extension DoubleExtension on double {
-  String toDefaultPrice({int maxFractionDigits = 5, String currencyCode = "EUR"}) {
-    final _format = NumberFormat("###,##0.00", "en_US");
-    _format.maximumFractionDigits = maxFractionDigits;
+  String toDefaultPrice({int maxFractionDigits = 5, String currencyCode = 'EUR'}) {
+    final format = NumberFormat('###,##0.00', 'en_US');
+    format.maximumFractionDigits = maxFractionDigits;
 
-    return _format.format(this) + _currencyCodeToSymbol(currencyCode);
+    return format.format(this) + _currencyCodeToSymbol(currencyCode);
   }
 
   String toDefaultNumber({int maxFractionDigits = 5, String? suffix}) {
-    final _format = NumberFormat("###,##0.00", "en_US");
-    _format.maximumFractionDigits = maxFractionDigits;
+    final format = NumberFormat('###,##0.00', 'en_US');
+    format.maximumFractionDigits = maxFractionDigits;
 
-    final formattedNumber = _format.format(this);
+    final formattedNumber = format.format(this);
     return suffix == null ? formattedNumber : formattedNumber + suffix;
   }
 }

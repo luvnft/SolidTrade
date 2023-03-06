@@ -107,28 +107,28 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: _UnifiedRow(children: [
                   _ParameterOption(
-                    optionName: _isKnockout ? "Leverage" : "Strike",
+                    optionName: _isKnockout ? 'Leverage' : 'Strike',
                     isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.leverageOrStrike,
                     sortingProperty: _SortByPropertyOptions.leverageOrStrike,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
-                    optionName: _isKnockout ? "Knockout" : "Delta",
+                    optionName: _isKnockout ? 'Knockout' : 'Delta',
                     isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.knockoutOrDelta,
                     sortingProperty: _SortByPropertyOptions.knockoutOrDelta,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
-                    optionName: "Size",
+                    optionName: 'Size',
                     isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.size,
                     sortingProperty: _SortByPropertyOptions.size,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
-                    optionName: "Expiry",
+                    optionName: 'Expiry',
                     isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.expiry,
                     sortingProperty: _SortByPropertyOptions.expiry,
                     sortDirectionOptions: _sortingDirection,
@@ -339,14 +339,14 @@ class _SingleDerivativeSearchResult extends StatelessWidget with STWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${result.issuerDisplayName} ${result.name}",
+                  '${result.issuerDisplayName} ${result.name}',
                   style: TextStyle(color: Colors.grey[300]),
                 ),
                 const SizedBox(height: 5),
                 _UnifiedRow(
                   children: [
-                    Text(result.leverageOrStrike.toString() + "x"),
-                    Text(result.knockoutBarrierOrDelta.toString() + "\$"),
+                    Text('${result.leverageOrStrike}x'),
+                    Text('${result.knockoutBarrierOrDelta}\$'),
                     Text(result.size.toString()),
                     Container(
                       padding: const EdgeInsets.all(2.5),

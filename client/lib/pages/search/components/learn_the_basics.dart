@@ -10,21 +10,21 @@ class LearnTheBasics extends StatelessWidget {
     return Column(
       children: const [
         _BlogItem(
-          title: "Why Invest?",
-          description: "Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.",
-          image: "",
+          title: 'Why Invest?',
+          description: 'Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.',
+          image: '',
         ),
         SizedBox(height: 10),
         _BlogItem(
-          title: "What is the stock market?",
-          description: "Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.",
-          image: "",
+          title: 'What is the stock market?',
+          description: 'Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.',
+          image: '',
         ),
         SizedBox(height: 10),
         _BlogItem(
-          title: "What are your goals?",
-          description: "Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.",
-          image: "",
+          title: 'What are your goals?',
+          description: 'Lorem ipsum dolor sit amet consectetur, alias, velit corporis eius eveniet consectetur aperiam! Deleniti architecto veritatis ad vel impedit.',
+          image: '',
         ),
       ],
     );
@@ -47,8 +47,8 @@ class _BlogItem extends StatelessWidget {
     return Row(
       children: [
         ClipRRect(
-          child: STLogo(DarkColorTheme().logoAsGif, key: UniqueKey()),
           borderRadius: BorderRadius.circular(10),
+          child: STLogo(DarkColorTheme().logoAsGif, key: UniqueKey()),
         ),
         const SizedBox(width: 12.5),
         Column(

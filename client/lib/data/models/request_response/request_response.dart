@@ -31,7 +31,7 @@ class RequestResponse<T> {
   factory RequestResponse.failedWithUserFriendlyMessage(String message) {
     return RequestResponse(
       error: ErrorResponse.fromJson({
-        "userFriendlyMessage": message
+        'userFriendlyMessage': message
       }),
       isSuccessful: false,
       result: null,
@@ -41,7 +41,7 @@ class RequestResponse<T> {
   factory RequestResponse.failedUnexpectedly(Map<String, dynamic> data) {
     return RequestResponse(
       error: ErrorResponse.fromJson({
-        "userFriendlyMessage": data["userFriendlyMessage"] ?? data["message"] ?? GetIt.instance.get<ConfigurationProvider>().languageProvider.language.common.httpFriendlyErrorResponse,
+        'userFriendlyMessage': data['userFriendlyMessage'] ?? data['message'] ?? GetIt.instance.get<ConfigurationProvider>().languageProvider.language.common.httpFriendlyErrorResponse,
       }),
       isSuccessful: false,
       result: null,

@@ -22,7 +22,7 @@ class OutstandingOrdersPortfolioListTile extends StatelessWidget with STWidget {
         ? const SizedBox.shrink()
         : Column(
             children: [
-              PortfolioOverviewTitle(title: title + " (${products.length})", textStyle: Theme.of(context).textTheme.subtitle1),
+              PortfolioOverviewTitle(title: '$title (${products.length})', textStyle: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 5),
               ListView.builder(
                 shrinkWrap: true,

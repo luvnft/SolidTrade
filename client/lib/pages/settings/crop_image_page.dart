@@ -55,7 +55,7 @@ class _CropperState extends State<Cropper> {
   }
 
   void _cropImage() async {
-    var closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+    var closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: 'Loading. This might take a while...');
 
     await Future.delayed(const Duration(milliseconds: 500));
 

@@ -35,7 +35,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
               children: [
                 Text(
                   orderType.fullName,
-                  style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 10),
@@ -52,7 +52,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          "Tip: Want to learn more about order types?",
+                          'Tip: Want to learn more about order types?',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: colors.foreground),
                         ),
@@ -69,7 +69,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
                     ),
                     onPressed: () => _pushToNextPage(context),
                     child: const Text(
-                      "Continue",
+                      'Continue',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -87,7 +87,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
       case BuyOrSell.buy:
         switch (orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return colors.stopOrderBuy;
           case OrderType.limit:
@@ -96,7 +96,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
       case BuyOrSell.sell:
         switch (orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return colors.stopOrderSell;
           case OrderType.limit:
@@ -110,7 +110,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
       case BuyOrSell.buy:
         switch (orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return translations.createOrderPage.buyStopOrderDescription(name);
           case OrderType.limit:
@@ -119,7 +119,7 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
       case BuyOrSell.sell:
         switch (orderType) {
           case OrderType.market:
-            throw ("Did not expect market order");
+            throw ('Did not expect market order');
           case OrderType.stop:
             return translations.createOrderPage.sellStopOrderDescription(name);
           case OrderType.limit:
@@ -133,5 +133,6 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
     Navigator.pop(context, result);
   }
 
-  void _onClickLearnAboutOrderTypes() => launch(Constants.learnMoreAboutOrderTypesLink);
+  // TODO: Test if this works.
+  void _onClickLearnAboutOrderTypes() => launchUrl(Uri.parse(Constants.learnMoreAboutOrderTypesLink));
 }

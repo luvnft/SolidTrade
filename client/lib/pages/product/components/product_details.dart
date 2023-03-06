@@ -17,13 +17,13 @@ class ProductDetails extends StatelessWidget with STWidget {
 
   Widget _detailEntry(BuildContext context, String name, String value) {
     const double fontSize = 15.25;
-    final style = Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: fontSize);
+    final style = Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: fontSize);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
-          name + ":",
+          '$name:',
           style: style.copyWith(
             color: Colors.grey[400],
           ),
@@ -37,27 +37,27 @@ class ProductDetails extends StatelessWidget with STWidget {
   }
 
   List<Widget> _loadDetailEntries(BuildContext context) {
-    final dateFormatter = DateFormat("dd.MM.yyyy");
-    final tradingHoursFormatter = DateFormat("HH:mm");
+    final dateFormatter = DateFormat('dd.MM.yyyy');
+    final tradingHoursFormatter = DateFormat('HH:mm');
 
-    final isCrypto = productInfo.typeId == "crypto";
-    final ticker = isCrypto ? productInfo.homeSymbol! : productInfo.intlSymbol ?? "--";
+    final isCrypto = productInfo.typeId == 'crypto';
+    final ticker = isCrypto ? productInfo.homeSymbol! : productInfo.intlSymbol ?? '--';
 
     if (isCrypto || isStock) {
       final name = productInfo.name.length > 30 ? productInfo.shortName : productInfo.name;
 
       final details = [
-        _detailEntry(context, "Name", name),
-        _detailEntry(context, "Isin", productInfo.isin),
+        _detailEntry(context, 'Name', name),
+        _detailEntry(context, 'Isin', productInfo.isin),
       ];
       if (productInfo.company.ipoDate != null) {
         details.addAll([
           _detailEntry(
             context,
-            "IPO Date*",
+            'IPO Date*',
             dateFormatter.format(fromUnixToDate(productInfo.company.ipoDate!)),
           ),
-          _detailEntry(context, "Ticker", ticker)
+          _detailEntry(context, 'Ticker', ticker)
         ]);
       }
       return details;
@@ -70,31 +70,31 @@ class ProductDetails extends StatelessWidget with STWidget {
     final tradingTimes = productInfo.exchanges.first.tradingTimes;
 
     final details = [
-      _detailEntry(context, "Product", derivativeInfo.productCategoryName),
-      _detailEntry(context, "Type", derivativeInfo.properties.optionType.capitalize()),
-      _detailEntry(context, "Issuer", productInfo.issuerDisplayName ?? "--"),
-      _detailEntry(context, "Isin", productInfo.isin),
-      _detailEntry(context, "Wkn", productInfo.wkn),
-      _detailEntry(context, "Underlying", derivativeInfo.underlying.name),
-      _detailEntry(context, "Underlying Currency", derivativeInfo.properties.currency),
-      _detailEntry(context, "Settlement", derivativeInfo.properties.settlementType.capitalize()),
-      _detailEntry(context, "Ratio", derivativeInfo.properties.size.toString()),
-      _detailEntry(context, "First Trading Day", dateFormatter.format(firstTradingDay)),
+      _detailEntry(context, 'Product', derivativeInfo.productCategoryName),
+      _detailEntry(context, 'Type', derivativeInfo.properties.optionType.capitalize()),
+      _detailEntry(context, 'Issuer', productInfo.issuerDisplayName ?? '--'),
+      _detailEntry(context, 'Isin', productInfo.isin),
+      _detailEntry(context, 'Wkn', productInfo.wkn),
+      _detailEntry(context, 'Underlying', derivativeInfo.underlying.name),
+      _detailEntry(context, 'Underlying Currency', derivativeInfo.properties.currency),
+      _detailEntry(context, 'Settlement', derivativeInfo.properties.settlementType.capitalize()),
+      _detailEntry(context, 'Ratio', derivativeInfo.properties.size.toString()),
+      _detailEntry(context, 'First Trading Day', dateFormatter.format(firstTradingDay)),
     ];
 
     if (lastTradingDay != null) {
-      details.add(_detailEntry(context, "Last Trading Day", dateFormatter.format(lastTradingDay)));
+      details.add(_detailEntry(context, 'Last Trading Day', dateFormatter.format(lastTradingDay)));
     }
 
     if (derivativeInfo.properties.expiry != null) {
-      details.add(_detailEntry(context, "Expiry", dateFormatter.format(DateTime.parse(derivativeInfo.properties.expiry!))));
+      details.add(_detailEntry(context, 'Expiry', dateFormatter.format(DateTime.parse(derivativeInfo.properties.expiry!))));
     }
 
     if (tradingTimes != null) {
       details.add(_detailEntry(
         context,
-        "Trading Hours",
-        tradingHoursFormatter.format(fromUnixToDate(tradingTimes.start)) + " - " + tradingHoursFormatter.format(fromUnixToDate(tradingTimes.end)),
+        'Trading Hours',
+        '${tradingHoursFormatter.format(fromUnixToDate(tradingTimes.start))} - ${tradingHoursFormatter.format(fromUnixToDate(tradingTimes.end))}',
       ));
     }
 

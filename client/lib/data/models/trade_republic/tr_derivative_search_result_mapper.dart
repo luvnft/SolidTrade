@@ -21,7 +21,7 @@ class TrDerivativeSearchResultMapper {
       case PositionType.knockout:
         return results.map((e) => TrDerivativeSearchResult.fromKnockoutSearchResult(e));
       default:
-        throw Exception("Expected ${(PositionType).toString()} to be knockout or warrant. But provided argument was $positionType.");
+        throw Exception('Expected ${(PositionType).toString()} to be knockout or warrant. But provided argument was $positionType.');
     }
   }
 }

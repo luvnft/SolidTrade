@@ -53,5 +53,5 @@ class TrDerivativesSearchService {
     required int numberOfAvailableProducts,
     DerivativesSortDirectionOptions sortDirection = DerivativesSortDirectionOptions.asc,
   }) =>
-      "$isin-$derivativeType-$sortBy-$filterByType-$numberOfAvailableProducts-$sortDirection";
+      '$isin-$derivativeType-$sortBy-$filterByType-$numberOfAvailableProducts-$sortDirection';
 }

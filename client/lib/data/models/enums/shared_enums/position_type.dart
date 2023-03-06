@@ -8,11 +8,11 @@ extension PositionTypeExtension on PositionType {
   String get trName {
     switch (this) {
       case PositionType.warrant:
-        return "vanillaWarrant";
+        return 'vanillaWarrant';
       case PositionType.knockout:
-        return "knockOutProduct";
+        return 'knockOutProduct';
       case PositionType.stock:
-        return "stock";
+        return 'stock';
     }
   }
 }

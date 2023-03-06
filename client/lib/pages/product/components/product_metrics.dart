@@ -37,9 +37,9 @@ class ProductMetrics extends StatelessWidget with STWidget {
           children: [
             _Metric(
               name: translations.productPage.marketCap,
-              value: tupleNameForNumber == null ? "--" : tupleNameForNumber.t2.toStringAsFixed(3) + " " + translations.productPage.nameOfNumberPrefix(tupleNameForNumber.t1),
+              value: tupleNameForNumber == null ? '--' : '${tupleNameForNumber.t2.toStringAsFixed(3)} ${translations.productPage.nameOfNumberPrefix(tupleNameForNumber.t1)}',
             ),
-            _Metric(name: "P/E", value: result.company.peRatioSnapshot?.toStringAsFixed(2)),
+            _Metric(name: 'P/E', value: result.company.peRatioSnapshot?.toStringAsFixed(2)),
           ],
         );
       },
@@ -58,16 +58,16 @@ class ProductMetrics extends StatelessWidget with STWidget {
     rows.add(
       Row(
         children: [
-          _Metric(name: "Strike", value: di.properties.strike.toDefaultPrice(currencyCode: di.properties.currency)),
+          _Metric(name: 'Strike', value: di.properties.strike.toDefaultPrice(currencyCode: di.properties.currency)),
           productInfo.positionType == PositionType.warrant
               ? _Metric(
-                  name: "Delta",
+                  name: 'Delta',
                   value: di.properties.delta!.toStringAsFixed(2),
                 )
               : _Metric(
-                  name: "Leverage",
+                  name: 'Leverage',
                   value: di.properties.leverage?.toStringAsFixed(2),
-                  fallbackValue: "Not specified",
+                  fallbackValue: 'Not specified',
                 ),
         ],
       ),
@@ -78,7 +78,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
         Row(
           children: [
             _Metric(
-              name: "Barrier",
+              name: 'Barrier',
               value: di.properties.barrier?.toDefaultPrice(currencyCode: di.properties.currency),
             ),
             _Metric.empty(),
@@ -113,16 +113,16 @@ class ProductMetrics extends StatelessWidget with STWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _Metric(name: "Bid", value: prices.bid.price.toDefaultPrice()),
-                  _Metric(name: "Ask", value: prices.ask?.price.toDefaultPrice()),
+                  _Metric(name: 'Bid', value: prices.bid.price.toDefaultPrice()),
+                  _Metric(name: 'Ask', value: prices.ask?.price.toDefaultPrice()),
                 ],
               ),
               !productInfo.isDerivative
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _Metric(name: "Open", value: prices.open.price.toDefaultPrice()),
-                        _Metric(name: "Close", value: prices.pre.price.toDefaultPrice()),
+                        _Metric(name: 'Open', value: prices.open.price.toDefaultPrice()),
+                        _Metric(name: 'Close', value: prices.pre.price.toDefaultPrice()),
                       ],
                     )
                   : const SizedBox.shrink(),
@@ -137,7 +137,7 @@ class ProductMetrics extends StatelessWidget with STWidget {
 }
 
 class _Metric extends StatelessWidget {
-  const _Metric({Key? key, required this.name, required this.value, this.fallbackValue = "--"}) : super(key: key);
+  const _Metric({Key? key, required this.name, required this.value, this.fallbackValue = '--'}) : super(key: key);
   final String fallbackValue;
   final String? value;
   final String name;
@@ -158,5 +158,5 @@ class _Metric extends StatelessWidget {
     );
   }
 
-  factory _Metric.empty() => const _Metric(name: "", value: "");
+  factory _Metric.empty() => const _Metric(name: '', value: '');
 }

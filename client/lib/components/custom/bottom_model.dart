@@ -40,7 +40,7 @@ class BottomModel extends StatelessWidget with STWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w600)),
+                Text(title, style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w600)),
                 Text(subtitle)
               ],
             ),
