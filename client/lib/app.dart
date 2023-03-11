@@ -49,6 +49,7 @@ class SolidtradeAppState extends State<SolidtradeApp> {
 
         return MaterialApp(
           title: 'Solidtrade™',
+          navigatorKey: widget.navigatorKey,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

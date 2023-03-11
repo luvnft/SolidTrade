@@ -5,6 +5,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/dtos/auth/response/check_magic_link_status_response_dto.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
+import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/pages/signup_and_signin/components/login_screen.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
@@ -14,10 +15,14 @@ import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ignore: must_be_immutable
-class LoginSignIn extends StatelessWidget with STWidget {
-  LoginSignIn({Key? key}) : super(key: key);
+class LoginSignIn extends StatefulWidget {
+  const LoginSignIn({Key? key}) : super(key: key);
 
+  @override
+  State<LoginSignIn> createState() => _LoginSignInState();
+}
+
+class _LoginSignInState extends State<LoginSignIn> with STWidget {
   final _secureStorage = get<FlutterSecureStorage>();
   final _historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
   final _portfolioService = GetIt.instance.get<PortfolioService>();
@@ -26,16 +31,19 @@ class LoginSignIn extends StatelessWidget with STWidget {
   String _email = '';
 
   Future<void> _handleClickSendLoginLink(BuildContext context) async {
-    if (_email.isEmpty) {
+    final email = _email.trim();
+    final isValidMail = RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(email);
+
+    if (!isValidMail) {
       const snackBar = SnackBar(
-        content: Text('Please enter your email address.'),
+        content: Text('Seems like you entered an invalid email address. Please try again.'),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
 
-    final createLinkResponse = await DataRequestService.authDataRequestService.createMagicLink(_email);
+    final createLinkResponse = await DataRequestService.authDataRequestService.createMagicLink(email);
 
     if (!createLinkResponse.isSuccessful) {
       Util.openDialog(context, 'Failed to send link', message: createLinkResponse.error!.userFriendlyMessage);
@@ -43,6 +51,14 @@ class LoginSignIn extends StatelessWidget with STWidget {
     }
 
     final code = createLinkResponse.result!.confirmationStatusCode;
+
+    const snackBar = SnackBar(
+      content: Text('A login link was send to your email address. Please click on the link to login.'),
+      duration: Duration(days: 1),
+      showCloseIcon: true,
+    );
+
+    final snk = ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     // Once the link was send we wait for the user to confirm the link
     // we do this by polling. this is not pretty but it works
@@ -71,9 +87,10 @@ class LoginSignIn extends StatelessWidget with STWidget {
       if (!fetchedSuccessfully) {
         Util.openDialog(context, 'Failed to login', message: 'Something went wrong while logging in. Are you sure you have an account?\nIf so try again later.');
       } else {
-        // TODO: Navigate to home page
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
 
+      snk.close();
       return;
     }
   }
@@ -89,8 +106,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
     return false;
   }
 
-  // TODO: Does this work?
-  void _handleClickForgotOrLostAccount() => launchUrl(Uri.parse(Constants.forgotOrLostAccountFormLink));
+  Future<void> _handleClickForgotOrLostAccount() async => await launchUrl(Uri.parse(Constants.forgotOrLostAccountFormLink));
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +115,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
       title: 'Hello Again!',
       subTitle: "Welcome back you've been missed!",
       additionalWidgets: [
-        TextFormField(
+        TextField(
           decoration: const InputDecoration(
             contentPadding: EdgeInsets.all(10),
             border: OutlineInputBorder(),
@@ -107,7 +123,6 @@ class LoginSignIn extends StatelessWidget with STWidget {
           ),
           style: const TextStyle(fontSize: 16),
           textAlign: TextAlign.center,
-          initialValue: _email,
           onChanged: (value) => _email = value,
         ),
         const SizedBox(height: 10),

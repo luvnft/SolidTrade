@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ import 'package:solidtrade/pages/settings/crop_image_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
 import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
@@ -189,7 +191,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       return;
     }
 
-    await UtilUserService.signOut();
+    await get<FlutterSecureStorage>().deleteAll();
 
     await Util.openDialog(
       context,

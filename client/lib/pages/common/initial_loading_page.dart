@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:solidtrade/pages/common/welcome_page.dart';
+import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
@@ -42,29 +43,25 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
       return;
     }
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
     _fetchedUserSuccessfully.complete(_LoginState.loggedOut);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: _fetchedUserSuccessfully.future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            switch (snapshot.data!) {
-              case _LoginState.loggedIn:
-                return const Center(child: Text('Logged in'));
-              case _LoginState.loggedOut:
-                Future.microtask(() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage())));
-                return const Center(child: Text('Logged out'));
-            }
+    return FutureBuilder(
+      future: _fetchedUserSuccessfully.future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          switch (snapshot.data!) {
+            case _LoginState.loggedIn:
+              return const HomePage();
+            case _LoginState.loggedOut:
+              return const WelcomePage();
           }
+        }
 
-          return const Center(child: Text('Loading'));
-        },
-      ),
+        return const Scaffold(body: Center(child: Text('Loading')));
+      },
     );
   }
 }

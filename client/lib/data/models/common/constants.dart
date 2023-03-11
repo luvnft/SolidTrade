@@ -5,6 +5,7 @@ class Constants {
   static const smokingGif = 'https://c.tenor.com/wQ5IslyynbkAAAAC/elon-musk-smoke.gif';
   static const googleLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png';
 
+  // TODO: The docs need an update.
   static const forgotOrLostAccountFormLink = 'https://docs.google.com/forms/d/181J0K5WYEPrI0h4_flZBNtz3Io5VSEo07c9SflOUtGY/';
   static const learnMoreAboutOrderTypesLink = 'https://www.investopedia.com/investing/basics-trading-stock-know-your-orders/';
   static const fileUploadLimitInBytes = 10000000; // 10MB
