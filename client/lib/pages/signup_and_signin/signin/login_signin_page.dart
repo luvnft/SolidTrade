@@ -14,6 +14,7 @@ import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class LoginSignIn extends StatelessWidget with STWidget {
   LoginSignIn({Key? key}) : super(key: key);
 
@@ -22,12 +23,10 @@ class LoginSignIn extends StatelessWidget with STWidget {
   final _portfolioService = GetIt.instance.get<PortfolioService>();
   final _userService = GetIt.instance.get<UserService>();
 
-  final _textController = TextEditingController();
+  String _email = '';
 
   Future<void> _handleClickSendLoginLink(BuildContext context) async {
-    final email = _textController.text;
-
-    if (email.isEmpty) {
+    if (_email.isEmpty) {
       const snackBar = SnackBar(
         content: Text('Please enter your email address.'),
       );
@@ -36,7 +35,7 @@ class LoginSignIn extends StatelessWidget with STWidget {
       return;
     }
 
-    final createLinkResponse = await DataRequestService.authDataRequestService.createMagicLink(email);
+    final createLinkResponse = await DataRequestService.authDataRequestService.createMagicLink(_email);
 
     if (!createLinkResponse.isSuccessful) {
       Util.openDialog(context, 'Failed to send link', message: createLinkResponse.error!.userFriendlyMessage);
@@ -101,7 +100,6 @@ class LoginSignIn extends StatelessWidget with STWidget {
       subTitle: "Welcome back you've been missed!",
       additionalWidgets: [
         TextFormField(
-          controller: _textController,
           decoration: const InputDecoration(
             contentPadding: EdgeInsets.all(10),
             border: OutlineInputBorder(),
@@ -109,6 +107,8 @@ class LoginSignIn extends StatelessWidget with STWidget {
           ),
           style: const TextStyle(fontSize: 16),
           textAlign: TextAlign.center,
+          initialValue: _email,
+          onChanged: (value) => _email = value,
         ),
         const SizedBox(height: 10),
         Util.roundedButton(
