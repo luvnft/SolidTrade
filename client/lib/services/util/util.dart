@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -82,7 +81,7 @@ class Util {
     String url,
     double size, {
     BorderRadius? borderRadius,
-    BoxFit? boxFit,
+    BoxFit boxFit = BoxFit.contain,
     BoxShape loadingBoxShape = BoxShape.circle,
     Color backgroundColor = Colors.transparent,
   }) {
@@ -95,15 +94,14 @@ class Util {
         borderRadius: borderRadius,
         child: Container(
           color: backgroundColor,
-          child: CachedNetworkImage(
-            fit: boxFit,
-            imageUrl: url,
-            height: size,
+          child: SvgPicture.network(
+            url,
             width: size,
-            placeholder: (context, url) => SkeletonAvatar(
+            height: size,
+            fit: boxFit,
+            placeholderBuilder: (_) => SkeletonAvatar(
               style: SkeletonAvatarStyle(shape: loadingBoxShape),
             ),
-            errorWidget: (context, url, error) => loadSvgImage(url, size, size),
           ),
         ),
       ),
@@ -141,26 +139,6 @@ class Util {
           fit: boxFit,
           height: size,
           width: size,
-        ),
-      ),
-    );
-  }
-
-  static Widget loadSvgImage(String url, double width, double height) {
-    return SvgPicture.network(
-      url,
-      width: width,
-      height: height,
-      placeholderBuilder: (BuildContext _) => Container(
-        padding: EdgeInsets.symmetric(horizontal: width, vertical: height),
-        width: width,
-        height: height,
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: const SkeletonAvatar(
-            style: SkeletonAvatarStyle(shape: BoxShape.circle),
-          ),
         ),
       ),
     );

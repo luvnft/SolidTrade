@@ -15,6 +15,7 @@ class TrStockDetails {
   });
 }
 
+@jsonSerializable
 class Company {
   final String name;
   double? marketCapSnapshot;
@@ -29,6 +30,7 @@ class Company {
   });
 }
 
+@jsonSerializable
 class AnalystRating {
   final TargetPrice targetPrice;
   final Recommendations recommendations;
@@ -39,6 +41,7 @@ class AnalystRating {
   });
 }
 
+@jsonSerializable
 class TargetPrice {
   final double average;
   final double high;
@@ -51,6 +54,7 @@ class TargetPrice {
   });
 }
 
+@jsonSerializable
 class Recommendations {
   final int buy;
   final int outperform;

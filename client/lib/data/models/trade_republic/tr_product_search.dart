@@ -11,6 +11,7 @@ class TrProductSearch {
   });
 }
 
+@jsonSerializable
 class TrProductSearchResult {
   final String isin;
   final String name;
@@ -27,6 +28,7 @@ class TrProductSearchResult {
   });
 }
 
+@jsonSerializable
 class TrProductSearchTags {
   final String id;
   final String name;

@@ -1,6 +1,8 @@
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:intl/intl.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_derivative_search_result_mapper.dart';
 
+@jsonSerializable
 class TrDerivativeSearchResult {
   final String name;
   final String isin;

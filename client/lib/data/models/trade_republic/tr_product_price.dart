@@ -15,6 +15,7 @@ class TrProductPrice {
   TrProductPrice({required this.open, required this.bid, this.ask, required this.pre});
 }
 
+@jsonSerializable
 class TrProductPriceItem {
   final int time;
   final double price;
