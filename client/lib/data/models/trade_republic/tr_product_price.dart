@@ -12,12 +12,12 @@ class TrProductPrice {
     return buyOrSell.isBuy ? ask!.price : bid.price;
   }
 
-  TrProductPrice({required this.open, required this.bid, this.ask, required this.pre});
+  TrProductPrice(this.open, this.bid, this.ask, this.pre);
 }
 
 @jsonSerializable
 class TrProductPriceItem {
   final int time;
   final double price;
-  const TrProductPriceItem({required this.time, required this.price});
+  const TrProductPriceItem(this.time, this.price);
 }

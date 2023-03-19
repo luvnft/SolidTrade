@@ -7,7 +7,7 @@ class TrAggregateHistory {
   final int lastAggregateEndTime;
   final int resolution;
 
-  TrAggregateHistory({required this.aggregates, required this.expectedClosingTime, required this.lastAggregateEndTime, required this.resolution});
+  TrAggregateHistory(this.aggregates, this.expectedClosingTime, this.lastAggregateEndTime, this.resolution);
 }
 
 @jsonSerializable
@@ -16,5 +16,5 @@ class TrAggregateHistoryEntry {
   final double open;
   final double close;
 
-  TrAggregateHistoryEntry({required this.time, required this.open, required this.close});
+  TrAggregateHistoryEntry(this.time, this.open, this.close);
 }

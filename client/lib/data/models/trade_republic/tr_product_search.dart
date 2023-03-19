@@ -5,10 +5,7 @@ class TrProductSearch {
   final List<TrProductSearchResult> results;
   final int resultCount;
 
-  TrProductSearch({
-    required this.results,
-    required this.resultCount,
-  });
+  TrProductSearch(this.results, this.resultCount);
 }
 
 @jsonSerializable
@@ -19,13 +16,7 @@ class TrProductSearchResult {
   final List<String> derivativeProductCategories;
   final List<TrProductSearchTags> tags;
 
-  TrProductSearchResult({
-    required this.isin,
-    required this.name,
-    required this.type,
-    required this.derivativeProductCategories,
-    required this.tags,
-  });
+  TrProductSearchResult(this.isin, this.name, this.type, this.derivativeProductCategories, this.tags);
 }
 
 @jsonSerializable
@@ -34,9 +25,5 @@ class TrProductSearchTags {
   final String name;
   final String type;
 
-  const TrProductSearchTags({
-    required this.id,
-    required this.name,
-    required this.type,
-  });
+  const TrProductSearchTags(this.id, this.name, this.type);
 }

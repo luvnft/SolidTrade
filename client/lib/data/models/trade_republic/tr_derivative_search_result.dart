@@ -13,40 +13,40 @@ class TrDerivativeSearchResult {
   final String currency;
   final String expiryText;
 
-  TrDerivativeSearchResult({
-    required this.name,
-    required this.isin,
-    required this.issuerDisplayName,
-    required this.leverageOrStrike,
-    required this.knockoutBarrierOrDelta,
-    required this.size,
-    required this.currency,
-    required this.expiryText,
-  });
+  TrDerivativeSearchResult(
+    this.name,
+    this.isin,
+    this.issuerDisplayName,
+    this.leverageOrStrike,
+    this.knockoutBarrierOrDelta,
+    this.size,
+    this.currency,
+    this.expiryText,
+  );
 
   static TrDerivativeSearchResult fromKnockoutSearchResult(TrSingleDerivativeSearchResultMapper result) {
     return TrDerivativeSearchResult(
-      name: result.productCategoryName,
-      isin: result.isin,
-      issuerDisplayName: result.issuerDisplayName,
-      leverageOrStrike: result.leverage!,
-      knockoutBarrierOrDelta: result.barrier!,
-      size: result.size,
-      currency: result.currency,
-      expiryText: result.productCategoryName,
+      result.productCategoryName,
+      result.isin,
+      result.issuerDisplayName,
+      result.leverage!,
+      result.barrier!,
+      result.size,
+      result.currency,
+      result.productCategoryName,
     );
   }
 
   static TrDerivativeSearchResult fromWarrantSearchResult(TrSingleDerivativeSearchResultMapper result) {
     return TrDerivativeSearchResult(
-      name: result.productCategoryName,
-      isin: result.isin,
-      issuerDisplayName: result.issuerDisplayName,
-      leverageOrStrike: result.strike,
-      knockoutBarrierOrDelta: result.delta!,
-      size: result.size,
-      currency: result.currency,
-      expiryText: DateFormat('dd.MM.yyyy').format(DateTime.parse(result.expiry!)),
+      result.productCategoryName,
+      result.isin,
+      result.issuerDisplayName,
+      result.strike,
+      result.delta!,
+      result.size,
+      result.currency,
+      DateFormat('dd.MM.yyyy').format(DateTime.parse(result.expiry!)),
     );
   }
 }

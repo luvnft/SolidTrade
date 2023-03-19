@@ -8,11 +8,11 @@ class TrDerivativeSearchResultMapper {
   final List<TrSingleDerivativeSearchResultMapper> results;
   final int resultCount;
 
-  TrDerivativeSearchResultMapper({
-    required this.issuerCount,
-    required this.resultCount,
-    required this.results,
-  });
+  TrDerivativeSearchResultMapper(
+    this.issuerCount,
+    this.resultCount,
+    this.results,
+  );
 
   Iterable<TrDerivativeSearchResult> convertToTrDerivativeSearchResults(PositionType positionType) {
     switch (positionType) {
@@ -38,16 +38,16 @@ class TrSingleDerivativeSearchResultMapper {
   final String? expiry;
   final String issuerDisplayName;
 
-  TrSingleDerivativeSearchResultMapper({
-    required this.isin,
-    required this.productCategoryName,
+  TrSingleDerivativeSearchResultMapper(
+    this.isin,
+    this.productCategoryName,
     this.barrier,
     this.leverage,
-    required this.strike,
-    required this.size,
+    this.strike,
+    this.size,
     this.delta,
-    required this.currency,
+    this.currency,
     this.expiry,
-    required this.issuerDisplayName,
-  });
+    this.issuerDisplayName,
+  );
 }
