@@ -6,9 +6,11 @@ git branch --show-current
 # Add Flutter
 mkdir flutter-sdk
 git clone -b 3.7.3 https://github.com/flutter/flutter/ flutter-sdk
-export PATH="$PATH:`pwd`flutter-sdk/flutter/bin"
+export PATH="$PATH:`pwd`/flutter-sdk/flutter/bin"
 
 flutter doctor
+
+echo "$@"
 
 # Create config directory if it doesn't exist
 mkdir -p ./assets/config
