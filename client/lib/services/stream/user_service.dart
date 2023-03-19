@@ -66,16 +66,6 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {
-    print(1);
-    var x = get<FlutterSecureStorage>();
-    print(2);
-    await x.write(key: 'x', value: 'y');
-    print(3);
-    var y = await x.read(key: 'p');
-    print(4);
-    print(y);
-    y = await x.read(key: SecureStorageKeys.token.name);
-    print(6);
     final token = await getUserToken();
 
     if (token == null) {
