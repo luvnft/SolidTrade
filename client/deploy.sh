@@ -1,36 +1,33 @@
 #!/bin/sh
-mkdir ./flutter-sdk && cd ./flutter-sdk
+
+git branch --show-current
 
 # Add Flutter
-git clone -b 3.7.3 https://github.com/flutter/flutter/
-
-# Add flutter to path
-export PATH="$PATH:`pwd`/flutter/bin"
+mkdir flutter-sdk
+git clone -b 3.7.3 https://github.com/flutter/flutter/ flutter-sdk
+export PATH="$PATH:`pwd`flutter-sdk/flutter/bin"
 
 flutter doctor
 
-cd ../client/
-
-# Create directory if it doesn't exist
+# Create config directory if it doesn't exist
 mkdir -p ./assets/config
 
-# Write out the environment variable configuration as a json file
-echo $App_Config | base64 -di > ./assets/config/app_config.json
+# Create configuration file
+echo $App_Config | base64 -di > ./assets/config/config.yml
 
-# Write out firebase credentials as js file
-echo $Firebase_Credentials | base64 -di > ./web/credentials.js
+VERSION="v4.32.1"
+BINARY="yq_linux_amd64"
+wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O yq
+chmod +x yq
 
-# Write out firebase messaging credentials as js file
-echo $Firebase_Messaging_Credentials | base64 -di > ./web/firebase-messaging-sw.js
+# Update base api url
+./yq e '.baseUrl = "urlhere"' ./assets/config/config.yml > ./assets/config/config.yml
 
 # Install dependencies
 flutter pub get
 
 # Generate mappings
-flutter pub run build_runner build
+flutter pub run build_runner build --delete-conflicting-outputs
 
-# Build web app
-if [ "$Deployment" = "Production" ];
-then
-  flutter build web --release
-fi
+# Build app
+flutter build web --release
