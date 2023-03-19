@@ -1,25 +1,14 @@
 #!/bin/sh
 
-yum install wget
-git branch --show-current
-
 # Add Flutter
 git clone -b 3.7.3 https://github.com/flutter/flutter/ flutter-sdk
-
-path=`pwd`/flutter-sdk/flutter/bin
-
-echo $path
-ls $path
-
-export PATH="$PATH:$path"
+export PATH="$PATH:`pwd`/flutter-sdk/bin"
 
 flutter doctor
 
-echo "---------------------------------"
-
-echo "$@"
-
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "$VERCEL_GIT_COMMIT_REF"
+echo "$VERCEL_GIT_COMMIT_REF"
+echo "$VERCEL_GIT_COMMIT_REF"
 
 # Create config directory if it doesn't exist
 mkdir -p ./assets/config
@@ -29,6 +18,8 @@ echo $App_Config | base64 -di > ./assets/config/config.yml
 
 VERSION="v4.32.1"
 BINARY="yq_linux_amd64"
+
+yum install wget
 wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O yq
 chmod +x yq
 
