@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -11,20 +10,16 @@ import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
-// ignore: must_be_immutable
 class ContinueSignupScreen extends StatefulWidget {
-  ContinueSignupScreen({
+  const ContinueSignupScreen({
     Key? key,
-    required this.user,
     required this.dicebearSeed,
     required this.profilePictureBytes,
   }) : super(key: key);
   final Uint8List? profilePictureBytes;
   final String? dicebearSeed;
-  User user;
 
   @override
   State<ContinueSignupScreen> createState() => _ContinueSignupScreenState();
@@ -56,16 +51,16 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   }
 
   Future<void> _handleClickChangeGoogleAccount() async {
-    var user = await UtilUserService.signInWithGoogle();
+    // var user = await UtilUserService.signInWithGoogle();
 
-    if (user == null) {
-      Navigator.pop(context);
-      return;
-    }
+    // if (user == null) {
+    //   Navigator.pop(context);
+    //   return;
+    // }
 
-    setState(() {
-      widget.user = user;
-    });
+    // setState(() {
+    //   // widget.user = user;
+    // });
   }
 
   Future<void> _handleClickCreateAccount() async {
@@ -74,7 +69,8 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
     String name = _nameController.text;
     String username = _usernameController.text;
     int initialBalance = int.parse(_initialBalanceController.text);
-    String email = FirebaseAuth.instance.currentUser!.email!;
+    String email = throw 'Not implemented';
+    // String email = FirebaseAuth.instance.currentUser!.email!;
 
     var response = await userService.createUser(
       name,
@@ -195,7 +191,8 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
               height: 40,
               child: Center(
                 child: Text(
-                  'Google account: ${widget.user.email}',
+                  // 'Google account: ${widget.user.email}',
+                  '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: DarkColorTheme().foreground,

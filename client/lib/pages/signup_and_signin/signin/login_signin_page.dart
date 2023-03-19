@@ -79,8 +79,8 @@ class _LoginSignInState extends State<LoginSignIn> with STWidget {
       }
 
       final tokens = statusResponse.result!.tokens!;
-      _secureStorage.write(key: SecureStorageKeys.token.name, value: tokens.token);
-      _secureStorage.write(key: SecureStorageKeys.refreshToken.name, value: tokens.refreshToken);
+      await _secureStorage.write(key: SecureStorageKeys.token.name, value: tokens.token);
+      await _secureStorage.write(key: SecureStorageKeys.refreshToken.name, value: tokens.refreshToken);
 
       final fetchedSuccessfully = await _fetchUser();
 

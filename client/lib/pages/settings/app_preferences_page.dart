@@ -22,7 +22,6 @@ import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
-import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class AppPreferences extends StatefulWidget {
@@ -145,20 +144,20 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       return;
     }
 
-    var response = await UtilUserService.deleteAccount(_userService);
+    // var response = await UtilUserService.deleteAccount(_userService);
 
-    var title = response.isSuccessful ? 'Account deleted' : 'Account deletion failed';
+    // var title = response.isSuccessful ? 'Account deleted' : 'Account deletion failed';
 
-    await Util.openDialog(
-      context,
-      title,
-      message: response.isSuccessful ? 'Account deleted successfully.\nPress okay to continue.' : response.error!.userFriendlyMessage,
-      closeText: 'Okay',
-    );
+    // await Util.openDialog(
+    //   context,
+    //   title,
+    //   message: response.isSuccessful ? 'Account deleted successfully.\nPress okay to continue.' : response.error!.userFriendlyMessage,
+    //   closeText: 'Okay',
+    // );
 
-    if (response.isSuccessful) {
-      Globals.appState.restart();
-    }
+    // if (response.isSuccessful) {
+    //   Globals.appState.restart();
+    // }
   }
 
   Future<void> _handleClickSignOut() async {

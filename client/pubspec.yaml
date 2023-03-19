@@ -15,9 +15,6 @@ dependencies:
   dart_json_mapper: ^2.2.7
   dotted_line: ^3.1.0
   enum_to_string: ^2.0.1
-  firebase_auth: ^4.2.2
-  firebase_core: ^2.7.0
-  # firebase_messaging: ^14.2.5
   flutter:
     sdk: flutter
   flutter_datetime_picker: ^1.5.1
@@ -25,7 +22,6 @@ dependencies:
   flutter_svg: ^2.0.4
   get_it: ^7.2.0
   google_fonts: ^4.0.3
-  google_sign_in: ^6.0.2
   http: ^0.13.5
   image: ^4.0.15
   image_cropper: ^3.0.1

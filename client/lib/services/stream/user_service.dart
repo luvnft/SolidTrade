@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/subjects.dart';
@@ -13,12 +12,7 @@ import 'package:solidtrade/services/stream/base/base_service.dart';
 import 'package:solidtrade/services/util/get_it.dart';
 
 class UserService extends IService<User?> {
-  UserService() : super(BehaviorSubject.seeded(null)) {
-    // This resolves the common problem using firebase web. See here for more: https://github.com/firebase/flutterfire/issues/5964
-    if (kIsWeb) {
-      auth.FirebaseAuth.instance.currentUser;
-    }
-  }
+  UserService() : super(BehaviorSubject.seeded(null));
 
   Future<RequestResponse<User>> createUser(
     String displayName,
@@ -72,6 +66,16 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {
+    print(1);
+    var x = get<FlutterSecureStorage>();
+    print(2);
+    await x.write(key: 'x', value: 'y');
+    print(3);
+    var y = await x.read(key: 'p');
+    print(4);
+    print(y);
+    y = await x.read(key: SecureStorageKeys.token.name);
+    print(6);
     final token = await getUserToken();
 
     if (token == null) {
@@ -109,6 +113,5 @@ class UserService extends IService<User?> {
     return response;
   }
 
-  Future<auth.IdTokenResult>? getFirebaseUserAuthToken() => auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
   Future<String?> getUserToken() async => get<FlutterSecureStorage>().read(key: SecureStorageKeys.token.name);
 }

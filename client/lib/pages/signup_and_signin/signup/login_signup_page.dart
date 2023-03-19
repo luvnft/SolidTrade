@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -10,8 +9,6 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/pages/settings/crop_image_page.dart';
 import 'package:solidtrade/pages/signup_and_signin/components/login_screen.dart';
-import 'package:solidtrade/pages/signup_and_signin/signup/continue_signup_page.dart';
-import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class LoginSignUp extends StatefulWidget {
@@ -132,20 +129,20 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
   }
 
   Future<void> _handleClickContinueSignUp() async {
-    var user = FirebaseAuth.instance.currentUser ?? await UtilUserService.signInWithGoogle();
+    // var user = FirebaseAuth.instance.currentUser ?? await UtilUserService.signInWithGoogle();
 
-    if (user == null) {
-      Util.googleLoginFailedDialog(context);
-      return;
-    }
+    // if (user == null) {
+    //   Util.googleLoginFailedDialog(context);
+    //   return;
+    // }
 
-    Util.pushToRoute(
-        context,
-        ContinueSignupScreen(
-          user: user,
-          dicebearSeed: _dicebearSeed,
-          profilePictureBytes: imageAsBytes,
-        ));
+    // Util.pushToRoute(
+    //     context,
+    //     ContinueSignupScreen(
+    //       user: user,
+    //       dicebearSeed: _dicebearSeed,
+    //       profilePictureBytes: imageAsBytes,
+    //     ));
   }
 
   List<Widget> _roundedButtons(bool showButtons) {
