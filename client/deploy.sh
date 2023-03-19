@@ -1,5 +1,6 @@
 #!/bin/sh
 
+sudo yum install wget
 git branch --show-current
 
 # Add Flutter
