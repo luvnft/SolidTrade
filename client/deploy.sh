@@ -4,13 +4,22 @@ yum install wget
 git branch --show-current
 
 # Add Flutter
-mkdir flutter-sdk
 git clone -b 3.7.3 https://github.com/flutter/flutter/ flutter-sdk
-export PATH="$PATH:`pwd`/flutter-sdk/flutter/bin"
+
+path=`pwd`/flutter-sdk/flutter/bin
+
+echo $path
+ls $path
+
+export PATH="$PATH:$path"
 
 flutter doctor
 
+echo "---------------------------------"
+
 echo "$@"
+
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 # Create config directory if it doesn't exist
 mkdir -p ./assets/config
