@@ -11,8 +11,7 @@ fi
 
 # Copy configuration and credentials 
 cp ~/projects/Rose-Linode/env/${credentials_folder}/.env '.'
-cp ~/projects/Rose-Linode/env/${credentials_folder}/server/appsettings.credentials.json './server/Configuration'
-cp ~/projects/Rose-Linode/env/${credentials_folder}/server/solid-trade-firebase-credentials.json './server/Configuration'
+cp ~/projects/Rose-Linode/env/${credentials_folder}/server/appsettings.credentials.json './server/WebAPI/Configuration'
 
 # We do not require ngrok for production. This is why we scale down to 0.
 # We also scale the api up to one, because its scaled to 0 by default for development.
