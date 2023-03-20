@@ -11,22 +11,22 @@ extension OrderTypeExtension on OrderType {
   String get name {
     switch (this) {
       case OrderType.market:
-        return "Market";
+        return 'Market';
       case OrderType.stop:
-        return "Stop";
+        return 'Stop';
       case OrderType.limit:
-        return "Limit";
+        return 'Limit';
     }
   }
 
   String get fullName {
     switch (this) {
       case OrderType.market:
-        return "Market order";
+        return 'Market order';
       case OrderType.stop:
-        return "Stop order";
+        return 'Stop order';
       case OrderType.limit:
-        return "Limit order";
+        return 'Limit order';
     }
   }
 
@@ -47,7 +47,7 @@ extension OrderTypeExtension on OrderType {
             return EnterOrExitPositionType.sellLimitOrder;
         }
       case OrderType.market:
-        throw "Did not expect market order type";
+        throw 'Did not expect market order type';
     }
   }
 }

@@ -9,7 +9,7 @@ class PortfolioOverviewTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(title, style: textStyle ?? Theme.of(context).textTheme.headline6),
+      child: Text(title, style: textStyle ?? Theme.of(context).textTheme.titleLarge),
     );
   }
 }

@@ -11,17 +11,17 @@ extension ChartDateRangeViewExtension on ChartDateRangeView {
   String get name {
     switch (this) {
       case ChartDateRangeView.oneDay:
-        return "1d";
+        return '1d';
       case ChartDateRangeView.oneWeek:
-        return "5d";
+        return '5d';
       case ChartDateRangeView.oneMonth:
-        return "1m";
+        return '1m';
       case ChartDateRangeView.sixMonth:
-        return "6m";
+        return '6m';
       case ChartDateRangeView.oneYear:
-        return "1y";
+        return '1y';
       case ChartDateRangeView.fiveYear:
-        return "5y";
+        return '5y';
     }
   }
 }

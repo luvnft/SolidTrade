@@ -38,8 +38,8 @@ class PortfolioOverviewPage extends StatelessWidget with STWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Good morning,\n${user.displayName}👋.",
-                        style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 30),
+                        'Good morning,\n${user.displayName}👋.',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 30),
                         textAlign: TextAlign.left,
                       ),
                     ),

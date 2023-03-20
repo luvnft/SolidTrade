@@ -104,7 +104,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
             icon: Icon(Icons.close, size: 25, color: Colors.red[300]),
             onPressed: _handleClickDiscard,
           ),
-          title: const Text("Customize your Profile"),
+          title: const Text('Customize your Profile'),
           elevation: 5,
           centerTitle: true,
           backgroundColor: colors.background,
@@ -120,6 +120,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
           child: Column(
             children: <Widget>[
               const SizedBox(height: 15),
+              // TODO: Do we want to keep this?
               // Text(
               //   "Customize your Profile",
               //   textAlign: TextAlign.center,
@@ -132,8 +133,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
               _inputField(title: 'Bio', controller: _bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: _bioController.text),
               _inputField(title: 'Email', controller: _emailController, callback: (content) => _emailChanged(content), hintText: _emailController.text),
               _inputField(title: 'Name', controller: _displayNameController, callback: (content) => _displayNameChanged(content), hintText: _displayNameController.text),
-              _inputField(title: 'Username', controller: _usernameController, callback: (content) => _usernameChanged(content), hintText: '@' + _usernameController.text),
-              SwitchListTile(title: const Text("Public portfolio"), value: _hasPublicPortfolio, onChanged: _hasPublicPortfolioChanged),
+              _inputField(title: 'Username', controller: _usernameController, callback: (content) => _usernameChanged(content), hintText: '@${_usernameController.text}'),
+              SwitchListTile(title: const Text('Public portfolio'), value: _hasPublicPortfolio, onChanged: _hasPublicPortfolioChanged),
               const SizedBox(height: 15),
             ],
           ),

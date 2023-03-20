@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +20,8 @@ import 'package:solidtrade/pages/settings/crop_image_page.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
-
-import 'package:solidtrade/services/util/user_util.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class AppPreferences extends StatefulWidget {
@@ -99,7 +98,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
 
     Util.openDialog(
       context,
-      "Updating user failed",
+      'Updating user failed',
       message: response.error!.userFriendlyMessage,
     );
   }
@@ -121,11 +120,11 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
 
     await Util.openDialog(
       context,
-      "Delete Account",
-      message: "Are you sure you want to delete your account?",
+      'Delete Account',
+      message: 'Are you sure you want to delete your account?',
       actionWidgets: [
         TextButton(
-          child: const Text("Dont delete account"),
+          child: const Text('Dont delete account'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TimerButton(
@@ -133,7 +132,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
             deleteAccount = true;
             Navigator.of(context).pop();
           },
-          text: "Delete account",
+          text: 'Delete account',
           initialSecondsLeft: 5,
           enabledButtonStyle: _roundedButtonStyle,
           disabledButtonStyle: _roundedButtonStyle,
@@ -145,20 +144,20 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       return;
     }
 
-    var response = await UtilUserService.deleteAccount(_userService);
+    // var response = await UtilUserService.deleteAccount(_userService);
 
-    var title = response.isSuccessful ? "Account deleted" : "Account deletion failed";
+    // var title = response.isSuccessful ? 'Account deleted' : 'Account deletion failed';
 
-    await Util.openDialog(
-      context,
-      title,
-      message: response.isSuccessful ? "Account deleted successfully.\nPress okay to continue." : response.error!.userFriendlyMessage,
-      closeText: "Okay",
-    );
+    // await Util.openDialog(
+    //   context,
+    //   title,
+    //   message: response.isSuccessful ? 'Account deleted successfully.\nPress okay to continue.' : response.error!.userFriendlyMessage,
+    //   closeText: 'Okay',
+    // );
 
-    if (response.isSuccessful) {
-      Globals.appState.restart();
-    }
+    // if (response.isSuccessful) {
+    //   Globals.appState.restart();
+    // }
   }
 
   Future<void> _handleClickSignOut() async {
@@ -166,15 +165,14 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
 
     await Util.openDialog(
       context,
-      "Sign out",
-      message: "Are you sure you want to sign out?",
+      'Sign out',
+      message: 'Are you sure you want to sign out?',
       actionWidgets: [
         TextButton(
-          child: const Text("Dont sign out"),
+          child: const Text('Dont sign out'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: const Text("Sign out"),
           style: _roundedButtonStyle.copyWith(
             backgroundColor: MaterialStateProperty.all(Colors.red),
             foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -183,6 +181,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
             signOut = true;
             Navigator.of(context).pop();
           },
+          child: const Text('Sign out'),
         ),
       ],
     );
@@ -191,13 +190,13 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
       return;
     }
 
-    await UtilUserService.signOut();
+    await get<FlutterSecureStorage>().deleteAll();
 
     await Util.openDialog(
       context,
-      "Sign out was successful",
-      message: "Sign out was successful.\nPress okay to continue.",
-      closeText: "Okay",
+      'Sign out was successful',
+      message: 'Sign out was successful.\nPress okay to continue.',
+      closeText: 'Okay',
     );
 
     Globals.appState.restart();
@@ -219,22 +218,22 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
   }
 
   Future<void> _handleClickChangeProfilePicture() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
     if (await image.length() > Constants.fileUploadLimitInBytes) {
-      Util.openDialog(context, "File too large", message: "Sorry, this image is too big.");
+      Util.openDialog(context, 'File too large', message: 'Sorry, this image is too big.');
       return;
     }
 
-    var isGifFile = image.name.endsWith(".gif");
+    var isGifFile = image.name.endsWith('.gif');
 
     if (kIsWeb) {
       var bytes = await image.readAsBytes();
 
       if (!isGifFile) {
-        final closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+        final closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: 'Loading. This might take a while...');
 
         await Future.delayed(const Duration(milliseconds: 400));
 
@@ -271,23 +270,29 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
     File? cropped;
 
     // For gif's cropping can not be applied
-    cropped = isGifFile
-        ? File(image.path)
-        : await ImageCropper().cropImage(
-            sourcePath: image.path,
-            aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-            aspectRatioPresets: [
-              CropAspectRatioPreset.square
-            ],
-            androidUiSettings: const AndroidUiSettings(
-              toolbarTitle: 'Cropper',
-              toolbarColor: Colors.deepOrange,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.square,
-            ),
-          );
+    if (!isGifFile) {
+      var croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+          )
+        ],
+      );
 
-    if (cropped == null) return;
+      if (croppedFile == null) return;
+
+      cropped = File(croppedFile.path);
+    } else {
+      cropped = File(image.path);
+    }
 
     setState(() {
       _imageAsBytes = cropped!.readAsBytesSync();
@@ -327,7 +332,7 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
             foregroundColor: colors.foreground,
             leading: IconButton(icon: Icon(Icons.close, size: 25, color: Colors.red[300]), onPressed: _handleDiscardProfileUpdate),
             title: const Text(
-              "Preferences",
+              'Preferences',
             ),
             elevation: 5,
             centerTitle: true,
@@ -412,13 +417,13 @@ class _AppPreferencesState extends State<AppPreferences> with STWidget {
                   children: [
                     _settingsButton(
                       callback: _handleClickSignOut,
-                      text: "Sign out",
+                      text: 'Sign out',
                       textColor: Colors.red,
                       width: constrains.maxWidth / 2,
                     ),
                     _settingsButton(
                       callback: _handleClickDeleteAccount,
-                      text: "Delete Account",
+                      text: 'Delete Account',
                       textColor: Colors.red,
                       width: constrains.maxWidth / 2,
                     ),

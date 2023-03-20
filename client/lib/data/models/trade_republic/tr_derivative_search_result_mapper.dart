@@ -1,18 +1,16 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_derivative_search_result.dart';
 
-@JsonObject()
+@jsonSerializable
 class TrDerivativeSearchResultMapper {
-  final Map<String, int> issuerCount;
   final List<TrSingleDerivativeSearchResultMapper> results;
   final int resultCount;
 
-  TrDerivativeSearchResultMapper({
-    required this.issuerCount,
-    required this.resultCount,
-    required this.results,
-  });
+  TrDerivativeSearchResultMapper(
+    this.resultCount,
+    this.results,
+  );
 
   Iterable<TrDerivativeSearchResult> convertToTrDerivativeSearchResults(PositionType positionType) {
     switch (positionType) {
@@ -21,11 +19,12 @@ class TrDerivativeSearchResultMapper {
       case PositionType.knockout:
         return results.map((e) => TrDerivativeSearchResult.fromKnockoutSearchResult(e));
       default:
-        throw Exception("Expected ${(PositionType).toString()} to be knockout or warrant. But provided argument was $positionType.");
+        throw Exception('Expected ${(PositionType).toString()} to be knockout or warrant. But provided argument was $positionType.');
     }
   }
 }
 
+@jsonSerializable
 class TrSingleDerivativeSearchResultMapper {
   final String isin;
   final String productCategoryName;
@@ -38,16 +37,16 @@ class TrSingleDerivativeSearchResultMapper {
   final String? expiry;
   final String issuerDisplayName;
 
-  TrSingleDerivativeSearchResultMapper({
-    required this.isin,
-    required this.productCategoryName,
+  TrSingleDerivativeSearchResultMapper(
+    this.isin,
+    this.productCategoryName,
     this.barrier,
     this.leverage,
-    required this.strike,
-    required this.size,
+    this.strike,
+    this.size,
     this.delta,
-    required this.currency,
+    this.currency,
     this.expiry,
-    required this.issuerDisplayName,
-  });
+    this.issuerDisplayName,
+  );
 }

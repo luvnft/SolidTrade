@@ -1,12 +1,21 @@
-import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:solidtrade/services/util/debug/logger.dart';
+import 'package:yaml/yaml.dart';
 
 abstract class ConfigReader {
-  static late Map<String, dynamic> _config;
+  static late YamlMap _config;
 
   static Future<void> initialize() async {
-    final configString = await rootBundle.loadString('assets/config/app_config.json');
-    _config = json.decode(configString) as Map<String, dynamic>;
+    const String configPath = 'assets/config/config.yml';
+    try {
+      final configString = await rootBundle.loadString(configPath);
+      _config = loadYaml(configString) as YamlMap;
+    } catch (e) {
+      final logger = Logger.create()..f('Failed to load config file at path $configPath. Make sure this file exists. See following Exception for more info');
+      logger.f(e);
+
+      rethrow;
+    }
   }
 
   static String getBaseUrl() {

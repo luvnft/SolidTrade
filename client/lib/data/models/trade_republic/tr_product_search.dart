@@ -1,16 +1,14 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 
-@JsonObject()
+@jsonSerializable
 class TrProductSearch {
   final List<TrProductSearchResult> results;
   final int resultCount;
 
-  TrProductSearch({
-    required this.results,
-    required this.resultCount,
-  });
+  TrProductSearch(this.results, this.resultCount);
 }
 
+@jsonSerializable
 class TrProductSearchResult {
   final String isin;
   final String name;
@@ -18,23 +16,14 @@ class TrProductSearchResult {
   final List<String> derivativeProductCategories;
   final List<TrProductSearchTags> tags;
 
-  TrProductSearchResult({
-    required this.isin,
-    required this.name,
-    required this.type,
-    required this.derivativeProductCategories,
-    required this.tags,
-  });
+  TrProductSearchResult(this.isin, this.name, this.type, this.derivativeProductCategories, this.tags);
 }
 
+@jsonSerializable
 class TrProductSearchTags {
   final String id;
   final String name;
   final String type;
 
-  const TrProductSearchTags({
-    required this.id,
-    required this.name,
-    required this.type,
-  });
+  const TrProductSearchTags(this.id, this.name, this.type);
 }

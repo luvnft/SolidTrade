@@ -1,7 +1,6 @@
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart' as l;
-import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/services/util/extensions/string_extensions.dart';
@@ -66,15 +65,15 @@ class _SimpleLogPrinter extends l.LogPrinter {
 
   String _getMethodNameFromWeb(String stackTrace) {
     final s1 = stackTrace.substring(2);
-    final s2 = s1.substring(0, s1.indexOf(":/") - 2);
-    final methodName = s2.substring(s2.lastIndexOf(" ") + 1);
+    final s2 = s1.substring(0, s1.indexOf(':/') - 2);
+    final methodName = s2.substring(s2.lastIndexOf(' ') + 1);
 
     return methodName;
   }
 
   String _getClassNameFromMobile(String stackTrace) {
-    final s1 = stackTrace.substring(stackTrace.indexOf("#4") + 1);
-    final s2 = s1.substring(s1.indexOf("#") + 2).trim();
-    return s2.substring(0, s2.indexOf("(") - 1).trim();
+    final s1 = stackTrace.substring(stackTrace.indexOf('#4') + 1);
+    final s2 = s1.substring(s1.indexOf('#') + 2).trim();
+    return s2.substring(0, s2.indexOf('(') - 1).trim();
   }
 }

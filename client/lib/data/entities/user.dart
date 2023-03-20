@@ -1,7 +1,7 @@
 import 'package:solidtrade/data/entities/historical_position.dart';
 import 'package:solidtrade/data/entities/portfolio.dart';
 
-import '../entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
 
 class User implements IBaseEntity {
   @override
@@ -39,18 +39,18 @@ class User implements IBaseEntity {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      bio: json["bio"],
-      displayName: json["displayName"],
-      email: json["email"],
-      hasPublicPortfolio: json["hasPublicPortfolio"],
-      profilePictureUrl: json["profilePictureUrl"],
-      uid: json["uid"],
-      username: json["username"],
-      historicalPositions: (json["historicalPositions"] as List<dynamic>).map((e) => HistoricalPosition.fromJson(e)).toList(),
-      portfolio: json["portfolio"] == null ? null : Portfolio.fromJson(json["portfolio"]),
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      bio: json['bio'],
+      displayName: json['displayName'],
+      email: json['email'],
+      hasPublicPortfolio: json['hasPublicPortfolio'],
+      profilePictureUrl: json['profilePictureUrl'],
+      uid: json['uid'],
+      username: json['username'],
+      historicalPositions: (json['historicalPositions'] as List<dynamic>).map((e) => HistoricalPosition.fromJson(e)).toList(),
+      portfolio: json['portfolio'] == null ? null : Portfolio.fromJson(json['portfolio']),
     );
   }
 }

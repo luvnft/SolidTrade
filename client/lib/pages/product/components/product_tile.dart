@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/common/product_tile_info.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
@@ -56,7 +56,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
             }
 
             if (!trProductInfoSnap.data!.isSuccessful) {
-              Util.openDialog(context, "Loading product failed", message: "Sorry, something went wrong while trying to load this product.");
+              Util.openDialog(context, 'Loading product failed', message: 'Sorry, something went wrong while trying to load this product.');
               return const Text("Something didn't go right. Please try again later.");
             }
 
@@ -102,7 +102,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                               subtitle,
                               overflow: TextOverflow.visible,
                               softWrap: false,
-                              style: Theme.of(context).textTheme.bodyText2,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ),
                         ],
@@ -121,7 +121,7 @@ class _ProductTileState extends State<ProductTile> with STWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              details.plusMinusProductNamePrefix + ((details.percentageChange - 1) * 100).toStringAsFixed(2) + "%",
+                              '${details.plusMinusProductNamePrefix}${((details.percentageChange - 1) * 100).toStringAsFixed(2)}%',
                               style: TextStyle(color: details.textColor),
                             ),
                             Text(

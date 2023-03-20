@@ -5,12 +5,9 @@ import 'package:solidtrade/providers/language/translation.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/util/debug/logger.dart';
 
-export 'package:solidtrade/services/util/debug/logger.dart';
-
 class STWidget {
   final configurationProvider = GetIt.instance.get<ConfigurationProvider>();
   final logger = GetIt.instance.get<Logger>();
-  // final logger = Log;
 
   ITranslation get translations => configurationProvider.languageProvider.language;
   IColorTheme get colors => configurationProvider.themeProvider.theme;

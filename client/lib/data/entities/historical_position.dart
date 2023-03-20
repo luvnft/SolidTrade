@@ -36,15 +36,15 @@ class HistoricalPosition implements IBaseEntity, IPosition {
 
   factory HistoricalPosition.fromJson(Map<String, dynamic> json) {
     return HistoricalPosition(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      positionType: EnumToString.fromString(PositionType.values, json["positionType"])!,
-      buyOrSell: EnumToString.fromString(BuyOrSell.values, json["buyOrSell"])!,
-      buyInPrice: json["buyInPrice"],
-      performance: json["performance"],
-      numberOfShares: json["numberOfShares"],
-      isin: json["isin"],
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      positionType: EnumToString.fromString(PositionType.values, json['positionType'])!,
+      buyOrSell: EnumToString.fromString(BuyOrSell.values, json['buyOrSell'])!,
+      buyInPrice: json['buyInPrice'],
+      performance: json['performance'],
+      numberOfShares: json['numberOfShares'],
+      isin: json['isin'],
     );
   }
 

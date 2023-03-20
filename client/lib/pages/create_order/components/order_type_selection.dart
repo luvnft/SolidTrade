@@ -28,8 +28,8 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
 
   @override
   Widget build(BuildContext context) => BottomModel(
-        title: "Order types",
-        subtitle: "Choose how you would like your order to be executed.",
+        title: 'Order types',
+        subtitle: 'Choose how you would like your order to be executed.',
         content: _loadButtons(context),
       );
 
@@ -40,8 +40,8 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
       if (type != OrderType.market && positionType == PositionType.stock) {
         await Util.openDialog(
           context,
-          "Unsupported feature",
-          message: "Stop and limit orders are currently only supported for knockouts and warrants.",
+          'Unsupported feature',
+          message: 'Stop and limit orders are currently only supported for knockouts and warrants.',
         );
         Navigator.pop(context);
         return;
@@ -72,7 +72,7 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(orderInfo.title, style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 18)),
+                      Text(orderInfo.title, style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 18)),
                       const SizedBox(height: 2),
                       Text(
                         orderInfo.subtitle,
@@ -95,19 +95,19 @@ class OrderTypeSelection extends StatelessWidget with STWidget {
   _OrderInfo _getOrderInfo(BuyOrSell buyOrSell, OrderType type) {
     final isBuy = buyOrSell == BuyOrSell.buy;
 
-    final marketOrderText = isBuy ? "Buy at the current price" : "Sell at the current price";
-    final stopOrderText = isBuy ? "Buy when the product rises to a certain price" : "Sell when the product falls to a certain price";
-    final limitOrderText = isBuy ? "Buy when the product falls to a certain price" : "Sell when the product rises to a certain price";
-    final stopOrderEmoji = isBuy ? "📈" : "📉";
-    final limitOrderEmoji = !isBuy ? "📈" : "📉";
+    final marketOrderText = isBuy ? 'Buy at the current price' : 'Sell at the current price';
+    final stopOrderText = isBuy ? 'Buy when the product rises to a certain price' : 'Sell when the product falls to a certain price';
+    final limitOrderText = isBuy ? 'Buy when the product falls to a certain price' : 'Sell when the product rises to a certain price';
+    final stopOrderEmoji = isBuy ? '📈' : '📉';
+    final limitOrderEmoji = !isBuy ? '📈' : '📉';
 
     switch (type) {
       case OrderType.market:
-        return _OrderInfo("Market order", marketOrderText, "📊", OrderType.market);
+        return _OrderInfo('Market order', marketOrderText, '📊', OrderType.market);
       case OrderType.stop:
-        return _OrderInfo("Stop order", stopOrderText, stopOrderEmoji, OrderType.stop);
+        return _OrderInfo('Stop order', stopOrderText, stopOrderEmoji, OrderType.stop);
       case OrderType.limit:
-        return _OrderInfo("Limit order", limitOrderText, limitOrderEmoji, OrderType.limit);
+        return _OrderInfo('Limit order', limitOrderText, limitOrderEmoji, OrderType.limit);
     }
   }
 }

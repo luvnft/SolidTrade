@@ -1,24 +1,18 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flutter development",
+      "name": "client",
       "request": "launch",
       "type": "dart",
-      "program": "lib/app/main_dev.dart",
-      "args": ["--web-port=49983"],
-      "toolArgs": ["--dart-define", "USE_FIREBASE_EMULATOR=true"]
+      "program": "lib/app/main_dev.dart"
     },
     {
-      "name": "Flutter development release mode",
+      "name": "client (release mode)",
       "request": "launch",
       "type": "dart",
-      "program": "lib/app/main_dev.dart",
-      "args": ["--web-port=49983", "--release"],
-      "toolArgs": ["--dart-define", "USE_FIREBASE_EMU=true"]
+      "flutterMode": "release",
+      "program": "lib/app/main_dev.dart"
     }
   ]
 }

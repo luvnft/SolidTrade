@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -16,7 +16,6 @@ import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
-import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/pages/create_order/components/order_validation_hint.dart';
 import 'package:solidtrade/pages/create_order/order_settings_view.dart';
 import 'package:solidtrade/pages/create_order/order_type_description_view.dart';
@@ -30,7 +29,6 @@ import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/local_auth_util.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 import 'package:solidtrade/services/util/util.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class CreateOrderPage extends StatefulWidget {
   const CreateOrderPage({
@@ -61,7 +59,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   late DateTime _goodUntil = _defaultGoodUntil;
 
   UserInputValidationResult _inputValidation = UserInputValidationResult.validInput();
-  OrderType _orderType = OrderType.market;
+  final OrderType _orderType = OrderType.market;
   double _definedStopLimitPrice = 0;
   double _numberOfShares = 0;
 
@@ -73,7 +71,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   double get _totalPrice {
-    double _getPriceOfSingleShare() {
+    double getPriceOfSingleShare() {
       switch (_orderType) {
         case OrderType.market:
           return _currentPrice.getPriceDependingOfBuyOrSell(widget.buyOrSell);
@@ -83,7 +81,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
       }
     }
 
-    return (_getPriceOfSingleShare() * _numberOfShares);
+    return (getPriceOfSingleShare() * _numberOfShares);
   }
 
   double _getNumberOfSharesOwned(Portfolio portfolio) {
@@ -112,9 +110,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyText1),
+                Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 1),
-                Text(translations.createOrderPage.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w400)),
+                Text(translations.createOrderPage.cashAvailable(portfolio.cash), style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w400)),
               ],
             ),
             actions: [
@@ -152,7 +150,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
                               widget.buyOrSell,
                               widget.productInfo.tickerOrShortName,
                             ),
-                            style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600),
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w600),
                             textAlign: TextAlign.left,
                           ),
                           const Spacer(),
@@ -169,15 +167,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
                               margin: const EdgeInsets.only(bottom: 20),
                               child: Text(
                                 widget.productInfo.shortName,
-                                style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
                               ),
                             )
                           : const SizedBox.shrink(),
                       Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          "➚ 1 ${widget.productInfo.tickerOrShortName} = ${price.getPriceDependingOfBuyOrSell(widget.buyOrSell).toDefaultPrice()}",
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: colors.blueText, fontSize: 17),
+                          '➚ 1 ${widget.productInfo.tickerOrShortName} = ${price.getPriceDependingOfBuyOrSell(widget.buyOrSell).toDefaultPrice()}',
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: colors.blueText, fontSize: 17),
                         ),
                       ),
                       _SharesInput(
@@ -383,30 +381,31 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   Future<void> _selectOrderType() async {
-    var selectedOrderType = await showMaterialModalBottomSheet<OrderType>(
-      expand: false,
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Material(
-        color: colors.background,
-        child: SafeArea(
-          top: false,
-          child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType, positionType: widget.productInfo.positionType),
-        ),
-      ),
-    );
+    // TODO: Find alternative to modal bottom sheet
+    // var selectedOrderType = await showMaterialModalBottomSheet<OrderType>(
+    //   expand: false,
+    //   context: context,
+    //   backgroundColor: Colors.transparent,
+    //   builder: (context) => Material(
+    //     color: colors.background,
+    //     child: SafeArea(
+    //       top: false,
+    //       child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType, positionType: widget.productInfo.positionType),
+    //     ),
+    //   ),
+    // );
 
-    if (selectedOrderType == null || selectedOrderType == _orderType) {
-      return;
-    }
+    // if (selectedOrderType == null || selectedOrderType == _orderType) {
+    //   return;
+    // }
 
-    setState(() {
-      _orderType = selectedOrderType;
-    });
+    // setState(() {
+    //   _orderType = selectedOrderType;
+    // });
 
-    if (selectedOrderType != OrderType.market) {
-      await _openOrderSettingsAndSet();
-    }
+    // if (selectedOrderType != OrderType.market) {
+    //   await _openOrderSettingsAndSet();
+    // }
   }
 }
 
@@ -458,7 +457,7 @@ class _SharesInput extends StatelessWidget with STWidget {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
                         isDense: true,
-                        hintText: isBuy ? "+0" : "-0",
+                        hintText: isBuy ? '+0' : '-0',
                         contentPadding: const EdgeInsets.only(bottom: 2),
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: colors.lessSoftForeground),
@@ -486,18 +485,18 @@ class _SelectGoodUntilDate extends StatelessWidget with STWidget {
   final void Function(DateTime) onGoodUntilDateChanged;
   final DateTime currentGoodUntilDate;
 
-  final dateFormat = DateFormat("dd.MM.yyy");
+  final dateFormat = DateFormat('dd.MM.yyy');
   String get _formattedDate => dateFormat.format(currentGoodUntilDate);
 
   @override
   Widget build(BuildContext context) {
     return _GeneralButtonWithDecoration(
-      children: [
-        const Text("Good until", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
-        Text("Order active until the date: $_formattedDate"),
-      ],
       onPressed: () => _showDatePicker(context),
       buttonText: translations.common.changeAsTextLiteral,
+      children: [
+        const Text('Good until', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+        Text('Order active until the date: $_formattedDate'),
+      ],
     );
   }
 
@@ -551,13 +550,13 @@ class _EditStopLimitPrice extends StatelessWidget with STWidget {
   @override
   Widget build(BuildContext context) {
     return _GeneralButtonWithDecoration(
+      onPressed: onPressed,
+      buttonText: translations.common.changeAsTextLiteral,
       children: [
         Text(translations.createOrderPage.stopLimitText(orderType), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
         const SizedBox(height: 2.5),
-        Text("1 $name = ${price.toDefaultPrice()}", style: const TextStyle(fontWeight: FontWeight.w400)),
+        Text('1 $name = ${price.toDefaultPrice()}', style: const TextStyle(fontWeight: FontWeight.w400)),
       ],
-      onPressed: onPressed,
-      buttonText: translations.common.changeAsTextLiteral,
     );
   }
 }

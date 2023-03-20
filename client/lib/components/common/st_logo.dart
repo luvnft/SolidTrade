@@ -34,7 +34,7 @@ class _STLogoState extends State<STLogo> {
   void initState() {
     super.initState();
 
-    _assetAsImage = widget.gifAsset.substring(0, widget.gifAsset.indexOf(".gif")) + ".jpg";
+    _assetAsImage = "${widget.gifAsset.substring(0, widget.gifAsset.indexOf(".gif"))}.jpg";
     myImage = Image.asset(
       _assetAsImage,
       width: widget.size,

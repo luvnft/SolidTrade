@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:simple_json_mapper/simple_json_mapper.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_request_model.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_request_response.dart';
+import 'package:solidtrade/services/util/debug/logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TrApiDataRequestService {
@@ -33,10 +33,10 @@ class TrApiDataRequestService {
 
   void _initializeConnection() {
     void reconnect() {
-      _logger.w("Lost connection to api");
+      _logger.w('Lost connection to api');
 
       if (_shouldReconnect) {
-        _logger.d("Trying to reconnect");
+        _logger.d('Trying to reconnect');
 
         _initializeConnection();
       }
@@ -54,16 +54,16 @@ class TrApiDataRequestService {
   }
 
   void _onMessageReceived(String message) {
-    if (!message.contains("{\"bid\":{\"time\":")) {
+    if (!message.contains('{"bid":{"time":')) {
       _logger.d(message);
     }
 
-    if (!_initialConnect && message == "connected") {
+    if (!_initialConnect && message == 'connected') {
       var requestMessageStrings = Map<int, String>.from(_requestMessageStrings);
 
       for (var item in requestMessageStrings.entries) {
         if (_runningRequests.any((r) => r.id == item.key)) {
-          _sendMessage("sub ${item.key} ${item.value}");
+          _sendMessage('sub ${item.key} ${item.value}');
         } else {
           _requestMessageStrings.remove(item);
         }
@@ -72,14 +72,14 @@ class TrApiDataRequestService {
       _initialConnect = false;
     }
 
-    if (message == "connected" || message.startsWith("echo")) {
+    if (message == 'connected' || message.startsWith('echo')) {
       _initialConnect = false;
       return;
     }
 
     if (DateTime.now().difference(_lastEchoSent).inSeconds > 30) {
       _lastEchoSent = DateTime.now();
-      _sendMessage("echo ${_lastEchoSent.millisecondsSinceEpoch}");
+      _sendMessage('echo ${_lastEchoSent.millisecondsSinceEpoch}');
     }
 
     var id = _parseMessageId(message);
@@ -100,7 +100,7 @@ class TrApiDataRequestService {
   }
 
   int _parseMessageId(String message) {
-    String s = message.substring(0, message.indexOf(" "));
+    String s = message.substring(0, message.indexOf(' '));
 
     return int.tryParse(s) ?? -1;
   }
@@ -112,7 +112,7 @@ class TrApiDataRequestService {
   }
 
   void _sendMessage(String message) {
-    _logger.d("Send websocket message: " + message);
+    _logger.d('Send websocket message: $message');
     _socketChannel.sink.add(message);
   }
 
@@ -127,22 +127,22 @@ class TrApiDataRequestService {
         id: id,
         onResponseCallback: (response) {
           unsub(id);
-          if (response.startsWith("{\"errors\"")) {
+          if (response.startsWith('{"errors"')) {
             completer.complete(RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage));
             return;
           }
 
-          completer.complete(RequestResponse.successful(JsonMapper.deserialize<T>(response)!));
+          completer.complete(RequestResponse.successful(JsonMapper.deserialize<T>(response) as T));
         });
 
-    _sendMessage("sub $id $requestString");
+    _sendMessage('sub $id $requestString');
     _requestMessageStrings[id] = requestString;
     _runningRequests.add(model);
 
     try {
       return await completer.future.timeout(const Duration(seconds: 10));
     } catch (e) {
-      return Future.value(RequestResponse.failedWithUserFriendlyMessage("Loading data took too long. Please try again later."));
+      return Future.value(RequestResponse.failedWithUserFriendlyMessage('Loading data took too long. Please try again later.'));
     }
   }
 
@@ -153,17 +153,17 @@ class TrApiDataRequestService {
     var model = TrRequestModel(
         id: id,
         onResponseCallback: (response) {
-          if (response.startsWith("{\"errors\"")) {
+          if (response.startsWith('{"errors"')) {
             var errorResult = RequestResponse<T>.failedWithUserFriendlyMessage(Constants.genericErrorMessage);
             subject.add(TrRequestResponse(id, errorResult));
             return;
           }
 
-          var successResult = RequestResponse<T>.successful(JsonMapper.deserialize<T>(response)!);
+          var successResult = RequestResponse<T>.successful(JsonMapper.deserialize<T>(response) as T);
           subject.add(TrRequestResponse(id, successResult));
         });
 
-    _sendMessage("sub $id $requestString");
+    _sendMessage('sub $id $requestString');
     _requestMessageStrings[id] = requestString;
     _runningRequests.add(model);
 
@@ -171,7 +171,7 @@ class TrApiDataRequestService {
   }
 
   void unsub(int id) {
-    _sendMessage("unsub $id");
+    _sendMessage('unsub $id');
     _runningRequests.removeWhere((r) => r.id == id);
     _requestMessageStrings.removeWhere((messageId, _) => messageId == id);
   }

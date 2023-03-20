@@ -41,9 +41,9 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
       onPressed: () => _onClickProduct(productInfo, details),
       imageUrl: details.imageUrl,
       productTitle: details.productTitle,
-      productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
+      productSubtitle: productInfo.typeId == 'crypto' ? productInfo.homeSymbol! : details.productSubtitle,
       percentMissingToFill: percentMissingToFill,
-      percentMissingToFillString: (percentMissingToFill * 100).toStringAsFixed(2) + "%",
+      percentMissingToFillString: '${(percentMissingToFill * 100).toStringAsFixed(2)}%',
       currentPriceText: currentPrice.toDefaultPrice(),
       targetPriceText: widget.info.buyInPrice.toDefaultPrice(),
     );
@@ -91,7 +91,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                         productSubtitle,
                         overflow: TextOverflow.visible,
                         softWrap: false,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],
@@ -157,7 +157,7 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
             }
 
             if (!trProductInfoSnap.data!.isSuccessful) {
-              Util.openDialog(context, "Loading product failed", message: "Sorry, something went wrong while trying to load this product.");
+              Util.openDialog(context, 'Loading product failed', message: 'Sorry, something went wrong while trying to load this product.');
               return const Text("Something didn't go right. Please try again later.");
             }
 
@@ -177,14 +177,14 @@ class _OngoingProductTileState extends State<OngoingProductTile> with STWidget {
                     onPressed: () {},
                     imageUrl: details.imageUrl,
                     productTitle: details.productTitle,
-                    productSubtitle: productInfo.typeId == "crypto" ? productInfo.homeSymbol! : details.productSubtitle,
+                    productSubtitle: productInfo.typeId == 'crypto' ? productInfo.homeSymbol! : details.productSubtitle,
                     percentMissingToFill: 0,
-                    percentMissingToFillString: "This product can no longer be bought or sold. This might happen if the product is expired or is knocked out. This product may not be showing by next week.",
+                    percentMissingToFillString: 'This product can no longer be bought or sold. This might happen if the product is expired or is knocked out. This product may not be showing by next week.',
                     showPriceText: false,
-                    currentPriceText: "",
-                    targetPriceText: "",
+                    currentPriceText: '',
+                    targetPriceText: '',
                     textAlign: TextAlign.center,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.normal),
+                    textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.normal),
                   );
                 }
 

@@ -1,10 +1,10 @@
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as im;
 import 'package:solidtrade/components/base/st_page.dart';
-import 'dart:math';
-
 import 'package:solidtrade/services/util/util.dart';
 
 class Cropper extends StatefulWidget {
@@ -13,6 +13,7 @@ class Cropper extends StatefulWidget {
   const Cropper({Key? key, required this.image}) : super(key: key);
 
   @override
+  // TODO: Why not State<_Cropper>?
   _CropperState createState() => _CropperState();
 }
 
@@ -54,7 +55,7 @@ class _CropperState extends State<Cropper> {
   }
 
   void _cropImage() async {
-    var closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: "Loading. This might take a while...");
+    var closeDialog = Util.showLoadingDialog(context, showIndicator: false, waitingText: 'Loading. This might take a while...');
 
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -64,7 +65,9 @@ class _CropperState extends State<Cropper> {
     double cropYpx = imgHeight * cropArea.height / totalY;
     double x0 = (imgWidth - cropXpx) * xPercent;
     double y0 = (imgHeight - cropYpx) * yPercent;
-    im.Image cropped = im.copyCrop(decoded, x0.toInt(), y0.toInt(), cropXpx.toInt(), cropYpx.toInt());
+
+    // TODO: Not sure if this is right.
+    im.Image cropped = im.copyCrop(decoded, x: x0.toInt(), y: y0.toInt(), width: cropXpx.toInt(), height: cropYpx.toInt());
     _encodeImage(cropped);
 
     closeDialog();

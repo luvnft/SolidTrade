@@ -18,15 +18,15 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
     switch (buyHoldSell) {
       case BuyHoldSell.buy:
         color = colors.stockGreen;
-        buyHoldSellText = "Buy";
+        buyHoldSellText = 'Buy';
         break;
       case BuyHoldSell.hold:
         color = colors.lessSoftForeground;
-        buyHoldSellText = "Hold";
+        buyHoldSellText = 'Hold';
         break;
       case BuyHoldSell.sell:
         color = colors.stockRed;
-        buyHoldSellText = "Sell";
+        buyHoldSellText = 'Sell';
         break;
     }
 
@@ -36,11 +36,11 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
       children: [
         Text(
           buyHoldSellText,
-          style: Theme.of(context).textTheme.subtitle1!.copyWith(color: color),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: color),
         ),
         Text(
-          percent.toStringAsFixed(1) + "%",
-          style: Theme.of(context).textTheme.headline6!.copyWith(color: textColor),
+          '${percent.toStringAsFixed(1)}%',
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor),
         )
       ],
     );
@@ -83,8 +83,8 @@ class AnalystsRecommendations extends StatelessWidget with STWidget {
             ]),
             const SizedBox(height: 10),
             Text(
-              "This data is updated every banking day, but analysts only update their estimates periodically.",
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
+              'This data is updated every banking day, but analysts only update their estimates periodically.',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: colors.lessSoftForeground, fontSize: 12),
             )
           ],
         );

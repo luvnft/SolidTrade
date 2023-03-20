@@ -26,12 +26,12 @@ class WarrantPosition implements IBaseEntity, IPosition {
 
   factory WarrantPosition.fromJson(Map<String, dynamic> json) {
     return WarrantPosition(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      isin: json["isin"],
-      buyInPrice: json["buyInPrice"],
-      numberOfShares: json["numberOfShares"],
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      isin: json['isin'],
+      buyInPrice: json['buyInPrice'],
+      numberOfShares: json['numberOfShares'],
     );
   }
 }

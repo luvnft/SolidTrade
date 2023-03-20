@@ -1,24 +1,18 @@
-import 'dart:typed_data';
-
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_messaging/firebase_messaging.dart' as msg;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:solidtrade/data/dtos/user/request/update_user_dto.dart';
 import 'package:solidtrade/data/dtos/user/response/delete_user_response.dart';
 import 'package:solidtrade/data/entities/user.dart';
 import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/base/base_service.dart';
+import 'package:solidtrade/services/util/get_it.dart';
 
 class UserService extends IService<User?> {
-  UserService() : super(BehaviorSubject.seeded(null)) {
-    // This resolves the common problem using firebase web. See here for more: https://github.com/firebase/flutterfire/issues/5964
-    if (kIsWeb) {
-      auth.FirebaseAuth.instance.currentUser;
-    }
-  }
+  UserService() : super(BehaviorSubject.seeded(null));
 
   Future<RequestResponse<User>> createUser(
     String displayName,
@@ -63,14 +57,7 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<User>> fetchUserCurrentUser() async {
-    var uid = auth.FirebaseAuth.instance.currentUser?.uid;
-
-    RequestResponse<User> result;
-    if (uid != null) {
-      result = await DataRequestService.userDataRequestService.fetchUserByUid(uid);
-    } else {
-      result = RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
-    }
+    final result = await DataRequestService.userDataRequestService.fetchCurrentUser();
 
     if (result.isSuccessful) {
       behaviorSubject.add(result.result);
@@ -79,26 +66,28 @@ class UserService extends IService<User?> {
   }
 
   Future<RequestResponse<Map<String, String>>> getUserAuthenticationHeader() async {
-    final token = await getFirebaseUserAuthToken();
+    final token = await getUserToken();
 
     if (token == null) {
       return RequestResponse.failedWithUserFriendlyMessage(Constants.notLoggedInMessage);
     }
 
     return RequestResponse.successful({
-      "Authorization": "Bearer " + token.token!,
+      'Authorization': 'Bearer $token',
     });
   }
 
   Future<RequestResponse<Map<String, String>>> getUserDeviceHeader() async {
-    final token = await getUserMessagingDeviceToken();
+    // TODO: Do we still need this?
+    var token = '';
+    // final token = await getUserMessagingDeviceToken();
 
     if (token == null) {
-      return RequestResponse.failedWithUserFriendlyMessage("Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.");
+      return RequestResponse.failedWithUserFriendlyMessage('Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.');
     }
 
     return RequestResponse.successful({
-      "DeviceToken": token,
+      'DeviceToken': token,
     });
   }
 
@@ -114,6 +103,5 @@ class UserService extends IService<User?> {
     return response;
   }
 
-  Future<auth.IdTokenResult>? getFirebaseUserAuthToken() => auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
-  Future<String?> getUserMessagingDeviceToken() => msg.FirebaseMessaging.instance.getToken();
+  Future<String?> getUserToken() async => get<FlutterSecureStorage>().read(key: SecureStorageKeys.token.name);
 }

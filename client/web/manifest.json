@@ -1,30 +1,18 @@
 {
-  "name": "Solidtrade™",
-  "short_name": "Solidtrade™",
+  "name": "solidtrade",
+  "short_name": "solidtrade",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0175C2",
-  "theme_color": "#0175C2",
-  "description": "A platform which allows paper trading Stocks, ETFs, Crypto and Derivatives. And also allows to view and compare your portfolio with friends and others!",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": " A platform which allows paper trading Stocks, ETFs, Crypto and Derivatives.",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icons/favicon.ico",
-      "type": "image/x-icon",
-      "sizes": "16x16 32x32"
-    },
-    {
-      "src": "icons/icon-192-maskable.png",
-      "type": "image/png",
+      "src": "icons/Icon-192.png",
       "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-512-maskable.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ]
 }

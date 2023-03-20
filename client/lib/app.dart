@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solidtrade/app/main_common.dart';
-import 'package:flutter/material.dart';
-import 'package:solidtrade/pages/common/pre_splash.dart';
+import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
+import 'package:solidtrade/pages/common/initial_loading_page.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
+import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
 
 // ignore: must_be_immutable
@@ -41,18 +45,34 @@ class SolidtradeAppState extends State<SolidtradeApp> {
       stream: uiUpdate.stream$,
       builder: (context, _) {
         final colors = configurationProvider.themeProvider.theme;
+        final ticker = configurationProvider.languageProvider.language.langTicker;
+
         return MaterialApp(
-          navigatorKey: widget.navigatorKey,
           title: 'Solidtrade™',
-          theme: ThemeData(
-            backgroundColor: colors.background,
-            scaffoldBackgroundColor: colors.background,
-            textTheme: GoogleFonts.poppinsTextTheme().apply(
-              bodyColor: colors.foreground,
-              displayColor: colors.foreground,
+          navigatorKey: widget.navigatorKey,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: ticker.locale,
+          supportedLocales: const [
+            Locale('en'),
+            Locale('de'),
+          ],
+          themeMode: colors.themeColorType == ColorThemeType.light ? ThemeMode.light : ThemeMode.dark,
+          theme: ThemeData.light().copyWith(
+            useMaterial3: true,
+            textTheme: GoogleFonts.poppinsTextTheme(),
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            useMaterial3: true,
+            textTheme: GoogleFonts.poppinsTextTheme(
+              ThemeData(brightness: Brightness.dark).textTheme,
             ),
           ),
-          home: const PreSplash(),
+          home: const InitialLoadingPage(),
         );
       },
     );

@@ -19,7 +19,7 @@ import 'package:solidtrade/services/util/extensions/string_extensions.dart';
 
 class TrUtil {
   static final _configurationProvider = GetIt.instance.get<ConfigurationProvider>();
-  static final _baseUrl = "https://" + ConfigReader.getBaseUrl();
+  static final _baseUrl = 'https://${ConfigReader.getBaseUrl()}';
 
   static TrUiProductDetails getTrUiProductDetails(TrProductPrice priceInfo, TrProductInfo productInfo, PositionType positionType, {List<TrAggregateHistoryEntry>? entires}) {
     final isStockPosition = positionType == PositionType.stock;
@@ -30,12 +30,12 @@ class TrUtil {
     final absoluteChange = positionChange.t2;
 
     final isUp = percentageChange == 1 || 1 < percentageChange;
-    final plusMinus = isUp ? "+" : "";
+    final plusMinus = isUp ? '+' : '';
 
     final productTitle = isStockPosition ? productInfo.shortName : _getDerivativesProductTitle(productInfo);
     final productSubtitle = isStockPosition ? _getStockProductSubtitle(productInfo.shortName, productInfo.name) : _getDerivativesProductSubtitle(productInfo);
 
-    final colorMode = _configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? "light" : "dark";
+    final colorMode = _configurationProvider.themeProvider.theme.themeColorType == ColorThemeType.light ? 'light' : 'dark';
 
     var imageIsin = isStockPosition ? productInfo.isin : productInfo.derivativeInfo!.underlying.isin;
 
@@ -46,7 +46,7 @@ class TrUtil {
       plusMinusProductNamePrefix: plusMinus,
       productTitle: productTitle,
       productSubtitle: productSubtitle,
-      imageUrl: _baseUrl + "/image?Isin=$imageIsin&ThemeColor=$colorMode&IsWeb=$kIsWeb",
+      imageUrl: '$_baseUrl/image?Isin=$imageIsin&ThemeColor=$colorMode&IsWeb=$kIsWeb',
       textColor: isUp ? _configurationProvider.themeProvider.theme.stockGreen : _configurationProvider.themeProvider.theme.stockRed,
     );
   }
@@ -79,11 +79,11 @@ class TrUtil {
   }
 
   static String _getDerivativesProductTitle(TrProductInfo info) {
-    return "${info.derivativeInfo!.properties.optionType.capitalize()} @${info.derivativeInfo!.properties.strike.toStringAsFixed(2)}";
+    return '${info.derivativeInfo!.properties.optionType.capitalize()} @${info.derivativeInfo!.properties.strike.toStringAsFixed(2)}';
   }
 
   static String _getDerivativesProductSubtitle(TrProductInfo info) {
-    return "${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}";
+    return '${info.derivativeInfo!.productCategoryName} ${info.derivativeInfo!.underlying.name}';
   }
 
   static int productPageGetAnalystsCount(Recommendations recommendations) {

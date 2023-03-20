@@ -24,5 +24,5 @@ class SharedQuotesTranslations {
     return Quotes.quotes.where((quote) => quote.lang == lang && quote.category == category).toList();
   }
 
-  static String _createCacheIdentifier(LanguageTicker ticker, QuoteCategory category) => "$ticker-$category";
+  static String _createCacheIdentifier(LanguageTicker ticker, QuoteCategory category) => '$ticker-$category';
 }

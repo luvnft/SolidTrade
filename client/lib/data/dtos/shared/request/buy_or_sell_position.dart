@@ -1,6 +1,6 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 
-@JsonObject()
+@jsonSerializable
 class BuyOrSellRequestDto {
   final String isin;
   final num numberOfShares;

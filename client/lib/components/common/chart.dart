@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -91,26 +92,26 @@ class _ChartState extends State<Chart> with STWidget {
 
     String str;
     if (data.last.key.difference(data.first.key) < const Duration(days: 1)) {
-      str = DateFormat("HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
+      str = DateFormat('HH:mm').format(args.chartPointInfo.chartDataPoint!.x).trim();
     } else {
-      str = DateFormat("dd.MM.yyyy HH:mm").format(args.chartPointInfo.chartDataPoint!.x).trim();
+      str = DateFormat('dd.MM.yyyy HH:mm').format(args.chartPointInfo.chartDataPoint!.x).trim();
     }
 
     /// FYI: The character U+0589 "։" could be confused with the character U+003a "։", which is more common in source code.
     // We do this because when the character U+003a ":" is used the text is not centered for some reason.
     // To bypass this issue we use the character U+0589 "։" which looks the same and also keep the text centered.
-    args.chartPointInfo.header = str.replaceFirst(":", "։");
+    args.chartPointInfo.header = str.replaceFirst(':', '։');
 
     if (args.chartPointInfo.series?.name != translations.common.changeAsTextLiteral) {
-      args.chartPointInfo.label = "${num.parse(args.chartPointInfo.label!).toStringAsFixed(2)}€";
+      args.chartPointInfo.label = '${num.parse(args.chartPointInfo.label!).toStringAsFixed(2)}€';
       return;
     }
 
     var selectedPoint = args.chartPointInfo.chartDataPoint!.yValue as double;
     var percent = (selectedPoint / data.first.value - 1) * 100;
-    var changePrefix = percent.isNegative ? "" : "+";
+    var changePrefix = percent.isNegative ? '' : '+';
 
-    args.chartPointInfo.label = "$changePrefix${percent.toStringAsFixed(2)}%";
+    args.chartPointInfo.label = '$changePrefix${percent.toStringAsFixed(2)}%';
     args.chartPointInfo.chartDataPoint!.pointColorMapper = percent.isNegative ? colors.stockRed : colors.stockGreen;
   }
 
@@ -165,7 +166,7 @@ class _ChartState extends State<Chart> with STWidget {
           color: _displayLineColor,
         ),
         LineSeries<MapEntry<DateTime, double>, DateTime>(
-          name: "Latest",
+          name: 'Latest',
           dataSource: _data,
           animationDuration: 500,
           enableTooltip: true,
@@ -175,7 +176,7 @@ class _ChartState extends State<Chart> with STWidget {
           // isVisible: false,
         ),
         FastLineSeries<MapEntry<DateTime, double>, DateTime>(
-          name: "Close",
+          name: 'Close',
           dataSource: _secondaryData,
           animationDuration: 500,
           isVisible: _secondaryData.isNotEmpty,

@@ -67,7 +67,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
     _trContinuousPricesService = TrContinuousProductPricesService(
       _chartDateRangeStream.stream$,
       widget.trProductPriceStream,
-      "${widget.productInfo.isin}.${widget.productInfo.exchangeIds.first}",
+      '${widget.productInfo.isin}.${widget.productInfo.exchangeIds.first}',
     );
 
     _chartDateRangeStreamSubscription = _chartDateRangeStream.stream$.listen(onChartRangeChange);
@@ -109,7 +109,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
         margin: const EdgeInsets.only(left: 25, top: 5),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text(title, style: Theme.of(context).textTheme.headline6),
+          child: Text(title, style: Theme.of(context).textTheme.titleLarge),
         ),
       ),
       Container(
@@ -149,7 +149,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
   @override
   Widget build(BuildContext context) {
     // We only fetch details if the product is a stock and not crypto because anything else does not have kpis
-    final isStock = widget.positionType == PositionType.stock && !widget.productInfo.isin.startsWith("XF");
+    final isStock = widget.positionType == PositionType.stock && !widget.productInfo.isin.startsWith('XF');
     if (isStock) {
       _stockDetailsService.requestTrProductInfo(widget.productInfo.isin);
     }
@@ -171,7 +171,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
           foregroundColor: colors.foreground,
           elevation: 0,
           titleSpacing: 0,
-          titleTextStyle: Theme.of(context).textTheme.bodyText2,
+          titleTextStyle: Theme.of(context).textTheme.bodyMedium,
           leading: IconButton(
             onPressed: _onClickLeadingButton,
             icon: const Icon(Icons.arrow_back),
@@ -199,7 +199,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                     child: Column(
                       children: [
                         VisibilityDetector(
-                          key: const Key("VisibilityDetectorKey"),
+                          key: const Key('VisibilityDetectorKey'),
                           onVisibilityChanged: (VisibilityInfo info) {
                             if (_widgetWasDisposed) {
                               return;
@@ -258,7 +258,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                               children: [
                                 ...section(
                                   context,
-                                  "📈 Position",
+                                  '📈 Position',
                                   PositionMetrics(
                                     trProductPriceStream: widget.trProductPriceStream,
                                     trStockDetailsStream: _stockDetailsService.stream$,
@@ -272,7 +272,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         ...section(
                           context,
-                          "📈 Statistics",
+                          '📈 Statistics',
                           ProductMetrics(
                             trProductPriceStream: widget.trProductPriceStream,
                             trStockDetailsStream: _stockDetailsService.stream$,
@@ -283,7 +283,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         ...section(
                           context,
-                          "🤔 What Analysts Say",
+                          '🤔 What Analysts Say',
                           AnalystsRecommendations(
                             trStockDetailsStream: _stockDetailsService.stream$,
                           ),
@@ -292,7 +292,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         ...section(
                           context,
-                          "💎 Derivatives",
+                          '💎 Derivatives',
                           DerivativesSelection(
                             productInfo: widget.productInfo,
                           ),
@@ -303,7 +303,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         ...section(
                           context,
-                          "ℹ️ About ${widget.productInfo.shortName}",
+                          'ℹ️ About ${widget.productInfo.shortName}',
                           ProductInformation(
                             trStockDetailsStream: _stockDetailsService.stream$,
                           ),
@@ -312,7 +312,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         ...section(
                           context,
-                          "ℹ️ Details",
+                          'ℹ️ Details',
                           ProductDetails(
                             trStockDetailsStream: _stockDetailsService.stream$,
                             productInfo: widget.productInfo,
@@ -324,7 +324,7 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          "In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.",
+                          'In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: colors.lessSoftForeground, fontSize: 13),
                         ),
@@ -352,11 +352,11 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                                   margin: const EdgeInsets.all(5),
                                   child: TextButton(
                                     onPressed: () => _pushToCreateOrder(BuyOrSell.sell),
-                                    child: const Text("Sell", style: TextStyle(color: Colors.white)),
                                     style: ButtonStyle(
                                       backgroundColor: MaterialStateProperty.all(colors.stockRed),
                                       foregroundColor: MaterialStateProperty.all(colors.foreground),
                                     ),
+                                    child: const Text('Sell', style: TextStyle(color: Colors.white)),
                                   ),
                                 )
                               : const SizedBox.shrink(),
@@ -365,11 +365,11 @@ class _ProductPageState extends State<ProductPage> with STWidget {
                             margin: const EdgeInsets.all(5),
                             child: TextButton(
                               onPressed: () => _pushToCreateOrder(BuyOrSell.buy),
-                              child: const Text("Buy", style: TextStyle(color: Colors.white)),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(colors.stockGreen),
                                 foregroundColor: MaterialStateProperty.all(colors.foreground),
                               ),
+                              child: const Text('Buy', style: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ],

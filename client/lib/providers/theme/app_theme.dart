@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solidtrade/data/models/enums/client_enums/shared_preferences_keys.dart';
+import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
 abstract class IColorTheme {
@@ -87,19 +87,19 @@ class LightColorTheme implements IColorTheme {
   Color get softBackground => Colors.grey[300]!;
 
   @override
-  String get logoAsGif => "assets/images/light-logo.gif";
+  String get logoAsGif => 'assets/images/light-logo.gif';
 
   @override
-  String get limitOrderBuy => "assets/images/order_types/buy_limit_order_light.jpg";
+  String get limitOrderBuy => 'assets/images/order_types/buy_limit_order_light.jpg';
 
   @override
-  String get limitOrderSell => "assets/images/order_types/sell_limit_order_light.jpg";
+  String get limitOrderSell => 'assets/images/order_types/sell_limit_order_light.jpg';
 
   @override
-  String get stopOrderBuy => "assets/images/order_types/buy_stop_order_light.jpg";
+  String get stopOrderBuy => 'assets/images/order_types/buy_stop_order_light.jpg';
 
   @override
-  String get stopOrderSell => "assets/images/order_types/sell_stop_order_light.jpg";
+  String get stopOrderSell => 'assets/images/order_types/sell_stop_order_light.jpg';
 
   @override
   Color get selectedItem => Colors.black;
@@ -173,19 +173,19 @@ class DarkColorTheme implements IColorTheme {
   Color get softBackground => Colors.grey[900]!;
 
   @override
-  String get logoAsGif => "assets/images/dark-logo.gif";
+  String get logoAsGif => 'assets/images/dark-logo.gif';
 
   @override
-  String get limitOrderBuy => "assets/images/order_types/buy_limit_order_dark.jpg";
+  String get limitOrderBuy => 'assets/images/order_types/buy_limit_order_dark.jpg';
 
   @override
-  String get limitOrderSell => "assets/images/order_types/sell_limit_order_dark.jpg";
+  String get limitOrderSell => 'assets/images/order_types/sell_limit_order_dark.jpg';
 
   @override
-  String get stopOrderBuy => "assets/images/order_types/buy_stop_order_dark.jpg";
+  String get stopOrderBuy => 'assets/images/order_types/buy_stop_order_dark.jpg';
 
   @override
-  String get stopOrderSell => "assets/images/order_types/sell_stop_order_dark.jpg";
+  String get stopOrderSell => 'assets/images/order_types/sell_stop_order_dark.jpg';
 
   @override
   Color get selectedItem => Colors.white;

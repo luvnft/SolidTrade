@@ -28,8 +28,8 @@ abstract class ITransientService<T> extends IService<T?> {
     if (event.requestResponse.isSuccessful) {
       behaviorSubject.add(event.requestResponse.result);
     } else {
-      _logger.f("If you see this error, then this issue has to be looked in to and future errors must be handled.");
-      _logger.f("Received unsuccessful request response, which wont get handled. Error Message: ${event.requestResponse.error!.userFriendlyMessage}");
+      _logger.f('If you see this error, then this issue has to be looked in to and future errors must be handled.');
+      _logger.f('Received unsuccessful request response, which wont get handled. Error Message: ${event.requestResponse.error!.userFriendlyMessage}');
     }
 
     _hadInitialListener = true;

@@ -55,13 +55,13 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
   Iterable<AnimatedText> _getWelcomeMessages(BuildContext context) {
     return SharedWelcomeMessages.welcomeMessages.map((message) => FadeAnimatedText(
           message,
-          textStyle: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40),
+          textStyle: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 40),
           textAlign: TextAlign.center,
         ));
   }
 
   TyperAnimatedText _getSolidtradeText(BuildContext context) {
-    return TyperAnimatedText("Solidtrade™", textStyle: Theme.of(context).textTheme.headline5, speed: const Duration(milliseconds: 100));
+    return TyperAnimatedText('Solidtrade™', textStyle: Theme.of(context).textTheme.headlineSmall, speed: const Duration(milliseconds: 100));
   }
 
   @override
@@ -114,12 +114,12 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    child: Icon(colors.themeColorType == ColorThemeType.light ? Icons.sunny : Icons.nightlight_round_outlined, color: colors.foreground),
                     onPressed: _handleClickChangeTheme,
+                    child: Icon(colors.themeColorType == ColorThemeType.light ? Icons.sunny : Icons.nightlight_round_outlined, color: colors.foreground),
                   ),
                   TextButton(
-                    child: Icon(Icons.public, color: colors.foreground),
                     onPressed: _handleClickChangeLanguage,
+                    child: Icon(Icons.public, color: colors.foreground),
                   )
                 ],
               ),

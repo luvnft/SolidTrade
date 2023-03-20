@@ -1,16 +1,15 @@
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/app.dart';
 import 'package:solidtrade/config/config_reader.dart';
 import 'package:solidtrade/data/models/enums/client_enums/environment.dart';
 import 'package:solidtrade/data/models/enums/client_enums/lang_ticker.dart';
-import 'package:solidtrade/data/models/enums/client_enums/shared_preferences_keys.dart';
+import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 import 'package:solidtrade/providers/app/app_update_stream_provider.dart';
 import 'package:solidtrade/providers/language/language_provider.dart';
@@ -19,11 +18,7 @@ import 'package:solidtrade/services/request/data_request_service.dart';
 import 'package:solidtrade/services/stream/aggregate_history_service.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
-import 'package:get_it/get_it.dart';
-import 'package:solidtrade/app.dart';
-import 'package:flutter/material.dart';
 import 'package:solidtrade/services/stream/knockout_service.dart';
-import 'package:solidtrade/services/stream/messaging_service.dart';
 import 'package:solidtrade/services/stream/ongoing_knockout_service.dart';
 import 'package:solidtrade/services/stream/ongoing_warrant_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
@@ -35,9 +30,7 @@ import 'package:solidtrade/services/stream/tr_product_search_service.dart';
 import 'package:solidtrade/services/stream/tr_stock_details_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/stream/warrant_service.dart';
-import 'package:solidtrade/services/util/user_util.dart';
-
-import '../mapper.g.dart' as mapper;
+import 'package:solidtrade/services/util/debug/logger.dart';
 
 Future<void> commonMain(Environment env) async {
   await Startup.initializeApp(env);
@@ -51,7 +44,7 @@ void _registerFlutterErrorHandler(Environment environment) {
 
   FlutterError.onError = (details) {
     // We can exclude image errors, because these are already being handled.
-    if (details.exception is Exception && (details.exception as Exception).toString().contains("Invalid image data")) {
+    if (details.exception is Exception && (details.exception as Exception).toString().contains('Invalid image data')) {
       return;
     }
 
@@ -60,7 +53,7 @@ void _registerFlutterErrorHandler(Environment environment) {
       print(details);
     }
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // We dont want to stack error snack bars. There for we only create one, if there currently is not other.
       if (isShowingErrorSnackBar) {
         return;
@@ -75,6 +68,9 @@ void _registerFlutterErrorHandler(Environment environment) {
             const Flexible(
               child: Text('We are sorry. Something went wrong. If you are facing any issues reload the app.'),
             ),
+            // TODO: With the new material 3 version, the text color of the SnackBarAction is not working as it should.
+            // This issue has been resolved already, but is not yet in stable yet.
+            // See here for more: https://github.com/flutter/flutter/commit/0588b925a070a591da8e199cb17d83b74daa9de1.
             SnackBarAction(
               label: 'Reload',
               onPressed: () async => await Globals.appState.restart(),
@@ -110,37 +106,14 @@ class Startup {
     languageHasToBeInitialized = false;
 
     WidgetsFlutterBinding.ensureInitialized();
-    mapper.init();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await ConfigReader.initialize();
-
-    await Firebase.initializeApp();
-
-    if (const bool.fromEnvironment("USE_FIREBASE_EMULATOR")) {
-      await _configureFirebaseAuth();
-    }
 
     _initializeServices(prefs);
     _initializeGoogleFonts();
 
     DataRequestService.initialize();
-  }
-
-  static Future<void> _configureFirebaseAuth() async {
-    String configuredHost = const String.fromEnvironment("FIREBASE_EMULATOR_URL");
-    int configuredPort = const int.fromEnvironment("AUTH_EMULATOR_PORT");
-    const int defaultPort = 9099;
-
-    // Android emulator must be pointed to 10.0.2.2
-    var defaultHost = !kIsWeb && Platform.isAndroid ? '10.0.2.2' : 'localhost';
-
-    var host = configuredHost.isNotEmpty ? configuredHost : defaultHost;
-    var port = configuredPort != 0 ? configuredPort : defaultPort;
-
-    await FirebaseAuth.instance.useAuthEmulator(host, port);
-
-    debugPrint('Using Firebase Auth emulator on: $host:$port');
   }
 
   static LanguageTicker _initialLanguage() {
@@ -177,12 +150,13 @@ class Startup {
     services.registerSingleton<OngoingWarrantService>(OngoingWarrantService());
     services.registerSingleton<OngoingKnockoutService>(OngoingKnockoutService());
     services.registerSingleton<PortfolioService>(PortfolioService());
-    services.registerSingleton<MessagingService>(MessagingService());
     services.registerSingleton<TrStockDetailsService>(TrStockDetailsService());
     services.registerSingleton<TrProductSearchService>(TrProductSearchService());
     services.registerSingleton<TrDerivativesSearchService>(TrDerivativesSearchService());
     services.registerSingleton<AggregateHistoryService>(AggregateHistoryService());
     services.registerSingleton<HistoricalPositionService>(HistoricalPositionService());
+
+    services.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
 
     services.registerFactory<TrProductInfoService>(() => TrProductInfoService());
     services.registerFactory<TrProductPriceService>(() => TrProductPriceService());

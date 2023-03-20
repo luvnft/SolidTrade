@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
@@ -66,7 +65,7 @@ class _SplashState extends State<Splash> with STWidget {
       await _historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
       await _portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
 
-      logger.d("Fetched user info successfully");
+      logger.d('Fetched user info successfully');
 
       await _fadeAnimationFuture;
       await delay;
@@ -77,7 +76,7 @@ class _SplashState extends State<Splash> with STWidget {
 
     delay.ignore();
     _fadeAnimationFuture.ignore();
-    logger.w("User login failed. Proceeding to login");
+    logger.w('User login failed. Proceeding to login');
 
     Navigator.pop(context, false);
   }
@@ -108,7 +107,7 @@ class _SplashState extends State<Splash> with STWidget {
                     width: 220,
                     child: Divider(thickness: 2, color: colors.softForeground),
                   ),
-                  const Text("Solidtrade"),
+                  const Text('Solidtrade'),
                 ],
               ),
             ),

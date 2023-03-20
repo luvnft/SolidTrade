@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget with STWidget {
         Text(
           alternativeTitle!,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
         ),
       ];
     }
@@ -48,7 +48,7 @@ class LoginScreen extends StatelessWidget with STWidget {
         margin: const EdgeInsets.symmetric(horizontal: 40),
         child: Text(
           title,
-          style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w600, fontSize: 20),
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w600, fontSize: 20),
           textAlign: TextAlign.center,
         ),
       ),
@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget with STWidget {
         child: Text(
           subTitle,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
         ),
       ),
     ];

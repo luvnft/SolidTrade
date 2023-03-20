@@ -1,5 +1,5 @@
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:get_it/get_it.dart';
-import 'package:simple_json_mapper/simple_json_mapper.dart';
 import 'package:solidtrade/data/models/request_response/error_response.dart';
 import 'package:solidtrade/providers/app/app_configuration_provider.dart';
 
@@ -8,7 +8,7 @@ class RequestResponse<T> {
   final T? result;
   final bool isSuccessful;
 
-  String get _toJson => error != null ? '{"error": "${error!.userFriendlyMessage}"}' : JsonMapper.serialize(result!)!;
+  String get _toJson => error != null ? '{"error": "${error!.userFriendlyMessage}"}' : JsonMapper.serialize(result!);
 
   const RequestResponse({
     required this.error,
@@ -31,7 +31,7 @@ class RequestResponse<T> {
   factory RequestResponse.failedWithUserFriendlyMessage(String message) {
     return RequestResponse(
       error: ErrorResponse.fromJson({
-        "userFriendlyMessage": message
+        'userFriendlyMessage': message
       }),
       isSuccessful: false,
       result: null,
@@ -41,7 +41,7 @@ class RequestResponse<T> {
   factory RequestResponse.failedUnexpectedly(Map<String, dynamic> data) {
     return RequestResponse(
       error: ErrorResponse.fromJson({
-        "userFriendlyMessage": data["userFriendlyMessage"] ?? data["message"] ?? GetIt.instance.get<ConfigurationProvider>().languageProvider.language.common.httpFriendlyErrorResponse,
+        'userFriendlyMessage': data['userFriendlyMessage'] ?? data['message'] ?? GetIt.instance.get<ConfigurationProvider>().languageProvider.language.common.httpFriendlyErrorResponse,
       }),
       isSuccessful: false,
       result: null,

@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  server:
+    cmds:
+      - "docker compose up -d --scale api=1 --build"
+    silent: true
+
+  server_no_build:
+    cmds:
+      - "docker compose up -d --scale api=1"
+    silent: true

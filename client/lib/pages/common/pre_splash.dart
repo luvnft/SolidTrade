@@ -25,7 +25,7 @@ class PreSplashState extends State<PreSplash> with STWidget {
     var fetchUserWasSuccessful = await Navigator.of(context).push<bool>(routeBuilderSplashScreen);
 
     if (fetchUserWasSuccessful == null) {
-      throw "Did not expect navigation result to not be null";
+      throw 'Did not expect navigation result to not be null';
     }
 
     // If fetching the user failed, we reauthenticate.

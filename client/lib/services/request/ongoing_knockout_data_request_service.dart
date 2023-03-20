@@ -1,4 +1,4 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:solidtrade/data/dtos/shared/request/ongoing_position_request_dto.dart';
 import 'package:solidtrade/data/entities/ongoing_knockout_position.dart';
 import 'package:solidtrade/data/models/common/constants.dart';

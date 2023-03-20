@@ -81,11 +81,11 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                       child: Row(
                         children: [
                           const SizedBox(width: 20),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), child: const Text("Overview"), style: buttonStyle(0))),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(0), style: buttonStyle(0), child: const Text('Overview'))),
                           const SizedBox(width: 10),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), child: const Text("Open positions"), style: buttonStyle(1))),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(1), style: buttonStyle(1), child: const Text('Open positions'))),
                           const SizedBox(width: 10),
-                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), child: const Text("Closed positions"), style: buttonStyle(2))),
+                          SizedBox(height: 35, child: TextButton(onPressed: () => _changeIndex(2), style: buttonStyle(2), child: const Text('Closed positions'))),
                           const SizedBox(height: 70),
                         ],
                       ),
@@ -97,13 +97,13 @@ class _PortfolioPageState extends State<PortfolioPage> with STWidget {
                   Container(
                     margin: const EdgeInsets.all(10),
                     child: Text(
-                      "In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.",
+                      'In the event of disruptions, outdated data may occur. When transactions are made, it is ensured that these disturbances are taken into account.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: colors.lessSoftForeground, fontSize: 13),
                     ),
                   ),
                   Text(
-                    "Solidtrade™",
+                    'Solidtrade™',
                     style: TextStyle(color: colors.lessSoftForeground, fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 10),

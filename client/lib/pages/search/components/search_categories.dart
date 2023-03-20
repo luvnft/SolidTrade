@@ -4,35 +4,35 @@ import 'package:solidtrade/services/util/extensions/build_context_extensions.dar
 
 class _CategoryItem {
   final String name;
-  final String basePath;
-  String get assetPath => "$basePath/$name.png";
+  final String basePath = 'assets/images/categories';
+  String get assetPath => '$basePath/$name.png';
 
-  _CategoryItem(this.name, {this.basePath = "assets/images/categories"});
+  _CategoryItem(this.name);
 }
 
 var _matrixOfCategories = [
   [
-    _CategoryItem("Technology"),
+    _CategoryItem('Technology'),
     // _CategoryItem("Electronics"),
-    _CategoryItem("Computer & Network"),
-    _CategoryItem("Crypto"),
+    _CategoryItem('Computer & Network'),
+    _CategoryItem('Crypto'),
   ],
   [
-    _CategoryItem("Health Care"),
-    _CategoryItem("Cosmetics & Pharmaceuticals"),
-    _CategoryItem("Water & Energy"),
-    _CategoryItem("Biotech & Nanotech"),
+    _CategoryItem('Health Care'),
+    _CategoryItem('Cosmetics & Pharmaceuticals'),
+    _CategoryItem('Water & Energy'),
+    _CategoryItem('Biotech & Nanotech'),
   ],
   [
-    _CategoryItem("Hotel & Tourism"),
-    _CategoryItem("Food"),
-    _CategoryItem("Retail & Stores"),
+    _CategoryItem('Hotel & Tourism'),
+    _CategoryItem('Food'),
+    _CategoryItem('Retail & Stores'),
   ],
   [
-    _CategoryItem("Baking & Finance"),
-    _CategoryItem("Insurance"),
-    _CategoryItem("Oil & Gas"),
-    _CategoryItem("Unique"),
+    _CategoryItem('Baking & Finance'),
+    _CategoryItem('Insurance'),
+    _CategoryItem('Oil & Gas'),
+    _CategoryItem('Unique'),
   ],
 ];
 

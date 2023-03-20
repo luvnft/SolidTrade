@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/base/st_stream_builder.dart';
+import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/data/models/common/tuple.dart';
 import 'package:solidtrade/data/models/enums/client_enums/chart_date_range_view.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
@@ -131,7 +131,7 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis),
+                                    Text(widget.productInfo.shortName, style: Theme.of(context).textTheme.bodyLarge, overflow: TextOverflow.ellipsis),
                                     Text(widget.productInfo.intlSymbol ?? _getProductTicker, style: _subtitleTextStyle),
                                   ],
                                 ),
@@ -150,7 +150,7 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
                                         size: 20,
                                       ),
                                       Text(
-                                        details.plusMinusProductNamePrefix + ((details.percentageChange - 1) * 100).toStringAsFixed(2) + "%",
+                                        '${details.plusMinusProductNamePrefix}${((details.percentageChange - 1) * 100).toStringAsFixed(2)}%',
                                         style: TextStyle(
                                           color: color,
                                         ),

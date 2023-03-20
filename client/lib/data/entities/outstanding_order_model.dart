@@ -3,7 +3,7 @@ import 'package:solidtrade/data/entities/ongoing_knockout_position.dart';
 import 'package:solidtrade/data/entities/ongoing_warrant_position.dart';
 import 'package:solidtrade/data/models/enums/entity_enums/enter_or_exit_position_type.dart';
 
-import '../entities/base/base_entity.dart';
+import 'package:solidtrade/data/entities/base/base_entity.dart';
 
 class OutstandingOrderModel implements IBaseEntity, IPosition {
   @override

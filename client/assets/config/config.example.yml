@@ -1,0 +1,5 @@
+baseUrl: solidtrade.api.rosemite.dev # Url to the SolidTrade API. When debugging locally, consider using ngrok to expose your local API.
+trEndpoint: wss://api.traderepublic.com/
+initialTrConnectString:
+  connect 22 {"locale":"en","platformId":"webtrading","platformVersion":"chrome
+  - 96.0.4664","clientId":"app.traderepublic.com","clientVersion":"6795"}

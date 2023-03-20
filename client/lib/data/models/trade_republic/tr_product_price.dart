@@ -1,7 +1,7 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 import 'package:solidtrade/data/models/enums/shared_enums/buy_or_sell.dart';
 
-@JsonObject()
+@jsonSerializable
 class TrProductPrice {
   final TrProductPriceItem open;
   final TrProductPriceItem pre;
@@ -12,11 +12,12 @@ class TrProductPrice {
     return buyOrSell.isBuy ? ask!.price : bid.price;
   }
 
-  TrProductPrice({required this.open, required this.bid, this.ask, required this.pre});
+  TrProductPrice(this.open, this.bid, this.ask, this.pre);
 }
 
+@jsonSerializable
 class TrProductPriceItem {
   final int time;
   final double price;
-  const TrProductPriceItem({required this.time, required this.price});
+  const TrProductPriceItem(this.time, this.price);
 }

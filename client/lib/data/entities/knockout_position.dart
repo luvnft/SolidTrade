@@ -26,12 +26,12 @@ class KnockoutPosition implements IBaseEntity, IPosition {
 
   factory KnockoutPosition.fromJson(Map<String, dynamic> json) {
     return KnockoutPosition(
-      id: json["id"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      isin: json["isin"],
-      buyInPrice: json["buyInPrice"],
-      numberOfShares: json["numberOfShares"],
+      id: json['id'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      isin: json['isin'],
+      buyInPrice: json['buyInPrice'],
+      numberOfShares: json['numberOfShares'],
     );
   }
 }

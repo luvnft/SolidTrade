@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/services/util/debug/logger.dart';
 
 class UtilLocalAuth {
   static final _logger = GetIt.instance.get<Logger>();
@@ -22,7 +22,7 @@ class UtilLocalAuth {
         ),
       );
     } on PlatformException catch (e) {
-      _logger.w("Error occurred when trying to authenticate user. See following Exception for more info");
+      _logger.w('Error occurred when trying to authenticate user. See following Exception for more info');
       _logger.w(e);
       return false;
     }

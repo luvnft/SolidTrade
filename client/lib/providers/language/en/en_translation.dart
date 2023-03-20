@@ -9,7 +9,7 @@ import 'package:solidtrade/providers/language/shared/shared_translations.dart';
 import 'package:solidtrade/services/util/extensions/double_extensions.dart';
 import 'package:solidtrade/services/util/tr_util.dart';
 
-import '../translation.dart';
+import 'package:solidtrade/providers/language/translation.dart';
 
 class EnTranslation implements ITranslation {
   @override
@@ -65,31 +65,31 @@ class EnQuotesTranslation implements IQuotesTranslation {
 
 class EnEditOrderSettingsTranslation implements IEditOrderSettingsTranslation {
   @override
-  String buyLimitOrderDescription(String tickerOrName, double currentPrice) => "Trigger a limit buy if $tickerOrName€ decreases from ${currentPrice.toDefaultPrice()} to:";
+  String buyLimitOrderDescription(String tickerOrName, double currentPrice) => 'Trigger a limit buy if $tickerOrName€ decreases from ${currentPrice.toDefaultPrice()} to:';
 
   @override
-  String buyStopOrderDescription(String tickerOrName, double currentPrice) => "Buy at market price if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:";
+  String buyStopOrderDescription(String tickerOrName, double currentPrice) => 'Buy at market price if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:';
 
   @override
-  String sellLimitOrderDescription(String tickerOrName, double currentPrice) => "Trigger a limit sell if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:";
+  String sellLimitOrderDescription(String tickerOrName, double currentPrice) => 'Trigger a limit sell if $tickerOrName increases from ${currentPrice.toDefaultPrice()} to:';
 
   @override
-  String sellStopOrderDescription(String tickerOrName, double currentPrice) => "Sell at market price if $tickerOrName decreases from ${currentPrice.toDefaultPrice()} to:";
+  String sellStopOrderDescription(String tickerOrName, double currentPrice) => 'Sell at market price if $tickerOrName decreases from ${currentPrice.toDefaultPrice()} to:';
 
   @override
-  String get errorMessagePriceMustBeHigher => "The specified price must be more than the market price";
+  String get errorMessagePriceMustBeHigher => 'The specified price must be more than the market price';
 
   @override
-  String get errorMessagePriceMustBeLower => "The specified price must be less than the market price";
+  String get errorMessagePriceMustBeLower => 'The specified price must be less than the market price';
 
   @override
-  String get errorMessagePriceCannotBeEmptyOrZero => "The price given can not be empty or zero";
+  String get errorMessagePriceCannotBeEmptyOrZero => 'The price given can not be empty or zero';
 
   @override
-  String get errorMessageInsufficientFunds => "You dont have sufficient funds for this transaction";
+  String get errorMessageInsufficientFunds => 'You dont have sufficient funds for this transaction';
 
   @override
-  String get errorMessageNumberOfSharesCannotBeZero => "The specified number of shares can not be zero";
+  String get errorMessageNumberOfSharesCannotBeZero => 'The specified number of shares can not be zero';
 }
 
 class EnCreateOrderPageTranslation implements ICreateOrderPageTranslation {
@@ -97,31 +97,31 @@ class EnCreateOrderPageTranslation implements ICreateOrderPageTranslation {
   String buyLimitOrderDescription(String tickerOrName) => "Set the limit price, or the maximum price at which you're willing to buy $tickerOrName. Your order will only be fulfilled at your limit price or lower.";
 
   @override
-  String buyStopOrderDescription(String tickerOrName) => "Set a stop price above the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.";
+  String buyStopOrderDescription(String tickerOrName) => 'Set a stop price above the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.';
 
   @override
   String sellLimitOrderDescription(String tickerOrName) => "Set the limit price, or the minimum price at which you're willing to sell $tickerOrName. Your order will only be fulfilled at your limit price or higher.";
 
   @override
-  String sellStopOrderDescription(String tickerOrName) => "Set a stop price below the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.";
+  String sellStopOrderDescription(String tickerOrName) => 'Set a stop price below the current price of $tickerOrName. When the stop price is reached, your Stop Order becomes a Market Order and then executed at the best price available.';
 
   @override
-  String buySellProduct(BuyOrSell buyOrSell, String tickerOrName) => "${buyOrSell.name} $tickerOrName";
+  String buySellProduct(BuyOrSell buyOrSell, String tickerOrName) => '${buyOrSell.name} $tickerOrName';
 
   @override
-  String cashAvailable(double cash) => "Cash available: ${cash.toDefaultPrice()}";
+  String cashAvailable(double cash) => 'Cash available: ${cash.toDefaultPrice()}';
 
   @override
-  String get createOrderAsTextLiteral => "Create order";
+  String get createOrderAsTextLiteral => 'Create order';
 
   @override
-  String sharesOwned(double numberOfShares) => "Shares owned: $numberOfShares";
+  String sharesOwned(double numberOfShares) => 'Shares owned: $numberOfShares';
 
   @override
-  String totalPrice(double totalPrice) => "Total price: ${totalPrice.toDefaultPrice()}";
+  String totalPrice(double totalPrice) => 'Total price: ${totalPrice.toDefaultPrice()}';
 
   @override
-  String stopLimitText(OrderType orderType) => "${orderType.name} price";
+  String stopLimitText(OrderType orderType) => '${orderType.name} price';
 }
 
 class EnChartTranslation implements IChartTranslation {
@@ -131,41 +131,41 @@ class EnChartTranslation implements IChartTranslation {
 
 class EnWelcomeTranslation implements IWelcomeTranslation {
   @override
-  String get getStarted => "Get Started";
+  String get getStarted => 'Get Started';
 }
 
 class EnChartDateRangeViewTranslation implements IChartDateRangeViewTranslation {
   @override
-  String get fiveYear => "5Y";
+  String get fiveYear => '5Y';
 
   @override
-  String get oneDay => "1D";
+  String get oneDay => '1D';
 
   @override
-  String get oneMonth => "1M";
+  String get oneMonth => '1M';
 
   @override
-  String get oneWeek => "1W";
+  String get oneWeek => '1W';
 
   @override
-  String get oneYear => "1Y";
+  String get oneYear => '1Y';
 
   @override
-  String get sixMonth => "6M";
+  String get sixMonth => '6M';
 }
 
 class EnCommonTranslation implements ICommonTranslation {
   @override
-  String get httpFriendlyErrorResponse => "Something went wrong. Please make sure your input is valid.";
+  String get httpFriendlyErrorResponse => 'Something went wrong. Please make sure your input is valid.';
 
   @override
-  String get buyAsTextLiteral => "Buy";
+  String get buyAsTextLiteral => 'Buy';
 
   @override
-  String get sellAsTextLiteral => "Sell";
+  String get sellAsTextLiteral => 'Sell';
 
   @override
-  String get changeAsTextLiteral => "Change";
+  String get changeAsTextLiteral => 'Change';
 }
 
 class EnPortfolioTranslation implements IPortfolioTranslation {}
@@ -173,43 +173,43 @@ class EnPortfolioTranslation implements IPortfolioTranslation {}
 class EnProductPageTranslation implements IProductPageTranslation {
   @override
   String whatAnalystsSayContent(TrStockDetails details) {
-    return "The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.productPageGetAnalystsCount(details.analystRating.recommendations)} analysts.";
+    return 'The average share price estimate lays by ${details.analystRating.targetPrice.average.toStringAsFixed(2)}. The highest estimate is ${details.analystRating.targetPrice.high.toStringAsFixed(2)}€ and the lowest estimate ${details.analystRating.targetPrice.low.toStringAsFixed(2)}€.\n\nThis stock is evaluated by ${TrUtil.productPageGetAnalystsCount(details.analystRating.recommendations)} analysts.';
   }
 
   @override
   String nameOfNumberPrefix(NameForLargeNumber nameForLargeNumber) {
     switch (nameForLargeNumber) {
       case NameForLargeNumber.billion:
-        return "B";
+        return 'B';
       case NameForLargeNumber.million:
-        return "M";
+        return 'M';
       case NameForLargeNumber.thousand:
       case NameForLargeNumber.trillion:
-        return "T";
+        return 'T';
     }
   }
 
   @override
-  String get marketCap => "Market cap";
+  String get marketCap => 'Market cap';
 
   @override
-  String get derivativesRiskDisclaimer => "Please be aware that these types of investments come with high risk.";
+  String get derivativesRiskDisclaimer => 'Please be aware that these types of investments come with high risk.';
 }
 
 class EnUserAppBarTranslation implements IUserAppBarTranslation {
   @override
-  String get invite => "Invite";
+  String get invite => 'Invite';
 }
 
 class EnSettingsTranslation implements ISettingsTranslation {
   @override
-  String get changeLanguage => "Change language.";
+  String get changeLanguage => 'Change language.';
 
   @override
-  String get changeTheme => "Change theme.";
+  String get changeTheme => 'Change theme.';
 
   @override
-  String get settings => "Settings";
+  String get settings => 'Settings';
 }
 
 class EnNavigationBarTranslation implements INavigationBarTranslation {
@@ -220,13 +220,13 @@ class EnNavigationBarTranslation implements INavigationBarTranslation {
   String get portfolio => SharedTranslations.navigationBarPortfolio;
 
   @override
-  String get profile => "Profile";
+  String get profile => 'Profile';
 
   @override
-  String get search => "Search";
+  String get search => 'Search';
 }
 
 class SplashTranslation implements ISplashTranslation {
   @override
-  String get loading => "Loading";
+  String get loading => 'Loading';
 }

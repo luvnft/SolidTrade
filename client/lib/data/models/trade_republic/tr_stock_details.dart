@@ -1,56 +1,60 @@
-import 'package:simple_json_mapper/simple_json_mapper.dart';
+import 'package:dart_json_mapper/dart_json_mapper.dart';
 
-@JsonObject()
+@jsonSerializable
 class TrStockDetails {
   final String isin;
   final Company company;
   final AnalystRating analystRating;
   final bool hasKpis;
 
-  TrStockDetails({
-    required this.isin,
-    required this.company,
-    required this.analystRating,
-    required this.hasKpis,
-  });
+  TrStockDetails(
+    this.isin,
+    this.company,
+    this.analystRating,
+    this.hasKpis,
+  );
 }
 
+@jsonSerializable
 class Company {
   final String name;
   double? marketCapSnapshot;
   String? description;
   double? peRatioSnapshot;
 
-  Company({
-    required this.name,
+  Company(
+    this.name,
     this.marketCapSnapshot,
     this.description,
     this.peRatioSnapshot,
-  });
+  );
 }
 
+@jsonSerializable
 class AnalystRating {
   final TargetPrice targetPrice;
   final Recommendations recommendations;
 
-  AnalystRating({
-    required this.targetPrice,
-    required this.recommendations,
-  });
+  AnalystRating(
+    this.targetPrice,
+    this.recommendations,
+  );
 }
 
+@jsonSerializable
 class TargetPrice {
   final double average;
   final double high;
   final double low;
 
-  TargetPrice({
-    required this.average,
-    required this.high,
-    required this.low,
-  });
+  TargetPrice(
+    this.average,
+    this.high,
+    this.low,
+  );
 }
 
+@jsonSerializable
 class Recommendations {
   final int buy;
   final int outperform;
@@ -58,11 +62,11 @@ class Recommendations {
   final int underperform;
   final int sell;
 
-  Recommendations({
-    required this.buy,
-    required this.outperform,
-    required this.hold,
-    required this.underperform,
-    required this.sell,
-  });
+  Recommendations(
+    this.buy,
+    this.outperform,
+    this.hold,
+    this.underperform,
+    this.sell,
+  );
 }

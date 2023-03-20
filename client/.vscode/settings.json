@@ -1,0 +1,8 @@
+{
+  "[dart]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    }
+  },
+  "cSpell.words": ["cmds", "microtask", "Nanotech", "riverpod"]
+}
