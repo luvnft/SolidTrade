@@ -6,8 +6,6 @@ workflows:
       groups:
         - default
       flutter: 3.7.3
-      xcode: latest
-      cocoapods: default
     triggering:
       events:
         - push
@@ -43,11 +41,11 @@ workflows:
 
         # Build app
         if [ "$branch" = "stable" ]; then
-          flutter build web --release -t lib/app/main_prod.dart
+          flutter build apk --release -t lib/app/main_prod.dart
         elif [ "$branch" = "staging" ]; then
-          flutter build web --release -t lib/app/main_staging.dart
+          flutter build apk --release -t lib/app/main_staging.dart
         else
-          flutter build web --release -t lib/app/main_dev.dart
+          flutter build apk --release -t lib/app/main_dev.dart
         fi
     artifacts:
       - client/build/**/outputs/apk/**/*.apk
