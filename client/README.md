@@ -8,7 +8,7 @@
 
 1. run `task reset` to remove builds and install dependencies
 1. run `task gen` to generate few files (i10n and json mapping)
-1. run `task api:server` or `task api:no_build_server` to not rebuild the api.
+1. run `task api:server` or `task api:server_no_build` to not rebuild the api.
    This will start the required services for the api to run
 1. go to `http://localhost:4551` and copy the url
 1. create a `config.yml` in the `assets/config` folder and paste the url for the
