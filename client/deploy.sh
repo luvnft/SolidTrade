@@ -27,7 +27,7 @@ apiUrl="solidtrade.$branch.api.rosemite.dev"
 echo "Using $apiUrl as base api url"
 
 # Update base api url
-./yq e ".baseUrl = \"$apiUrl\"" ./assets/config/config.yml > ./assets/config/config.yml
+./yq -i ".baseUrl = \"$apiUrl\"" ./assets/config/config.yml
 
 # Install dependencies
 flutter pub get
