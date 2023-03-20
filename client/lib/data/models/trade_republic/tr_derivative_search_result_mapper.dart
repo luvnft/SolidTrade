@@ -4,12 +4,10 @@ import 'package:solidtrade/data/models/trade_republic/tr_derivative_search_resul
 
 @jsonSerializable
 class TrDerivativeSearchResultMapper {
-  final Map<String, int> issuerCount;
   final List<TrSingleDerivativeSearchResultMapper> results;
   final int resultCount;
 
   TrDerivativeSearchResultMapper(
-    this.issuerCount,
     this.resultCount,
     this.results,
   );
@@ -26,6 +24,7 @@ class TrDerivativeSearchResultMapper {
   }
 }
 
+@jsonSerializable
 class TrSingleDerivativeSearchResultMapper {
   final String isin;
   final String productCategoryName;
