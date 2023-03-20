@@ -36,4 +36,10 @@ flutter pub get
 flutter pub run build_runner build --delete-conflicting-outputs
 
 # Build app
-flutter build web --release
+if [ "$branch" = "stbale" ]; then
+  flutter build web --release -t lib/app/main_prod.dart
+elif [ "$branch" = "staging" ]; then
+  flutter build web --release -t lib/app/main_staging.dart
+else
+  flutter build web --release -t lib/app/main_dev.dart
+fi
