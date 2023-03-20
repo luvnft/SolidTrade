@@ -14,39 +14,38 @@ workflows:
           include: true
           source: true
     scripts:
-      - |
-        #!/bin/sh
-        cd client
+      - name: Build android apk
+        script: |
+          #!/bin/sh
+          cd client
 
-        echo $CM_BRANCH
+          VERSION="v4.32.1"
+          BINARY="yq_linux_amd64"
+          wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O yq
+          chmod +x yq
 
-        VERSION="v4.32.1"
-        BINARY="yq_linux_amd64"
-        wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O yq
-        chmod +x yq
+          branch=$(echo $CM_BRANCH | cut -d'/' -f2)
+          apiUrl="solidtrade.$branch.api.rosemite.dev"
 
-        branch=$(echo $CM_BRANCH | cut -d'/' -f2)
-        apiUrl="solidtrade.$branch.api.rosemite.dev"
+          echo "Using $apiUrl as base api url"
 
-        echo "Using $apiUrl as base api url"
+          # Update base api url
+          ./yq e ".baseUrl = \"$apiUrl\"" ./assets/config/config.yml > ./assets/config/config.yml
 
-        # Update base api url
-        ./yq e ".baseUrl = \"$apiUrl\"" ./assets/config/config.yml > ./assets/config/config.yml
+          # Install dependencies
+          flutter pub get
 
-        # Install dependencies
-        flutter pub get
+          # Generate mappings
+          flutter pub run build_runner build --delete-conflicting-outputs
 
-        # Generate mappings
-        flutter pub run build_runner build --delete-conflicting-outputs
-
-        # Build app
-        if [ "$branch" = "stable" ]; then
-          flutter build apk --release -t lib/app/main_prod.dart
-        elif [ "$branch" = "staging" ]; then
-          flutter build apk --release -t lib/app/main_staging.dart
-        else
-          flutter build apk --release -t lib/app/main_dev.dart
-        fi
+          # Build app
+          if [ "$branch" = "stable" ]; then
+            flutter build apk --release -t lib/app/main_prod.dart
+          elif [ "$branch" = "staging" ]; then
+            flutter build apk --release -t lib/app/main_staging.dart
+          else
+            flutter build apk --release -t lib/app/main_dev.dart
+          fi
     artifacts:
       - client/build/**/outputs/apk/**/*.apk
       - client/build/**/outputs/bundle/**/*.aab
