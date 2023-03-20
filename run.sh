@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-branch_name=$1
+# Converts to all lower. If not docker compose will not be very happy.
+branch_name=${1,,}
 environment_name=solidtrade-$branch_name
 credentials_folder=$environment_name
 
