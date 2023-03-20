@@ -14,6 +14,12 @@ mkdir -p ./assets/config
 # Create configuration file
 echo $App_Config | base64 -di > ./assets/config/config.yml
 
+cat ./assets/config/config.yml
+
+echo "---------------------------------"
+
+echo $App_Config
+
 VERSION="v4.32.1"
 BINARY="yq_linux_amd64"
 
