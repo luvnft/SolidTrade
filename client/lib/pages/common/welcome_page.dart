@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
+import 'package:solidtrade/components/custom/input_field.dart';
 import 'package:solidtrade/components/custom/timer_button.dart';
 import 'package:solidtrade/data/dtos/auth/response/check_magic_link_status_response_dto.dart';
 import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
+import 'package:solidtrade/pages/signup_and_signin/base/login_page.dart';
 import 'package:solidtrade/providers/language/shared/shared_welcome_messages.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/request/data_request_service.dart';
@@ -133,7 +135,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
       final fetchedSuccessfully = await _fetchUser();
 
       if (!fetchedSuccessfully) {
-        Util.openDialog(context, 'Failed to login', message: 'Something went wrong while logging in. Are you sure you have an account?\nIf so try again later.');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(email: email)));
       } else {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
@@ -227,38 +229,6 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class InputField extends StatelessWidget with STWidget {
-  InputField({required this.labelText, required this.hintText, required this.controller, Key? key}) : super(key: key);
-  final TextEditingController controller;
-  final String labelText;
-  final String hintText;
-
-  InputBorder getInputBorderDecoration() {
-    return OutlineInputBorder(borderSide: BorderSide(color: colors.softBackground, width: 2), borderRadius: BorderRadius.circular(10));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(margin: const EdgeInsets.all(8), child: Text(labelText, style: const TextStyle(fontWeight: FontWeight.w600))),
-        TextFormField(
-          controller: controller,
-          cursorColor: colors.foreground,
-          decoration: InputDecoration(
-            focusedBorder: getInputBorderDecoration(),
-            enabledBorder: getInputBorderDecoration(),
-            border: getInputBorderDecoration(),
-            hintText: hintText,
-            // labelStyle: TextStyle(color: colors.foreground),
-          ),
-        ),
-      ],
     );
   }
 }

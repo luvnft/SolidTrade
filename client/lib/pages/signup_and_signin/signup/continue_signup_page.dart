@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_page.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/common/st_logo.dart';
-import 'package:solidtrade/data/models/common/constants.dart';
+import 'package:solidtrade/components/custom/input_field.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/providers/theme/app_theme.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
 import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
+import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/util.dart';
 
 class ContinueSignupScreen extends StatefulWidget {
@@ -17,9 +17,11 @@ class ContinueSignupScreen extends StatefulWidget {
     Key? key,
     required this.dicebearSeed,
     required this.profilePictureBytes,
+    required this.email,
   }) : super(key: key);
   final Uint8List? profilePictureBytes;
   final String? dicebearSeed;
+  final String email;
 
   @override
   State<ContinueSignupScreen> createState() => _ContinueSignupScreenState();
@@ -30,38 +32,9 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-  final historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-  final portfolioService = GetIt.instance.get<PortfolioService>();
-  final userService = GetIt.instance.get<UserService>();
-
-  InputBorder getInputBorderDecoration() {
-    return UnderlineInputBorder(
-      borderSide: BorderSide(color: colors.softBackground, width: 2),
-    );
-  }
-
-  InputDecoration getInputDecoration(String labelText) {
-    return InputDecoration(
-      focusedBorder: getInputBorderDecoration(),
-      enabledBorder: getInputBorderDecoration(),
-      border: getInputBorderDecoration(),
-      labelText: labelText,
-      labelStyle: TextStyle(color: colors.foreground),
-    );
-  }
-
-  Future<void> _handleClickChangeGoogleAccount() async {
-    // var user = await UtilUserService.signInWithGoogle();
-
-    // if (user == null) {
-    //   Navigator.pop(context);
-    //   return;
-    // }
-
-    // setState(() {
-    //   // widget.user = user;
-    // });
-  }
+  final historicalPositionService = get<HistoricalPositionService>();
+  final portfolioService = get<PortfolioService>();
+  final userService = get<UserService>();
 
   Future<void> _handleClickCreateAccount() async {
     final closeDialog = Util.showLoadingDialog(context);
@@ -69,13 +42,11 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
     String name = _nameController.text;
     String username = _usernameController.text;
     int initialBalance = int.parse(_initialBalanceController.text);
-    String email = throw 'Not implemented';
-    // String email = FirebaseAuth.instance.currentUser!.email!;
 
     var response = await userService.createUser(
       name,
       username,
-      email,
+      widget.email,
       initialBalance,
       profilePictureSeed: widget.dicebearSeed,
       profilePictureFile: widget.profilePictureBytes,
@@ -120,24 +91,26 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                     const Spacer(),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
+                      child: InputField(
                         controller: _nameController,
-                        cursorColor: colors.foreground,
-                        decoration: getInputDecoration('Name'),
+                        labelText: 'Name',
+                        hintText: 'John Doe',
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
+                      child: InputField(
                         controller: _usernameController,
-                        decoration: getInputDecoration('Username'),
+                        labelText: 'Username',
+                        hintText: 'john_doe',
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
+                      child: InputField(
                         controller: _initialBalanceController,
-                        decoration: getInputDecoration('Starting account balance'),
+                        labelText: 'Starting account balance',
+                        hintText: '10000',
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -155,48 +128,7 @@ class _ContinueSignupScreenState extends State<ContinueSignupScreen> with STWidg
                         foregroundColor: DarkColorTheme().foreground,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(thickness: 4, color: colors.softForeground),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: Util.roundedButton(
-                        [
-                          Util.loadImage(
-                            Constants.googleLogoUrl,
-                            20,
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Change google account',
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            softWrap: false,
-                          ),
-                        ],
-                        colors: colors,
-                        backgroundColor: DarkColorTheme().navigationBackground,
-                        foregroundColor: DarkColorTheme().foreground,
-                        onPressed: _handleClickChangeGoogleAccount,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
                   ],
-                ),
-              ),
-            ),
-            Container(
-              color: Colors.green,
-              height: 40,
-              child: Center(
-                child: Text(
-                  // 'Google account: ${widget.user.email}',
-                  '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: DarkColorTheme().foreground,
-                  ),
                 ),
               ),
             ),
