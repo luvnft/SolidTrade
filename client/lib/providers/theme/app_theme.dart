@@ -277,3 +277,8 @@ enum ColorThemeType {
   light,
   dark,
 }
+
+extension ColorThemeTypeExtension on ColorThemeType {
+  bool get isLight => this == ColorThemeType.light;
+  bool get isDark => this == ColorThemeType.dark;
+}
