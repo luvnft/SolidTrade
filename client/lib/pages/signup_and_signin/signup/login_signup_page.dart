@@ -101,6 +101,7 @@ class _LoginSignUpState extends State<LoginSignUp> with STWidget {
 
     // For gif's cropping can not be applied
     if (!isGifFile) {
+      // TODO: There is some additional work to confiure the cropper for android. Also i think the cropper is not working on web. Maybe find a better solution?
       var croppedFile = await ImageCropper().cropImage(
         sourcePath: image.path,
         aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
