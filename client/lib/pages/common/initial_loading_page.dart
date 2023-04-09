@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:solidtrade/pages/common/splash.dart';
 import 'package:solidtrade/pages/common/welcome_page.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/services/stream/historicalpositions_service.dart';
@@ -8,7 +9,7 @@ import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/get_it.dart';
 
-enum _LoginState {
+enum LoginState {
   loggedIn,
   loggedOut,
 }
@@ -25,7 +26,7 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
   final _portfolioService = get<PortfolioService>();
   final _userService = get<UserService>();
 
-  final _fetchedUserSuccessfully = Completer<_LoginState>();
+  final _fetchedUserSuccessfully = Completer<LoginState>();
 
   @override
   void initState() {
@@ -38,12 +39,24 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
     if (userRequest.isSuccessful) {
       await _historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
       await _portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
-      _fetchedUserSuccessfully.complete(_LoginState.loggedIn);
+      _fetchedUserSuccessfully.complete(LoginState.loggedIn);
 
       return;
     }
 
-    _fetchedUserSuccessfully.complete(_LoginState.loggedOut);
+    _fetchedUserSuccessfully.complete(LoginState.loggedOut);
+  }
+
+  Widget? _getChild(LoginState? state) {
+    if (state == LoginState.loggedIn) {
+      return const HomePage();
+    }
+
+    if (state == LoginState.loggedOut) {
+      return const WelcomePage();
+    }
+
+    return null;
   }
 
   @override
@@ -51,16 +64,10 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
     return FutureBuilder(
       future: _fetchedUserSuccessfully.future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          switch (snapshot.data!) {
-            case _LoginState.loggedIn:
-              return const HomePage();
-            case _LoginState.loggedOut:
-              return const WelcomePage();
-          }
-        }
-
-        return const Scaffold(body: Center(child: Text('Loading')));
+        return Splash(
+          shouldRedirectToLogin: snapshot.data == null ? null : snapshot.data == LoginState.loggedOut,
+          child: _getChild(snapshot.data),
+        );
       },
     );
   }
