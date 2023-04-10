@@ -6,6 +6,7 @@ import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/components/custom/input_field.dart';
 import 'package:solidtrade/components/custom/timer_button.dart';
 import 'package:solidtrade/data/dtos/auth/response/check_magic_link_status_response_dto.dart';
+import 'package:solidtrade/data/models/common/constants.dart';
 import 'package:solidtrade/data/models/enums/client_enums/preferences_keys.dart';
 import 'package:solidtrade/pages/home/home_page.dart';
 import 'package:solidtrade/pages/signup_and_signin/base/login_page.dart';
@@ -17,6 +18,7 @@ import 'package:solidtrade/services/stream/portfolio_service.dart';
 import 'package:solidtrade/services/stream/user_service.dart';
 import 'package:solidtrade/services/util/get_it.dart';
 import 'package:solidtrade/services/util/util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -145,6 +147,10 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
     }
   }
 
+  void _handleClickLostEmail() {
+    launchUrl(Uri.parse(Constants.forgotOrLostAccountFormLink));
+  }
+
   Iterable<AnimatedText> _getWelcomeMessages(BuildContext context) {
     return SharedWelcomeMessages.welcomeMessages.map((message) => FadeAnimatedText(
           message,
@@ -203,7 +209,7 @@ class _WelcomePageState extends State<WelcomePage> with STWidget {
                   ),
                   Row(
                     children: [
-                      TextButton(onPressed: () {}, child: const Text('Can\'t access Email?', style: TextStyle(color: Colors.blue))),
+                      TextButton(onPressed: _handleClickLostEmail, child: const Text('Can\'t access Email?', style: TextStyle(color: Colors.blue))),
                       const Spacer(),
                       _showResendButton
                           ? TimerButton(
