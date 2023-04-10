@@ -1,11 +1,11 @@
 workflows:
-  staging-workflow:
+  default-workflow:
     name: Workflow
     max_build_duration: 60
     environment:
       groups:
         - default
-      flutter: 3.7.3
+      flutter: 3.7.10
     triggering:
       events:
         - push

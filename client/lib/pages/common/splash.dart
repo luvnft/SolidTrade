@@ -1,88 +1,65 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
-import 'package:solidtrade/app/main_common.dart';
 import 'package:solidtrade/components/common/st_logo.dart';
-import 'package:solidtrade/providers/language/language_provider.dart';
-import 'package:solidtrade/services/stream/historicalpositions_service.dart';
-import 'package:solidtrade/services/stream/portfolio_service.dart';
-import 'package:solidtrade/services/stream/user_service.dart';
-import 'package:solidtrade/services/util/util.dart';
 
 class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+  const Splash({required this.shouldRedirectToLogin, required this.child, Key? key}) : super(key: key);
+  final bool? shouldRedirectToLogin;
+  final Widget? child;
 
   @override
-  _SplashState createState() => _SplashState();
+  State<Splash> createState() => _SplashState();
 }
 
 class _SplashState extends State<Splash> with STWidget {
-  final _historicalPositionService = GetIt.instance.get<HistoricalPositionService>();
-  final _portfolioService = GetIt.instance.get<PortfolioService>();
-  final _userService = GetIt.instance.get<UserService>();
+  bool _alreadyRedirected = false;
+  bool _visible = false;
 
-  late Future _fadeAnimationFuture;
-  bool _subTitleVisible = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _initializeAppConfiguration();
-    _fadeSubTitle();
-    _fetchAndLoadUser();
-  }
-
-  void _initializeAppConfiguration() {
-    if (Startup.colorThemeHasToBeInitialized) {
-      final theme = Util.currentDeviceColorTheme(context);
-      configurationProvider.themeProvider.updateTheme(theme, savePermanently: false);
-
-      Startup.colorThemeHasToBeInitialized = false;
-    }
-
-    if (Startup.languageHasToBeInitialized) {
-      final ticker = Util.currentDeviceLanguage(context);
-      configurationProvider.languageProvider.updateLanguage(LanguageProvider.tickerToTranslation(ticker));
-
-      Startup.languageHasToBeInitialized = false;
-    }
-  }
-
-  void _fadeSubTitle() {
-    _fadeAnimationFuture = Future.delayed(const Duration(milliseconds: 600), () {
-      setState(() {
-        _subTitleVisible = !_subTitleVisible;
-      });
+  void _fade() {
+    setState(() {
+      _visible = !_visible;
     });
   }
 
-  Future<void> _fetchAndLoadUser() async {
-    var delay = Future.delayed(const Duration(milliseconds: 2500));
+  PageRouteBuilder<T> _createPageRouteBuilder<T>(Offset? begin, Widget widget) {
+    return PageRouteBuilder<T>(
+      transitionDuration: const Duration(milliseconds: 1250),
+      pageBuilder: (context, animation, secondaryAnimation) => widget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var tween = Tween(begin: begin, end: Offset.zero).chain(
+          CurveTween(curve: Curves.ease),
+        );
+        final offsetAnimation = animation.drive(tween);
 
-    var userRequest = await _userService.fetchUserCurrentUser();
-    if (userRequest.isSuccessful) {
-      await _historicalPositionService.fetchHistoricalPositions(userRequest.result!.id);
-      await _portfolioService.fetchPortfolioByUserId(userRequest.result!.id);
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
 
-      logger.d('Fetched user info successfully');
+  Future<void> navigate() async {
+    if (widget.shouldRedirectToLogin!) {
+      _fade();
 
-      await _fadeAnimationFuture;
-      await delay;
-
-      Navigator.pop(context, true);
-      return;
+      // Wait for the typewriter to finish
+      await Future.delayed(const Duration(seconds: 6));
     }
 
-    delay.ignore();
-    _fadeAnimationFuture.ignore();
-    logger.w('User login failed. Proceeding to login');
-
-    Navigator.pop(context, false);
+    var route = _createPageRouteBuilder(const Offset(0.0, 1.0), widget.child!);
+    await Future.delayed(const Duration(milliseconds: 200));
+    Navigator.of(context).pushReplacement(route);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.shouldRedirectToLogin != null && !_alreadyRedirected) {
+      _alreadyRedirected = true;
+      navigate();
+    }
+
     return Scaffold(
       backgroundColor: colors.splashScreenColor,
       body: Center(
@@ -94,22 +71,34 @@ class _SplashState extends State<Splash> with STWidget {
             const Spacer(),
             STLogo(colors.logoAsGif, key: UniqueKey()),
             const Spacer(),
-            AnimatedOpacity(
-              opacity: _subTitleVisible ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 800),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(translations.splash.loading),
-                  SizedBox(
-                    width: 220,
-                    child: Divider(thickness: 2, color: colors.softForeground),
-                  ),
-                  const Text('Solidtrade'),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _visible
+                    ? SizedBox(
+                        height: 50,
+                        child: AnimatedTextKit(
+                          totalRepeatCount: 1,
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              'Welcome to',
+                              speed: const Duration(milliseconds: 100),
+                              textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                              textAlign: TextAlign.center,
+                            ),
+                            TypewriterAnimatedText(
+                              'Solidtrade™',
+                              speed: const Duration(milliseconds: 100),
+                              textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(height: 50),
+              ],
             ),
             const SizedBox(height: 50),
           ],

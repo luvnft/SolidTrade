@@ -3,7 +3,7 @@
 cd client
 
 # Install flutter
-git clone -b 3.7.3 https://github.com/flutter/flutter/ flutter-sdk
+git clone -b 3.7.10 https://github.com/flutter/flutter/ flutter-sdk
 export PATH="$PATH:`pwd`/flutter-sdk/bin"
 
 flutter doctor

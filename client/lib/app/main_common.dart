@@ -68,18 +68,16 @@ void _registerFlutterErrorHandler(Environment environment) {
             const Flexible(
               child: Text('We are sorry. Something went wrong. If you are facing any issues reload the app.'),
             ),
-            // TODO: With the new material 3 version, the text color of the SnackBarAction is not working as it should.
-            // This issue has been resolved already, but is not yet in stable yet.
-            // See here for more: https://github.com/flutter/flutter/commit/0588b925a070a591da8e199cb17d83b74daa9de1.
-            SnackBarAction(
-              label: 'Reload',
-              onPressed: () async => await Globals.appState.restart(),
-              textColor: Colors.red,
+            TextButton(
+              child: const Text('Reload', style: TextStyle(color: Colors.red)),
+              onPressed: () async {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                await Globals.appState.restart();
+              },
             ),
-            SnackBarAction(
-              label: 'Dismiss',
+            TextButton(
+              child: const Text('Dismiss', style: TextStyle(color: Colors.blue)),
               onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-              textColor: Colors.blue,
             ),
           ]),
         );
