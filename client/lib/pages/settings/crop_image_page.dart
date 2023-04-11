@@ -66,7 +66,6 @@ class _CropperState extends State<Cropper> {
     double x0 = (imgWidth - cropXpx) * xPercent;
     double y0 = (imgHeight - cropYpx) * yPercent;
 
-    // TODO: Not sure if this is right.
     im.Image cropped = im.copyCrop(decoded, x: x0.toInt(), y: y0.toInt(), width: cropXpx.toInt(), height: cropYpx.toInt());
     _encodeImage(cropped);
 
