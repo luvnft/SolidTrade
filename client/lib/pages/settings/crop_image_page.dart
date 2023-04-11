@@ -13,8 +13,7 @@ class Cropper extends StatefulWidget {
   const Cropper({Key? key, required this.image}) : super(key: key);
 
   @override
-  // TODO: Test if the change from _CropperState to State<_Cropper> causes any issues.
-  _CropperState createState() => _CropperState();
+  State<Cropper> createState() => _CropperState();
 }
 
 class _CropperState extends State<Cropper> {
