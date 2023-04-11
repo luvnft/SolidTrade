@@ -106,8 +106,8 @@ class DerivativesSelection extends StatelessWidget with STWidget {
     var trProductInfo = await trProductPriceService.requestTrProductPriceByIsinWithoutExtension(productInfo.isin);
 
     if (!trProductInfo.isSuccessful) {
-      // TODO: Handle.
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trProductInfo.error?.userFriendlyMessage);
+      return;
     }
 
     var priceInfoFuture = Completer<TrProductPrice>();

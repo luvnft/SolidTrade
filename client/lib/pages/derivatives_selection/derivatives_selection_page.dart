@@ -71,11 +71,11 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
   void _initializeParameters() {
     if (!_isKnockout) {
       _setSortingDirection(DerivativesSortDirectionOptions.desc);
-      _setSortingByProperty(_SortByPropertyOptions.knockoutOrDelta);
+      _setSortingByProperty(SortByPropertyOptions.knockoutOrDelta);
       return;
     }
     _setSortingDirection(DerivativesSortDirectionOptions.desc);
-    _setSortingByProperty(_SortByPropertyOptions.leverageOrStrike);
+    _setSortingByProperty(SortByPropertyOptions.leverageOrStrike);
   }
 
   @override
@@ -108,29 +108,29 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
                 child: _UnifiedRow(children: [
                   _ParameterOption(
                     optionName: _isKnockout ? 'Leverage' : 'Strike',
-                    isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.leverageOrStrike,
-                    sortingProperty: _SortByPropertyOptions.leverageOrStrike,
+                    isSelected: _sortByProperty.toSortByPropertyOptions == SortByPropertyOptions.leverageOrStrike,
+                    sortingProperty: SortByPropertyOptions.leverageOrStrike,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
                     optionName: _isKnockout ? 'Knockout' : 'Delta',
-                    isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.knockoutOrDelta,
-                    sortingProperty: _SortByPropertyOptions.knockoutOrDelta,
+                    isSelected: _sortByProperty.toSortByPropertyOptions == SortByPropertyOptions.knockoutOrDelta,
+                    sortingProperty: SortByPropertyOptions.knockoutOrDelta,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
                     optionName: 'Size',
-                    isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.size,
-                    sortingProperty: _SortByPropertyOptions.size,
+                    isSelected: _sortByProperty.toSortByPropertyOptions == SortByPropertyOptions.size,
+                    sortingProperty: SortByPropertyOptions.size,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
                   _ParameterOption(
                     optionName: 'Expiry',
-                    isSelected: _sortByProperty.toSortByPropertyOptions == _SortByPropertyOptions.expiry,
-                    sortingProperty: _SortByPropertyOptions.expiry,
+                    isSelected: _sortByProperty.toSortByPropertyOptions == SortByPropertyOptions.expiry,
+                    sortingProperty: SortByPropertyOptions.expiry,
                     sortDirectionOptions: _sortingDirection,
                     onClick: _handleClickParameterOption,
                   ),
@@ -151,7 +151,7 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
     );
   }
 
-  Future<void> _handleClickParameterOption(_SortByPropertyOptions sortOption) async {
+  Future<void> _handleClickParameterOption(SortByPropertyOptions sortOption) async {
     var convertedSortOption = _sortByProperty.toSortByPropertyOptions;
 
     var isAlreadySelected = convertedSortOption == sortOption;
@@ -181,16 +181,16 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
     });
   }
 
-  void _setSortingByProperty(_SortByPropertyOptions option) {
+  void _setSortingByProperty(SortByPropertyOptions option) {
     DerivativesSortOptions getSortingOption() {
       switch (option) {
-        case _SortByPropertyOptions.leverageOrStrike:
+        case SortByPropertyOptions.leverageOrStrike:
           return _isKnockout ? DerivativesSortOptions.leverage : DerivativesSortOptions.strike;
-        case _SortByPropertyOptions.knockoutOrDelta:
+        case SortByPropertyOptions.knockoutOrDelta:
           return _isKnockout ? DerivativesSortOptions.knockout : DerivativesSortOptions.delta;
-        case _SortByPropertyOptions.size:
+        case SortByPropertyOptions.size:
           return DerivativesSortOptions.size;
-        case _SortByPropertyOptions.expiry:
+        case SortByPropertyOptions.expiry:
           return DerivativesSortOptions.expiry;
       }
     }
@@ -230,8 +230,8 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
     );
 
     if (!trDerivativeSearchResultMapper.isSuccessful) {
-      // TODO: Handle...
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trDerivativeSearchResultMapper.error?.userFriendlyMessage);
+      return [];
     }
 
     return trDerivativeSearchResultMapper.result!.convertToTrDerivativeSearchResults(widget.derivativesPositionType);
@@ -270,9 +270,9 @@ class _ParameterOption extends StatelessWidget with STWidget {
     required this.sortDirectionOptions,
     required this.onClick,
   }) : super(key: key);
-  final void Function(_SortByPropertyOptions sortOption) onClick;
+  final void Function(SortByPropertyOptions sortOption) onClick;
   final DerivativesSortDirectionOptions sortDirectionOptions;
-  final _SortByPropertyOptions sortingProperty;
+  final SortByPropertyOptions sortingProperty;
   final String optionName;
   final bool isSelected;
 
@@ -376,8 +376,8 @@ class _SingleDerivativeSearchResult extends StatelessWidget with STWidget {
     var trProductInfo = await trProductPriceService.requestTrProductPriceByIsinWithoutExtension(result.isin);
 
     if (!trProductInfo.isSuccessful) {
-      // TODO: Handle.
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trProductInfo.error?.userFriendlyMessage);
+      return;
     }
 
     var info = trProductInfo.result!;
@@ -432,7 +432,7 @@ enum _CurrentPageLongShort {
   short,
 }
 
-enum _SortByPropertyOptions {
+enum SortByPropertyOptions {
   leverageOrStrike,
   knockoutOrDelta,
   size,
@@ -440,18 +440,18 @@ enum _SortByPropertyOptions {
 }
 
 extension DerivativesSortOptionsExtension on DerivativesSortOptions {
-  _SortByPropertyOptions get toSortByPropertyOptions {
+  SortByPropertyOptions get toSortByPropertyOptions {
     switch (this) {
       case DerivativesSortOptions.leverage:
       case DerivativesSortOptions.strike:
-        return _SortByPropertyOptions.leverageOrStrike;
+        return SortByPropertyOptions.leverageOrStrike;
       case DerivativesSortOptions.knockout:
       case DerivativesSortOptions.delta:
-        return _SortByPropertyOptions.knockoutOrDelta;
+        return SortByPropertyOptions.knockoutOrDelta;
       case DerivativesSortOptions.size:
-        return _SortByPropertyOptions.size;
+        return SortByPropertyOptions.size;
       case DerivativesSortOptions.expiry:
-        return _SortByPropertyOptions.expiry;
+        return SortByPropertyOptions.expiry;
     }
   }
 }

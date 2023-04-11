@@ -9,15 +9,14 @@ class TrProductSearchService extends IService<TrProductSearch?> {
   TrProductSearchService() : super(BehaviorSubject.seeded(null));
   final Map<String, TrProductSearch> _cache = {};
 
-  Future<RequestResponse<TrProductSearch>> requestTrProductSearch(String search) async {
+  Future<RequestResponse<TrProductSearch>> requestTrProductSearch(SearchCategory category, String search) async {
     RequestResponse<TrProductSearch>? result;
     if (_cache.containsKey(search)) {
       result = RequestResponse.successful(_cache[search]!);
     } else {
       result = await DataRequestService.trApiDataRequestService.makeRequest<TrProductSearch>(Constants.getTrProductSearchRequestString(
         search,
-        // TODO: Currently only stocks will be shown. Fix...
-        _SearchType.stock.name,
+        category.name,
       ));
 
       if (result.isSuccessful) {
@@ -33,4 +32,9 @@ class TrProductSearchService extends IService<TrProductSearch?> {
   }
 }
 
-enum _SearchType { stock, crypto, fund, derivatives }
+enum SearchCategory {
+  stock,
+  crypto,
+  fund,
+  derivative
+}

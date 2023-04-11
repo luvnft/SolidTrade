@@ -75,7 +75,7 @@ class _SearchViewState extends State<SearchView> with STWidget {
                 ),
               ),
               Expanded(
-                child: _SearchResults(
+                child: _Search(
                   textEditingController: _textEditingController,
                 ),
               )
@@ -91,15 +91,34 @@ class _SearchViewState extends State<SearchView> with STWidget {
   }
 }
 
-class _SearchResults extends StatefulWidget {
-  const _SearchResults({Key? key, required this.textEditingController}) : super(key: key);
+class _Search extends StatelessWidget {
+  const _Search({Key? key, required this.textEditingController}) : super(key: key);
   final TextEditingController textEditingController;
 
   @override
-  State<_SearchResults> createState() => _SearchResultsState();
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.stock),
+          _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.fund),
+          _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.crypto),
+        ],
+      ),
+    );
+  }
 }
 
-class _SearchResultsState extends State<_SearchResults> with STWidget {
+class _SearchCategoryResults extends StatefulWidget {
+  const _SearchCategoryResults({Key? key, required this.textEditingController, required this.category}) : super(key: key);
+  final TextEditingController textEditingController;
+  final SearchCategory category;
+
+  @override
+  State<_SearchCategoryResults> createState() => _SearchCategoryResultState();
+}
+
+class _SearchCategoryResultState extends State<_SearchCategoryResults> with STWidget {
   final _trProductSearchService = GetIt.instance.get<TrProductSearchService>();
   final List<TrProductSearchResult> _productSearchResults = [];
   final _animatedListKey = GlobalKey<AnimatedListState>();
@@ -135,19 +154,18 @@ class _SearchResultsState extends State<_SearchResults> with STWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '$_totalNumberOfResults results',
+                '$_totalNumberOfResults ${widget.category.name} results',
                 style: TextStyle(color: colors.lessSoftForeground),
               ),
               IconButton(onPressed: () {}, icon: Icon(Icons.auto_awesome_mosaic_rounded, color: colors.foreground)),
             ],
           ),
         ),
-        Expanded(
-          child: AnimatedList(
-            key: _animatedListKey,
-            initialItemCount: _productSearchResults.length,
-            itemBuilder: (context, index, animation) => _buildItem(_productSearchResults[index], animation, isFirstItem: index == 0),
-          ),
+        AnimatedList(
+          key: _animatedListKey,
+          initialItemCount: _productSearchResults.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index, animation) => _buildItem(_productSearchResults[index], animation, isFirstItem: index == 0),
         ),
       ],
     );
@@ -164,12 +182,13 @@ class _SearchResultsState extends State<_SearchResults> with STWidget {
   }
 
   Future<TrProductSearch> _fetchSearchResults(String search) async {
-    var result = await _trProductSearchService.requestTrProductSearch(search);
+    var result = await _trProductSearchService.requestTrProductSearch(widget.category, search);
     if (result.isSuccessful) {
       return result.result!;
     }
 
-    throw UnimplementedError();
+    Util.openDialog(context, 'Error', message: result.error!.userFriendlyMessage);
+    return TrProductSearch([], 0);
   }
 
   void _updateResults(TrProductSearch searchResult) {
@@ -252,8 +271,8 @@ class SingleSearchResult extends StatelessWidget with STWidget {
     var trProductInfo = await trProductPriceService.requestTrProductPriceByIsinWithoutExtension(isin);
 
     if (!trProductInfo.isSuccessful) {
-      // TODO: Handle.
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trProductInfo.error?.userFriendlyMessage);
+      return;
     }
 
     var info = trProductInfo.result!;

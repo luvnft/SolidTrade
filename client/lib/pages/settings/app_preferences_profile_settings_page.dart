@@ -50,13 +50,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
     });
   }
 
-  // TODO: Maybe use the same text inputs, used in the sign up process, in the future...
-  // TextFormField(
-  //     controller: _nameController,
-  //     cursorColor: colors.foreground,
-  //     decoration: getInputDecoration("Name"),
-  //   ),
-
   Widget _inputField({
     required String title,
     required TextEditingController controller,
@@ -120,15 +113,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> with STWidget
           child: Column(
             children: <Widget>[
               const SizedBox(height: 15),
-              // TODO: Do we want to keep this?
-              // Text(
-              //   "Customize your Profile",
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(
-              //     color: alertColor,
-              //     fontSize: 22.5,
-              //   ),
-              // ),
               const SizedBox(height: 15),
               _inputField(title: 'Bio', controller: _bioController, callback: (content) => _bioChanged(content), maxLines: 5, hintText: _bioController.text),
               _inputField(title: 'Email', controller: _emailController, callback: (content) => _emailChanged(content), hintText: _emailController.text),

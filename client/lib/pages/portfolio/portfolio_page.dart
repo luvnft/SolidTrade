@@ -1,16 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get_it/get_it.dart';
 import 'package:solidtrade/components/base/st_widget.dart';
 import 'package:solidtrade/pages/portfolio/components/portfolio_positions.dart';
 import 'package:solidtrade/pages/portfolio/portfolio_overview_page.dart';
 import 'package:solidtrade/services/stream/floating_action_button_update_service.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class PortfolioPage extends StatefulWidget {
   const PortfolioPage({Key? key}) : super(key: key);
 
   @override
-  _PortfolioPageState createState() => _PortfolioPageState();
+  State<PortfolioPage> createState() => _PortfolioPageState();
 }
 
 class _PortfolioPageState extends State<PortfolioPage> with STWidget {

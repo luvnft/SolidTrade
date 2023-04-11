@@ -13,8 +13,7 @@ class Cropper extends StatefulWidget {
   const Cropper({Key? key, required this.image}) : super(key: key);
 
   @override
-  // TODO: Why not State<_Cropper>?
-  _CropperState createState() => _CropperState();
+  State<Cropper> createState() => _CropperState();
 }
 
 class _CropperState extends State<Cropper> {
@@ -66,7 +65,6 @@ class _CropperState extends State<Cropper> {
     double x0 = (imgWidth - cropXpx) * xPercent;
     double y0 = (imgHeight - cropYpx) * yPercent;
 
-    // TODO: Not sure if this is right.
     im.Image cropped = im.copyCrop(decoded, x: x0.toInt(), y: y0.toInt(), width: cropXpx.toInt(), height: cropYpx.toInt());
     _encodeImage(cropped);
 

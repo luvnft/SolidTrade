@@ -6,7 +6,7 @@ services:
     restart: on-failure:3
     # For development no api containers are required since debugging should happen using the IDE
     deploy:
-        replicas: 0
+      replicas: 0
     environment:
       ENVIRONMENT: ${API_ENVIRONMENT}
     ports:
@@ -26,7 +26,7 @@ services:
     environment:
       SA_PASSWORD: ${DB_SA_PASSWORD}
       ACCEPT_EULA: "Y"
- 
+
   ngrok:
     image: shkoliar/ngrok:latest
     ports:
@@ -37,6 +37,7 @@ services:
       AUTH_TOKEN: ${NGROK_AUTH_TOKEN}
       REGION: ${NGROK_REGION}
       DOMAIN: ${NGROK_DOMAIN}
+      DEBUG: true
       PORT: 80
     depends_on:
       - api

@@ -45,7 +45,7 @@ class _ProductAppBarState extends State<ProductAppBar> with STWidget, SingleTick
 
     _aggregateHistoryService.getTrAggregateHistory(widget.productInfo.isinWithExchangeExtension, range).then((response) {
       if (!response.isSuccessful) {
-        // TODO: Handle...
+        Util.openDialog(context, 'Unexpected error', message: response.error?.userFriendlyMessage);
         return;
       }
 

@@ -50,7 +50,6 @@ class TrContinuousProductPricesService implements Disposable {
     var response = await _aggregateHistoryService.getTrAggregateHistory(_isinWithExtension, range);
 
     if (!response.isSuccessful) {
-      // TODO: Handle...
       _logger.f('Failed to fetch aggregateHistory successfully');
       return null;
     }
