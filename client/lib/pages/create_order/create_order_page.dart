@@ -382,7 +382,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   Future<void> _selectOrderType() async {
-    // TODO: Test if this works
     var selectedOrderType = await showModalBottomSheet<OrderType>(
       context: context,
       backgroundColor: Colors.transparent,

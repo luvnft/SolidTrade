@@ -133,6 +133,5 @@ class OrderTypeDescriptionView extends StatelessWidget with STWidget {
     Navigator.pop(context, result);
   }
 
-  // TODO: Test if this works.
   void _onClickLearnAboutOrderTypes() => launchUrl(Uri.parse(Constants.learnMoreAboutOrderTypesLink));
 }
