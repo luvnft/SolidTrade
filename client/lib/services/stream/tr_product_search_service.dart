@@ -102,5 +102,5 @@ enum SearchCategory {
   stock,
   crypto,
   fund,
-  derivatives
+  derivative
 }

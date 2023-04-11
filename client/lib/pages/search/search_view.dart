@@ -458,7 +458,7 @@ class _Search extends StatelessWidget {
       children: [
         _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.stock),
         _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.fund),
-        _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.derivatives),
+        _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.derivative),
         _SearchCategoryResults(textEditingController: textEditingController, category: SearchCategory.crypto),
       ],
     );
