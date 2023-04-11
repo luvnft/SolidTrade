@@ -16,6 +16,7 @@ import 'package:solidtrade/data/models/enums/shared_enums/position_type.dart';
 import 'package:solidtrade/data/models/request_response/request_response.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_info.dart';
 import 'package:solidtrade/data/models/trade_republic/tr_product_price.dart';
+import 'package:solidtrade/pages/create_order/components/order_type_selection.dart';
 import 'package:solidtrade/pages/create_order/components/order_validation_hint.dart';
 import 'package:solidtrade/pages/create_order/order_settings_view.dart';
 import 'package:solidtrade/pages/create_order/order_type_description_view.dart';
@@ -59,7 +60,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   late DateTime _goodUntil = _defaultGoodUntil;
 
   UserInputValidationResult _inputValidation = UserInputValidationResult.validInput();
-  final OrderType _orderType = OrderType.market;
+  OrderType _orderType = OrderType.market;
   double _definedStopLimitPrice = 0;
   double _numberOfShares = 0;
 
@@ -381,31 +382,30 @@ class _CreateOrderPageState extends State<CreateOrderPage> with STWidget {
   }
 
   Future<void> _selectOrderType() async {
-    // TODO: Find alternative to modal bottom sheet
-    // var selectedOrderType = await showMaterialModalBottomSheet<OrderType>(
-    //   expand: false,
-    //   context: context,
-    //   backgroundColor: Colors.transparent,
-    //   builder: (context) => Material(
-    //     color: colors.background,
-    //     child: SafeArea(
-    //       top: false,
-    //       child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType, positionType: widget.productInfo.positionType),
-    //     ),
-    //   ),
-    // );
+    // TODO: Test if this works
+    var selectedOrderType = await showModalBottomSheet<OrderType>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Material(
+        color: colors.background,
+        child: SafeArea(
+          top: false,
+          child: OrderTypeSelection(buyOrSell: widget.buyOrSell, orderType: _orderType, positionType: widget.productInfo.positionType),
+        ),
+      ),
+    );
 
-    // if (selectedOrderType == null || selectedOrderType == _orderType) {
-    //   return;
-    // }
+    if (selectedOrderType == null || selectedOrderType == _orderType) {
+      return;
+    }
 
-    // setState(() {
-    //   _orderType = selectedOrderType;
-    // });
+    setState(() {
+      _orderType = selectedOrderType;
+    });
 
-    // if (selectedOrderType != OrderType.market) {
-    //   await _openOrderSettingsAndSet();
-    // }
+    if (selectedOrderType != OrderType.market) {
+      await _openOrderSettingsAndSet();
+    }
   }
 }
 
