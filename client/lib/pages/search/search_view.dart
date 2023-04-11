@@ -252,8 +252,8 @@ class SingleSearchResult extends StatelessWidget with STWidget {
     var trProductInfo = await trProductPriceService.requestTrProductPriceByIsinWithoutExtension(isin);
 
     if (!trProductInfo.isSuccessful) {
-      // TODO: Handle.
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trProductInfo.error?.userFriendlyMessage);
+      return;
     }
 
     var info = trProductInfo.result!;

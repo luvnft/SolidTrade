@@ -230,8 +230,8 @@ class _DerivativesSelectionPageState extends State<DerivativesSelectionPage> wit
     );
 
     if (!trDerivativeSearchResultMapper.isSuccessful) {
-      // TODO: Handle...
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trDerivativeSearchResultMapper.error?.userFriendlyMessage);
+      return [];
     }
 
     return trDerivativeSearchResultMapper.result!.convertToTrDerivativeSearchResults(widget.derivativesPositionType);
@@ -376,8 +376,8 @@ class _SingleDerivativeSearchResult extends StatelessWidget with STWidget {
     var trProductInfo = await trProductPriceService.requestTrProductPriceByIsinWithoutExtension(result.isin);
 
     if (!trProductInfo.isSuccessful) {
-      // TODO: Handle.
-      throw UnimplementedError();
+      Util.openDialog(context, 'Unexpected error', message: trProductInfo.error?.userFriendlyMessage);
+      return;
     }
 
     var info = trProductInfo.result!;
