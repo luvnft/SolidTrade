@@ -77,20 +77,6 @@ class UserService extends IService<User?> {
     });
   }
 
-  Future<RequestResponse<Map<String, String>>> getUserDeviceHeader() async {
-    // TODO: Do we still need this?
-    var token = '';
-    // final token = await getUserMessagingDeviceToken();
-
-    if (token == null) {
-      return RequestResponse.failedWithUserFriendlyMessage('Failed to request device token.\nPlease reopen the app. If this issue persists please reach out.');
-    }
-
-    return RequestResponse.successful({
-      'DeviceToken': token,
-    });
-  }
-
   Future<RequestResponse<DeleteUserResponse>> deleteUser() async {
     var response = await DataRequestService.userDataRequestService.deleteUser();
 

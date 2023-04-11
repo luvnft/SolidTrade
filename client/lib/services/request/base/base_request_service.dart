@@ -140,15 +140,8 @@ abstract class IBaseRequestService {
       return RequestResponse.inheritErrorResponse(auth);
     }
 
-    var deviceToken = await _userService.getUserDeviceHeader();
-
-    if (!deviceToken.isSuccessful && deviceToken.result == null) {
-      return RequestResponse.inheritErrorResponse(deviceToken);
-    }
-
     http.Response response;
     Map<String, String> requestHeaders = {
-      ...?deviceToken.result,
       ...?auth.result,
       ...headers,
     };
