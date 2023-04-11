@@ -15,3 +15,15 @@ tasks:
   reset:
     cmds:
       - "flutter clean && flutter pub get"
+
+  setup:
+    cmds:
+      - task: api:server_no_build
+      - "bash ./dev-setup.sh"
+
+  init-setup:
+    cmds:
+      - task: reset
+      - task: gen
+      - task: api:server
+      - "bash ./dev-setup.sh"
